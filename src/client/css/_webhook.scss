@@ -1,0 +1,24 @@
+#webhook-container{
+
+    overflow-y: auto;
+    
+    .alert{
+        margin-top: 15px;
+    }
+    
+    table{
+        
+        img{
+            max-width: 20px;
+        }
+        
+        td{
+            padding: 10px;
+        }
+        
+        .selectable{
+            cursor: pointer;
+        }
+        
+    }
+}

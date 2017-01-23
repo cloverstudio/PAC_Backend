@@ -1,0 +1,119 @@
+
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li><a href="/admin/user/list">{{l10n "User Management"}}</a></li>
+    <li class="active">{{l10n "Delete"}}</li>
+</ol>
+
+<h1 style="max-width:50%">{{l10n "Delete User"}}</h1>
+<h3 style="margin-top:10px">{{formValues.name}}</h3>
+
+<hr>
+
+{{> alertMessage }}
+
+<form method="post" action="/admin/user/delete/{{formValues._id}}">
+  <input type="hidden" name="_id" class="form-control" id="input1" value="{{formValues._id}}">
+  
+  <div class="form-group">
+    <label for="input1">{{l10n "User Name"}}</label>
+    <input type="text" disabled="disabled" name="name" class="form-control" id="input1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">
+  </div>
+  
+  <div class="form-group">
+    <label for="sortName">{{l10n "Sort User Name"}}</label>
+    <input type="text" disabled="disabled" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
+  </div>
+
+  <div class="form-group">
+    <label for="input2">{{l10n "Description"}}</label>
+    <textarea rows="4" disabled="disabled" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="input3">{{l10n "User ID"}}</label>
+    <input type="text" disabled="disabled" name="userid" class="form-control" id="input2" placeholder="{{l10n "User ID"}}" value="{{formValues.userid}}">
+  </div>
+  
+  <div class="form-group">
+    <label for="input4">{{l10n "Password"}}</label>
+    <input type="password" disabled="disabled" name="password" class="form-control" id="input3" placeholder="{{l10n "Password"}}" value="{{formValues.password}}">
+  </div>
+
+  <div class="form-group">
+    <label for="input5">{{l10n "Status"}}</label>
+    <br>
+    <label class="radio-inline">
+      <input type="radio" disabled="disabled" name="status" id="status1" value="1" {{{checkedIfEqual formValues.status 1}}}> {{l10n "Enabled"}}
+    </label>
+    <label class="radio-inline">
+      <input type="radio" disabled="disabled" name="status" id="status0" value="0" {{{checkedIfEqual formValues.status 0}}}> {{l10n "Disabled"}}
+    </label>
+  </div>
+
+  {{#if formValues.groupList}}
+    <div class="form-group">
+      <label for="input6">{{l10n "Groups"}}</label>
+      <br/>
+
+      {{#each formValues.groupList}}
+              
+        <label class="checkbox-inline">
+          <input type="checkbox" disabled="disabled" name="groups" value="{{_id}}" {{{checkIfExisted ../formValues.groups _id}}}>{{name}} 
+        </label>
+          
+      {{/each}}
+
+    </div>
+  {{/if}}
+
+  {{#if formValues.departmentList}}
+    <div class="form-group">
+      <label for="input6">{{l10n "Departments"}}</label>
+      <br/>
+
+      {{#each formValues.departmentList}}
+        <label class="checkbox-inline">
+          <input type="checkbox" disabled="disabled" name="groups" value="{{_id}}" {{{checkIfExisted ../formValues.groups _id}}} />{{name}} 
+        </label>
+      {{/each}}
+
+    </div>
+  {{/if}}
+
+  {{#if formValues.showPermission}}
+    <div class="form-group">
+      <label for="input7">{{l10n "Permission"}}</label>
+      <br/>
+      <label class="radio-inline">
+        <input type="radio" disabled="disabled" name="permission" value="1" {{{checkedIfEqual formValues.permission 1}}} /> {{l10n "Web Client"}}
+      </label>
+      {{!-- <label class="radio-inline">
+        <input type="radio" disabled="disabled" name="permission" value="2" {{{checkedIfEqual formValues.permission 2}}} /> {{l10n "Organization Admin"}}
+      </label> --}}
+      <label class="radio-inline">
+        <input type="radio" disabled="disabled" name="permission" value="3" {{{checkedIfEqual formValues.permission 3}}} /> {{l10n "Sub-Admin"}}
+      </label>
+    </div>
+  {{/if}}
+  
+  {{#if organizationAdmin}}
+    <div class="form-group">
+      <label for="input3">{{l10n "Avatar"}}</label><br/>
+
+      {{#if formValues.avatar.thumbnail.nameOnServer}}
+        <div class="avatar-container">
+          <img class="edit-thumbnail img-rounded" src="/admin/file/{{formValues.avatar.thumbnail.nameOnServer}}" />
+        </div>
+      {{/if}}
+
+      <input type="file" disabled="disabled" name="file">
+    </div>
+  {{/if}}
+
+  <button  type="submit" class="btnDelete pull-right">
+      <i class="fa fa-times" style="margin-right:10px;"></i>
+      {{l10n "Delete"}}
+  </button>
+
+</form>

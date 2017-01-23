@@ -1,0 +1,15 @@
+
+    {{#each list}}
+        <div class="chat-target" id="{{_id}}">
+            
+            <div class="img-holder">
+                <img class="img-circle" src="/api/v2/avatar/group/{{avatar.thumbnail.nameOnServer}}" />
+            </div>
+
+            <span class="chat-name">{{name}}</span><br />
+            
+            <span class="chat-description">{{description}}</span><br />
+            
+            <div class="clearfix"></div>
+        </div>
+    {{/each}}

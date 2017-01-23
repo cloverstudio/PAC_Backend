@@ -1,0 +1,17 @@
+
+    {{#each list}}
+    
+        <tr class="{{evenodd @index "even" "odd"}}">
+            
+            <td width="50px">
+                <img class="img-rounded" src="/api/v2/avatar/user/{{avatar.thumbnail.nameOnServer}}" />
+            </td>
+            
+            <td>
+                {{#if onlineStatus}}  <img class="img-circle onlineicon" src="/images/onlineIcon.png" /> {{/if}}
+                {{name}}
+            </td>
+            
+        </tr>
+        
+    {{/each}}

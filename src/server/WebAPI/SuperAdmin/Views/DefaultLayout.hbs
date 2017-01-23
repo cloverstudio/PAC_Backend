@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{l10n "Spika For Business Owner"}}</title>
+    <link href="{{AssetURL}}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{AssetURL}}/css/simple-sidebar.css" rel="stylesheet">
+    <link href="{{AssetURL}}/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{AssetURL}}/css/styles.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="{{AssetURL}}/js/jquery-1.11.2.min.js"></script>
+    <script src="{{AssetURL}}/js/bootstrap.min.js"></script>
+    <script src="{{AssetURL}}/js/sidebar_menu.js"></script>
+    
+</head>
+
+<body>
+    <nav class="navbar navbar-default no-margin navbar-fixed-top">
+        
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header fixed-brand">
+            
+            <button class="navbar-toggle collapsed" type="button" data-toggle="dropdown" id="menu-toggle">
+                <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+            </button>
+
+            <ul class="dropdown-menu pull-right">
+
+                <li>
+                    <a href="/owner/home"><span class="fa-stack fa-lg"><i class="fa fa-dashboard fa-stack"></i></span>{{l10n "Dashboard"}}</a>
+                </li>
+
+                <li>
+                    <a href="/owner/organization/list"><span class="fa-stack fa-lg"><i class="fa fa-building fa-stack"></i></span>{{l10n "Organizations"}}</a>
+                </li>
+
+                <li>
+                    <a href="/owner/sticker/list"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Stickers"}}</a>
+                </li>
+                
+                <li>
+                    <a href="/owner/signout"><span class="fa-stack fa-lg"><i class="fa fa-sign-out fa-stack"></i></span>{{l10n "Logout"}}</a>
+                </li>
+
+            </ul>
+
+            <a class="navbar-brand" href="#">{{l10n "Spika For Business Owner"}}</a>
+
+        </div>
+
+    </nav>
+    
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                
+                <li {{{printIfEqual page 'home' 'class="active1"'}}}>
+                    <a href="/owner/home"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span>{{l10n "Dashboard"}}</a>
+                </li>
+                
+                <li {{{printIfEqual page 'organization-list' 'class="active1"'}}}>
+                    <a href="/owner/organization/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-building fa-stack-1x"></i></span>{{l10n "Organizations"}}</a>
+                </li>
+
+                <li {{{printIfEqual page 'sticker-list' 'class="active1"'}}}>
+                    <a href="/owner/sticker/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-smile-o fa-stack-1x"></i></span>{{l10n "Stickers"}}</a>
+                </li>
+
+                <li>
+                    <a href="/owner/signout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-sign-out fa-stack-1x"></i></span>{{l10n "Logout"}}</a>
+                </li>
+                
+            </ul>
+        </div><!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid xyz">
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        {{{body}}}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    <script type="text/javascript">
+        
+        $( document ).ready(function() {
+            
+            {{#if openMenu}}
+                $('#submanu-{{openMenu}}').show();
+            {{/if}}
+
+        });
+
+    </script>
+    
+</body>
+
+</html>

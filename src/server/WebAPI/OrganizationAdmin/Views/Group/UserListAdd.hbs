@@ -1,0 +1,81 @@
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li><a href="/admin/group/list">{{l10n "Group Management"}}</a></li>
+    <li><a href="/admin/group/userlist/{{groupId}}">{{l10n "Group Members"}}</a></li>
+    <li class="active">{{l10n "Add Group Members"}}</li>
+</ol>
+
+<h1 style="max-width:50%; display: inline-block;">{{l10n "Add Group Members"}}</h1>
+<h3 style="margin-top:10px">{{groupName}}</h3>
+
+<hr />
+
+{{> alertMessage }}
+
+<div class="searchbar">
+    <form method="post" action="/admin/group/userlistadd/search/{{groupId}}" id="searchform" class="form-inline">
+        <div class="form-group">
+            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+        </div>
+        
+        {{#if keyword}}
+            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
+        {{/if}}
+
+        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+        
+    </form>
+</div>
+
+{{> paginator }}
+
+<table class="table table-hover">
+    
+    <thead>
+        <tr>
+            <th width="5%"></th>
+            <th>
+                {{l10n "Name"}}<br />
+            </th>
+            <th width="15%">{{l10n "User ID"}}</th>
+            <th width="15%">{{l10n "Created At"}}</th>
+            <th width="5%"></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+    {{#each list}}
+
+        <tr> 
+            <td>
+                <img class="list-thumbnail img-rounded" src="/admin/file/{{avatar.thumbnail.nameOnServer}}" />
+            </td>
+            <td><strong>{{name}}</strong><br /><span class="small">{{_id}}</span></td>
+            <td>{{userid}}</td>
+            <td>{{formatDate created}}</td>
+            <td>
+                <button type="button" class="buttonGreenGhoust" onclick='location.href="/admin/group/userlistadd/add/{{../groupId}}/{{_id}}"'>{{l10n "Add"}}</button>
+            </td>
+        </tr> 
+        
+    {{/each}}
+    </tbody>
+    
+</table>
+    
+{{> paginator }}
+
+<script type="text/javascript">
+     
+    $(document).ready(function() {
+
+        $('#btn-clear').on('click',function(){
+            
+            $('#tb-keyword').val('');     
+            $('#searchform').submit();   
+         
+        });
+        
+    });
+        
+</script>

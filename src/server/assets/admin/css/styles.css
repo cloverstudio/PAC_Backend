@@ -1,0 +1,361 @@
+/*
+
+My Custom CSS
+=============
+
+Author:  Brad Hussey
+Updated: August 2013
+Notes:	 Hand coded for Udemy.com
+
+*/
+
+
+/* --------------------------------------
+   Layout
+   -------------------------------------- */
+ul li {
+    color: #404040;
+    font-family: 'Lato', sans-serif; 
+}
+
+.container {
+	display: table;
+	height: 100%;
+}
+
+.spikaLoginImg{
+    max-height:120px;
+    
+}
+
+.block {
+	display: table-row;
+	height: 1px;
+}
+
+.push {
+	height: auto;
+}
+
+
+tr  {
+    color: #404040;
+    font-family: 'Lato', sans-serif; 
+}
+
+
+
+p {
+    color: #404040;
+    font-family: 'Lato', sans-serif;
+    
+    }
+
+label, p {
+    color: #404040;
+    font-family: 'Lato', sans-serif;
+    
+    }
+
+a {
+    color: #009EA0;
+    font-family: 'Lato', sans-serif;
+
+}
+
+h1, h2, h3 {
+    font-family: 'Ubuntu Condensed', sans-serif;
+    padding-top: 0px;
+    margin: 0px;
+}
+
+/* Background images are set within the HTML using inline CSS, not here */
+
+.fill {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.login {
+    margin: 100px;
+    padding: 50px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow:0 0 70px #067677;
+    text-align: center;
+}
+
+.Loginbutton {
+    width: 100%;
+    padding: 7px;
+    margin-top:20px;
+    background-color:#009EA0;
+    border: 0px; 
+    border-radius: 5px; 
+    color:#fff;
+}
+
+.signUp {
+    margin-top:20px;
+    padding:20px;
+    border-radius: 10px;
+    background-color:#F3F3F3;
+}
+
+.checkbox{
+	text-align: left;
+}
+
+.signUpBtn {
+    width: 100%;
+    background-color:#FFBE3B;
+    border-radius: 5px;
+    color:#fff;
+}
+
+#wrapper {
+    margin-top:50px;
+}
+
+#sidebar-wrapper {
+    background-color: #3F3F3F;
+}
+
+.dropDownMenu {
+    list-style-type:none;
+}
+
+.dropdown-toggle {
+    margin: 10px 0px 10px 55px;
+    color: #fff;
+    background-color: #009EA0;   
+}
+.btnSend,
+.btnDelete {
+    border: 1px;
+    border-radius: 150px;
+    color: #fff;
+    margin-top: 20px;
+    padding: 7px 50px 7px 40px;
+}
+
+.btnAddNew {
+    border: 1px;
+    border-radius: 150px;
+    color: #fff;
+    padding: 7px 50px 7px 40px;
+    margin-left: 20px;
+}
+
+.btnSend,
+.btnAddNew {
+    background-color: #009EA0;
+}
+
+.btnDelete {
+    background-color: #D0021B;
+}
+
+.buttonGreenGhoust {
+    border: 2px solid #009EA0;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 150px;
+    background-color: #fff;
+    color: #009EA0;
+}
+
+.buttonRedGhoust {
+    border: 2px solid #D0021B;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 150px;
+    background-color: #D0021B;
+    color: #fff;
+}
+
+
+.footerNav {
+    background:#F8F8F8;
+    padding-top:13px;
+}
+
+.paginationDiv {
+     margin-top:-35px;
+    }
+
+.inviteUser {
+    background-color: #009EA0;
+    border-radius: 150px;
+    color:#fff;
+    margin-top:-30px;
+}
+
+.searchbar{
+    text-align: right;
+    margin: 10px 0px 10px 0px;
+}
+
+.list-thumbnail, 
+.list-tree-thumbnail {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+.edit-thumbnail {
+    max-width: 180px;
+    max-height: 180px;
+}
+
+.list-tree-thumbnail {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.formatTableData {
+    color: red;
+}
+
+/* --------------------------------------
+   Google map
+   -------------------------------------- */
+
+
+
+/* --------------------------------------
+   Typography
+   -------------------------------------- */
+
+
+
+/* --------------------------------------
+   Navbar
+   -------------------------------------- */
+
+
+/* --------------------------------------
+   Carousel
+   -------------------------------------- */
+
+
+
+/* --------------------------------------
+   Global Styles
+   -------------------------------------- */
+
+
+
+/* --------------------------------------
+   Media Queries
+   -------------------------------------- */
+
+/* Portrait & landscape phone */
+@media (max-width: 480px) {
+	
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 768px) {
+	
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+	
+}
+
+.b-radius-left {
+    border-top-left-radius: 5px;    
+    border-bottom-left-radius: 5px;  
+}
+.b-radius-right {
+    border-radius: 5px;    
+}
+
+.avatar-container {
+    vertical-align: bottom;
+    margin-bottom: 20px;
+}
+
+.avatar-delete-button {
+    vertical-align: bottom;
+}
+
+.checkbox-search {
+    float: left;
+}
+
+.list-edit-link a {
+    color: inherit;
+}
+
+.header-login-data label {
+    display: inline;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    font-size: 18px;
+    margin: 0;
+}
+
+.header-login-data label:first-child {
+    border-right: 1px solid #009EA0;
+}
+
+
+
+/* PAGING */
+
+.pagination .selected-page,
+.pagination .selected-page:hover {
+    background-color: #009EA0;
+    color: #FFF;
+}
+
+
+
+/* SEARCH BUTTON */
+
+.btnSearch, 
+.btnSearch:hover,
+.btnSearch:focus {
+    color: #FFF;
+    background-color: #009EA0;
+    border-color: #009EA0;
+}
+
+
+
+/* NAVBAR */
+
+.navbar-default {
+    border-color: #009EA0;
+}
+
+
+@media (max-width: 768px) {
+
+    body {
+        background-image: none !important;
+    }
+
+    .login {
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .container {
+        display: block;
+        padding: 0;
+    }
+
+    .col-md-6 {
+        padding: 0;
+    }
+
+}

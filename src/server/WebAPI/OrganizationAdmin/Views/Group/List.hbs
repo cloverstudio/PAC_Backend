@@ -1,0 +1,98 @@
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li class="active">{{l10n "Group Management"}}</li>
+</ol>
+
+<h1 style="max-width:50%; display: inline-block;">{{l10n "Group Management"}}</h1>
+
+<button type="button" class="btnAddNew pull-right" onClick="location.href = '/admin/group/add';">
+    <i class="fa fa-plus" style="margin-right:10px;"></i>
+    {{l10n "Add New"}}
+</button>
+
+<h3 style="margin-top:10px">{{l10n "Number of groups/departments in organization:"}} <strong>{{numberOfGroups}}</strong> {{l10n "of max"}} <strong>{{maxGroupNumber}}</strong></h3>
+
+<hr />
+
+{{> alertMessage }}
+
+<div class="searchbar">
+    <form method="post" action="/admin/group/search" id="searchform" class="form-inline">
+        <div class="form-group">
+            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+        </div>
+        
+        {{#if keyword}}
+            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
+        {{/if}}
+
+        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+        
+        
+    </form>
+</div>
+
+{{> paginator }}
+
+<table class="table table-hover">
+    
+    <thead>
+        <tr>
+            <th width="5%"></th>
+            <th>
+                {{l10n "Name"}}<br />
+            </th>
+            <th width="15%">{{l10n "Created At"}}</th>
+            <th width="5%"></th>
+            <th width="5%"></th>
+            <th width="5%"></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+    {{#each list}}
+
+        <tr>
+            <td>
+                <img class="list-thumbnail img-rounded" src="/admin/file/{{avatar.thumbnail.nameOnServer}}" />
+            </td>
+            <td class="list-edit-link">
+                <a href="/admin/group/edit/{{_id}}">
+                    <strong>{{name}}</strong>
+                </a>
+                <br/>
+                <span class="small">{{_id}}</span>
+            </td>
+            <td>{{formatDate created}}</td>
+            <td>
+                <button type="button" class="buttonGreenGhoust" onclick='location.href="/admin/group/userlist/{{_id}}"'>{{l10n "Members"}}</button>
+            </td>
+            <td>
+                <button type="button" class="buttonGreenGhoust" onclick='location.href="/admin/group/edit/{{_id}}"'>{{l10n "Edit"}}</button>
+            </td>
+            <td>
+                <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/group/delete/{{_id}}"'>{{l10n "Delete"}}</button>
+            </td>
+        </tr>
+
+    {{/each}}
+    </tbody>
+    
+</table>
+    
+{{> paginator }}
+
+<script type="text/javascript">
+     
+    $(document).ready(function() {
+
+        $('#btn-clear').on('click',function(){
+            
+            $('#tb-keyword').val('');     
+            $('#searchform').submit();   
+         
+        });
+        
+    });
+        
+</script>

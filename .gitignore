@@ -1,0 +1,16 @@
+# third party modules
+node_modules
+modules_customised/spika/public/uploads
+
+# generated files
+public/uploads
+public/doc/JS
+public/doc/API
+hostid
+nohup.out
+out
+
+# configuration
+src/server/lib/init.js
+src/client/js/lib/init.js
+src/server/assets/certificates/**

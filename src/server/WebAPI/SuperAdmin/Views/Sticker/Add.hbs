@@ -1,0 +1,47 @@
+
+<ol class="breadcrumb">
+    <li><a href="/owner/home">{{l10n "Home"}}</a></li>
+    <li><a href="/owner/sticker/list">{{l10n "Sticker Management"}}</a></li>
+    <li class="active">{{l10n "Add New"}}</li>
+</ol>
+
+<h1 style="max-width:50%">{{l10n "Add New Sticker Collection"}}</h1>
+
+<hr>
+
+{{> alertMessage }}
+
+<form method="post" action="/owner/sticker/add" enctype="multipart/form-data">
+
+  <div class="form-group">
+    <label for="input1">{{l10n "Sticker Collection Name"}}</label>
+    <input type="text" name="name" class="form-control" id="text1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">
+  </div>
+  
+  <div class="form-group">
+    <label for="sortName">{{l10n "Sort Sticker Collection Name"}}</label>
+    <input type="text" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
+    <p class="help-block">{{l10n "This name will be used for sorting data."}}</p>
+  </div>
+  
+  <div class="form-group">
+    <label for="input2">{{l10n "Description"}}</label>
+    <textarea rows="4" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="input3">{{l10n "Upload File"}}</label>
+    <input type="file" name="file" />
+    <p class="help-block">
+      {{getStickerNote}} 
+      <br/>
+      {{getImageNote}}
+    </p>
+  </div>
+
+  <button  type="submit" class="btnSend pull-right">
+      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
+      {{l10n "Save"}}
+  </button>
+
+</form>

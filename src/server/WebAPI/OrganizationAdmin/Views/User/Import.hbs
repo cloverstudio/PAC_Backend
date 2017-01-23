@@ -1,0 +1,42 @@
+
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li><a href="/admin/user/list">{{l10n "User Management"}}</a></li>
+    <li class="active">{{l10n "Import"}}</li>
+</ol>
+
+<h1 style="max-width:50%">{{l10n "Import User"}}</h1>
+
+<hr>
+
+{{> alertMessage }}
+
+{{#if errorList}}
+    <div class="alert alert-danger" role="alert">
+        <strong>{{l10n "Error is found in following lines."}}</strong><br /><br />
+
+    {{#each errorList}}
+        {{#if message}} #{{line}}: {{message}}<br />{{/if}}
+    {{/each}}
+
+    </div>
+
+{{/if}}
+
+
+<form method="post" action="/admin/user/import" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label for="input3">{{l10n "Please select file."}}</label><br/>
+        <input type="file" name="file" />
+        <p class="help-block">
+            <a href="/assets/admin/sample.csv">{{l10n "Download sample file"}}</a>
+        </p>
+    </div>
+
+  <button type="submit" class="btnSend pull-right">
+      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
+      {{l10n "Start Import"}}
+  </button>
+  
+</form>

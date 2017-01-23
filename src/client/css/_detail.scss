@@ -1,0 +1,62 @@
+.detailinfotab{
+    
+    img{
+        
+        max-width: 256px;
+        margin-right: 10px;
+        float: left;
+    }
+    
+    .tab-pane{
+        padding : 10px;
+    }
+
+    .description{
+        color: $gray;
+    }
+    
+    .detail-label{
+        display: inline-block;
+        width: 150px;
+        color: $gray-light;
+        line-height: 30px;
+    }
+    
+    .detail-value{
+        line-height: 30px;
+        color: $gray;
+    }
+    
+    #memberlist{
+        overflow-y: auto;
+        height: 250px;
+        
+        table{
+            img{
+                width: 50px;
+            }
+
+            img.onlineicon{
+                width: 10px;
+                margin: 5px;
+            }
+            
+            td{
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            
+            .even{
+                td{
+                    background-color : $table-bg-accent;
+                }
+            }
+            
+            .odd{
+                td{
+                    
+                }
+            }
+        }
+    }
+}

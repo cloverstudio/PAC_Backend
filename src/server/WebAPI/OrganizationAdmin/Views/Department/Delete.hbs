@@ -1,0 +1,66 @@
+
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li><a href="/admin/department/list">{{l10n "Department Management"}}</a></li>
+    <li class="active">{{l10n "Delete"}}</li>
+</ol>
+
+<h1 style="max-width:50%">{{l10n "Delete Department"}}</h1>
+<h3 style="margin-top:10px">{{formValues.name}}</h3>
+
+<hr>
+
+{{> alertMessage }}
+
+<form method="post" action="/admin/department/delete/{{formValues._id}}" enctype="multipart/form-data">
+  <input type="hidden" name="_id" class="form-control" value="{{formValues._id}}">
+  
+  <div class="form-group">
+    <label for="input1">{{l10n "Department Name"}}</label>
+    <input type="text" disabled="disabled" name="name" class="form-control" id="text1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">
+  </div>
+  
+  <div class="form-group">
+    <label for="sortName">{{l10n "Sort Department Name"}}</label>
+    <input type="text" disabled="disabled" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
+    <p class="help-block">{{l10n "This name will be used for sorting data."}}</p>
+  </div>
+  
+  <div class="form-group">
+    <label for="input2">{{l10n "Description"}}</label>
+    <textarea rows="4" disabled="disabled" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="input3">{{l10n "Parent Department"}}</label>
+    <br/>
+
+    <select disabled="disabled" name="parentId">
+      <option value=""></option>
+
+      {{#each formValues.departmentList}}
+        <option value="{{_id}}" {{{selectedIfEqual ../formValues.parentId _id}}}>{{name}}</option>
+      {{/each}}
+
+    </select>
+
+  </div>
+
+  <div class="form-group">
+    <label for="input3">{{l10n "Avatar"}}</label>
+
+    {{#if formValues.avatar.thumbnail.nameOnServer}}
+      <div class="avatar-container">
+        <img class="edit-thumbnail img-rounded" src="/admin/file/{{formValues.avatar.thumbnail.nameOnServer}}" />
+      </div>
+    {{/if}}
+
+    <input type="file" disabled="disabled" name="avatar" />
+  </div>
+
+  <button  type="submit" class="btnDelete pull-right">
+      <i class="fa fa-times" style="margin-right:10px;"></i>
+      {{l10n "Delete"}}
+  </button>
+
+</form>

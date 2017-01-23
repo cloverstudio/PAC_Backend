@@ -1,0 +1,3 @@
+#"User Name","Sort User Name","User ID","Password","Status 1: enabled, 0: disabled","Groups","Departments","Permission 1: normal user, 2 : subadmin"
+"Import User 1","ImportUser1","importuser1","password","1","importgroup","importdepartment","1"
+"Import User 2","ImportUser2","importuser2","password","0","importgroup,importgroup2","importdepartment","2"

@@ -1,0 +1,195 @@
+#callingview.window-mini{
+    
+    border: 1px solid $gray-lighter;
+
+    -webkit-box-shadow: 4px 4px 24px 1px rgba(192,192,192,1);
+    -moz-box-shadow: 4px 4px 24px 1px rgba(192,192,192,1);
+    box-shadow: 4px 4px 24px 1px rgba(192,192,192,1);
+    
+    font-family: Lato;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 330px;
+    height: 330px;
+    background-color: rgba(256, 256, 256, 0.8);
+    z-index: 1000;
+    text-align: center;
+    overflow-y: auto;
+
+    .img-holder{
+        
+        margin-top: 10px;
+        
+        img{
+            max-width: 100px;
+        }
+        
+    }
+    
+    #video-holder.row{
+        
+        margin: 0px;
+        margin-top: 20px;
+        text-align: left;
+        
+        div{
+            margin: 0px;
+            
+            video{
+                width: 100%;
+                border-radius: 10px;
+            }
+        }
+        
+        #video-target{
+            background-color: #fff;
+        }
+        
+        #video-mine{
+            background-color: #fff;
+        }
+        
+        .userinfo{
+            
+            line-height: 15px;
+            font-size: 15px;
+            
+            img{
+                max-width: 50px;
+            }
+        }
+        
+    }
+    .name-holder{
+        
+        margin-top: 5px;
+        font-size: 25px;
+        
+    }
+    
+    #call-status{
+        
+        margin-top: 10px;
+        
+    }
+    
+    .call-media{
+        
+        margin-top: 5px;
+        
+        img{
+            max-width: 50px;
+        }
+        
+        .media-btn-holder{
+            text-align: center;
+        }
+    }
+    
+    .call-operation{
+        margin-top: 5px;
+    }
+    
+    .icon{
+        max-width: 30px;
+        cursor: pointer;
+    }
+    
+}
+
+#callingview.window-full{
+    
+    font-family: Lato;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(256, 256, 256, 0.8);
+    z-index: 1000;
+    text-align: center;
+    overflow-y: auto;
+    
+    .img-holder{
+        
+        margin-top: 100px;
+        
+        img{
+            max-width: 150px;
+        }
+        
+    }
+    
+    #video-holder.row{
+        
+        margin: 0px;
+        margin-top: 20px;
+        text-align: left;
+        
+        div{
+            margin: 0px;
+            
+            video{
+                width: 100%;
+                border-radius: 10px;
+            }
+        }
+        
+        #video-target{
+            background-color: #fff;
+        }
+        
+        #video-mine{
+            background-color: #fff;
+        }
+        
+        .userinfo{
+            
+            line-height: 60px;
+            vertical-align: middle;
+            font-size: 20px;
+            
+            img{
+                max-width: 50px;
+            }
+        }
+        
+    }
+    .name-holder{
+        
+        margin-top: 25px;
+        font-size: 25px;
+        
+    }
+    
+    #call-status{
+        
+        margin-top: 25px;
+        
+    }
+    
+    .call-media{
+        
+        margin-top: 25px;
+        height: 100px;
+        
+        img{
+            max-width: 75px;
+        }
+        
+        .media-btn-holder{
+            text-align: center;
+        }
+    }
+    
+    .call-operation{
+        margin-top: 25px;
+    }
+    
+    .icon{
+        max-width: 50px;
+        cursor: pointer;
+    }
+    
+}

@@ -1,0 +1,74 @@
+
+    {{#each list}}
+        
+        <div class="chat-target  {{#if unreadCount }} unread {{/if}}" id="{{_id}}">
+            
+        {{#condition chatType 1}}
+            
+            <div class="private">
+                
+                <div class="img-holder">
+                    <img class="img-circle" src="/api/v2/avatar/user/{{user.avatar.thumbnail.nameOnServer}}" />
+                </div>
+
+                {{#if user.onlineStatus}}  <img class="img-circle onlineicon" src="/images/onlineIcon.png" /> {{/if}}
+
+                <div class="name">
+                    {{strip user.name 15}}
+                </div>
+                
+                <div class="lastmessage">{{strip lastMessage.message 35}}</div>
+
+                <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
+                
+                {{#if unreadCount }}<span class="badge">{{unreadCount }}</span>{{/if}}
+                
+            </div>
+            
+
+        {{/condition}}
+ 
+        {{#condition chatType 2}}
+            
+            <div class="group">
+
+                <div class="img-holder">
+                    <img class="img-circle" src="/api/v2/avatar/group/{{group.avatar.thumbnail.nameOnServer}}" />
+                </div>
+                
+                <div class="name">{{strip group.name 15}}</div>
+                
+                <div class="lastmessage">{{strip lastMessage.message 35}}</div>
+
+                <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
+
+                {{#if unreadCount }}<span class="badge">{{unreadCount }}</span>{{/if}}
+                
+            </div>
+            
+        {{/condition}}
+        
+        {{#condition chatType 3}}
+
+            <div class="room">
+
+                <div class="img-holder">
+                    <img class="img-circle" src="/api/v2/avatar/room/{{room.avatar.thumbnail.nameOnServer}}" />
+                </div>
+                
+                <div class="name">{{strip room.name 15}}</div>
+                
+                <div class="lastmessage">{{strip lastMessage.message 35}}</div>
+
+                <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
+                
+                {{#if unreadCount }}<span class="badge">{{unreadCount }}</span>{{/if}}
+                
+            </div>
+            
+        {{/condition}}
+
+            <div class="clearfix"></div>
+        </div>
+        
+    {{/each}}

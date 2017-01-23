@@ -1,0 +1,1 @@
+Here is logics for each searvice provide, it is called when inbound hook is arrived.

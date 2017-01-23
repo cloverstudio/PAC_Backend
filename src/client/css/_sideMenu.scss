@@ -1,0 +1,243 @@
+#sidemenu-cover{
+    
+    position: absolute;
+    background-color: #000;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    
+}
+
+#sidemenu{
+    
+    background-color: #fff;
+    position: absolute;
+    left: -320px;
+    top: 0px;
+    height: 100%;
+    z-index: 200;
+    width: 320px;
+    
+    overflow: auto;
+    
+    .loginuser{
+
+        padding: 10px;
+        
+        .img-holder{
+            height: 50px;
+            float: left;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        
+        img{
+            width: 50px;
+        }
+  
+        .user-name{
+            color : $gray-dark;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+
+
+        .user-identifier{
+            color : $gray-dark;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+        
+        .user-description{
+            color : $gray-light;
+            margin-left: 10px;
+        }
+    
+        border-bottom: 1px solid $gray-lighter;
+    }
+    
+    ul{
+        
+        padding: 0px;
+        
+        li{
+            
+            list-style: none;
+            border-bottom: 1px solid $gray-lighter;
+            vertical-align: middle;
+            
+            a{
+                display: block;
+                padding-left : 10px;
+                line-height: 50px;
+                color: $gray;
+            }
+
+            a:hover{
+                text-decoration: none;
+                background-color: $gray-lighter;
+            }
+            
+            a.disabled{
+                text-decoration: none;
+                cursor: default;
+            }
+            
+            a.disabled:hover{
+                text-decoration: none;
+                background-color: #fff;
+            }
+            
+            img{
+                max-width: 30px;
+            }
+        
+        }
+        
+        li.spacer{
+            height: 10px;
+            background-color: $gray-lighter;
+        }
+        
+        li.red-bg{
+            
+            //background-color: $brand-danger;
+            
+            a{
+                color: $brand-danger;
+            }
+
+            a:hover{
+                text-decoration: none;
+                color : #fff;
+                background-color: $brand-danger;
+            }
+            
+        }
+        
+    }
+    
+    #submenu-header{
+        
+        padding : 10px;
+        margin-top: 10px;
+        line-height: 30px;
+        vertical-align: middle;
+        border-bottom: 1px solid $state-success-border;
+        border-top: 1px solid $state-success-border;
+        color : $panel-success-text;
+        background-color: $panel-success-heading-bg;
+        
+    }
+    
+    .sidemenu-user{
+        
+        padding: 10px;
+        
+        .img-holder{
+            height: 50px;
+            float: left;
+            margin-right: 5px;
+        }
+        
+        img{
+            width: 50px;
+        }
+
+
+        img.onlineicon{
+            width: 10px;
+            margin: 5px;
+        }
+          
+          
+        .chat-name{
+            color : $gray-dark;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+
+        .chat-description{
+            color : $gray-light;
+            margin-left: 10px;
+        }
+        
+        .chat-info{
+            color : $gray-light;
+
+        }
+        
+    }
+
+    .sidemenu-group{
+    
+        padding: 10px;
+        
+        .img-holder{
+            height: 50px;
+            float: left;
+            margin-right: 5px;
+        }
+        
+        img{
+            width: 50px;
+        }
+        
+        .chat-name{
+            color : $gray-dark;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+
+        .chat-description{
+            color : $gray-light;
+            margin-left: 10px;
+        }
+        
+        .chat-info{
+            color : $gray-light;
+
+        }
+        
+    }
+
+    .sidemenu-room{
+    
+        padding: 10px;
+        
+        .img-holder{
+            height: 50px;
+            float: left;
+            margin-right: 5px;
+        }
+        
+        img{
+            width: 50px;
+        }
+        
+        .chat-name{
+            color : $gray-dark;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+        
+        .chat-description{
+            color : $gray-light;
+            margin-left: 10px;
+        }
+        
+        .chat-info{
+            color : $gray-light;
+
+        }
+        
+    }
+        
+    .switch-container{
+        float: right;
+        padding-right: 10px;
+    }
+        
+}

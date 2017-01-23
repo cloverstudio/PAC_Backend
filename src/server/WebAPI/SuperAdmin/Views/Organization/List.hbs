@@ -1,0 +1,106 @@
+<ol class="breadcrumb">
+    <li><a href="/owner/home">{{l10n "Home"}}</a></li>
+    <li class="active">{{l10n "Organization"}}</li>
+</ol>
+
+<h1 style="max-width:50%; display: inline-block;">{{l10n "Organization Management"}}</h1>
+
+<button type="button" class="btnAddNew pull-right" onClick="location.href = '/owner/organization/add';">
+    <i class="fa fa-plus" style="margin-right:10px;"></i>
+    {{l10n "Add New"}}
+</button>
+
+<hr />
+
+{{> alertMessage }}
+
+<div class="searchbar">
+    <form method="post" action="/owner/organization/search" id="searchform" class="form-inline">
+
+        <label class="checkbox-inline checkbox-search">
+            <input type="checkbox" name="disabledStatus" id="chk-disabledStatus" value="1" {{{checkedIfEqual disabledStatus 1}}} />{{l10n "Show disabled organizations"}}
+        </label>
+
+        <div class="form-group">
+            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+        </div>
+        
+        {{#if keyword}}
+            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
+        {{/if}}
+
+        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+        
+    </form>
+</div>
+
+{{> paginator }}
+
+<table class="table table-hover">
+    
+    <thead>
+        <tr>
+            <th width="5%"></th>
+            <th>{{l10n "Name"}}</th>
+            <th width="10%">{{l10n "Users"}}</th>
+            <th width="15%">{{l10n "Groups / Departments"}}</th>
+            <th width="10%">{{l10n "Rooms"}}</th>
+            <th width="15%">{{l10n "Disk Quota (GB)"}}</th>
+            <th width="15%">{{l10n "Organization ID"}}</th>
+            <th width="10%">{{l10n "Created At"}}</th>
+            <th width="10%">{{l10n "Status"}}</th>
+            <th width="5%"></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+    {{#each list}}
+        <tr>
+            <td>
+                <img class="list-thumbnail img-rounded" src="/owner/file/{{logo.thumbnail.nameOnServer}}" />
+            </td>
+            <td class="list-edit-link">
+                <a href="/owner/organization/edit/{{_id}}">
+                    <strong>{{name}}</strong>
+                </a>
+                <br/>
+                <span class="small">{{_id}}</span>
+            </td>
+            {{{formatTableData userCount maxUserNumber}}}
+            {{{formatTableData groupCount maxGroupNumber}}}
+            {{{formatTableData roomCount maxRoomNumber}}}
+            {{{formatTableData disk.diskUsage disk.diskQuota}}}
+            <td>{{organizationId}}</td>
+            <td>{{formatDate created}}</td>
+            <td>{{getStatusName status}}</td>
+            <td>
+                <button type="button" class="buttonGreenGhoust" onclick='location.href="/owner/organization/edit/{{_id}}"'>{{l10n "Edit"}}</button>
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+    
+</table>
+    
+{{> paginator }}
+
+<script type="text/javascript">
+     
+    $(document).ready(function() {
+
+        $('#btn-clear').on('click',function(){
+            
+            $('#tb-keyword').val('');     
+            $('#searchform').submit();   
+         
+        });
+        
+        $('#chk-disabledStatus').on('change', function() {
+
+            $('#searchform').submit();    
+
+        });
+
+    });
+        
+</script>

@@ -1,0 +1,105 @@
+
+    <div class="container">
+        <div class="col-md-6 col-md-offset-2">
+            <div class="login col-md-12"> 
+                <img class="spikaLoginImg" src="{{AssetURL}}/images/spikaLogo.svg">
+                <div class="clearfix"></div>
+                <p>{{l10n "Welcome to"}}</p>
+                <h2>{{l10n "Spika for Business: Admin"}}</h2> 
+                <br>
+                
+                
+                <div class="col-md-12">
+                    
+                    <form id="mainform" method="post" onsubmit="return onSubmit()">
+                        
+                        {{> alertMessage }}
+                        
+                        <input class="form-control" name="organizationId" id="text-organizationId" type="text" placeholder="{{l10n "Enter organization ID..."}}" value="{{organizationId}}" autofocus="autofocus">
+                        <br/>
+                        <input class="form-control" name="username" id="text-name" type="text" placeholder="{{l10n "Enter user name..."}}" value="{{username}}">
+                        <br/>
+                        <input class="form-control" name="password" id="text-password" type="password" placeholder="{{l10n "Password"}}" value="{{password}}">
+                        
+                        <button type="submit" class="Loginbutton" id="btn-login">{{l10n "Login"}}</button>
+                        
+                        <div class="checkbox" style="margin-top:10px">
+
+                        	<label class="checkbox-inline"> <input type="checkbox" id="chkbox-remember">{{l10n "Remember password"}}</label>
+
+                        </div>
+                        {{!-- <div class="pull-right  col-sm-6" style="margin-top:10px">
+                            <a href="#">{{l10n "Forgot password?"}}</a>
+                        </div> --}}
+                        <div class="container-fluid signUp"> 
+                            <p> {{l10n "Not allready a member?"}}</p>
+                            <button type="submit" class="btn signUpBtn" name="signup" value="1">{{l10n "Sign up"}}</button>
+                        </div>
+                        
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    	
+		$(function() {
+
+            var savedOrganizationId = localStorage.getItem("admin-organizationId");
+			var savedUserName = localStorage.getItem("admin-loginname");
+			var savedPassword = localStorage.getItem("admin-loginpassword");
+
+            var organizationIdEnabled = false;
+			var nameEnabled = false;
+			var passwordEnabled = false;
+            
+            if (savedOrganizationId && savedOrganizationId != "") {            
+                if (!$('#text-organizationId').val()) {
+                    $('#text-organizationId').val(savedOrganizationId);
+                    organizationIdEnabled = true;
+                };
+            }
+
+            if (savedPassword && savedPassword != "") {
+                if (!$('#text-name').val()) {
+                    $('#text-password').val(savedPassword);
+                    passwordEnabled = true;
+                };
+            }
+
+            if (savedUserName && savedUserName != "") {
+                if (!$('#text-name').val()) {
+                    $('#text-name').val(savedUserName);
+                    nameEnabled = true;                    
+                };
+            }
+            
+			if (organizationIdEnabled && nameEnabled && passwordEnabled) 
+                $("#chkbox-remember").attr('checked','checked');	
+				
+		});
+		
+    	function onSubmit() {
+
+	        if(typeof(Storage) === "undefined")
+	            return false;
+
+			if($("#chkbox-remember").is(':checked')){
+				
+                localStorage.setItem("admin-organizationId", $('#text-organizationId').val());
+				localStorage.setItem("admin-loginname", $('#text-name').val());
+                localStorage.setItem("admin-loginpassword", $('#text-password').val());
+
+			}else{
+				
+                localStorage.setItem("admin-organizationId", "");
+				localStorage.setItem("admin-loginname", "");
+                localStorage.setItem("admin-loginpassword", "");
+				
+			}
+
+    		return true;
+    	}
+    	
+    </script>

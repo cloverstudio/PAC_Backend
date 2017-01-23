@@ -1,0 +1,85 @@
+
+    {{#each list}}
+        <div class="search-result-row" id="{{_id}}">
+
+            {{#if userModelTarget}}
+ 
+                <div class="img-holder">
+                    <img class="img-circle" src="/api/v2/avatar/user/{{userModelTarget.avatar.thumbnail.nameOnServer}}" />
+                </div>
+                
+                <div class="name-holder">
+                    {{userModelTarget.name}}
+                </div>
+                
+            {{/if}}
+            
+            {{#if groupModel}}
+ 
+                 <div class="img-holder">
+                    <img class="img-circle" src="/api/v2/avatar/group/{{groupModel.avatar.thumbnail.nameOnServer}}" />
+                </div>
+                
+                <div class="name-holder">
+                    {{groupModel.name}}
+                </div>
+                
+            {{/if}}
+            
+            {{#if roomModel}}
+
+                 <div class="img-holder">
+                    <img class="img-circle" src="/api/v2/avatar/room/{{roomModel.avatar.thumbnail.nameOnServer}}" />
+                </div>
+                
+                <div class="name-holder">
+                    {{roomModel.name}}
+                </div>
+                
+            {{/if}}
+                
+            <div class="info-holder">
+
+                {{l10n "Posted on "}} {{formatDate created}}
+                
+                {{l10n "From "}} {{userModel.name}}
+
+            </div>
+
+            <div class="message-holder new">
+                
+                {{#condition type 1}}
+                    
+                    {{message}}
+                    
+                {{/condition}}
+
+                {{#condition type 2}}
+                    
+                    {{#if file.thumb}}
+                        
+                        <img src="{{spikaImageUrl file.thumb.id}}" class="img-rounded"/><br />
+                        <span class="filename">{{file.file.name}}</span>
+                        
+                    {{/if}}
+                    
+                    {{#unless file.thumb}}
+                        
+                        <i class="fa fa-file-o"></i> {{file.file.name}}
+                        
+                    {{/unless}}
+                    
+                {{/condition}}
+                
+            </div>
+            
+            <div class="clearfix"></div>
+            
+        </div>
+    {{/each}}
+    
+    {{#ifempty list}}
+        
+        <div class="alert alert-warning" role="alert">{{l10n "No message found. Please try to search with diffenret word."}}</div>
+        
+    {{/ifempty}}

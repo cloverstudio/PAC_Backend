@@ -1,0 +1,52 @@
+ 
+ <div id="view-login">
+
+     <div class="col-md-6 col-md-push-6 hidden-sm hidden-xs bigpicture">
+         
+         <img src="/images/UI/world.png" />
+         
+         <span class="trademark">
+            
+            &copy; 2016 Clover Studio Ltd. All rights reserved
+                
+         </span>
+         
+     </div>
+     
+     <div class="col-md-6 col-sm-12 col-md-pull-6 forms">
+         
+         <div class="logo-container">
+            
+            <img src="/images/UI/logo.png" />
+            
+            <div class="welcome">
+                <div class="text">{{l10n "Welcome to"}}</div>
+                <div class="title">Spika for Business: Web Client</div>
+            </div>
+                
+         </div>
+
+         <div class="form-container">
+            
+            <div id="alert-error" class="alert alert-danger" style="display:none" role="alert">
+                <strong id="error-title">{{l10n "Failed to login"}}</strong><br />
+                <span id="error-desc"> {{l10n "Please input correct login credentials."}} </span>
+            </div>
+
+            <input value="{{savedCredentials.organization}}" class="form-control" name="organization" id="tb-organization" type="text" placeholder="{{l10n "Enter organiztion name..."}}" autofocus="autofocus">
+
+            <input value="{{savedCredentials.userid}}" class="form-control" name="username" id="tb-username" type="text" placeholder="{{l10n "Enter user name..."}}">
+
+            <input value="{{savedCredentials.password}}" class="form-control" name="password" id="tb-password" type="password" placeholder="{{l10n "Password"}}" >
+
+            <button id="btn-login" type="submit" class="btn-primary btn-block btn-lg Loginbutton"> <i class="fa fa-cog fa-spin hide"></i> {{l10n "Login"}} </button>
+
+            <label><input type="checkbox" id="checkbox-remember" {{#if savedCredentials.remember }} checked {{/if}}> {{l10n "Keep me logged in"}}</label>
+
+            
+         </div>
+     
+    
+     </div>
+
+</div>

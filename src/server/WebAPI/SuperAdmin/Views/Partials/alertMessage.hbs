@@ -1,0 +1,15 @@
+{{#if infoMessage}}
+    <div class="alert alert-info" role="alert">{{l10n infoMessage}}</div>
+{{/if}}
+
+{{#if errorMessage}}
+    <div class="alert alert-danger" role="alert">{{{l10n errorMessage}}}</div>
+{{/if}}
+
+{{#if warningMessage}}
+    <div class="alert alert-warning" role="alert">{{l10n warningMessage}}</div>
+{{/if}}
+
+{{#if successMessage}}
+    <div class="alert alert-success" role="alert">{{l10n successMessage}}</div>
+{{/if}}

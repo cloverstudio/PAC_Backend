@@ -1,0 +1,26 @@
+{
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "args": [
+        "--no-color"
+    ],
+    "tasks": [
+        {
+            "taskName": "build-dist",
+            "args": [],
+            "isBuildCommand": true,
+            "isWatching": false,
+            "problemMatcher": [
+                "$lessCompile",
+                "$tsc",
+                "$jshint"
+            ]
+        },
+        {
+            "taskName": "messenger-test",
+            "args": [],
+            "isTestCommand": true
+        }
+    ]
+}

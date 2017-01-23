@@ -1,0 +1,19 @@
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li class="active">{{l10n "Department Management"}}</li>
+</ol>
+
+<h1 style="max-width:50%; display: inline-block;">{{l10n "Department Management"}}</h1>
+
+<button type="button" class="btnAddNew pull-right" onClick="location.href = '/admin/department/add';">
+    <i class="fa fa-plus" style="margin-right:10px;"></i>
+    {{l10n "Add New"}}
+</button>
+
+<h3 style="margin-top:10px">{{l10n "Number of groups/departments in organization:"}} <strong>{{numberOfGroups}}</strong> {{l10n "of max"}} <strong>{{maxGroupNumber}}</strong></h3>
+
+<hr />
+
+{{> alertMessage }}
+
+{{{createTreeGridDepartment list}}}

@@ -1,0 +1,284 @@
+
+
+body {
+    font-family: Lato;
+}
+
+
+/* --------------------------------------
+   signup
+   -------------------------------------- */
+
+.fixscreen{
+    overflow-x: auto;
+}
+
+.bigpicture{
+    
+    background-image: url(/assets/admin/images/spikaPattern.jpg);
+    text-align: center;
+    position: relative;
+
+}
+
+.bigpicture .helptext{
+    position: absolute;
+    top: 10%;
+    left:50px;  
+    width: 90%;
+    font-size: 30px;
+    color: #fff;
+}
+
+.bigpicture img{
+    position: absolute;
+    top: 30%;
+    left:50px;    
+    width: 90%;
+}
+
+.bigpicture .trademark, 
+.tutorial .trademark {
+    color: #fff;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.logo-container{
+    text-align: center;
+    padding: 0px 50px 0px 50px;
+    margin-top: 120px;
+    margin-bottom: 20px;
+}
+
+.logo-container img{
+    width: 75px;
+}
+
+.logo-container .welcome{
+    margin-top: 30px;
+}
+
+.logo-container .welcome .text{
+    color: #d3d3d3;
+    font-size: 12px;
+}
+
+.logo-container .welcome .title{
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+.form-container{
+    text-align: left;
+    padding: 0px 50px 0px 50px;
+}
+    
+.form-container input.form-control{
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.form-container button{
+    height: 40px;
+    margin-bottom: 20px;
+    border: none;
+}
+
+.form-container label{
+    color: #d3d3d3;
+    font-weight: normal;
+}
+
+.finish {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.finish img#teamimage {
+    width: 90%
+}
+
+.finish .logo-container {
+    margin-top: 100px;
+}
+
+.finish .logo-container .thankyou{
+    margin-top: 10px;
+}
+
+.finish .logo-container .thankyou .text{
+    margin-top: 10px;
+    color: #bbb;
+    font-size: 12px;
+}
+
+ .finish .logo-container .thankyou .title{
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+.finish .follow{
+    text-align: center;
+    margin-top: 10px;
+    color: #555;
+    font-size: 12px;
+}
+
+
+.tutorial {
+    background-image: url(/assets/admin/images/spikaPattern.jpg);
+    text-align: center;
+    color: #fff;
+}
+
+.tutorial .textsmall,
+.signupurl span {
+    color: #fff;
+    font-size: 14px;
+}
+
+.tutorial .textbig {
+    margin-top: 5px;
+    color: #fff;
+    font-size: 30px;
+}
+
+.tutorial img {
+    margin-top: 20px;
+    width: 40%;
+    border-radius: 5%;
+}
+
+.tutorial .download {
+    padding-top: 50px;
+}
+
+.tutorial #slider .download img,
+.tutorial .download img {
+    margin: auto auto 30px;
+    width: 30%;
+    border-radius: 5%;
+}
+
+.signupurl {
+    margin-top: 10px;
+}
+
+.signupurl .url {
+    margin: 5px auto auto;
+    font-size: 18px;
+    width: 52%;
+    background-color: #fff;
+    color: #222;
+    padding: 10px;
+    border-radius: 10px;  
+    outline: none;
+    display: block;
+    text-align: center;
+    border: 0;
+}
+
+
+/* --------------------------------------
+   404
+   -------------------------------------- */
+.txt-centar {
+    text-align: center;
+}
+
+.error img {
+    max-width:300px; 
+    max-height: 400px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+} 
+
+.b-radius-left {
+    border-top-left-radius: 5px;    
+    border-bottom-left-radius: 5px;  
+}
+.b-radius-right {
+    border-radius: 5px;    
+}
+
+
+
+/***********************
+  OUTLINE BUTTONS
+************************/
+
+.btn-holder {
+
+}
+
+.btn.outline {
+    background: none;
+    padding: 12px 22px;
+    outline: none;
+}
+
+.btn-step.outline {
+    border: 2px solid #fff;
+    color: #fff;
+    width: 50%;
+    border-radius: 10px;
+    margin: auto;
+}  
+
+/***********************
+  SLIDER
+************************/
+
+#slider {
+    margin: auto auto 0;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 50px;
+}
+
+#slider ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#slider ul li {
+    position: relative;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/***********************
+  SLIDER DOTS
+************************/
+
+#slider-dots {
+    margin-top:20px;
+    list-style: none;
+    width: 100%;
+    list-style-type: none;
+    text-align: center;
+}
+
+#slider-dots ul {
+    padding: 0px;
+}
+
+#slider-dots ul li {
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}

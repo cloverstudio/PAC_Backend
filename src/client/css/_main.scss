@@ -1,0 +1,121 @@
+
+#header{
+    
+    font-family: Lato;
+    border-bottom: 1px solid $color-main;
+    
+    
+    .sidebar{
+
+        line-height: 70px;
+        vertical-align: middle;
+    
+        margin-left: -15px;
+        text-align: center;
+        
+        .sidebarleft{
+
+            .btn{
+                background-color: $gray-lighter;
+            }
+    
+            float: left;
+        }
+
+        .sidebartitle{
+            color: $color-main;
+            font-size: 15px;
+        }
+        
+        .sidebarright{
+
+            .btn{
+                background-color: $gray-lighter;
+            }
+            
+            img{
+                cursor: pointer;
+            }
+
+            img:hover { 
+                opacity: 0.8; 
+                filter: alpha(opacity=80); 
+            } 
+
+            float: right;
+        }
+
+    }
+    
+    #btn-new-room{
+        background-color: $color-main;
+        color: #fff;
+        float: left;
+    }
+    
+    
+    #title-container{
+        text-align: center;
+    }
+    
+    #header-title{
+        
+        width: 100%;
+        vertical-align: middle;
+        padding-top: 20px;
+        
+        .img-holder{
+           
+            margin-right: 5px;
+            display: none;
+            
+            img{
+                width: 30px;
+            }
+        
+        }
+
+        .onlineicon{
+            width: 10px !important;
+        }
+    
+        #header-title-title{
+            padding-top: 5px;
+            font-size: 15px;
+            color: $color-main;
+        }
+        
+        #header-title-description{
+            color: $gray-light;
+        }
+            
+    }
+
+
+    #custom-header-container{
+        padding-left: 0px;
+    }
+    
+    #search-header-container{
+        
+        .form-control-feedback{
+            left: 0;
+        }
+        
+        input{
+            padding-left : 30px;
+        }
+        
+        margin-top: 20px;
+        color: $gray-light;
+        
+    }
+    
+    background-color: $gray-lighter;
+    height: 70px;
+    
+}
+
+#chat-container{
+    padding: 0px;
+}

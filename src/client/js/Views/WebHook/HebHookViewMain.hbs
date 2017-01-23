@@ -1,0 +1,147 @@
+<div id="webhook-container">
+    
+    {{#ifnotempty list}}
+        
+        <table class="table table-striped">
+            
+            <thead>
+                <tr>
+                    <td width="10%">{{l10n "type"}}</td>
+                    <td width="40%">{{l10n "Notity URL"}}</td>
+                    <td width="30%">{{l10n "Target"}}</td>
+                    <td width="10%">{{l10n "Created"}}</td>
+                    <td width="10%"></td>
+                </tr>
+            </thead>
+            
+            <tbody>
+                
+                {{#each list}}
+                
+                    <tr>
+                        
+                        <td>
+
+                            {{#condition hookType 1}}
+                                
+                                <img src="/images/UI/arrow_right.png" />
+                                <span class="text-primary">{{l10n "inbound"}}</span>
+                                
+                            {{/condition}}
+
+                            {{#condition hookType 2}}
+                                
+                                <img src="/images/UI/arrow_left.png" />
+                                <span class="text-success">{{l10n "outgoing"}}</span>
+                                
+                            {{/condition}}
+                            
+                        </td>
+
+                        <td>
+                            {{#condition hookType 1}}
+                                
+                                {{baseURL}}/api/v2/hook/r/{{identifier}}
+                                
+                            {{/condition}}
+
+                            {{#condition hookType 2}}
+                                
+                                {{url}}
+                                
+                            {{/condition}}
+
+                        </td>
+
+                        <td class="selectable">
+                            
+                            <span class="read">
+                                
+                                {{#condition hookType 1}}
+                                    
+                                To:
+                                    
+                                {{/condition}}
+
+                                {{#condition hookType 2}}
+                                    
+                                From:
+                                    
+                                {{/condition}}
+                                
+
+                                {{#condition targetType 1}}
+                                    
+                                    {{userModel.name}}
+                                    
+                                {{/condition}}
+
+                                {{#condition targetType 3}}
+                                    
+                                    {{roomModel.name}}
+                                    
+                                {{/condition}}
+                                
+                            </span>
+
+                            <span class="edit" style="display:none">
+                                
+                                <form class="form-inline" onsubmit="return false">
+                                    
+                                    <select id="hookselect-{{_id}}" class="form-control">
+
+                                        {{#each ../rooms}}
+                                            <option value="{{_id}}">{{l10n "Room :"}} {{name}}</option>
+                                        {{/each}}
+                                        
+                                    </select>
+                                    
+                                    <button type="button" hookid="{{_id}}" class="btn-save btn btn-success btn-xs">{{l10n "Save"}}</button>
+                                    <button type="button" class="btn-cancel btn-delete btn btn-default btn-xs">{{l10n "Cancel"}}</button>
+                                
+                                </form>
+                                
+                            </span>
+                            
+                        </td>
+
+
+                        <td >
+                            
+                             {{yyyymmdd created}}
+                            
+                        </td>
+
+                        <td class="text-right">
+                            
+                            <button type="button" hookid="{{_id}}" class="btn-delete btn btn-danger btn-xs">{{l10n "Delete"}}</button>
+                            
+                        </td>
+                        
+                    </tr>
+                    
+                {{/each}}
+            
+                <tr>
+                   <td colspan="5" class="text-right">
+                       <button type="button" id="btn-newhook" class="btn btn-primary">{{l10n "Add New"}}</button>
+                   </td>
+                </tr>
+                
+            </tbody>
+            
+        </table>
+        
+    {{/ifnotempty}}
+    
+    {{#ifempty list}}
+
+            <div class="alert alert-warning" role="alert">
+                {{l10n "No webhook settings exists. "}} 
+                <button type="button" id="btn-newhook" class="btn btn-primary">{{l10n "Add New"}}</button>
+            </div>
+
+    {{/ifempty}}
+    
+</div>
+

@@ -1,0 +1,31 @@
+
+    <div class="sidemenu-group">
+        
+        <div class="img-holder">
+            <img class="img-circle" src="/api/v2/avatar/group/{{group.avatar.thumbnail.nameOnServer}}" />
+        </div>
+
+        <span class="chat-name">{{group.name}}</span><br />
+        
+        <span class="chat-description">{{group.description}}</span><br />
+        
+        <div class="clearfix"></div>
+    </div>
+
+    <ul class="menu">
+        
+        <li>
+            <a href="javascript:void(0)" class="disabled">
+                {{l10n "Notification"}}
+
+                <div class="switch-container">
+                    <input type="checkbox" name="checkbox-notify">
+                </div>
+            
+            </a>
+            
+        </li>
+
+        <li><a href="javascript:void(0)" id="btn-groupdetail">{{l10n "Show Detail"}}</a></li>
+        
+    </ul>

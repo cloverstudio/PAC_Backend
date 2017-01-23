@@ -1,0 +1,34 @@
+
+    <div class="sidemenu-user" id="{{user._id}}">
+        
+        <div class="img-holder">
+            <img class="img-circle" src="/api/v2/avatar/user/{{user.avatar.thumbnail.nameOnServer}}" />
+        </div>
+        
+        <span class="chat-name">
+                {{#if user.onlineStatus}}  <img class="img-circle onlineicon" src="/images/onlineIcon.png" /> {{/if}}
+                {{user.name}}
+        </span><br />
+        
+        <span class="chat-description">{{user.description}}</span><br />
+        
+        <div class="clearfix"></div>
+    </div>
+        
+    <ul class="menu">
+        
+        <li>
+            <a href="javascript:void(0)" class="disabled">
+                {{l10n "Notification"}}
+
+                <div class="switch-container">
+                    <input type="checkbox" name="checkbox-notify">
+                </div>
+                    
+            </a>
+        </li>
+            
+        <li><a href="javascript:void(0)" id="btn-editprofile">{{l10n "Show Profile"}}</a></li>
+
+    </ul>
+    

@@ -1,0 +1,16 @@
+
+{{#each list}}
+
+    <li>
+        
+        <span class="img-holder">
+            <img class="img-circle" src="/api/v2/avatar/user/{{avatar.thumbnail.nameOnServer}}" />
+            {{#if onlineStatus}}  <img class="img-circle onlineicon" src="/images/onlineIcon.png" /> {{/if}}
+        </span>
+        
+        {{name}}
+        
+        <div class="clearfix"></div>
+    </li>
+
+{{/each}}

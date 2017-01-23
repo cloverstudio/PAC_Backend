@@ -1,0 +1,83 @@
+
+    {{#each list}}
+        <div class="search-result-row" id="{{messageModel._id}}">
+           
+           {{#if messageModel.userModelTarget}}
+
+                <div class="name-holder">
+                    <img class="img-circle" src="/api/v2/avatar/user/{{messageModel.userModelTarget.avatar.thumbnail.nameOnServer}}" /> {{messageModel.userModelTarget.name}}
+                </div>
+            
+            {{/if}}
+            
+            {{#if messageModel.groupModel}}
+ 
+                <div class="name-holder">
+                    <img class="img-circle" src="/api/v2/avatar/user/{{messageModel.groupModel.avatar.thumbnail.nameOnServer}}" /> {{messageModel.groupModel.name}}
+                </div>
+                
+            {{/if}}
+            
+            {{#if messageModel.roomModel}}
+
+                <div class="name-holder">
+                    <img class="img-circle" src="/api/v2/avatar/user/{{messageModel.roomModel.avatar.thumbnail.nameOnServer}}" /> {{messageModel.roomModel.name}}
+                </div>
+                
+            {{/if}}
+            
+            <div class="info-holder">
+
+
+                {{l10n "Posted on "}} {{formatDate messageModel.created}}
+                
+                {{l10n "From "}} {{messageModel.userModel.name}}
+                
+            </div>
+
+            <div class="message-holder new">
+                
+                {{#condition messageModel.type 1}}
+                    
+                    {{messageModel.message}}
+                    
+                {{/condition}}
+
+                {{#condition messageModel.type 2}}
+                    
+                    {{#if messageModel.file.thumb}}
+                        
+                        <img src="{{spikaImageUrl messageModel.file.thumb.id}}" class="img-rounded"/><br />
+                        {{messageModel.file.file.name}}
+                        
+                    {{/if}}
+                    
+                    {{#unless messageModel.file.thumb}}
+                        
+                        <i class="fa fa-file-o"></i> {{messageModel.file.file.name}}
+                        
+                    {{/unless}}
+                    
+                {{/condition}}
+                
+                
+                
+            </div>
+
+            <div class="action-holder">
+                
+                <a class="btn-forward" href="javascript:void(0)" messageid="{{messageModel._id}}"><i class="fa fa-share"></i> {{l10n "Forward"}}</a>
+                <a class="btn-unlike" href="javascript:void(0)" messageid="{{messageModel._id}}"><i class="fa fa-heart-o"></i> {{l10n "Remove from favorites"}}</a>
+                
+            </div>
+            
+            <div class="clearfix"></div>
+            
+        </div>
+    {{/each}}
+    
+    {{#ifempty list}}
+        
+        <div class="alert alert-warning" role="alert">{{l10n "No message in favorite."}}</div>
+        
+    {{/ifempty}}
