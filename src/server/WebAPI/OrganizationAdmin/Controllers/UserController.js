@@ -17,6 +17,8 @@ var Const = require("../../../lib/consts");
 var Config = require("../../../lib/init");
 var BackendBaseController = require("./BackendBaseController");
 var DatabaseManager = require('../../../lib/DatabaseManager');
+var SocketAPIHandler = require("../../../SocketAPI/SocketAPIHandler");
+
 var Utils = require('../../../lib/utils');
 
 var UserModel = require('../../../Models/User');
@@ -1736,6 +1738,32 @@ UserController.prototype.init = function(app){
                     
                 });
             
+            },
+            function(result, done){
+
+                // get socket id to send block signal
+		        DatabaseManager.redisGet(Const.redisKeyUserId + result.user._id,function(err,value){
+		            
+                    result.socketIds = value;
+                    
+                    done(null,result)
+                    
+		        });
+
+            },
+            function(result, done){
+
+                _.forEach(result.socketIds,function(socketInfo){
+                    
+                    // send block signal
+                    SocketAPIHandler.emitToSocket(socketInfo.socketId,"device_blocked",{
+                        UUID: UUID
+                    });
+                
+                });
+
+                done(null,result)
+
             }
 
         ],
