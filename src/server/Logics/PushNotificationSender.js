@@ -281,22 +281,26 @@ PushNotificationSender = {
                     });
                     */
                     
-                    var fcm = new FCM(Config.fcmServerKey);
+                    if(!_.isEmpty(Config.fcmServerKey)){
 
-                    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                        to: pushToken, 
-                        collapse_key: 'spikaforbusiness',
+                        var fcm = new FCM(Config.fcmServerKey);
+
+                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                            to: pushToken, 
+                            collapse_key: 'spikaforbusiness',
+                            
+                            data: gcmData
+                        };
+
+                        fcm.send(message, function(err, response){
+                            if (err) {
+                                console.log("Something has gone wrong!");
+                            } else {
+                                console.log("Successfully sent with response: ", response);
+                            }
+                        });
                         
-                        data: gcmData
-                    };
-
-                    fcm.send(message, function(err, response){
-                        if (err) {
-                            console.log("Something has gone wrong!");
-                        } else {
-                            console.log("Successfully sent with response: ", response);
-                        }
-                    });
+                    }
                     
                     donePushOne(null);
                 }
