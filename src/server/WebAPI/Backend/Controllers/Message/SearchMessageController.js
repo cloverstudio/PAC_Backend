@@ -293,15 +293,17 @@ SearchMessageController.prototype.init = function(app){
         },
         function(result,done){
             
-            var regexUserId = RegExp("^1-*." + request.user._id.toString(),"i");
+            var regexUserId = RegExp("^1.+" + request.user._id.toString(),"i");
             
             //search private message
             spikaMessageModel.find({
-                roomID:{ $regex: regexUserId },
-                $or : [
-                   { message : { $regex:regexMessage}},
-                   { "file.file.name" : {$regex:regexMessage}}
-                ]
+				$and:[
+					{roomID:{ $regex: regexUserId }},
+					{$or : [
+						{ message : { $regex:regexMessage}},
+						{ "file.file.name" : {$regex:regexMessage}}
+					]}
+				]
             }).limit(Const.pagingRows).skip(Const.pagingRows * page).exec(function(err,privateMessageFindResult){
 
                 var objects = privateMessageFindResult.map(function(item){
