@@ -45,7 +45,7 @@ BackendBase.prototype.successResponse = function(response,code,data){
         response.json({
             code : Const.responsecodeSucceed,
             time : Utils.now(),
-            data : data
+            data : _.isEmpty(data) ? {} : data
         });
     
     }

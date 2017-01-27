@@ -66,6 +66,11 @@
     Const.responsecodeBlockWrongParam = 4000059;
     Const.responsecodeUserBlocked = 4000060;
     Const.responsecodeDeviceRejected = 4000061;
+    Const.responsecodeSignupNoOrganizationId = 4000062;
+    Const.responsecodeSignupUserAlreadyVerified = 4000063;
+    Const.responsecodeSignupInvalidActivationCode = 4000064;
+    Const.responsecodeSignupInvalidUserName = 4000065;
+    Const.responsecodeSignupInvalidPassword = 4000066;
 
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
@@ -142,6 +147,11 @@
 
     Const.blockActionBlock = 'block';
     Const.blockActionUnblock = 'unblock';
+
+    Const.userStatus = {
+        disabled: 0, 
+        enabled: 1
+    };
 
     // Exports ----------------------------------------------
     module["exports"] = Const;

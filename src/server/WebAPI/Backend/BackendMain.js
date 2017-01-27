@@ -21,6 +21,7 @@ var BackendMain ={
         
         router.use("/user/signin", require("./Controllers/User/SigninController").init(app));
         router.use("/user/signout", require("./Controllers/User/SignoutController").init(app));
+        router.use("/user/signup", require("./Controllers/User/SignupController").init(app));
         
         router.use("/user/list", require("./Controllers/User/UserListController").init(app));
         router.use("/user/search", require("./Controllers/User/UserSearchController").init(app));

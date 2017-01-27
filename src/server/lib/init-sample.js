@@ -121,4 +121,10 @@
     
     Config.protocol = "http://";
     
+    Config.twilio = {
+        accountSid: "",
+        authToken: "",
+        fromNumber: ""
+    };
+
     module["exports"] = Config;

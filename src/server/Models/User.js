@@ -47,7 +47,9 @@ User.prototype.init = function(mongoose){
         muted : [],
         blocked : [],
         devices : [],
-        UUID: []
+        UUID: [],
+        phoneNumber: String,
+        activationCode: String
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "User", this.schema);

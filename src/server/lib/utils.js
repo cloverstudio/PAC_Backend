@@ -9,6 +9,8 @@ var md5 = require('md5');
 var util = require('util');
 var sha1 = require('sha1');
 var Const = require('../lib/consts');
+var Config = require("./init");
+var twilioClient = require('twilio')(Config.twilio.accountSid, Config.twilio.authToken); 
 
 (function(global) {
     "use strict;"
@@ -39,6 +41,9 @@ var Const = require('../lib/consts');
     Utils.prototype.chatIdByGroup = chatIdByGroup;
     Utils.prototype.chatIdByRoom = chatIdByRoom;
     Utils.prototype.stripPrivateData = stripPrivateData;
+    Utils.prototype.getRandomNumber = getRandomNumber;
+    Utils.prototype.sendSMS = sendSMS;
+    
     // Implementation ---------------------------------------
     
     function formatDate(ut,useUserFriendlyText,showTime){
@@ -322,7 +327,37 @@ var Const = require('../lib/consts');
         
     }
 
+    function getRandomNumber(length) {
+    
+        var text = "";
+        var possible = "0123456789";
         
+        if(!length){
+            length = 6;
+        }
+        
+        for( var i=0; i < length; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+    
+        return text;
+    }
+    
+    function sendSMS(to, body, callback) {
+    
+        var smsData = {
+            to: to,
+            from: Config.twilio.fromNumber,
+            body: body
+        };
+
+        twilioClient.messages.create(smsData, (err, message) => { 
+
+            callback(err, message);
+
+        });
+
+    }
+
     // Exports ----------------------------------------------
     module["exports"] = new Utils();
 

@@ -33854,7 +33854,7 @@ module.exports = function (constraints, cb) {
     }
 };
 
-window.addEventListener('message', function (event) {
+typeof window !== 'undefined' && window.addEventListener('message', function (event) {
     if (event.origin != window.location.origin) {
         return;
     }
@@ -33971,21 +33971,21 @@ module.exports=require(6)
 },{}],74:[function(require,module,exports){
 arguments[4][7][0].apply(exports,arguments)
 },{"./chrome/chrome_shim":75,"./edge/edge_shim":77,"./firefox/firefox_shim":79,"./safari/safari_shim":81,"./utils":82}],75:[function(require,module,exports){
-arguments[4][39][0].apply(exports,arguments)
+arguments[4][8][0].apply(exports,arguments)
 },{"../utils.js":82,"./getusermedia":76}],76:[function(require,module,exports){
-module.exports=require(40)
+module.exports=require(9)
 },{"../utils.js":82}],77:[function(require,module,exports){
-module.exports=require(41)
+module.exports=require(10)
 },{"../utils":82,"./getusermedia":78,"sdp":73}],78:[function(require,module,exports){
 module.exports=require(11)
 },{}],79:[function(require,module,exports){
-arguments[4][43][0].apply(exports,arguments)
+arguments[4][12][0].apply(exports,arguments)
 },{"../utils":82,"./getusermedia":80}],80:[function(require,module,exports){
-module.exports=require(44)
+module.exports=require(13)
 },{"../utils":82}],81:[function(require,module,exports){
-module.exports=require(45)
+module.exports=require(14)
 },{}],82:[function(require,module,exports){
-module.exports=require(46)
+module.exports=require(15)
 },{}],83:[function(require,module,exports){
 var WildEmitter = require('wildemitter');
 
