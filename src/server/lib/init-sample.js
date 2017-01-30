@@ -34,6 +34,8 @@
     Config.username = "admin";
     Config.password = "1234";
     
+    Config.signinBackDoorSecret = "";
+
     Config.apnsCertificates = {
         
         dev : {

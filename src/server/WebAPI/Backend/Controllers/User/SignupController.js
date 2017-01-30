@@ -11,6 +11,8 @@ var Const = require(pathTop +"lib/consts");
 var Config = require(pathTop+ "lib/init");
 var Utils = require(pathTop + 'lib/utils');
 var UserModel = require(pathTop + 'Models/User');
+var OrganizationModel = require(pathTop + 'Models/Organization');
+
 var tokenChecker = require( pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
@@ -50,6 +52,7 @@ SignupController.prototype.init = function(app){
         var activationCode = Utils.getRandomNumber();
 
         var userModel = UserModel.get();
+        var organizationModel = OrganizationModel.get();
 
         async.waterfall([
             validate,
@@ -64,17 +67,30 @@ SignupController.prototype.init = function(app){
         **********************/
 
         function validate(done) {
+
             if (_.isEmpty(organizationId))
                 return done({ handledError: Const.responsecodeSignupNoOrganizationId });
 
-            done(null, {});  
+            // get organization 
+            organizationModel.findOne({ organizationId: organizationId }, (err, findResult) => {
+                
+                if (err)
+                    return done(err);
+                                
+                if(_.isEmpty(findResult))
+                    return done({ handledError: Const.responsecodeSigninWrongOrganizationId });                
+                
+                done(null, { organization: findResult.toObject() });
+                                
+            });
+
         };
 
         function addUser(result, done) {
 
             userModel.findOne({ 
                 userid: phoneNumber, 
-                organizationId: organizationId,
+                organizationId: result.organization._id.toString(),
                 status: Const.userStatus.disabled
             }, (err, findResult) => {
                 
@@ -99,7 +115,7 @@ SignupController.prototype.init = function(app){
                 else {
 
                     var data = {      
-                        organizationId: organizationId,
+                        organizationId: result.organization._id,
                         created: Utils.now(),
                         phoneNumber: phoneNumber,
                         userid: phoneNumber,
@@ -144,7 +160,7 @@ SignupController.prototype.init = function(app){
                 }
             }
             else {
-                self.successResponse(response, Const.responsecodeSucceed, result);                
+                self.successResponse(response, Const.responsecodeSucceed);                
             }
 
         };
@@ -295,7 +311,8 @@ SignupController.prototype.init = function(app){
      * @apiHeader {String} access-token Users unique access-token.
 
      * @apiParam {String} name display name
-     * @apiParam {String} password password
+     * @apiParam {String} password hashed password
+     * @apiParam {String} secret secret
 
      * 
      * @apiSuccessExample Success-Response:
@@ -311,8 +328,9 @@ SignupController.prototype.init = function(app){
         
         var name = request.body.name;
         var password = request.body.password;
+        var secret = request.body.secret;  
         var user = request.user;
-        
+
         var userModel = UserModel.get();
 
         async.waterfall([
@@ -334,6 +352,27 @@ SignupController.prototype.init = function(app){
             if(_.isEmpty(password))
                 return done({ handledError: Const.responsecodeSignupInvalidPassword });
 
+             // check secret first
+            var tenSec = Math.floor(Utils.now() / 1000 / 10);
+            var salt = Config.hashSalt;
+            
+            var candidate1 = salt + (tenSec);
+            var candidate2 = salt + (tenSec - 1);
+            var candidate3 = salt + (tenSec - 2);
+            
+            if(sha1(candidate1) == secret || 
+                sha1(candidate2) == secret || 
+                sha1(candidate3) == secret) {
+                
+            } 
+            else {
+                
+                if(secret != Config.signinBackDoorSecret) {
+                    return done({ handledError: Const.responsecodeSigninWrongSecret });
+                }
+                
+            }
+
             done(null, {});
 
         };
@@ -342,7 +381,7 @@ SignupController.prototype.init = function(app){
 
             user.name = name;
             user.sortName = name.toLowerCase();
-            user.password = Utils.getHash(password);
+            user.password = password;
 
             user.save((err, saveResult) => {
 
