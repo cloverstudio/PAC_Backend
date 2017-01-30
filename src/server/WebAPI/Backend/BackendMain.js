@@ -47,6 +47,7 @@ var BackendMain ={
         router.use("/room/users", require("./Controllers/Room/RoomUsersController").init(app));
         router.use("/room/users/add", require("./Controllers/Room/AddUsersToRoomController").init(app));
         router.use("/room/users/remove", require("./Controllers/Room/RemoveUsersFromRoomController").init(app));
+        router.use("/room/search", require("./Controllers/Room/SearchRoomController").init(app));
         
         router.use("/group/list", require("./Controllers/Group/GroupListController").init(app));
         router.use("/group/search", require("./Controllers/Group/GroupSearchController").init(app));
