@@ -10,7 +10,7 @@ var util = require('util');
 var sha1 = require('sha1');
 var Const = require('../lib/consts');
 var Config = require("./init");
-var twilioClient = require('twilio')(Config.twilio.accountSid, Config.twilio.authToken); 
+
 
 (function(global) {
     "use strict;"
@@ -343,7 +343,9 @@ var twilioClient = require('twilio')(Config.twilio.accountSid, Config.twilio.aut
     }
     
     function sendSMS(to, body, callback) {
-    
+        
+        var twilioClient = require('twilio')(Config.twilio.accountSid, Config.twilio.authToken); 
+        
         var smsData = {
             to: to,
             from: Config.twilio.fromNumber,
