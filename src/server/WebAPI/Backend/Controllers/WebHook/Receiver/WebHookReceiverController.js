@@ -48,7 +48,7 @@ WebHookReceiverController.prototype.init = function(app){
 
 **/
     
-    router.get('/:hookIdentifier',function(request,response){
+    router.post('/:hookIdentifier',function(request,response){
         
         var hookIdentifier = request.params.hookIdentifier;
         var hookModel = HookModel.get();
