@@ -5,15 +5,14 @@ var router = express.Router();
 var _ = require('lodash');
 var async = require('async');
 
-var pathTop = "../../../../";
-
-var Const = require( pathTop + "lib/consts");
-var Config = require( pathTop + "lib/init");
-var Utils = require( pathTop + 'lib/utils');
-var tokenChecker = require( pathTop + 'lib/authApi');
-var SearchUserLogic = require( pathTop + 'Logics/SearchUser');
-var SearchGroupLogic = require( pathTop + 'Logics/SearchGroup');
-var SearchRoomLogic = require( pathTop + 'Logics/SearchRoom');
+var Const = require("../../../../lib/consts");
+var Config = require("../../../../lib/init");
+var Utils = require("../../../../lib/utils");
+var tokenChecker = require("../../../../lib/authApi");
+var SearchUserLogic = require("../../../../Logics/SearchUser");
+var SearchGroupLogic = require("../../../../Logics/SearchGroup");
+var SearchRoomLogic = require("../../../../Logics/SearchRoom");
+var HistoryModel = require('../../../../Models/History');
 
 var BackendBase = require('../BackendBase');
 
@@ -75,29 +74,53 @@ SearchRoomController.prototype.init = function(app){
         var keyword = request.query.keyword;
         var page = request.params.page - 1;
         
-        async.waterfall([function(done){
-            
-            var result = {};
+        var model = HistoryModel.get();
+        var user = request.user;
 
-            SearchRoomLogic.search(request.user,keyword,page,function(data){
-                
-                result.rooms = data.list.map(function(item){
-                    item.type = Const.chatTypeRoom;
+        async.waterfall([
+
+            (done) => {
+
+                // get history 
+                model.find({ 
+                    userId: user._id.toString(),
+                    chatType: Const.chatTypeRoom
+                }, (err, findResult) => {
                     
-                    return item;
+                    if (err)
+                        return done(err);
+                                                
+                    done(null, { roomHistory: findResult });
+                                    
                 });
-                
-                result.count = data.count;
-                
-                done(null,result)
-                
-            },function(err){
-                done(err,result)
-            });
             
-        }
+            },
+            (result, done) => {
+            
+                SearchRoomLogic.search(request.user,keyword,page,function(data){
+                    
+                    result.rooms = data.list.map((item) => {
+                        item.type = Const.chatTypeRoom;
+
+                        var lastUpdate = _.map(_.filter(result.roomHistory, { chatId: item._id.toString() }), "lastUpdate")[0];                    
+                        item.lastUpdate = !lastUpdate ? 0 : lastUpdate;
+
+                        return item;
+                    });
+                    
+                    result.rooms = _.sortByOrder(result.rooms, [ 'lastUpdate' ], [ 'desc' ]);
+                
+                    result.count = data.count;
+                    
+                    done(null,result)
+                    
+                },function(err){
+                    done(err,result)
+                });
+            
+            }
         ],
-        function(err,result){
+        (err, result) => {
             
             if(err){
                 console.log("critical err",err);
