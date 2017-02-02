@@ -131,70 +131,84 @@ var SpikaBridge = {
                 },
 
                 sendMessage : function(param,callBack){
-                    
-                    var messageTargetTypeAry = param.roomID.split("-");
-                    if(messageTargetTypeAry.length > 0){
-                        var messageTargetType = messageTargetTypeAry[0];
-
-                        if(messageTargetType != 1){
-
-                            callBack({
-                                canSend: true
-                            });
-
-                            return;
-
-                        }
-
-                    }
-
-                    var isBlocked = false;
 
                     var userModel = UserModel.get();
 
-                    var userIdFrom = param.userID;
-                    var splitted = param.roomID.split("-");
-                    if(splitted.length > 2){
+                    var messageTargetTypeAry = param.roomID.split("-");
 
-                        var userIdTo = splitted[1];
-                        if(userIdTo == userIdFrom)
-                            userIdTo = splitted[2];
-                        
-                    }
-
-                    async.waterfall([(done) => {
-                        
-                        var result = {};
-                        
-                        /*
-                        userModel.findOne({_id:userIdFrom},function(err,findResult){
-                            result.userFrom = findResult;
-                            done(err,result)
-                        });
-                        */
-
-                        done(null,result);
-
-                    },
-                    (result,done) => {
-
-                        userModel.findOne({_id:userIdTo},function(err,findResult){
-                            result.userTo = findResult.toObject();
-                            done(err,result)
-                        });
-                    }
-                    ],
-                    function(err,result){
-
-                        if(_.isArray(result.userTo.blocked) &&
-                            result.userTo.blocked.indexOf(userIdFrom) != -1)
-                            isBlocked = true;
-
+                    if(messageTargetTypeAry.length < 2){
                         callBack({
-                            canSend: !isBlocked
                         });
 
-                    });
+                        return;
+                    }
+
+                    var messageTargetType = messageTargetTypeAry[0];
+
+                    if(messageTargetType == 1){
+
+                        var isBlocked = false;
+
+                        var userIdFrom = param.userID;
+                        var splitted = param.roomID.split("-");
+                        if(splitted.length > 2){
+
+                            var userIdTo = splitted[1];
+                            if(userIdTo == userIdFrom)
+                                userIdTo = splitted[2];
+                            
+                        }
+
+                        async.waterfall([(done) => {
+                            
+                            var result = {};
+                            
+                            /*
+                            userModel.findOne({_id:userIdFrom},function(err,findResult){
+                                result.userFrom = findResult;
+                                done(err,result)
+                            });
+                            */
+
+                            done(null,result);
+
+                        },
+                        (result,done) => {
+
+                            userModel.findOne({_id:userIdTo},function(err,findResult){
+                                result.userTo = findResult.toObject();
+                                done(err,result)
+                            });
+                        }
+                        ],
+                        function(err,result){
+
+                            if(_.isArray(result.userTo.blocked) &&
+                                result.userTo.blocked.indexOf(userIdFrom) != -1)
+                                isBlocked = true;
+
+                            callBack({
+                                canSend: !isBlocked
+                            });
+
+                        });
+                        
+                    }
+
+                    else if(messageTargetType == 2){
+
+                        userModel.findOne({_id:param.userID},function(err,findResult){
+                            
+                            var groups = findResult.groups;
+                            var toGroupId = messageTargetTypeAry[1];
+
+                            callBack({
+                                canSend: groups.indexOf(toGroupId) != -1
+                            });
+                            
+                        });
+
+                    }
 
                 },
                 typing : function(param,callBack){

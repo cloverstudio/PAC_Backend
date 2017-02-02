@@ -1507,6 +1507,7 @@ GroupController.prototype.init = function(app){
         }
         
         var model = UserModel.get();
+        var historyModel = HistoryModel.get();
         
         async.waterfall([
             
@@ -1545,7 +1546,7 @@ GroupController.prototype.init = function(app){
             function(result, done) {
 
                 // if user is orgadmin, then delete user, else remove groups from user
-                if (baseUser.permission == Const.userPermission.organizationAdmin) {
+                /*if (baseUser.permission == Const.userPermission.organizationAdmin) {
 
                     model.remove({ _id: userId }, function(err, deleteResult) {
 
@@ -1567,7 +1568,16 @@ GroupController.prototype.init = function(app){
          
                     });
 
-                };
+                };*/
+
+                model.update(
+                    { _id: userId },
+                    { $pull: { groups: groupId } },
+                function(err, updateUser) {
+
+                    done(err, result);
+        
+                });
 
             },
             function(result, done) {
@@ -1594,7 +1604,7 @@ GroupController.prototype.init = function(app){
 
                 // remove ($pull) current user in groups
                 modelGroup.update(
-                    { users: userId, organizationId: baseUser.organizationId },
+                    { _id: groupId },
                     { $pull: { users: userId } }, 
                     { multi: true }, 
                 function(err, updateResult) {
@@ -1602,6 +1612,22 @@ GroupController.prototype.init = function(app){
                     done(err, result);
 
                 });     
+
+            },
+            function(result, done) {
+            
+                // delete from user's history
+                historyModel.remove({ 
+                    userId:userId,
+                    chatId:groupId
+                }, function(err, deleteResult) {
+
+                    if(err)
+                        console.log(err);
+                    
+                    done(null, result);
+                    
+                });
 
             }
         ],

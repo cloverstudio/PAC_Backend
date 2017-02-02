@@ -25,6 +25,7 @@ var UserModel = require('../../../Models/User');
 var GroupModel = require('../../../Models/Group');
 var OrganizationSettingsModel = require('../../../Models/OrganizationSettings');
 var OrganizationModel = require('../../../Models/Organization');
+var HistoryModel = require('../../../Models/History');
 
 var checkUserAdmin = require('../../../lib/auth.js').checkUserAdmin;
 
@@ -603,6 +604,7 @@ UserController.prototype.init = function(app){
         }
         
         var model = UserModel.get();
+        var historyModel = HistoryModel.get();
         var uploadPathError = self.checkUploadPath();
         
         async.waterfall([
@@ -1008,6 +1010,40 @@ UserController.prototype.init = function(app){
 
                     done(err, result);
 
+                });
+
+            },
+            function(result, done){
+
+                // delete from history if user is deleted from group or department
+                //result.originalData
+                templateParams.formValues.groups
+
+                var deletedIds = _.filter(result.originalData.groups,function(originalDataGroupId){
+
+                    return templateParams.formValues.groups.indexOf(originalDataGroupId) == -1;
+
+                });
+
+                async.forEachSeries(deletedIds,function(deleteGroupId,doneEach){
+
+                    // delete from user's history
+                    historyModel.remove({ 
+                        userId:_id,
+                        chatId:deleteGroupId
+                    }, function(err, deleteResult) {
+
+                        if(err)
+                            console.log(err);
+                        
+                        doneEach(null, result);
+                        
+                    });
+
+                },function(err){
+
+                    done(null,result);
+                    
                 });
 
             }
