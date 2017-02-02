@@ -138,6 +138,7 @@ var SpikaBridge = {
 
                     if(messageTargetTypeAry.length < 2){
                         callBack({
+                            canSend: false
                         });
 
                         return;
@@ -208,6 +209,12 @@ var SpikaBridge = {
                             
                         });
 
+                    }
+
+                    else{
+                            callBack({
+                                canSend: true
+                            }); 
                     }
 
                 },
