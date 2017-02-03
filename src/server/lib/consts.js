@@ -71,6 +71,7 @@
     Const.responsecodeSignupInvalidActivationCode = 4000064;
     Const.responsecodeSignupInvalidUserName = 4000065;
     Const.responsecodeSignupInvalidPassword = 4000066;
+    Const.responsecodeMessageNoPermission = 4000067;
 
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;

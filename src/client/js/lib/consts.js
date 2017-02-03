@@ -38,6 +38,7 @@ Const.ErrorCodes = {
         4000029 : "Invalid chat id",
         4000030 : "Invalid message id",
         4000057 : "You can't add more rooms.",
+        4000067 : "You have no permission.",
         4999999 : ""              
 },
      

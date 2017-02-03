@@ -45,20 +45,12 @@ var socketIOManager = {
         
         this.ioNsp.on('socketerror', function(error){
             
-            /*
-            
-            var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
+            if(Const.ErrorCodes[error.code]){
+                var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
+                var message = Utils.l10n(Const.ErrorCodes[error.code]);
+                alertDialog.show(Utils.l10n("Api Error"),message);
 
-            var message = "";
-            
-            if(Const.ErrorCodes[error.code])
-                message = Utils.l10n(Const.ErrorCodes[error.code]);
-            else
-                message = Utils.l10n("Critical Error");
-                
-            alertDialog.show(Utils.l10n("Api Error"),message);
-            
-            */
+            }
             
         });
 

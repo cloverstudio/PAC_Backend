@@ -65010,7 +65010,7 @@ module.exports = HistoryListView;
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "            \n            <div id=\"sidebar-wrapper\">\n                \n                <div id=\"sidebar-userlist\">\n                </div>\n\n                <div id=\"sidebar-grouplist\">\n                </div>\n\n                <div id=\"sidebar-historylist\">\n                </div>\n                \n            </div>\n            \n            <div id=\"sidebar-tab\">\n\n                <ul class=\"list-inline\">\n                    <li id=\"btn-tab-history\" class=\"iconNav active\">\n                        <img src=\"/images/UI/3_contacts_m_over.png\" />\n                        <span class=\"badge\"></span>\n                    </li>\n\n                    <li id=\"btn-tab-groups\" class=\"iconNav center\">\n                        <img src=\"/images/UI/2_groups.png\" />\n                    </li>\n\n                    <li id=\"btn-tab-users\" class=\"iconNav\">\n                        <img src=\"/images/UI/3_contacts.png\" />\n                    </li>\n                </ul>\n                    \n            </div>";
+    return "            \n            <div id=\"sidebar-wrapper\">\n                \n                <div id=\"sidebar-userlist\">\n                </div>\n\n                <div id=\"sidebar-grouplist\">\n                </div>\n\n                <div id=\"sidebar-historylist\">\n                </div>\n                \n            </div>\n            \n            <div id=\"sidebar-tab\">\n\n                <ul class=\"list-inline\">\n                    <li id=\"btn-tab-history\" class=\"iconNav active\">\n                        <img src=\"/images/UI/1_recent_m_over.png\" />\n                        <span class=\"badge\"></span>\n                    </li>\n\n                    <li id=\"btn-tab-groups\" class=\"iconNav center\">\n                        <img src=\"/images/UI/2_groups.png\" />\n                    </li>\n\n                    <li id=\"btn-tab-users\" class=\"iconNav\">\n                        <img src=\"/images/UI/3_contacts.png\" />\n                    </li>\n                </ul>\n                    \n            </div>";
 },"useData":true});
 
 },{"hbsfy/runtime":66}],233:[function(require,module,exports){
@@ -69108,20 +69108,12 @@ var socketIOManager = {
         
         this.ioNsp.on('socketerror', function(error){
             
-            /*
-            
-            var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
+            if(Const.ErrorCodes[error.code]){
+                var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
+                var message = Utils.l10n(Const.ErrorCodes[error.code]);
+                alertDialog.show(Utils.l10n("Api Error"),message);
 
-            var message = "";
-            
-            if(Const.ErrorCodes[error.code])
-                message = Utils.l10n(Const.ErrorCodes[error.code]);
-            else
-                message = Utils.l10n("Critical Error");
-                
-            alertDialog.show(Utils.l10n("Api Error"),message);
-            
-            */
+            }
             
         });
 
@@ -69209,7 +69201,7 @@ var socketIOManager = {
 module["exports"] = socketIOManager;
 
 
-},{"./NotificationManager":278,"./consts":286,"./init":287,"./loginUserManager":290,"./utils":292,"backbone":16,"lodash":86,"socket.io-client":119}],284:[function(require,module,exports){
+},{"../Views/Modals/AlertDialog/AlertDialog":188,"./NotificationManager":278,"./consts":286,"./init":287,"./loginUserManager":290,"./utils":292,"backbone":16,"lodash":86,"socket.io-client":119}],284:[function(require,module,exports){
 var socket = require('socket.io-client');
 var Backbone = require('backbone');
 var _ = require('lodash');
@@ -69323,6 +69315,7 @@ Const.ErrorCodes = {
         4000029 : "Invalid chat id",
         4000030 : "Invalid message id",
         4000057 : "You can't add more rooms.",
+        4000067 : "You have no permission.",
         4999999 : ""              
 },
      

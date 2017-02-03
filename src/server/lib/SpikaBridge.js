@@ -15,11 +15,13 @@ var UserModel = require('../Models/User');
 var FavoriteModel = require('../Models/Favorite');
 var EncryptionManager = require('./EncryptionManager');
 var HistoryModel = require('../Models/History');
+var RoomModel = require( '../Models/Room');
 
 var UpdateHistoryLogic = require('../Logics/UpdateHistory');
 var NotifyNewMessage = require('../Logics/NotifyNewMessage');
 var UpdateOrganizationDiskUsageLogic = require("../Logics/UpdateOrganizationDiskUsage");
 
+var SocketAPIHandler = require("../SocketAPI/SocketAPIHandler");
 
 var SpikaBridge = {
     
@@ -133,6 +135,7 @@ var SpikaBridge = {
                 sendMessage : function(param,callBack){
 
                     var userModel = UserModel.get();
+                    var roomModel = RoomModel.get();
 
                     var messageTargetTypeAry = param.roomID.split("-");
 
@@ -187,6 +190,10 @@ var SpikaBridge = {
                             if(_.isArray(result.userTo.blocked) &&
                                 result.userTo.blocked.indexOf(userIdFrom) != -1)
                                 isBlocked = true;
+                            
+                            if(isBlocked){
+                                SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission})
+                            }
 
                             callBack({
                                 canSend: !isBlocked
@@ -202,19 +209,56 @@ var SpikaBridge = {
                             
                             var groups = findResult.groups;
                             var toGroupId = messageTargetTypeAry[1];
+                            var canSend = groups.indexOf(toGroupId) != -1;
+
+                            if(!canSend){
+                                SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission});
+                            }
 
                             callBack({
-                                canSend: groups.indexOf(toGroupId) != -1
+                                canSend: canSend
                             });
                             
                         });
 
                     }
 
-                    else{
+                    else if(messageTargetType == 3){
+
+                        var roomId = messageTargetTypeAry[1];
+
+                        roomModel.findOne({_id:roomId},function(err,findResult){
+                            
+                           if(err || !findResult){
+
+                                SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission});
+
+                                callBack({
+                                    canSend: false
+                                }); 
+
+                                return;
+                            }
+
+                            var canSend = findResult.users.indexOf(param.userID) != -1;
+
+                            if(!canSend){
+                                SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission});
+                            }
+                            
                             callBack({
-                                canSend: true
-                            }); 
+                                canSend: canSend
+                            });
+                            
+                        });
+
+
+                    }
+
+                    else{
+                        callBack({
+                            canSend: true
+                        }); 
                     }
 
                 },
