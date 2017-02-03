@@ -85,6 +85,41 @@ CallingActionsHandler.prototype.attach = function(io,socket){
 		        });
                 
             },
+
+            function(result,done){
+
+                var userIdFrom = result.userFrom._id;
+                var userIdTo = userId;
+
+                var userModel = UserModel.get();
+
+                // check blocked
+                userModel.findOne({
+                    _id: userIdTo
+                },function(err,findUserResult){
+                    
+                    if(err){
+                        done("user error",result)
+                        return;
+                    }
+
+                    if(!err){
+
+                        if(findUserResult.blocked.indexOf(userIdFrom) != -1){
+
+                            done('permission error',result);
+
+                        }else{
+
+                            done(null,result);
+
+                        }
+                            
+                    }
+                    
+                });
+
+            },
             function(result,done){
 
                 var callId = Utils.getRandomString();
@@ -191,7 +226,7 @@ CallingActionsHandler.prototype.attach = function(io,socket){
                 SocketAPIHandler.emitToSocket(socket.id,"call_failed",{
                     failedType: Const.callFaildUserBusy
                 });
-
+                
             }
 
         });
