@@ -19,7 +19,7 @@
     <thead>
         <tr>
             <th width="45%">
-                {{l10n "UUID"}} / {{l10n "Token"}}<br />
+                {{l10n "UUID"}} / {{l10n "Token"}}  / {{l10n "Push Tokens"}}<br />
             </th>
             <th width="15%">{{l10n "Last Login"}}</th>
             <th width="15%">{{l10n "Blocked"}}</th>
@@ -40,7 +40,12 @@
                     Web
                 {{/if}}
                 <br />
-                {{lastToken}}
+                {{lastToken}}<br />
+
+                {{#each pushTokens}}
+                    {{truncate this}}<br />
+                {{/each}}
+                
             </td>
             <td>{{formatDateTime lastLogin}}</td>
             <td>

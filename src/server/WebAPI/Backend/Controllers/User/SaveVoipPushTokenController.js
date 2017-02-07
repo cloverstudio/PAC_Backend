@@ -103,6 +103,57 @@ SavePushTokenController.prototype.init = function(app){
                     
                 } 
                   
+            },
+            function(result,done){
+
+                // link pushtoken to UUID
+                var UUID = request.headers['uuid']; 
+                var newPushToken = request.body.pushToken;
+                var savedUUIDs = request.user.UUID;
+                var changed = false;
+
+                if(UUID && newPushToken && savedUUIDs){
+
+                    _.forEach(savedUUIDs,(o) => {
+                        
+                        if(o.UUID == UUID){
+
+                            if(!o.pushTokens){
+                                o.pushTokens = [];
+                            }
+
+                            if(o.pushTokens.indexOf(newPushToken) == -1){
+                                o.pushTokens.push(newPushToken);
+                                changed = true;
+                            }
+                            
+                        }   
+                            
+                    });    
+
+                    if(changed){
+
+                        userModel.update(
+                            {_id:request.user._id},{
+                            UUID: savedUUIDs
+                        },function(err,updateResult){
+                            
+                            done(err,result);
+                            
+                        });
+
+                    } else {
+
+                        done(null,result);
+
+                    }           
+
+                } else{
+
+                    done(null,result);
+
+                }
+
             }
         ],
         function(err,result){

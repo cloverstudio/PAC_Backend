@@ -9,14 +9,71 @@ var Const = require("../lib/consts");
 var Config = require("../lib/init");
 var Utils = require("../lib/utils");
 
+var UserModel = require('../Models/User');
+
 var DatabaseManager = require('../lib/DatabaseManager');
 var EncryptionManager = require('../lib/EncryptionManager');
 var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
 
 PushNotificationSender = {
-
     
     start : function(tokenAndBadgeCount,payload,isVoip){
+
+        var self = this;
+
+        var tokensFiltered = [];
+        var userModel = UserModel.get();
+
+        console.log('before',tokenAndBadgeCount.length);
+
+        async.eachSeries(tokenAndBadgeCount,(tokenAndBadge,doneEach) => {
+
+            var pushToken = tokenAndBadge.token;
+            var unreadCount = tokenAndBadge.badge;
+
+            // get user 
+            userModel.findOne({
+                 UUID: { 
+                     $elemMatch: { pushTokens:  pushToken } 
+                 }
+            },function(err,findResult){
+                
+                if(!findResult){
+                    doneEach(null);
+                    return;
+                }
+                // check is blocked
+                var UUIDs = findResult.UUID;
+
+                var theRow = _.find(UUIDs,(o) => {
+
+                    if(o.pushTokens)
+                        return o.pushTokens.indexOf(pushToken) != -1;
+                    else
+                        return false;
+                    
+                });
+
+                if(theRow && theRow.blocked == true){
+
+                }else{
+                    tokensFiltered.push(tokenAndBadge);
+                }
+
+                doneEach(null);
+            });
+
+        },(err) => {
+
+            console.log('after',tokensFiltered.length);
+
+            self.send(tokensFiltered,payload,isVoip);
+
+        });
+        
+    },
+
+    send : function(tokenAndBadgeCount,payload,isVoip){
 
         async.eachLimit(tokenAndBadgeCount,Const.pushTokenThreadSize,function(tokenAndBadge,donePushEach){
             

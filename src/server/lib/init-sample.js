@@ -129,4 +129,6 @@
         fromNumber: ""
     };
 
+    Config.useVoipPush = true;
+
     module["exports"] = Config;

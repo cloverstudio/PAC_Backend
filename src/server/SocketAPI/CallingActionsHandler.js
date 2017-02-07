@@ -18,6 +18,11 @@ var UserModel = require('../Models/User');
 
 var SocketHandlerBase = require("./SocketHandlerBase");
 
+// default
+if(Config.useVoipPush == undefined){
+    Config.useVoipPush = true;
+}
+
 var CallingActionsHandler = function(){
     
 }
@@ -36,8 +41,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
      * @apiParam {string} mediaType 1: audio 2: video
      */
     socket.on('call_request', function(param){
-
-        console.log("call request");
 
         if(_.isNull(param.userId)){
             socket.emit('socketerror', {code:Const.responsecodeCallingInvalidParamInvalidUserId});
@@ -81,7 +84,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
                         done("user error",result)
                     }
                     
-                    
 		        });
                 
             },
@@ -90,7 +92,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
 
                 var userIdFrom = result.userFrom._id;
                 var userIdTo = userId;
-
                 var userModel = UserModel.get();
 
                 // check blocked
@@ -152,25 +153,39 @@ CallingActionsHandler.prototype.attach = function(io,socket){
 
                             findUserResult.pushToken.forEach((token) => {
 
-                                // only android
-                                if(token.length > 64){
+                                if(Config.useVoipPush){
+
+                                    // only android
+                                    if(token.length > 64){
+                                        tokens.push({
+                                            badge: null,
+                                            token: token
+                                        });
+                                    }
+
+                                } else {
+
                                     tokens.push({
                                         badge: null,
                                         token: token
                                     });
+
                                 }
+
 
                             });
 
                         }
 
-                        if(findUserResult.voipPushToken && findUserResult.voipPushToken.length > 0){
-                            findUserResult.voipPushToken.forEach((token) => {
-                                tokens.push({
-                                    badge: null,
-                                    token: token
+                        if(Config.useVoipPush){
+                            if(findUserResult.voipPushToken && findUserResult.voipPushToken.length > 0){
+                                findUserResult.voipPushToken.forEach((token) => {
+                                    tokens.push({
+                                        badge: null,
+                                        token: token
+                                    });
                                 });
-                            });
+                            }
                         }
 
                         if(tokens.length > 0){
@@ -192,7 +207,7 @@ CallingActionsHandler.prototype.attach = function(io,socket){
                                         name:result.userFrom.name,
                                         avatarFileName:avatarFileName
                                     }
-                                },true);
+                                },Config.useVoipPush);
                             }
                         }
 
@@ -306,27 +321,42 @@ CallingActionsHandler.prototype.attach = function(io,socket){
 
                             findUserResult.pushToken.forEach((token) => {
 
-                                // only android
-                                if(token.length > 64){
+                                if(Config.useVoipPush){
+
+                                    // only android
+                                    if(token.length > 64){
+                                        tokens.push({
+                                            badge: null,
+                                            token: token
+                                        });
+                                    }
+
+                                } else {
+
                                     tokens.push({
                                         badge: null,
                                         token: token
                                     });
+
                                 }
 
                             });
 
                         }
 
-                        if(findUserResult.voipPushToken && findUserResult.voipPushToken.length > 0){
+                        if(Config.useVoipPush){
 
-                            findUserResult.voipPushToken.forEach((token) => {
-                                tokens.push({
-                                    badge: null,
-                                    token: token
+                            if(findUserResult.voipPushToken && findUserResult.voipPushToken.length > 0){
+
+                                findUserResult.voipPushToken.forEach((token) => {
+                                    tokens.push({
+                                        badge: null,
+                                        token: token
+                                    });
                                 });
-                            });
 
+                            }
+                        
                         }
 
                         if(tokens.length > 0){
@@ -348,7 +378,7 @@ CallingActionsHandler.prototype.attach = function(io,socket){
                                         name:result.userFrom.name,
                                         avatarFileName:avatarFileName
                                     }
-                                },true);
+                                },Config.useVoipPush);
                             }
 
                         }

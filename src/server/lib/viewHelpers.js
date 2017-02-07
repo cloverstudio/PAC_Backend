@@ -387,6 +387,16 @@ var helpers = {
 
         return html;
 
+    },
+    "truncate": function(value) {
+
+        if(value.length > 30){
+            return value.substr(0,27) + "...";
+        }else{
+            return value;
+        }
+        
+
     }
 }
 
