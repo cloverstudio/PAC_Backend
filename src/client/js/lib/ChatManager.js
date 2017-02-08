@@ -18,6 +18,7 @@ var UIUtils = require('../lib/UIUtils');
 var ChatManager = {
     
     isLoading: false,
+    currentRoomId: null,
     open: function(roomId,messageId){
         
         var self = this;
@@ -57,6 +58,8 @@ var ChatManager = {
         setTimeout(function(){
             self.isLoading = false;
         },10 * 1000);
+
+        this.currentRoomId = roomId;
 
 	    SpikaAdapter.attach({
 	        mode: "div", 
@@ -323,6 +326,13 @@ var ChatManager = {
     
     close:function(){
         $('#main-container').removeClass('chat');
+        $('#main-container').html('');
+    },
+    closeIfOpened:function(roomId){
+
+        if(this.currentRoomId == roomId)
+            this.close();
+
     }
     
 }

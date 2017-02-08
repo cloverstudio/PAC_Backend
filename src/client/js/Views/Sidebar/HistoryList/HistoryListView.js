@@ -41,8 +41,6 @@ var HistoryListView = Backbone.View.extend({
 
     onLoad: function(){
         
-        console.log("history onload 2");
-        
         var self = this;
         
         this.dataList = [];
@@ -87,7 +85,14 @@ var HistoryListView = Backbone.View.extend({
             
         });
         
-        
+        Backbone.on(Const.NotificationDeletedFromGroup, function(obj){
+
+            self.dataList = [];
+            self.currentPage = 1;
+            self.updateList();
+            
+        });
+
         
         this.loadNext();
         

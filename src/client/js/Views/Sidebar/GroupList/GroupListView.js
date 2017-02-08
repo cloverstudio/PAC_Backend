@@ -75,6 +75,20 @@ var GroupListView = Backbone.View.extend({
 
         });
         
+        Backbone.on(Const.NotificationDeletedFromGroup, function(params){
+
+            if(params.groupIds){
+
+                params.groupIds.forEach(function(groupId){
+                    ChatManager.closeIfOpened(Const.chatTypeGroup + "-" + groupId);
+                });
+
+            }
+            
+            self.resetResultAndLoadNext(self.currentKeyword);
+
+        });
+
         this.resetResultAndLoadNext(self.currentKeyword);
         
     },

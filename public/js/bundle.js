@@ -64508,6 +64508,20 @@ var GroupListView = Backbone.View.extend({
 
         });
         
+        Backbone.on(Const.NotificationDeletedFromGroup, function(params){
+
+            if(params.groupIds){
+
+                params.groupIds.forEach(function(groupId){
+                    ChatManager.closeIfOpened(Const.chatTypeGroup + "-" + groupId);
+                });
+
+            }
+            
+            self.resetResultAndLoadNext(self.currentKeyword);
+
+        });
+
         this.resetResultAndLoadNext(self.currentKeyword);
         
     },
@@ -64760,8 +64774,6 @@ var HistoryListView = Backbone.View.extend({
 
     onLoad: function(){
         
-        console.log("history onload 2");
-        
         var self = this;
         
         this.dataList = [];
@@ -64806,7 +64818,14 @@ var HistoryListView = Backbone.View.extend({
             
         });
         
-        
+        Backbone.on(Const.NotificationDeletedFromGroup, function(obj){
+
+            self.dataList = [];
+            self.currentPage = 1;
+            self.updateList();
+            
+        });
+
         
         this.loadNext();
         
@@ -67465,6 +67484,7 @@ var UIUtils = require('../lib/UIUtils');
 var ChatManager = {
     
     isLoading: false,
+    currentRoomId: null,
     open: function(roomId,messageId){
         
         var self = this;
@@ -67504,6 +67524,8 @@ var ChatManager = {
         setTimeout(function(){
             self.isLoading = false;
         },10 * 1000);
+
+        this.currentRoomId = roomId;
 
 	    SpikaAdapter.attach({
 	        mode: "div", 
@@ -67770,6 +67792,13 @@ var ChatManager = {
     
     close:function(){
         $('#main-container').removeClass('chat');
+        $('#main-container').html('');
+    },
+    closeIfOpened:function(roomId){
+
+        if(this.currentRoomId == roomId)
+            this.close();
+
     }
     
 }
@@ -69176,7 +69205,12 @@ var socketIOManager = {
 
         });
         
-        
+        this.ioNsp.on('delete_group', function(param){
+
+            Backbone.trigger(Const.NotificationDeletedFromGroup,param);
+
+        });
+
     },
     
     emit:function(command,params){
@@ -69354,6 +69388,7 @@ Const.NotificationCallRejectMine = "notification_rejectmine";
 Const.NotificationCallReceived = "notification_callreceived";
 Const.NotificationCallAnswer = "notification_callanswer";
 Const.NotificationCallClose = "notification_callclose";
+Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;

@@ -77,6 +77,7 @@ Const.NotificationCallRejectMine = "notification_rejectmine";
 Const.NotificationCallReceived = "notification_callreceived";
 Const.NotificationCallAnswer = "notification_callanswer";
 Const.NotificationCallClose = "notification_callclose";
+Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;

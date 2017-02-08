@@ -18,6 +18,7 @@ var Utils = require('../../../lib/utils');
 var GroupModel = require('../../../Models/Group');
 var UserModel = require('../../../Models/User');
 var HistoryModel = require('../../../Models/History');
+var SocketAPIHandler = require("../../../SocketAPI/SocketAPIHandler");
 
 var checkUserAdmin = require('../../../lib/auth.js').checkUserAdmin;
 
@@ -1627,6 +1628,11 @@ GroupController.prototype.init = function(app){
                     
                     done(null, result);
                     
+                });
+
+                // send block signal
+                SocketAPIHandler.emitToUser(userId,"delete_group",{
+                    groupIds:[groupId]
                 });
 
             }
