@@ -1046,6 +1046,16 @@ UserController.prototype.init = function(app){
                     
                 });
 
+                // send delete signal
+                if(deletedIds){
+
+                    // send block signal
+                    SocketAPIHandler.emitToUser(_id,"delete_group",{
+                        groupIds:deletedIds
+                    });
+
+                }
+
             }
         ],
         function(err, result) {

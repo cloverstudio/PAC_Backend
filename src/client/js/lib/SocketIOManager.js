@@ -113,7 +113,12 @@ var socketIOManager = {
 
         });
         
-        
+        this.ioNsp.on('delete_group', function(param){
+
+            Backbone.trigger(Const.NotificationDeletedFromGroup,param);
+
+        });
+
     },
     
     emit:function(command,params){
