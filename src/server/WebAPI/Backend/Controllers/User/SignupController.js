@@ -373,7 +373,7 @@ SignupController.prototype.init = function(app){
             else {
                 
                 if(secret != Config.signinBackDoorSecret) {
-                    // return done({ handledError: Const.responsecodeSigninWrongSecret });
+                    return done({ handledError: Const.responsecodeSigninWrongSecret });
                 }
                 
             }
@@ -404,7 +404,7 @@ SignupController.prototype.init = function(app){
 
             user.name = name;
             user.sortName = name.toLowerCase();
-            user.password = Utils.getHash(password);
+            user.password = password;
             user.groups = result.group._id;
 
             user.save((err, saveResult) => {
