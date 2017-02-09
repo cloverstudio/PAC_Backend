@@ -3603,7 +3603,7 @@ var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? 
         
         var nowDate = new Date();
         var now = new Date().getTime();
-        var interval = now - ut;
+        var interval = (now - ut) / 1000;
         
         if(interval < 60){
             return "now";
