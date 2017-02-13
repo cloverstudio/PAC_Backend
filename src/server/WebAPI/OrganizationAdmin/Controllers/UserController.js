@@ -835,8 +835,11 @@ UserController.prototype.init = function(app){
                     groups: _.isEmpty(templateParams.formValues.groups) ? [] : templateParams.formValues.groups
                 };
 
-                if(templateParams.formValues.status == "0")
+                // force logout if status == 0, and stop sending push
+                if(templateParams.formValues.status == "0"){
                     updateParams.token = [];
+                    updateParams.pushToken = [];
+                }
                 
                 if(!_.isEmpty(templateParams.formValues.password)) {
                     updateParams.password = Utils.getHash(templateParams.formValues.password);
