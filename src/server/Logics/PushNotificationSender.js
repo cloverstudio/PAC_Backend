@@ -4,6 +4,7 @@ var async = require('async');
 var apn = require('apn');
 var FCM = require('fcm-node');
 var request = require('request');
+var fs = require('fs');
 
 var Const = require("../lib/consts");
 var Config = require("../lib/init");
@@ -101,6 +102,15 @@ PushNotificationSender = {
                         donePushOne(null); 
                         return;
                     }
+
+                    if (!fs.existsSync(Config.apnsCertificates.dev.cert) ||
+                            !fs.existsSync(Config.apnsCertificates.dev.key)) {
+
+                        donePushOne(null); 
+                        return;
+                        
+                    }
+
                     
                     var options = {
                         cert: Config.apnsCertificates.dev.cert,
@@ -146,6 +156,14 @@ PushNotificationSender = {
                         return;
                     }
                     
+                    if (!fs.existsSync(Config.apnsCertificates.adhoc.cert) ||
+                            !fs.existsSync(Config.apnsCertificates.adhoc.key)) {
+
+                        donePushOne(null); 
+                        return;
+                        
+                    }
+
                     // send apns adhoc
                     var options = {
                         cert: Config.apnsCertificates.adhoc.cert,
@@ -191,6 +209,15 @@ PushNotificationSender = {
                         return;
                     }
                     
+                    if (!fs.existsSync(Config.apnsCertificates.store.cert) ||
+                            !fs.existsSync(Config.apnsCertificates.store.key)) {
+
+                        donePushOne(null); 
+                        return;
+                        
+                    }
+
+
                     // send apns store
                     var options = {
                         cert: Config.apnsCertificates.store.cert,
@@ -247,7 +274,15 @@ PushNotificationSender = {
                         key: Config.apnsCertificates.voip.key,
                         production: true
                     };
-                    
+
+                    if (!fs.existsSync(Config.apnsCertificates.voip.cert) ||
+                            !fs.existsSync(Config.apnsCertificates.voip.key)) {
+
+                        donePushOne(null); 
+                        return;
+                        
+                    }
+
                     var apnConnection = new apn.Connection(options);
                     
                     var device = new apn.Device(pushToken);

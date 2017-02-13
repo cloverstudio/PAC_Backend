@@ -3,7 +3,7 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/HenrikJoreteg/SimpleWebRTC?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-Want to see it in action? Check out the demo: https://talky.io/
+Want to see it in action? Check out the demo: https://simplewebrtc.com/demo.html
 
 
 ## It's so easy:
@@ -104,7 +104,7 @@ https://gitter.im/HenrikJoreteg/SimpleWebRTC
   - `Connection connection` - *optional* connection object for signaling. See
   `Connection` below. Defaults to a new SocketIoConnection
   - `bool debug` - *optional* flag to set the instance to debug mode
-  - `[string|DomElement] locaVidelEl` - ID or Element to contain the local video
+  - `[string|DomElement] localVideoEl` - ID or Element to contain the local video
   element
   - `[string|DomElement] remoteVideosEl` - ID or Element to contain the
   remote video elements
@@ -184,15 +184,15 @@ same event
 
 - `el` the element that contains the local screen stream
 
-`leftRoom, roomName` - emitted after successfully leaving the current room,
+`'leftRoom', roomName` - emitted after successfully leaving the current room,
 ending all peers, and stopping the local screen stream
 
-`videoAdded, videoEl, peer` - emitted when a peer stream is added
+`'videoAdded', videoEl, peer` - emitted when a peer stream is added
 
 - `videoEl` - the video element associated with the stream that was added
 - `peer` - the peer associated with the stream that was added
 
-`videoRemoved, videoEl, peer` - emitted when a peer stream is removed
+`'videoRemoved', videoEl, peer` - emitted when a peer stream is removed
 
 - `videoEl` - the video element associated with the stream that was removed
 - `peer` - the peer associated with the stream that was removed
@@ -204,7 +204,7 @@ ending all peers, and stopping the local screen stream
 
 `joinRoom(name, callback)` - joins the conference in room `name`. Callback is
 invoked with `callback(err, roomDescription)` where `roomDescription` is yielded
-by the connection on the `join` event. See signalmaster for more details.
+by the connection on the `join` event. See [signalmaster](https://github.com/andyet/signalmaster) for more details.
 
 `startLocalVideo()` - starts the local media with the `media` options provided
 in the config passed to the constructor

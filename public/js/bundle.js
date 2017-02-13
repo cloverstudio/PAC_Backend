@@ -68139,7 +68139,7 @@ module["exports"] = NotificationManager;
 
 },{"./EncryptionManager":277,"./SoundManager":284,"./consts":286,"./init":287,"./loginUserManager":290,"./utils":292,"lodash":86}],279:[function(require,module,exports){
 var util = require('util');
-var webrtc = require('webrtcsupport');
+var webrtcSupport = require('webrtcsupport');
 var PeerConnection = require('rtcpeerconnection');
 var WildEmitter = require('wildemitter');
 var FileTransfer = require('filetransfer');
@@ -68147,6 +68147,14 @@ var FileTransfer = require('filetransfer');
 // the inband-v1 protocol is sending metadata inband in a serialized JSON object
 // followed by the actual data. Receiver closes the datachannel upon completion
 var INBAND_FILETRANSFER_V1 = 'https://simplewebrtc.com/protocol/filetransfer#inband-v1';
+
+function isAllTracksEnded(stream) {
+    var isAllTracksEnded = true;
+    stream.getTracks().forEach(function (t) {
+        isAllTracksEnded = t.readyState === 'ended' && isAllTracksEnded;
+    });
+    return isAllTracksEnded;
+}
 
 function Peer(options) {
     var self = this;
@@ -68290,7 +68298,7 @@ Peer.prototype.send = function (messageType, payload) {
         roomType: this.type,
         type: messageType,
         payload: payload,
-        prefix: webrtc.prefix
+        prefix: webrtcSupport.prefix
     };
     this.logger.log('sending', messageType, message);
     this.parent.emit('message', message);
@@ -68323,7 +68331,7 @@ Peer.prototype._observeDataChannel = function (channel) {
 
 // Fetch or create a data channel by the given name
 Peer.prototype.getDataChannel = function (name, opts) {
-    if (!webrtc.supportDataChannel) return this.emit('error', new Error('createDataChannel not supported'));
+    if (!webrtcSupport.supportDataChannel) return this.emit('error', new Error('createDataChannel not supported'));
     var channel = this.channels[name];
     opts || (opts = {});
     if (channel) return channel;
@@ -68337,7 +68345,7 @@ Peer.prototype.onIceCandidate = function (candidate) {
     if (this.closed) return;
     if (candidate) {
         var pcConfig = this.parent.config.peerConnectionConfig;
-        if (webrtc.prefix === 'moz' && pcConfig && pcConfig.iceTransports &&
+        if (webrtcSupport.prefix === 'moz' && pcConfig && pcConfig.iceTransports &&
                 candidate.candidate && candidate.candidate.candidate &&
                 candidate.candidate.candidate.indexOf(pcConfig.iceTransports) < 0) {
             this.logger.log('Ignoring ice candidate not matching pcConfig iceTransports type: ', pcConfig.iceTransports);
@@ -68383,19 +68391,26 @@ Peer.prototype.handleRemoteStreamAdded = function (event) {
         this.logger.warn('Already have a remote stream');
     } else {
         this.stream = event.stream;
-        // FIXME: addEventListener('ended', ...) would be nicer
-        // but does not work in firefox
-        this.stream.onended = function () {
-            self.end();
-        };
+
+        this.stream.getTracks().forEach(function (track) {
+            track.addEventListener('ended', function () {
+                if (isAllTracksEnded(self.stream)) {
+                    self.end();
+                }
+            });
+        });
+
         this.parent.emit('peerStreamAdded', this);
     }
 };
 
 Peer.prototype.handleStreamRemoved = function () {
-    this.parent.peers.splice(this.parent.peers.indexOf(this), 1);
-    this.closed = true;
-    this.parent.emit('peerStreamRemoved', this);
+    var peerIndex = this.parent.peers.indexOf(this);
+    if (peerIndex > -1) {
+        this.parent.peers.splice(peerIndex, 1);
+        this.closed = true;
+        this.parent.emit('peerStreamRemoved', this);
+    }
 };
 
 Peer.prototype.handleDataChannelAdded = function (channel) {
@@ -68484,7 +68499,9 @@ function SimpleWebRTC(opts) {
 
     // set our config from options
     for (item in options) {
-        this.config[item] = options[item];
+        if (options.hasOwnProperty(item)) {
+            this.config[item] = options[item];
+        }
     }
 
     // attach detected support for convenience
@@ -68511,7 +68528,6 @@ function SimpleWebRTC(opts) {
         var peer;
 
         if (message.type === 'offer') {
-            
             if (peers.length) {
                 peers.forEach(function (p) {
                     if (p.sid == message.sid) peer = p;
@@ -68527,7 +68543,6 @@ function SimpleWebRTC(opts) {
                     sharemyscreen: message.roomType === 'screen' && !message.broadcaster,
                     broadcaster: message.roomType === 'screen' && !message.broadcaster ? self.connection.getSessionid() : null
                 });
-
                 self.emit('createdPeer', peer);
             }
             peer.handleMessage(message);
@@ -68545,12 +68560,8 @@ function SimpleWebRTC(opts) {
     });
 
     connection.on('remove', function (room) {
-
-        if (room.id.indexOf(self.connection.getSessionid()) == -1) {
+        if (room.id !== self.connection.getSessionid()) {
             self.webrtc.removePeers(room.id, room.type);
-            self.emit('remove');
-        }else{
-            self.emit('remove_mine');
         }
     });
 
@@ -68606,11 +68617,9 @@ function SimpleWebRTC(opts) {
 
     this.webrtc.on('iceFailed', function (peer) {
         // local ice failure
-        this.emit('error', new Error('iceFailed'));
     });
     this.webrtc.on('connectivityError', function (peer) {
         // remote ice failure
-        this.emit('error', new Error('connectivityError'));
     });
 
 
@@ -68643,7 +68652,7 @@ function SimpleWebRTC(opts) {
 
         self.emit('localScreenAdded', el);
         self.connection.emit('shareScreen');
-        
+
         self.webrtc.peers.forEach(function (existingPeer) {
             var peer;
             if (existingPeer.type === 'video') {
@@ -68664,7 +68673,9 @@ function SimpleWebRTC(opts) {
         });
     });
     this.webrtc.on('localScreenStopped', function (stream) {
-        self.stopScreenShare();
+        if (self.getLocalScreen()) {
+            self.stopScreenShare();
+        }
         /*
         self.connection.emit('unshareScreen');
         self.webrtc.peers.forEach(function (peer) {
@@ -68695,7 +68706,7 @@ SimpleWebRTC.prototype.leaveRoom = function () {
     if (this.roomName) {
         this.connection.emit('leave');
         while (this.webrtc.peers.length) {
-            this.webrtc.peers.shift().end();
+            this.webrtc.peers[0].end();
         }
         if (this.getLocalScreen()) {
             this.stopScreenShare();
@@ -68761,8 +68772,7 @@ SimpleWebRTC.prototype.joinRoom = function (name, cb) {
     var self = this;
     this.roomName = name;
     this.connection.emit('join', name, function (err, roomDescription) {
-
-
+        console.log('join CB', err, roomDescription);
         if (err) {
             self.emit('error', err);
         } else {
@@ -68792,9 +68802,7 @@ SimpleWebRTC.prototype.joinRoom = function (name, cb) {
 
         if (cb) cb(err, roomDescription);
         self.emit('joinedRoom', name);
-        
     });
-
 };
 
 SimpleWebRTC.prototype.getEl = function (idOrEl) {
@@ -68854,7 +68862,6 @@ SimpleWebRTC.prototype.stopScreenShare = function () {
     this.connection.emit('unshareScreen');
     var videoEl = document.getElementById('localScreen');
     var container = this.getRemoteVideoContainer();
-    var stream = this.getLocalScreen();
 
     if (this.config.autoRemoveVideos && container && videoEl) {
         container.removeChild(videoEl);
@@ -68862,16 +68869,17 @@ SimpleWebRTC.prototype.stopScreenShare = function () {
 
     // a hack to emit the event the removes the video
     // element that we want
-    if (videoEl) this.emit('videoRemoved', videoEl);
-    if (stream) {
-        stream.getTracks().forEach(function (track) { track.stop(); });
+    if (videoEl) {
+        this.emit('videoRemoved', videoEl);
+    }
+    if (this.getLocalScreen()) {
+        this.webrtc.stopScreenShare();
     }
     this.webrtc.peers.forEach(function (peer) {
         if (peer.broadcaster) {
             peer.end();
         }
     });
-    //delete this.webrtc.localScreen;
 };
 
 SimpleWebRTC.prototype.testReadiness = function () {
@@ -68930,8 +68938,7 @@ module.exports = SocketIoConnection;
 
 },{"socket.io-client":119}],282:[function(require,module,exports){
 var util = require('util');
-var webrtc = require('webrtcsupport');
-var WildEmitter = require('wildemitter');
+var webrtcSupport = require('webrtcsupport');
 var mockconsole = require('mockconsole');
 var localMedia = require('localmedia');
 var Peer = require('./peer');
@@ -68957,9 +68964,6 @@ function WebRTC(opts) {
         };
     var item;
 
-    // expose screensharing check
-    this.screenSharingSupport = webrtc.screenSharing;
-
     // We also allow a 'logger' option. It can be any object that implements
     // log, warn, and error methods.
     // We log nothing by default, following "the rule of silence":
@@ -68979,11 +68983,13 @@ function WebRTC(opts) {
 
     // set options
     for (item in options) {
-        this.config[item] = options[item];
+        if (options.hasOwnProperty(item)) {
+            this.config[item] = options[item];
+        }
     }
 
     // check for support
-    if (!webrtc.support) {
+    if (!webrtcSupport.support) {
         this.logger.error('Your browser doesn\'t seem to support WebRTC');
     }
 
@@ -69089,7 +69095,7 @@ WebRTC.prototype.sendDirectlyToAll = function (channel, message, payload) {
 
 module.exports = WebRTC;
 
-},{"./peer":279,"localmedia":70,"mockconsole":87,"util":22,"webrtcsupport":168,"wildemitter":169}],283:[function(require,module,exports){
+},{"./peer":279,"localmedia":70,"mockconsole":87,"util":22,"webrtcsupport":168}],283:[function(require,module,exports){
 var socket = require('socket.io-client');
 var Backbone = require('backbone');
 var _ = require('lodash');
