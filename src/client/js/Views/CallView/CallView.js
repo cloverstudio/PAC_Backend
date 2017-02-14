@@ -75,7 +75,20 @@ var CallView = Backbone.View.extend({
         };
         
         if(this.callOptions.mediaType == Const.callMediaTypeVideo){
-            media.video = true;
+            media.video = { 
+                "width": {
+                    "min": "320",
+                    "max": "320"
+                },
+                "height": {
+                    "min": "480",
+                    "max": "480"
+                },
+                "frameRate": {
+                    "min": "8",
+                    "max": "8"
+                }
+            }
         }
         
         this.videoStatus = media.video;
@@ -99,7 +112,7 @@ var CallView = Backbone.View.extend({
             autoRequestMedia: true,
             media: media,
             peerConnectionConfig  : {
-                iceTransports : "relay"
+                iceTransports : "all"
             },
         });
 

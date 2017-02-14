@@ -60188,7 +60188,20 @@ var CallView = Backbone.View.extend({
         };
         
         if(this.callOptions.mediaType == Const.callMediaTypeVideo){
-            media.video = true;
+            media.video = { 
+                "width": {
+                    "min": "320",
+                    "max": "320"
+                },
+                "height": {
+                    "min": "480",
+                    "max": "480"
+                },
+                "frameRate": {
+                    "min": "8",
+                    "max": "8"
+                }
+            }
         }
         
         this.videoStatus = media.video;
@@ -60212,7 +60225,7 @@ var CallView = Backbone.View.extend({
             autoRequestMedia: true,
             media: media,
             peerConnectionConfig  : {
-                iceTransports : "relay"
+                iceTransports : "all"
             },
         });
 
@@ -68568,7 +68581,7 @@ function SimpleWebRTC(opts) {
     // instantiate our main WebRTC helper
     // using same logger from logic here
     opts.logger = this.logger;
-    opts.debug = false;
+    opts.debug = true;
     this.webrtc = new WebRTC(opts);
 
     // attach a few methods from underlying lib to simple.

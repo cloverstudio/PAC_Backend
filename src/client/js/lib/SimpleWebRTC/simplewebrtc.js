@@ -124,7 +124,7 @@ function SimpleWebRTC(opts) {
     // instantiate our main WebRTC helper
     // using same logger from logic here
     opts.logger = this.logger;
-    opts.debug = false;
+    opts.debug = true;
     this.webrtc = new WebRTC(opts);
 
     // attach a few methods from underlying lib to simple.
