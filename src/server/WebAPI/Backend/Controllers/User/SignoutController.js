@@ -55,7 +55,8 @@ SignoutController.prototype.init = function(app){
                     _id: request.user._id
                 },{
                     token: [],
-                    pushToken: []
+                    pushToken: [],
+                    voipPushToken: []
                 },{},function(){
 
                     done(null,result);
