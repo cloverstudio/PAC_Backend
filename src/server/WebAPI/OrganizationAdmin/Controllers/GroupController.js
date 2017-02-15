@@ -16,6 +16,7 @@ var DatabaseManager = require('../../../lib/DatabaseManager');
 var Utils = require('../../../lib/utils');
 
 var GroupModel = require('../../../Models/Group');
+var OrganizationModel = require('../../../Models/Organization');
 var UserModel = require('../../../Models/User');
 var HistoryModel = require('../../../Models/History');
 var SocketAPIHandler = require("../../../SocketAPI/SocketAPIHandler");
@@ -273,11 +274,27 @@ GroupController.prototype.init = function(app){
             },
             function(result, done) {
 
+                var organizationModel = OrganizationModel.get();
+
+                // get latest organization data
+                organizationModel.findOne({
+                    _id: baseOrganization._id
+                }, function(err, findResult) {
+
+                    result.latestOrganizationData = findResult;
+
+                    done(err, result);
+
+                });
+
+            },
+            function(result, done) {
+
                 var file = result.file;
                 
                 self.numberOfGroupsInOrganization(model, baseUser.organizationId, (err, numberOfGroups) => {
 
-                    if (numberOfGroups >= baseOrganization.maxGroupNumber) { 
+                    if (numberOfGroups >= result.latestOrganizationData.maxGroupNumber) { 
                         
                         if (file) fs.unlink(file.path, function() {});
 
