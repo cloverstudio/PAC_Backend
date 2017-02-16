@@ -33,7 +33,7 @@ PushNotificationSender = {
             var unreadCount = tokenAndBadge.badge;
 
             // get user 
-            userModel.findOne({
+            userModel.find({
                  UUID: { 
                      $elemMatch: { pushTokens:  pushToken } 
                  }
@@ -43,21 +43,32 @@ PushNotificationSender = {
                     doneEach(null);
                     return;
                 }
-                // check is blocked
-                var UUIDs = findResult.UUID;
 
-                var theRow = _.find(UUIDs,(o) => {
+                var isBlocked = false;
 
-                    if(o.pushTokens)
-                        return o.pushTokens.indexOf(pushToken) != -1;
-                    else
-                        return false;
+                findResult.forEach(function(user){
+
+                    // check is blocked
+                    var UUIDs = user.UUID;
+
+                    var theRow = _.find(UUIDs,(o) => {
+
+                        if(o.pushTokens)
+                            return o.pushTokens.indexOf(pushToken) != -1;
+                        else
+                            return false;
+                        
+                    });
+
+                    if(theRow && theRow.blocked == true){
+                        isBlocked = true;
+                    }else{
+
+                    }
                     
                 });
 
-                if(theRow && theRow.blocked == true){
-
-                }else{
+                if(!isBlocked){
                     tokensFiltered.push(tokenAndBadge);
                 }
 
