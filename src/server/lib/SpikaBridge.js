@@ -80,7 +80,7 @@ var SpikaBridge = {
                 },
                 OnUserTyping:function(obj){
         
-        
+
                 },
                 OnMessageChanges:function(obj){
                     
@@ -264,9 +264,84 @@ var SpikaBridge = {
                 },
                 typing : function(param,callBack){
 
-                    callBack({
-                        canSend: true
-                    });
+                    var userModel = UserModel.get();
+                    var roomModel = RoomModel.get();
+
+                    var messageTargetTypeAry = param.roomID.split("-");
+
+                    if(messageTargetTypeAry.length < 2){
+                        callBack({
+                            canSend: false
+                        });
+
+                        return;
+                    }
+
+                    var messageTargetType = messageTargetTypeAry[0];
+
+                    var userIdFrom = null;
+                    var userIdTo = null;
+
+                    if(messageTargetType == 1){
+
+                        var isBlocked = false;
+
+                        userIdFrom = param.userID;
+                        var splitted = param.roomID.split("-");
+                        if(splitted.length > 2){
+
+                            userIdTo = splitted[1];
+                            if(userIdTo == userIdFrom)
+                                userIdTo = splitted[2];
+                            
+                            
+
+                        }
+                        
+                        // get blocked user
+
+                        async.waterfall([(done) => {
+                            
+                            var result = {};
+                            
+                            /*
+                            userModel.findOne({_id:userIdFrom},function(err,findResult){
+                                result.userFrom = findResult;
+                                done(err,result)
+                            });
+                            */
+                            done(null,result);
+
+                        },
+                        (result,done) => {
+
+                            userModel.findOne({_id:userIdTo},function(err,findResult){
+                                result.userTo = findResult.toObject();
+                                done(err,result)
+                            });
+                        }
+                        ],
+                        function(err,result){
+
+                            if(_.isArray(result.userTo.blocked) &&
+                                result.userTo.blocked.indexOf(userIdFrom) != -1)
+                                isBlocked = true;
+
+                            callBack({
+                                canSend: !isBlocked
+                            });
+
+                            return;
+
+                        });
+
+                    } else { 
+
+                        callBack({
+                            canSend: true
+                        });
+
+                    }
 
                 },
                 
