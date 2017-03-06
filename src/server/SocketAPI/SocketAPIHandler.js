@@ -83,7 +83,8 @@ var SocketAPIHandler = {
                 var socketId = socket.socketId;
                 var socket = SocketAPIHandler.nsp.sockets[socketId];
 
-                socket.join(type + '-' + roomId);
+                if(socket)
+                    socket.join(type + '-' + roomId);
 
             });
 
@@ -101,7 +102,8 @@ var SocketAPIHandler = {
                 var socketId = socket.socketId;
                 var socket = SocketAPIHandler.nsp.sockets[socketId];
 
-                socket.leave(type + '-' + roomId);
+                if(socket)
+                    socket.leave(type + '-' + roomId);
 
             });
 
