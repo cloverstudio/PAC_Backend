@@ -20,6 +20,7 @@ var RoomModel = require( '../Models/Room');
 var UpdateHistoryLogic = require('../Logics/UpdateHistory');
 var NotifyNewMessage = require('../Logics/NotifyNewMessage');
 var UpdateOrganizationDiskUsageLogic = require("../Logics/UpdateOrganizationDiskUsage");
+var PermissionLogic = require("../Logics/Permission");
 
 var SocketAPIHandler = require("../SocketAPI/SocketAPIHandler");
 
@@ -205,21 +206,44 @@ var SpikaBridge = {
 
                     else if(messageTargetType == 2){
 
-                        userModel.findOne({_id:param.userID},function(err,findResult){
-                            
-                            var groups = findResult.groups;
-                            var toGroupId = messageTargetTypeAry[1];
-                            var canSend = groups.indexOf(toGroupId) != -1;
+                        async.waterfall([
 
-                            if(!canSend){
-                                SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission});
-                            }
+                            function(done) {
 
-                            callBack({
-                                canSend: canSend
-                            });
+                                // get departments
+                                PermissionLogic.getDepartments(param.userID, function(departments) {
+
+                                    done(null, { departmentIds: departments });
+                                    
+                                });
+
+                            },
+                            function(result, done) {
+
+
+                                userModel.findOne({_id:param.userID},function(err,findResult){
+                                    
+                                    var groups = findResult.groups;
+                                    var toGroupId = messageTargetTypeAry[1];
+
+                                    var allGroupsAndDepartments = groups.concat(result.departmentIds);
+
+                                    result.canSend = allGroupsAndDepartments.indexOf(toGroupId) != -1;
+
+                                    if(!result.canSend){
+                                        SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission});
+                                    }
+                                    
+                                });
+
+                            }],
+                            function(err,result){
+
+                                callBack({
+                                    canSend: result.canSend
+                                });
                             
-                        });
+                        });  
 
                     }
 
