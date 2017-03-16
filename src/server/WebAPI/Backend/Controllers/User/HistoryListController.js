@@ -709,8 +709,10 @@ HistioryListController.prototype.getList = function(lastUpdate,page,request,resp
                          
                     });
                     
-                    result.list[index].user.onlineStatus = onlineStatusObj.onlineStatus;
-                    
+					if(onlineStatusObj)
+                    	result.list[index].user.onlineStatus = onlineStatusObj.onlineStatus;
+					else
+						result.list[index].user.onlineStatus = false;
                 }
                  
             });
