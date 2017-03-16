@@ -234,6 +234,8 @@ var SpikaBridge = {
                                         SocketAPIHandler.emitToUser(param.userID,'socketerror', {code:Const.responsecodeMessageNoPermission});
                                     }
                                     
+                                    done(err, result);
+
                                 });
 
                             }],
