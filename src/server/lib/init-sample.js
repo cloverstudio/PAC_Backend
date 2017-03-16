@@ -4,8 +4,6 @@
     
     var Config = {};
 
-    Config.isMasterServer = true;
-    
     Config.host = "localhost";
     Config.port = 8080;
     Config.urlPrefix = '/';

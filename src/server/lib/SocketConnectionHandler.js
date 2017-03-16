@@ -14,36 +14,7 @@ var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
 
 var SocketConnectionHandler = {
     
-    hostId:"",
     init:function(){
-	    
-	    var hostIdFile = path.resolve(__dirname, "../../..", Const.hostidFile);
-	    var savedHostId = null;
-	    
-	    try{
-		    savedHostId = fs.readFileSync(hostIdFile, 'utf8');
-	    }catch(ex){
-		    
-	    }
-	    
-	    if(!savedHostId){
-		    
-		    // generate hostid
-		    var newHostId = Utils.getRandomString(6);
-		    fs.writeFileSync(hostIdFile, newHostId);
-		    
-		    savedHostId = fs.readFileSync(hostIdFile, 'utf8');
-		    
-	    }
-	    
-	    if(!savedHostId){
-		    console.log("faild to save host id.");
-		    return false;
-	    }
-	    
-	    this.hostId = savedHostId;
-	    
-	    console.log("Host id is " + this.hostId);
 	    
 	    return true;
 	    

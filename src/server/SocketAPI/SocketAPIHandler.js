@@ -43,6 +43,35 @@ var SocketAPIHandler = {
         this.nsp.to(socketId).emit(command,param);
 
     },
+    temporaryListener: function(socketId,command,timeout,callBack){
+
+        var socket = this.nsp.sockets[socketId];
+
+        if(!socket){
+            callBack(null);
+            return;
+        }
+        
+        _.debounce(()=>{
+
+            if(callBack)
+                callBack(null);
+
+            socket.removeAllListeners(command);
+
+        },timeout);
+        
+        socket.on(command, function(param){
+            
+            if(callBack)
+                callBack(param);
+
+            socket.removeAllListeners(command);
+            
+        });
+
+    },
+
     emitToUser: function(userId,command,param){
 
         var self = this;

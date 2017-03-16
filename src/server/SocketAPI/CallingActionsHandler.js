@@ -4,7 +4,6 @@ var _ = require('lodash');
 var async = require('async');
 
 var DatabaseManager = require("../lib/DatabaseManager");
-var OnlineStatusChecker = require('../lib/OnlineStatusChecker');
 var SocketAPIHandler = require("./SocketAPIHandler");
 var PushNotificationSender = require('../Logics/PushNotificationSender');
 

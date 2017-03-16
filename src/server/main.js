@@ -20,7 +20,6 @@ var SocketAPI = require('./SocketAPI/SocketAPIHandler');
 
 var SpikaBridge = require('./lib/SpikaBridge');
 var DatabaseManager = require('./lib/DatabaseManager');
-var OnlineStatusChecker = require('./lib/OnlineStatusChecker.js');
 var SocketConnectionHandler = require('./lib/SocketConnectionHandler');
 
 DatabaseManager.init(function(success){
@@ -51,8 +50,6 @@ DatabaseManager.init(function(success){
         }
         
         SpikaBridge.init(app,SocketAPI.io);
-        
-        OnlineStatusChecker.start();
         
         // start signaling server
         signaling(io, Conf.webRTCConfig);  

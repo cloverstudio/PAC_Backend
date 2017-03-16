@@ -4,7 +4,6 @@ var _ = require('lodash');
 var async = require('async');
 
 var DatabaseManager = require("../lib/DatabaseManager");
-var OnlineStatusChecker = require('../lib/OnlineStatusChecker');
 
 var Utils = require("../lib/utils");
 var Const = require("../lib/consts");
@@ -39,8 +38,6 @@ PongActionHandler.prototype.attach = function(io,socket){
             socket.emit('socketerror', {code:Const.responsecodeSigninInvalidToken});
             return;
         }
-        
-        OnlineStatusChecker.addAnswer(socket.id)
           
     });
 

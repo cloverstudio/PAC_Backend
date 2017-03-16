@@ -8,6 +8,7 @@ var Config = require("../lib/init");
 var Utils = require("../lib/utils");
 
 var DatabaseManager = require("../lib/DatabaseManager");
+var SocketAPIHandler = require("../SocketAPI/SocketAPIHandler");
 
 var UserModel = require('../Models/User');
 var RoomModel = require('../Models/Room');
@@ -22,23 +23,59 @@ var GetUserOnlineStatus = {
         
         async.each(userIds,function(userId,done){
             
-            DatabaseManager.redisGetValue(Const.redisKeyOnlineStatus + userId,function(err,redisResult){
-                
+            DatabaseManager.redisGet(Const.redisKeyUserId + userId,function(err,redisResult){
+
                 if(redisResult){
-                    redisResult = 1;
+
+                    var onlinestatus = false;
+
+                    async.each(redisResult,function(socketInfo,done2){
+
+                        var socketId = socketInfo.socketId;
+
+                        SocketAPIHandler.emitToSocket(socketId,"spikaping",{});
+
+                        SocketAPIHandler.temporaryListener(socketId,'pingok',2000,(param) => {
+
+                            if(param){
+                                // got pintok. so this user is online
+                                onlinestatus = true;
+
+                                // send err to forece quit all
+                                done2(1);
+                            }else{
+                                done2(null);
+                            }
+                            
+                        });
+
+                    },function(err){
+
+                        console.log(" sent ping"," all done ");
+
+                        result.push({
+                            userId : userId,
+                            onlineStatus : onlinestatus
+                        });
+
+                        done(err);
+
+                    });
+
                 }else{
-                    redisResult = 0;
+
+                    result.push({
+                        userId : userId,
+                        onlineStatus : false
+                    });
+
+                    done(err);
                 }
-                
-                result.push({
-                    userId : userId,
-                    onlineStatus : redisResult
-                });
-                
-                done(err);
-                
+
             });
             
+            
+
         },function(err){
             
             callBack(err,result);

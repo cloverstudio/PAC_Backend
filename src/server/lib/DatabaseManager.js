@@ -68,17 +68,6 @@ var DatabaseManager = {
 
         self.redisClient.on("ready", function (err) {
 
-            if(Conf.isMasterServer){
-                
-                self.redisClient.flushdb( function (err, succeeded) {
-
-                    if(succeeded)
-                        console.log("Redis DB initialized."); 
-                        
-                });
-            
-            }
-
             self.isRedisReady = true;
             
             if(callBack){
