@@ -78,6 +78,9 @@ var GetUserOnlineStatus = {
 
         },function(err){
             
+            if(err == 1)
+                err = null;
+                
             callBack(err,result);
 
         });
