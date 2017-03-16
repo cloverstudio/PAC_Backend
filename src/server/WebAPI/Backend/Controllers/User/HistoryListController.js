@@ -712,7 +712,7 @@ HistioryListController.prototype.getList = function(lastUpdate,page,request,resp
 					if(onlineStatusObj)
                     	result.list[index].user.onlineStatus = onlineStatusObj.onlineStatus;
 					else
-						result.list[index].user.onlineStatus = false;
+						result.list[index].user.onlineStatus = 0;
                 }
                  
             });
@@ -720,7 +720,7 @@ HistioryListController.prototype.getList = function(lastUpdate,page,request,resp
             done(null,result);
         
         });
-        
+
     }],
     function(err,result){
 

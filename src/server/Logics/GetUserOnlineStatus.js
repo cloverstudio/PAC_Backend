@@ -27,7 +27,7 @@ var GetUserOnlineStatus = {
 
                 if(redisResult){
 
-                    var onlinestatus = false;
+                    var onlinestatus = 0;
 
                     async.each(redisResult,function(socketInfo,done2){
 
@@ -39,7 +39,7 @@ var GetUserOnlineStatus = {
 
                             if(param){
                                 // got pintok. so this user is online
-                                onlinestatus = true;
+                                onlinestatus = 1;
 
                                 // send err to forece quit all
                                 done2(1);
@@ -66,14 +66,14 @@ var GetUserOnlineStatus = {
 
                     result.push({
                         userId : userId,
-                        onlineStatus : false
+                        onlineStatus : 0
                     });
 
                     done(err);
+
                 }
 
             });
-            
             
 
         },function(err){
