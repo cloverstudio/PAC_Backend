@@ -145,8 +145,11 @@ UserDetailController.prototype.init = function(app){
                     return;
                 }
                 
-                result.user.onlineStatus = onlineStatusResult[0].onlineStatus;
-                
+                if(onlineStatusResult[0])
+                    result.user.onlineStatus = onlineStatusResult[0].onlineStatus;
+                else
+                    result.user.onlineStatus = 0;
+                    
                 done(null,result);
                 
             });
