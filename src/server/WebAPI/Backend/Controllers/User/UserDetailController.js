@@ -145,7 +145,7 @@ UserDetailController.prototype.init = function(app){
                     return;
                 }
                 
-                if(onlineStatusResult[0])
+                if(onlineStatusResult && onlineStatusResult[0])
                     result.user.onlineStatus = onlineStatusResult[0].onlineStatus;
                 else
                     result.user.onlineStatus = 0;
