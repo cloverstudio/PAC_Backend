@@ -23,6 +23,14 @@ var GetUserOnlineStatus = {
         
         async.each(userIds,function(userId,done){
             
+            result.push({
+                userId : userId,
+                onlineStatus : 0
+            });
+
+            done();
+
+            /*
             DatabaseManager.redisGet(Const.redisKeyUserId + userId,function(err,redisResult){
 
                 if(redisResult){
@@ -73,8 +81,11 @@ var GetUserOnlineStatus = {
 
                 }
 
+                
+
             });
             
+            */
 
         },function(err){
             
