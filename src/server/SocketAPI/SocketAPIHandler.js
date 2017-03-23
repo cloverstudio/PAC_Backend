@@ -66,7 +66,7 @@ var SocketAPIHandler = {
             if(callBack)
                 callBack(param);
 
-            socket.removeAllListeners(command);
+            socket.off(command);
             
         });
 
