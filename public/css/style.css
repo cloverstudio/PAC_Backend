@@ -14688,6 +14688,8 @@ body.loading {
 .detailinfotab #memberlist {
   overflow-y: auto;
   height: 250px; }
+  .detailinfotab #memberlist table tr {
+    cursor: pointer; }
   .detailinfotab #memberlist table img {
     width: 50px; }
   .detailinfotab #memberlist table img.onlineicon {

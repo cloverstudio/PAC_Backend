@@ -62466,8 +62466,10 @@ var Utils = require('../../../lib/utils.js');
 
 var template = require('./GroupDetail.hbs');
 var templateListRows = require('./MemberListRow.hbs');
-
 var GroupUserListClient = require('../../../lib/APIClients/GroupUserListClient');
+
+var ChatManager = require('../../../lib/ChatManager');
+var loginUserManager = require('../../../lib/loginUserManager');
 
 var GroupDetail = {
     
@@ -62535,6 +62537,17 @@ var GroupDetail = {
             $('#memberlist table').append(templateListRows({
                 list: response.list
             }));
+
+            $('#memberlist table tr').unbind().click(function(){
+
+                var userId = $(this).attr('userid');
+
+                if(userId != loginUserManager.getUser()._id){
+                    ChatManager.openChatByUserId(userId);
+                    self.hide();
+                }
+            });
+            
             
             if(self.initialRowCount == -1)
                 self.initialRowCount = response.list.length;
@@ -62563,20 +62576,22 @@ var GroupDetail = {
 }
 
 module.exports = GroupDetail;
-},{"../../../lib/APIClients/GroupUserListClient":256,"../../../lib/consts.js":287,"../../../lib/utils.js":293,"../AlertDialog/AlertDialog":188,"./GroupDetail.hbs":200,"./MemberListRow.hbs":202,"jquery":69,"lodash":86}],202:[function(require,module,exports){
+},{"../../../lib/APIClients/GroupUserListClient":256,"../../../lib/ChatManager":276,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"../AlertDialog/AlertDialog":188,"./GroupDetail.hbs":200,"./MemberListRow.hbs":202,"jquery":69,"lodash":86}],202:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4="function";
 
   return "    \n        <tr class=\""
     + alias3((helpers.evenodd || (depth0 && depth0.evenodd) || alias2).call(alias1,(data && data.index),"even","odd",{"name":"evenodd","hash":{},"data":data}))
+    + "\" userid=\""
+    + alias3(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + "\">\n            \n            <td width=\"50px\">\n                <img class=\"img-rounded\" src=\"/api/v2/avatar/user/"
     + alias3(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.avatar : depth0)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n            </td>\n            \n            <td>\n                "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.onlineStatus : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n                "
-    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + "\n            </td>\n            \n        </tr>\n        \n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "  <img class=\"img-circle onlineicon\" src=\"/images/onlineIcon.png\" /> ";
@@ -62976,6 +62991,10 @@ var templateListRows = require('./MemberListRow.hbs');
 
 var RoomUserListClient = require('../../../lib/APIClients/RoomUserListClient');
 
+
+var ChatManager = require('../../../lib/ChatManager');
+var loginUserManager = require('../../../lib/loginUserManager');
+
 var RoomDetail = {
     
     page : 1,
@@ -63042,7 +63061,19 @@ var RoomDetail = {
             $('#memberlist table').append(templateListRows({
                 list: response.list
             }));
+
+            $('#memberlist table tr').unbind().click(function(){
+
+                var userId = $(this).attr('userid');
+
+                if(userId != loginUserManager.getUser()._id){
+                    ChatManager.openChatByUserId(userId);
+                    self.hide();
+                }
+                
+            });
             
+
             if(self.initialRowCount == -1)
                 self.initialRowCount = response.list.length;
             
@@ -63070,7 +63101,7 @@ var RoomDetail = {
 }
 
 module.exports = RoomDetail;
-},{"../../../lib/APIClients/RoomUserListClient":266,"../../../lib/consts.js":287,"../../../lib/utils.js":293,"../AlertDialog/AlertDialog":188,"./MemberListRow.hbs":208,"./RoomDetail.hbs":209,"jquery":69,"lodash":86}],211:[function(require,module,exports){
+},{"../../../lib/APIClients/RoomUserListClient":266,"../../../lib/ChatManager":276,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"../AlertDialog/AlertDialog":188,"./MemberListRow.hbs":208,"./RoomDetail.hbs":209,"jquery":69,"lodash":86}],211:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {

@@ -32,6 +32,11 @@
         height: 250px;
         
         table{
+
+            tr{
+                cursor: pointer;
+            }
+            
             img{
                 width: 50px;
             }

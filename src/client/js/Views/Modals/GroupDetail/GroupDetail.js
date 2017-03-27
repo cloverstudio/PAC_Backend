@@ -6,8 +6,10 @@ var Utils = require('../../../lib/utils.js');
 
 var template = require('./GroupDetail.hbs');
 var templateListRows = require('./MemberListRow.hbs');
-
 var GroupUserListClient = require('../../../lib/APIClients/GroupUserListClient');
+
+var ChatManager = require('../../../lib/ChatManager');
+var loginUserManager = require('../../../lib/loginUserManager');
 
 var GroupDetail = {
     
@@ -75,6 +77,17 @@ var GroupDetail = {
             $('#memberlist table').append(templateListRows({
                 list: response.list
             }));
+
+            $('#memberlist table tr').unbind().click(function(){
+
+                var userId = $(this).attr('userid');
+
+                if(userId != loginUserManager.getUser()._id){
+                    ChatManager.openChatByUserId(userId);
+                    self.hide();
+                }
+            });
+            
             
             if(self.initialRowCount == -1)
                 self.initialRowCount = response.list.length;

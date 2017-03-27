@@ -9,6 +9,10 @@ var templateListRows = require('./MemberListRow.hbs');
 
 var RoomUserListClient = require('../../../lib/APIClients/RoomUserListClient');
 
+
+var ChatManager = require('../../../lib/ChatManager');
+var loginUserManager = require('../../../lib/loginUserManager');
+
 var RoomDetail = {
     
     page : 1,
@@ -75,7 +79,19 @@ var RoomDetail = {
             $('#memberlist table').append(templateListRows({
                 list: response.list
             }));
+
+            $('#memberlist table tr').unbind().click(function(){
+
+                var userId = $(this).attr('userid');
+
+                if(userId != loginUserManager.getUser()._id){
+                    ChatManager.openChatByUserId(userId);
+                    self.hide();
+                }
+                
+            });
             
+
             if(self.initialRowCount == -1)
                 self.initialRowCount = response.list.length;
             

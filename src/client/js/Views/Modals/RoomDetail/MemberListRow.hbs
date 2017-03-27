@@ -1,7 +1,7 @@
 
     {{#each list}}
     
-        <tr class="{{evenodd @index "even" "odd"}}">
+        <tr class="{{evenodd @index "even" "odd"}}" userid="{{_id}}">
             
             <td width="50px">
                 <img class="img-rounded" src="/api/v2/avatar/user/{{avatar.thumbnail.nameOnServer}}" />
