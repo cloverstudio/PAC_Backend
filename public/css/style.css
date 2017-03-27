@@ -14182,6 +14182,7 @@ body.loading {
   #detailinfo-container ul.onlineusers {
     border-top: 1px solid #eeeeee; }
     #detailinfo-container ul.onlineusers li {
+      cursor: pointer;
       line-height: 30px;
       vertical-align: middle; }
       #detailinfo-container ul.onlineusers li .img-holder {

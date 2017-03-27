@@ -10,6 +10,7 @@ var Config = require('../../lib/init');
 
 var NotificationManager = require('../../lib/NotificationManager');
 var loginUserManager = require('../../lib/loginUserManager');
+var ChatManager = require('../../lib/ChatManager');
 
 var template = require('./DetailInfoView.hbs');
 var templateDetailUser = require('./UserDetail.hbs');
@@ -251,6 +252,15 @@ var DetailInfoView = Backbone.View.extend({
             $('#chat-detail .onlineusers').html(templateOnlineUserList({
                 list:onlineUsers
             }));
+
+            $('#chat-detail .onlineusers li').unbind().click(function(){
+
+                var userId = $(this).attr('userid');
+
+                if(userId != loginUserManager.getUser()._id)
+                    ChatManager.openChatByUserId(userId);
+
+            });
             
         });
         

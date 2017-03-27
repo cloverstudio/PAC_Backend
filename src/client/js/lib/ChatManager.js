@@ -167,7 +167,17 @@ var ChatManager = {
         
     },
     
-    
+    openChatByUserId: function(userId,messageId){
+
+        var self = this;
+
+        UserDetailClient.send(userId,function(data){
+
+            self.openChatByUser(data.user);
+
+        });
+
+    },
     openChatByUser: function(user,messageId){
 
         if(this.isLoading){

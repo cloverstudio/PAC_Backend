@@ -60490,6 +60490,7 @@ var Config = require('../../lib/init');
 
 var NotificationManager = require('../../lib/NotificationManager');
 var loginUserManager = require('../../lib/loginUserManager');
+var ChatManager = require('../../lib/ChatManager');
 
 var template = require('./DetailInfoView.hbs');
 var templateDetailUser = require('./UserDetail.hbs');
@@ -60731,6 +60732,15 @@ var DetailInfoView = Backbone.View.extend({
             $('#chat-detail .onlineusers').html(templateOnlineUserList({
                 list:onlineUsers
             }));
+
+            $('#chat-detail .onlineusers li').unbind().click(function(){
+
+                var userId = $(this).attr('userid');
+
+                if(userId != loginUserManager.getUser()._id)
+                    ChatManager.openChatByUserId(userId);
+
+            });
             
         });
         
@@ -60869,7 +60879,7 @@ var DetailInfoView = Backbone.View.extend({
 
 module.exports = DetailInfoView;
 
-},{"../../lib/APIClients/BlockClient":247,"../../lib/APIClients/GroupUserListClient":256,"../../lib/APIClients/LeaveRoomClient":260,"../../lib/APIClients/MuteClient":262,"../../lib/APIClients/RoomUserListClient":266,"../../lib/APIClients/UserDetailClient":273,"../../lib/NotificationManager":279,"../../lib/UIUtils":286,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../Modals/AlertDialog/AlertDialog":188,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/GroupDetail/GroupDetail":201,"../Modals/RoomDetail/RoomDetail":210,"../Modals/UpdateRoom/UpdateRoom":212,"./DetailInfoView.hbs":174,"./GroupDetail.hbs":176,"./OnlineUserList.hbs":177,"./RoomDetail.hbs":178,"./UserDetail.hbs":179,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],176:[function(require,module,exports){
+},{"../../lib/APIClients/BlockClient":247,"../../lib/APIClients/GroupUserListClient":256,"../../lib/APIClients/LeaveRoomClient":260,"../../lib/APIClients/MuteClient":262,"../../lib/APIClients/RoomUserListClient":266,"../../lib/APIClients/UserDetailClient":273,"../../lib/ChatManager":276,"../../lib/NotificationManager":279,"../../lib/UIUtils":286,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../Modals/AlertDialog/AlertDialog":188,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/GroupDetail/GroupDetail":201,"../Modals/RoomDetail/RoomDetail":210,"../Modals/UpdateRoom/UpdateRoom":212,"./DetailInfoView.hbs":174,"./GroupDetail.hbs":176,"./OnlineUserList.hbs":177,"./RoomDetail.hbs":178,"./UserDetail.hbs":179,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],176:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -60892,14 +60902,16 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : {};
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "\n    <li>\n        \n        <span class=\"img-holder\">\n            <img class=\"img-circle\" src=\"/api/v2/avatar/user/"
-    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.avatar : depth0)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
+  return "\n    <li userid=\""
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + "\">\n        \n        <span class=\"img-holder\">\n            <img class=\"img-circle\" src=\"/api/v2/avatar/user/"
+    + alias4(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.avatar : depth0)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n            "
-    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.onlineStatus : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.onlineStatus : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n        </span>\n        \n        "
-    + alias1(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias2,{"name":"name","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + "\n        \n        <div class=\"clearfix\"></div>\n    </li>\n\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return "  <img class=\"img-circle onlineicon\" src=\"/images/onlineIcon.png\" /> ";
@@ -67646,7 +67658,17 @@ var ChatManager = {
         
     },
     
-    
+    openChatByUserId: function(userId,messageId){
+
+        var self = this;
+
+        UserDetailClient.send(userId,function(data){
+
+            self.openChatByUser(data.user);
+
+        });
+
+    },
     openChatByUser: function(user,messageId){
 
         if(this.isLoading){
