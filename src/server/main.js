@@ -42,7 +42,6 @@ DatabaseManager.init(function(success){
             next();
         });
 
-
         WebAPI.init(app);
         SocketAPI.init(io);
         OnlineStatusChecker.start();

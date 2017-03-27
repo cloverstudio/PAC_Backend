@@ -144,6 +144,7 @@ var SearchUser = {
                 if(!_.isEmpty(keyword)){
                     conditions['$or'] = [
                         { name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
+                        { sortName: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
                         { description: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
                     ];
                 }
