@@ -60087,7 +60087,7 @@ var CallRequestView = Backbone.View.extend({
 
 module.exports = CallRequestView;
 
-},{"../../lib/SocketIOManager":283,"../../lib/SoundManager":284,"../../lib/consts":286,"../../lib/init":287,"../../lib/utils":292,"../Modals/AlertDialog/AlertDialog":188,"./CallRequestView.hbs":170,"./CallView.js":173,"async":4,"backbone":16,"getusermedia":36,"lodash":86,"webrtcsupport":168}],172:[function(require,module,exports){
+},{"../../lib/SocketIOManager":284,"../../lib/SoundManager":285,"../../lib/consts":287,"../../lib/init":288,"../../lib/utils":293,"../Modals/AlertDialog/AlertDialog":188,"./CallRequestView.hbs":170,"./CallView.js":173,"async":4,"backbone":16,"getusermedia":36,"lodash":86,"webrtcsupport":168}],172:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -60452,7 +60452,7 @@ var CallView = Backbone.View.extend({
 
 module.exports = CallView;
 
-},{"../../lib/SimpleWebRTC/simplewebrtc":280,"../../lib/SocketIOManager":283,"../../lib/consts":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils":292,"../Modals/AlertDialog/AlertDialog":188,"./CallView.hbs":172,"async":4,"backbone":16,"getusermedia":36,"lodash":86,"webrtcsupport":168}],174:[function(require,module,exports){
+},{"../../lib/SimpleWebRTC/simplewebrtc":281,"../../lib/SocketIOManager":284,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../Modals/AlertDialog/AlertDialog":188,"./CallView.hbs":172,"async":4,"backbone":16,"getusermedia":36,"lodash":86,"webrtcsupport":168}],174:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -60869,7 +60869,7 @@ var DetailInfoView = Backbone.View.extend({
 
 module.exports = DetailInfoView;
 
-},{"../../lib/APIClients/BlockClient":247,"../../lib/APIClients/GroupUserListClient":256,"../../lib/APIClients/LeaveRoomClient":260,"../../lib/APIClients/MuteClient":262,"../../lib/APIClients/RoomUserListClient":266,"../../lib/APIClients/UserDetailClient":273,"../../lib/NotificationManager":278,"../../lib/UIUtils":285,"../../lib/consts":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils":292,"../Modals/AlertDialog/AlertDialog":188,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/GroupDetail/GroupDetail":201,"../Modals/RoomDetail/RoomDetail":210,"../Modals/UpdateRoom/UpdateRoom":212,"./DetailInfoView.hbs":174,"./GroupDetail.hbs":176,"./OnlineUserList.hbs":177,"./RoomDetail.hbs":178,"./UserDetail.hbs":179,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],176:[function(require,module,exports){
+},{"../../lib/APIClients/BlockClient":247,"../../lib/APIClients/GroupUserListClient":256,"../../lib/APIClients/LeaveRoomClient":260,"../../lib/APIClients/MuteClient":262,"../../lib/APIClients/RoomUserListClient":266,"../../lib/APIClients/UserDetailClient":273,"../../lib/NotificationManager":279,"../../lib/UIUtils":286,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../Modals/AlertDialog/AlertDialog":188,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/GroupDetail/GroupDetail":201,"../Modals/RoomDetail/RoomDetail":210,"../Modals/UpdateRoom/UpdateRoom":212,"./DetailInfoView.hbs":174,"./GroupDetail.hbs":176,"./OnlineUserList.hbs":177,"./RoomDetail.hbs":178,"./UserDetail.hbs":179,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],176:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -61267,7 +61267,7 @@ var FavoriteView = Backbone.View.extend({
 
 module.exports = FavoriteView;
 
-},{"../../lib/APIClients/FavoriteListMessageClient":251,"../../lib/APIClients/RemoveFromFavoriteClient":264,"../../lib/ChatManager":276,"../../lib/UIUtils":285,"../../lib/consts":286,"../../lib/init":287,"../../lib/utils":292,"../Modals/ForwardMessage/ForwardMessageDialog":198,"../SideMenu/SideMenu":222,"./FavoriteResult.hbs":180,"./FavoriteView.hbs":181,"backbone":16,"lodash":86}],183:[function(require,module,exports){
+},{"../../lib/APIClients/FavoriteListMessageClient":251,"../../lib/APIClients/RemoveFromFavoriteClient":264,"../../lib/ChatManager":276,"../../lib/UIUtils":286,"../../lib/consts":287,"../../lib/init":288,"../../lib/utils":293,"../Modals/ForwardMessage/ForwardMessageDialog":198,"../SideMenu/SideMenu":222,"./FavoriteResult.hbs":180,"./FavoriteView.hbs":181,"backbone":16,"lodash":86}],183:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -61388,7 +61388,7 @@ var HeaderView = Backbone.View.extend({
 
 module.exports = HeaderView;
 
-},{"../../lib/consts":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils":292,"../SideMenu/SideMenu":222,"./Header.hbs":183,"backbone":16,"lodash":86}],185:[function(require,module,exports){
+},{"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../SideMenu/SideMenu":222,"./Header.hbs":183,"backbone":16,"lodash":86}],185:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -61546,7 +61546,7 @@ var MainView = Backbone.View.extend({
 
 module.exports = MainView;
 
-},{"../../lib/APIClients/UserDetailClient":273,"../../lib/ChatManager":276,"../../lib/consts":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils":292,"../CallView/CallRequestView.js":171,"../DetailInfoView/DetailInfoView.js":175,"../Favorite/FavoriteView.js":182,"../Header/HeaderView.js":184,"../Search/SearchView.js":220,"../SideMenu/SideMenu":222,"../Sidebar/SidebarView.js":233,"../WebHook/WebHookView.js":240,"./MainView.hbs":185,"backbone":16,"lodash":86}],187:[function(require,module,exports){
+},{"../../lib/APIClients/UserDetailClient":273,"../../lib/ChatManager":276,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../CallView/CallRequestView.js":171,"../DetailInfoView/DetailInfoView.js":175,"../Favorite/FavoriteView.js":182,"../Header/HeaderView.js":184,"../Search/SearchView.js":220,"../SideMenu/SideMenu":222,"../Sidebar/SidebarView.js":233,"../WebHook/WebHookView.js":240,"./MainView.hbs":185,"backbone":16,"lodash":86}],187:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -61597,7 +61597,7 @@ var AlertDialog = {
     }
 }
 module.exports = AlertDialog;
-},{"../../../lib/utils.js":292,"./AlertDialog.hbs":187,"jquery":69,"lodash":86}],189:[function(require,module,exports){
+},{"../../../lib/utils.js":293,"./AlertDialog.hbs":187,"jquery":69,"lodash":86}],189:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -61784,7 +61784,7 @@ var ChangePassword = {
     
 }
 module.exports = ChangePassword;
-},{"../../../lib/APIClients/ChangePasswordClient":248,"../../../lib/APIClients/UpdateProfileClient":271,"../../../lib/consts":286,"../../../lib/loginUserManager":290,"../../../lib/utils.js":292,"./ChangePassword.hbs":189,"jquery":69,"lodash":86,"sha1":118,"validator":167}],191:[function(require,module,exports){
+},{"../../../lib/APIClients/ChangePasswordClient":248,"../../../lib/APIClients/UpdateProfileClient":271,"../../../lib/consts":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"./ChangePassword.hbs":189,"jquery":69,"lodash":86,"sha1":118,"validator":167}],191:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -61845,7 +61845,7 @@ var ConfirmDialog = {
 }
 
 module.exports = ConfirmDialog;
-},{"../../../lib/utils.js":292,"./ConfirmDialog.hbs":191,"jquery":69,"lodash":86}],193:[function(require,module,exports){
+},{"../../../lib/utils.js":293,"./ConfirmDialog.hbs":191,"jquery":69,"lodash":86}],193:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -62027,7 +62027,7 @@ var CreateRoom = {
     
 }
 module.exports = CreateRoom;
-},{"../../../lib/APIClients/CreateRoomClient":249,"../../../lib/ChatManager":276,"../../../lib/consts.js":286,"../../../lib/loginUserManager":290,"../../../lib/utils.js":292,"../../Parts/UsersSelectTextBox/UsersSelectTextBox":216,"./CreateRoom.hbs":193,"backbone":16,"jquery":69,"lodash":86,"validator":167}],195:[function(require,module,exports){
+},{"../../../lib/APIClients/CreateRoomClient":249,"../../../lib/ChatManager":276,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"../../Parts/UsersSelectTextBox/UsersSelectTextBox":216,"./CreateRoom.hbs":193,"backbone":16,"jquery":69,"lodash":86,"validator":167}],195:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -62194,7 +62194,7 @@ var EditProfile = {
     
 }
 module.exports = EditProfile;
-},{"../../../lib/APIClients/UpdateProfileClient":271,"../../../lib/consts.js":286,"../../../lib/loginUserManager":290,"../../../lib/utils.js":292,"./EditProfile.hbs":195,"jquery":69,"lodash":86,"validator":167}],197:[function(require,module,exports){
+},{"../../../lib/APIClients/UpdateProfileClient":271,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"./EditProfile.hbs":195,"jquery":69,"lodash":86,"validator":167}],197:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -62394,7 +62394,7 @@ var ForwardMessageDialog = {
     }
 }
 module.exports = ForwardMessageDialog;
-},{"../../../lib/APIClients/AllSearchClient":245,"../../../lib/APIClients/ForwardMessageClient":252,"../../../lib/UIUtils":285,"../../../lib/consts.js":286,"../../../lib/loginUserManager":290,"../../../lib/utils.js":292,"./ForwardMessageDialog.hbs":197,"./SearchListContents.hbs":199,"jquery":69,"lodash":86}],199:[function(require,module,exports){
+},{"../../../lib/APIClients/AllSearchClient":245,"../../../lib/APIClients/ForwardMessageClient":252,"../../../lib/UIUtils":286,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"./ForwardMessageDialog.hbs":197,"./SearchListContents.hbs":199,"jquery":69,"lodash":86}],199:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -62551,7 +62551,7 @@ var GroupDetail = {
 }
 
 module.exports = GroupDetail;
-},{"../../../lib/APIClients/GroupUserListClient":256,"../../../lib/consts.js":286,"../../../lib/utils.js":292,"../AlertDialog/AlertDialog":188,"./GroupDetail.hbs":200,"./MemberListRow.hbs":202,"jquery":69,"lodash":86}],202:[function(require,module,exports){
+},{"../../../lib/APIClients/GroupUserListClient":256,"../../../lib/consts.js":287,"../../../lib/utils.js":293,"../AlertDialog/AlertDialog":188,"./GroupDetail.hbs":200,"./MemberListRow.hbs":202,"jquery":69,"lodash":86}],202:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -62856,7 +62856,7 @@ var NewHookDialog = {
 }
 
 module.exports = NewHookDialog;
-},{"../../../lib/APIClients/AddInboundHookClient":241,"../../../lib/APIClients/AddOutgoingHookClient":242,"../../../lib/APIClients/MyRoomListClient":263,"../../../lib/UIUtils":285,"../../../lib/consts.js":286,"../../../lib/loginUserManager":290,"../../../lib/utils.js":292,"./NewHook.hbs":203,"./NewHookStep1.hbs":205,"./NewHookStep2_in.hbs":206,"./NewHookStep2_out.hbs":207,"async":4,"jquery":69,"lodash":86,"validator":167}],205:[function(require,module,exports){
+},{"../../../lib/APIClients/AddInboundHookClient":241,"../../../lib/APIClients/AddOutgoingHookClient":242,"../../../lib/APIClients/MyRoomListClient":263,"../../../lib/UIUtils":286,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"./NewHook.hbs":203,"./NewHookStep1.hbs":205,"./NewHookStep2_in.hbs":206,"./NewHookStep2_out.hbs":207,"async":4,"jquery":69,"lodash":86,"validator":167}],205:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -63058,7 +63058,7 @@ var RoomDetail = {
 }
 
 module.exports = RoomDetail;
-},{"../../../lib/APIClients/RoomUserListClient":266,"../../../lib/consts.js":286,"../../../lib/utils.js":292,"../AlertDialog/AlertDialog":188,"./MemberListRow.hbs":208,"./RoomDetail.hbs":209,"jquery":69,"lodash":86}],211:[function(require,module,exports){
+},{"../../../lib/APIClients/RoomUserListClient":266,"../../../lib/consts.js":287,"../../../lib/utils.js":293,"../AlertDialog/AlertDialog":188,"./MemberListRow.hbs":208,"./RoomDetail.hbs":209,"jquery":69,"lodash":86}],211:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -63364,7 +63364,7 @@ var UpdateRoom = {
     
 }
 module.exports = UpdateRoom;
-},{"../../../lib/APIClients/AddUsersToRoomClient":244,"../../../lib/APIClients/RemoveUsersFromRoomClient":265,"../../../lib/APIClients/RoomUserListClient":266,"../../../lib/APIClients/UpdateRoomClient":272,"../../../lib/ChatManager":276,"../../../lib/UIUtils":285,"../../../lib/consts.js":286,"../../../lib/loginUserManager":290,"../../../lib/utils.js":292,"../../Parts/UsersSelectTextBox/UsersSelectTextBox":216,"./UpdateRoom.hbs":211,"async":4,"backbone":16,"jquery":69,"lodash":86,"validator":167}],213:[function(require,module,exports){
+},{"../../../lib/APIClients/AddUsersToRoomClient":244,"../../../lib/APIClients/RemoveUsersFromRoomClient":265,"../../../lib/APIClients/RoomUserListClient":266,"../../../lib/APIClients/UpdateRoomClient":272,"../../../lib/ChatManager":276,"../../../lib/UIUtils":286,"../../../lib/consts.js":287,"../../../lib/loginUserManager":291,"../../../lib/utils.js":293,"../../Parts/UsersSelectTextBox/UsersSelectTextBox":216,"./UpdateRoom.hbs":211,"async":4,"backbone":16,"jquery":69,"lodash":86,"validator":167}],213:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -63645,7 +63645,7 @@ UsersSelectTextBox.prototype.removeUser = function(userObj){
 
 
 module.exports = UsersSelectTextBox;
-},{"../../../lib/APIClients/UserSearchClient":275,"../../../lib/utils.js":292,"./SelectPanel.hbs":213,"./UsersSelectContents.hbs":214,"./UsersSelectTextBox.hbs":215,"jquery":69,"lodash":86}],217:[function(require,module,exports){
+},{"../../../lib/APIClients/UserSearchClient":275,"../../../lib/utils.js":293,"./SelectPanel.hbs":213,"./UsersSelectContents.hbs":214,"./UsersSelectTextBox.hbs":215,"jquery":69,"lodash":86}],217:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -63960,7 +63960,7 @@ var SearchView = Backbone.View.extend({
 
 module.exports = SearchView;
 
-},{"../../lib/APIClients/SearchMessageClient":267,"../../lib/ChatManager":276,"../../lib/UIUtils":285,"../../lib/consts":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils":292,"../SideMenu/SideMenu":222,"./SearchHeaderView.hbs":217,"./SearchResult.hbs":218,"./SearchView.hbs":219,"backbone":16,"lodash":86}],221:[function(require,module,exports){
+},{"../../lib/APIClients/SearchMessageClient":267,"../../lib/ChatManager":276,"../../lib/UIUtils":286,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../SideMenu/SideMenu":222,"./SearchHeaderView.hbs":217,"./SearchResult.hbs":218,"./SearchView.hbs":219,"backbone":16,"lodash":86}],221:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -64333,7 +64333,7 @@ var SideMenu = {
     
 }
 module.exports = SideMenu;
-},{"../../lib/APIClients/LeaveRoomClient":260,"../../lib/APIClients/MarkAllAsReadClient":261,"../../lib/NotificationManager":278,"../../lib/UIUtils":285,"../../lib/consts.js":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils.js":292,"../Modals/ChangePassword/ChangePassword":190,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/CreateRoom/CreateRoom":194,"../Modals/EditProfile/EditProfile":196,"./SideMenu.hbs":221,"./SubMenuGroup.hbs":223,"./SubMenuRoom.hbs":224,"./SubMenuUser.hbs":225,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86,"validator":167}],223:[function(require,module,exports){
+},{"../../lib/APIClients/LeaveRoomClient":260,"../../lib/APIClients/MarkAllAsReadClient":261,"../../lib/NotificationManager":279,"../../lib/UIUtils":286,"../../lib/consts.js":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils.js":293,"../Modals/ChangePassword/ChangePassword":190,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/CreateRoom/CreateRoom":194,"../Modals/EditProfile/EditProfile":196,"./SideMenu.hbs":221,"./SubMenuGroup.hbs":223,"./SubMenuRoom.hbs":224,"./SubMenuUser.hbs":225,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86,"validator":167}],223:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -64658,7 +64658,7 @@ var GroupListView = Backbone.View.extend({
 
 module.exports = GroupListView;
 
-},{"../../../lib/APIClients/GroupListClient":254,"../../../lib/APIClients/GroupSearchClient":255,"../../../lib/ChatManager":276,"../../../lib/UIUtils":285,"../../../lib/consts":286,"../../../lib/init":287,"../../../lib/loginUserManager":290,"../../../lib/utils":292,"./GroupListContents.hbs":226,"./GroupListView.hbs":227,"backbone":16,"lodash":86}],229:[function(require,module,exports){
+},{"../../../lib/APIClients/GroupListClient":254,"../../../lib/APIClients/GroupSearchClient":255,"../../../lib/ChatManager":276,"../../../lib/UIUtils":286,"../../../lib/consts":287,"../../../lib/init":288,"../../../lib/loginUserManager":291,"../../../lib/utils":293,"./GroupListContents.hbs":226,"./GroupListView.hbs":227,"backbone":16,"lodash":86}],229:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -65038,7 +65038,7 @@ var HistoryListView = Backbone.View.extend({
 
 module.exports = HistoryListView;
 
-},{"../../../lib/APIClients/HistoryListClient":258,"../../../lib/ChatManager":276,"../../../lib/UIUtils":285,"../../../lib/consts":286,"../../../lib/init":287,"../../../lib/localzationManager":289,"../../../lib/loginUserManager":290,"../../../lib/utils":292,"./HistoryListContents.hbs":229,"./HistoryListView.hbs":230,"backbone":16,"lodash":86}],232:[function(require,module,exports){
+},{"../../../lib/APIClients/HistoryListClient":258,"../../../lib/ChatManager":276,"../../../lib/UIUtils":286,"../../../lib/consts":287,"../../../lib/init":288,"../../../lib/localzationManager":290,"../../../lib/loginUserManager":291,"../../../lib/utils":293,"./HistoryListContents.hbs":229,"./HistoryListView.hbs":230,"backbone":16,"lodash":86}],232:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -65207,7 +65207,7 @@ var SidebarView = Backbone.View.extend({
 
 module.exports = SidebarView;
 
-},{"../../lib/consts":286,"../../lib/init":287,"../../lib/utils":292,"../../lib/windowManager":294,"./GroupList/GroupListView.js":228,"./HistoryList/HistoryListView.js":231,"./SidebarView.hbs":232,"./UserList/UserListView.js":236,"backbone":16,"lodash":86}],234:[function(require,module,exports){
+},{"../../lib/consts":287,"../../lib/init":288,"../../lib/utils":293,"../../lib/windowManager":295,"./GroupList/GroupListView.js":228,"./HistoryList/HistoryListView.js":231,"./SidebarView.hbs":232,"./UserList/UserListView.js":236,"backbone":16,"lodash":86}],234:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -65452,7 +65452,7 @@ var UserListView = Backbone.View.extend({
 
 module.exports = UserListView;
 
-},{"../../../lib/APIClients/UserListClient":274,"../../../lib/APIClients/UserSearchClient":275,"../../../lib/ChatManager":276,"../../../lib/UIUtils":285,"../../../lib/consts":286,"../../../lib/init":287,"../../../lib/loginUserManager":290,"../../../lib/utils":292,"./UserListContents.hbs":234,"./UserListView.hbs":235,"backbone":16,"lodash":86}],237:[function(require,module,exports){
+},{"../../../lib/APIClients/UserListClient":274,"../../../lib/APIClients/UserSearchClient":275,"../../../lib/ChatManager":276,"../../../lib/UIUtils":286,"../../../lib/consts":287,"../../../lib/init":288,"../../../lib/loginUserManager":291,"../../../lib/utils":293,"./UserListContents.hbs":234,"./UserListView.hbs":235,"backbone":16,"lodash":86}],237:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -65783,7 +65783,7 @@ var SigninView = Backbone.View.extend({
 
 module.exports = SigninView;
 
-},{"../../lib/APIClients/GuestSigninClient":257,"../../lib/APIClients/SigninClient":268,"../../lib/SocketIOManager":283,"../../lib/consts":286,"../../lib/init":287,"../../lib/localstorageManager":288,"../../lib/loginUserManager":290,"../../lib/utils":292,"./SigninView.hbs":237,"backbone":16,"lodash":86}],239:[function(require,module,exports){
+},{"../../lib/APIClients/GuestSigninClient":257,"../../lib/APIClients/SigninClient":268,"../../lib/SocketIOManager":284,"../../lib/consts":287,"../../lib/init":288,"../../lib/localstorageManager":289,"../../lib/loginUserManager":291,"../../lib/utils":293,"./SigninView.hbs":237,"backbone":16,"lodash":86}],239:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
@@ -66087,7 +66087,7 @@ var WebHookView = Backbone.View.extend({
 
 module.exports = WebHookView;
 
-},{"../../lib/APIClients/DeleteHookClient":250,"../../lib/APIClients/HookListClient":259,"../../lib/APIClients/MyRoomListClient":263,"../../lib/APIClients/UpdateHookClient":270,"../../lib/UIUtils":285,"../../lib/consts":286,"../../lib/init":287,"../../lib/loginUserManager":290,"../../lib/utils":292,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/NewHook/NewHook":204,"./HebHookViewMain.hbs":239,"backbone":16,"lodash":86}],241:[function(require,module,exports){
+},{"../../lib/APIClients/DeleteHookClient":250,"../../lib/APIClients/HookListClient":259,"../../lib/APIClients/MyRoomListClient":263,"../../lib/APIClients/UpdateHookClient":270,"../../lib/UIUtils":286,"../../lib/consts":287,"../../lib/init":288,"../../lib/loginUserManager":291,"../../lib/utils":293,"../Modals/ConfirmDialog/ConfirmDialog":192,"../Modals/NewHook/NewHook":204,"./HebHookViewMain.hbs":239,"backbone":16,"lodash":86}],241:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66108,7 +66108,7 @@ AddInboundHookClient.prototype.send = function(targetType,targetId,success,err){
 }
     // returns instance
 module["exports"] = new AddInboundHookClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],242:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],242:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66130,7 +66130,7 @@ AddOutgoingHookClient.prototype.send = function(url,targetType,targetId,success,
 }
     // returns instance
 module["exports"] = new AddOutgoingHookClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],243:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],243:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66150,7 +66150,7 @@ AddToFavoriteClient.prototype.send = function(messageId,success,err){
 }
     // returns instance
 module["exports"] = new AddToFavoriteClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],244:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],244:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66171,7 +66171,7 @@ AddToFavoriteClient.prototype.send = function(roomId,users,success,err){
 }
     // returns instance
 module["exports"] = new AddToFavoriteClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],245:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],245:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66195,7 +66195,7 @@ AllSearchClient.prototype.send = function(keyword,page,success,err){
     
 // returns instance
 module["exports"] = new AllSearchClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],246:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],246:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66351,7 +66351,7 @@ var localStorage = require('../localstorageManager');
     module["exports"] = APIClientBase;
 
 })((this || 0).self || global);
-},{"../SocketIOManager":283,"../consts":286,"../init":287,"../localstorageManager":288,"../loginUserManager":290,"../utils":292,"./SigninClient":268,"JSON2":2,"lodash":86}],247:[function(require,module,exports){
+},{"../SocketIOManager":284,"../consts":287,"../init":288,"../localstorageManager":289,"../loginUserManager":291,"../utils":293,"./SigninClient":268,"JSON2":2,"lodash":86}],247:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66376,7 +66376,7 @@ BlockClient.prototype.send = function(state,targetId,success,err){
 }
     // returns instance
 module["exports"] = new BlockClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],248:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],248:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66394,7 +66394,7 @@ ChangePasswordClient.prototype.send = function(data,success,err){
 }
     // returns instance
 module["exports"] = new ChangePasswordClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],249:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],249:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66527,7 +66527,7 @@ CreateRoomClient.prototype.handleInvalidToken = function(reCallFunction){
 module["exports"] = new CreateRoomClient();
 
 
-},{"../SocketIOManager":283,"../consts":286,"../init":287,"../localstorageManager":288,"../loginUserManager":290,"../utils":292,"./ApiClientBase":246,"./SigninClient":268,"lodash":86}],250:[function(require,module,exports){
+},{"../SocketIOManager":284,"../consts":287,"../init":288,"../localstorageManager":289,"../loginUserManager":291,"../utils":293,"./ApiClientBase":246,"./SigninClient":268,"lodash":86}],250:[function(require,module,exports){
 var Const = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66559,7 +66559,7 @@ DeleteHookClient.prototype.send = function(hookType,hookId,success,err){
 }
     // returns instance
 module["exports"] = new DeleteHookClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],251:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],251:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66581,7 +66581,7 @@ FavoriteListMessageClient.prototype.send = function(page,success,err){
     
 // returns instance
 module["exports"] = new FavoriteListMessageClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],252:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],252:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66602,7 +66602,7 @@ ForwardMessageClient.prototype.send = function(messageId,roomId,success,err){
 }
     // returns instance
 module["exports"] = new ForwardMessageClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],253:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],253:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66620,7 +66620,7 @@ GetDictionary.prototype.send = function(success,err){
 }
     // returns instance
 module["exports"] = new GetDictionary();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],254:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],254:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66642,7 +66642,7 @@ GroupListClient.prototype.send = function(page,success,err){
     
 // returns instance
 module["exports"] = new GroupListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],255:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],255:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66666,7 +66666,7 @@ GroupSearchClient.prototype.send = function(keyword,page,success,err){
     
 // returns instance
 module["exports"] = new GroupSearchClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],256:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],256:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66688,7 +66688,7 @@ GroupUserListClient.prototype.send = function(groupId,page,success,err){
     
 // returns instance
 module["exports"] = new GroupUserListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],257:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],257:[function(require,module,exports){
 var _ = require('lodash');
 var async = require('async');
 
@@ -66775,7 +66775,7 @@ GuestSigninClient.prototype.send = function(organization,userid,success,error){
 // returns instance
 module["exports"] = new GuestSigninClient();
 
-},{"../consts":286,"../init":287,"../utils":292,"async":4,"lodash":86}],258:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"async":4,"lodash":86}],258:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66803,7 +66803,7 @@ HistoryListClient.prototype.sendUpdate = function(lastUpdate,success,err){
 
 // returns instance
 module["exports"] = new HistoryListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],259:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],259:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66825,7 +66825,7 @@ HookListClient.prototype.send = function(success,err){
     
 // returns instance
 module["exports"] = new HookListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],260:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],260:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66843,7 +66843,7 @@ LeaveRoomClient.prototype.send = function(roomId,success,err){
 }
     // returns instance
 module["exports"] = new LeaveRoomClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],261:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],261:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66861,7 +66861,7 @@ MarkAllAsReadClient.prototype.send = function(success,err){
 }
     // returns instance
 module["exports"] = new MarkAllAsReadClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],262:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],262:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66887,7 +66887,7 @@ MuteClient.prototype.send = function(state,targetId,type,success,err){
 }
     // returns instance
 module["exports"] = new MuteClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],263:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],263:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66909,7 +66909,7 @@ MyRoomListClient.prototype.send = function(success,err){
     
 // returns instance
 module["exports"] = new MyRoomListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],264:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],264:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66929,7 +66929,7 @@ AddToFavoriteClient.prototype.send = function(messageId,success,err){
 }
     // returns instance
 module["exports"] = new AddToFavoriteClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],265:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],265:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -66950,7 +66950,7 @@ RemoveUsersFromRoomClient.prototype.send = function(roomId,users,success,err){
 }
     // returns instance
 module["exports"] = new RemoveUsersFromRoomClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],266:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],266:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66972,7 +66972,7 @@ RoomUserListClient.prototype.send = function(roomId,page,success,err){
     
 // returns instance
 module["exports"] = new RoomUserListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],267:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],267:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -66994,7 +66994,7 @@ SearchMessageClient.prototype.send = function(keyword,page,success,err){
     
 // returns instance
 module["exports"] = new SearchMessageClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],268:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],268:[function(require,module,exports){
 var _ = require('lodash');
 var async = require('async');
 
@@ -67085,7 +67085,7 @@ SigninClient.prototype.send = function(organization,userid,password,success,erro
 // returns instance
 module["exports"] = new SigninClient();
 
-},{"../consts":286,"../init":287,"../utils":292,"async":4,"lodash":86}],269:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"async":4,"lodash":86}],269:[function(require,module,exports){
 var _ = require('lodash');
 var async = require('async');
 var APIClientBase = require('./ApiClientBase');
@@ -67109,7 +67109,7 @@ SignoutClient.prototype.send = function(success,error){
 // returns instance
 module["exports"] = new SignoutClient();
 
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"async":4,"lodash":86}],270:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"async":4,"lodash":86}],270:[function(require,module,exports){
 var Const = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -67146,7 +67146,7 @@ UpdateHookClient.prototype.send = function(hookObj,success,err){
 }
     // returns instance
 module["exports"] = new UpdateHookClient();
-},{"../consts":286,"../init":287,"../loginUserManager":290,"./ApiClientBase":246,"lodash":86}],271:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../loginUserManager":291,"./ApiClientBase":246,"lodash":86}],271:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -67277,7 +67277,7 @@ UpdateProfileClient.prototype.handleInvalidToken = function(reCallFunction){
 module["exports"] = new UpdateProfileClient();
 
 
-},{"../SocketIOManager":283,"../consts":286,"../init":287,"../localstorageManager":288,"../loginUserManager":290,"../utils":292,"./ApiClientBase":246,"./SigninClient":268,"lodash":86}],272:[function(require,module,exports){
+},{"../SocketIOManager":284,"../consts":287,"../init":288,"../localstorageManager":289,"../loginUserManager":291,"../utils":293,"./ApiClientBase":246,"./SigninClient":268,"lodash":86}],272:[function(require,module,exports){
 var CONST = require('../consts');
 var APIClientBase = require('./ApiClientBase');
 var _ = require('lodash');
@@ -67408,7 +67408,7 @@ UpdateRoomClient.prototype.handleInvalidToken = function(reCallFunction){
 module["exports"] = new UpdateRoomClient();
 
 
-},{"../SocketIOManager":283,"../consts":286,"../init":287,"../localstorageManager":288,"../loginUserManager":290,"../utils":292,"./ApiClientBase":246,"./SigninClient":268,"lodash":86}],273:[function(require,module,exports){
+},{"../SocketIOManager":284,"../consts":287,"../init":288,"../localstorageManager":289,"../loginUserManager":291,"../utils":293,"./ApiClientBase":246,"./SigninClient":268,"lodash":86}],273:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -67430,7 +67430,7 @@ UserDetailClient.prototype.send = function(userId,success,err){
     
 // returns instance
 module["exports"] = new UserDetailClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],274:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],274:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -67452,7 +67452,7 @@ UserListClient.prototype.send = function(page,success,err){
     
 // returns instance
 module["exports"] = new UserListClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],275:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],275:[function(require,module,exports){
 var JSON = require('JSON2');
 var _ = require('lodash');
 
@@ -67476,7 +67476,7 @@ UserSearchClient.prototype.send = function(keyword,page,success,err){
     
 // returns instance
 module["exports"] = new UserSearchClient();
-},{"../consts":286,"../init":287,"../utils":292,"./ApiClientBase":246,"JSON2":2,"lodash":86}],276:[function(require,module,exports){
+},{"../consts":287,"../init":288,"../utils":293,"./ApiClientBase":246,"JSON2":2,"lodash":86}],276:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('lodash');
 
@@ -67818,7 +67818,7 @@ var ChatManager = {
 
 module["exports"] = ChatManager;
 
-},{"../Views/Modals/ForwardMessage/ForwardMessageDialog":198,"../lib/UIUtils":285,"./APIClients/AddToFavoriteClient":243,"./APIClients/RemoveFromFavoriteClient":264,"./APIClients/UserDetailClient":273,"./EncryptionManager":277,"./SocketIOManager":283,"./UIUtils":285,"./consts":286,"./init":287,"./loginUserManager":290,"./utils":292,"backbone":16,"lodash":86}],277:[function(require,module,exports){
+},{"../Views/Modals/ForwardMessage/ForwardMessageDialog":198,"../lib/UIUtils":286,"./APIClients/AddToFavoriteClient":243,"./APIClients/RemoveFromFavoriteClient":264,"./APIClients/UserDetailClient":273,"./EncryptionManager":277,"./SocketIOManager":284,"./UIUtils":286,"./consts":287,"./init":288,"./loginUserManager":291,"./utils":293,"backbone":16,"lodash":86}],277:[function(require,module,exports){
 var sjcl = require('./sjcl');
 var Config = require('./init');
 
@@ -67995,7 +67995,41 @@ EncryptManager = {
 }
 
 module["exports"] = EncryptManager;
-},{"./init":287,"./sjcl":291}],278:[function(require,module,exports){
+},{"./init":288,"./sjcl":292}],278:[function(require,module,exports){
+var socket = require('socket.io-client');
+var Backbone = require('backbone');
+var _ = require('lodash');
+
+var Const = require('./consts');
+var Config = require('./init');
+var Utils = require('./utils');
+
+var loginUserManager = require('./loginUserManager');
+var NotificationManager = require('./NotificationManager');
+
+var SocketIOManager = require('./SocketIOManager');
+
+var KeepAliveManager = {
+
+    init:function(){
+
+        setInterval(function(){
+
+            SocketIOManager.emit("keepalive",{
+                userId: loginUserManager.getUser()._id
+            });
+
+        },Const.keepAliveInterval);
+
+    }
+
+};
+
+// Exports ----------------------------------------------
+module["exports"] = KeepAliveManager;
+
+
+},{"./NotificationManager":279,"./SocketIOManager":284,"./consts":287,"./init":288,"./loginUserManager":291,"./utils":293,"backbone":16,"lodash":86,"socket.io-client":119}],279:[function(require,module,exports){
 var _ = require('lodash');
 
 var Const = require('./consts');
@@ -68150,7 +68184,7 @@ var NotificationManager = {
 module["exports"] = NotificationManager;
 
 
-},{"./EncryptionManager":277,"./SoundManager":284,"./consts":286,"./init":287,"./loginUserManager":290,"./utils":292,"lodash":86}],279:[function(require,module,exports){
+},{"./EncryptionManager":277,"./SoundManager":285,"./consts":287,"./init":288,"./loginUserManager":291,"./utils":293,"lodash":86}],280:[function(require,module,exports){
 var util = require('util');
 var webrtcSupport = require('webrtcsupport');
 var PeerConnection = require('rtcpeerconnection');
@@ -68454,7 +68488,7 @@ Peer.prototype.sendFile = function (file) {
 
 module.exports = Peer;
 
-},{"filetransfer":35,"rtcpeerconnection":115,"util":22,"webrtcsupport":168,"wildemitter":169}],280:[function(require,module,exports){
+},{"filetransfer":35,"rtcpeerconnection":115,"util":22,"webrtcsupport":168,"wildemitter":169}],281:[function(require,module,exports){
 var WebRTC = require('./webrtc');
 var WildEmitter = require('wildemitter');
 var webrtcSupport = require('webrtcsupport');
@@ -68924,7 +68958,7 @@ SimpleWebRTC.prototype.sendFile = function () {
 
 module.exports = SimpleWebRTC;
 
-},{"./socketioconnection":281,"./webrtc":282,"attachmediastream":5,"mockconsole":87,"webrtcsupport":168,"wildemitter":169}],281:[function(require,module,exports){
+},{"./socketioconnection":282,"./webrtc":283,"attachmediastream":5,"mockconsole":87,"webrtcsupport":168,"wildemitter":169}],282:[function(require,module,exports){
 var io = require('socket.io-client');
 
 function SocketIoConnection(config) {
@@ -68949,7 +68983,7 @@ SocketIoConnection.prototype.disconnect = function () {
 
 module.exports = SocketIoConnection;
 
-},{"socket.io-client":119}],282:[function(require,module,exports){
+},{"socket.io-client":119}],283:[function(require,module,exports){
 var util = require('util');
 var webrtcSupport = require('webrtcsupport');
 var mockconsole = require('mockconsole');
@@ -69108,7 +69142,7 @@ WebRTC.prototype.sendDirectlyToAll = function (channel, message, payload) {
 
 module.exports = WebRTC;
 
-},{"./peer":279,"localmedia":70,"mockconsole":87,"util":22,"webrtcsupport":168}],283:[function(require,module,exports){
+},{"./peer":280,"localmedia":70,"mockconsole":87,"util":22,"webrtcsupport":168}],284:[function(require,module,exports){
 var socket = require('socket.io-client');
 var Backbone = require('backbone');
 var _ = require('lodash');
@@ -69254,7 +69288,7 @@ var socketIOManager = {
 module["exports"] = socketIOManager;
 
 
-},{"../Views/Modals/AlertDialog/AlertDialog":188,"./NotificationManager":278,"./consts":286,"./init":287,"./loginUserManager":290,"./utils":292,"backbone":16,"lodash":86,"socket.io-client":119}],284:[function(require,module,exports){
+},{"../Views/Modals/AlertDialog/AlertDialog":188,"./NotificationManager":279,"./consts":287,"./init":288,"./loginUserManager":291,"./utils":293,"backbone":16,"lodash":86,"socket.io-client":119}],285:[function(require,module,exports){
 var socket = require('socket.io-client');
 var Backbone = require('backbone');
 var _ = require('lodash');
@@ -69296,7 +69330,7 @@ var SoundManager = {
 module["exports"] = SoundManager;
 
 
-},{"./consts":286,"./init":287,"./utils":292,"backbone":16,"howler":67,"lodash":86,"socket.io-client":119}],285:[function(require,module,exports){
+},{"./consts":287,"./init":288,"./utils":293,"backbone":16,"howler":67,"lodash":86,"socket.io-client":119}],286:[function(require,module,exports){
 var Config = require('./init');
 var sha1 = require('sha1');
 
@@ -69327,7 +69361,7 @@ var UIUtils = {
 module["exports"] = UIUtils;
 
 
-},{"../Views/Modals/AlertDialog/AlertDialog":188,"./consts":286,"./init":287,"./utils":292,"sha1":118}],286:[function(require,module,exports){
+},{"../Views/Modals/AlertDialog/AlertDialog":188,"./consts":287,"./init":288,"./utils":293,"sha1":118}],287:[function(require,module,exports){
 
 var Const = {};
 
@@ -69423,9 +69457,11 @@ Const.callFailedUserBusy = 2;
 Const.callFailedUserReject = 3;
 Const.callFailedUserNotSupport = 4;
 
+Const.keepAliveInterval = 30 * 1000;
+
 // Exports ----------------------------------------------
 module["exports"] = Const;
-},{}],287:[function(require,module,exports){
+},{}],288:[function(require,module,exports){
 var Config = {
     AppTitle : "Spika",
     APIEndpoint : '/api/v2',
@@ -69440,7 +69476,7 @@ var Config = {
 
 // Exports ----------------------------------------------
 module["exports"] = Config;
-},{}],288:[function(require,module,exports){
+},{}],289:[function(require,module,exports){
 var _ = require('lodash');
 var Backbone = require('backbone');
 
@@ -69497,7 +69533,7 @@ var localstorageManager = {
 
 module["exports"] = localstorageManager;
 
-},{"backbone":16,"lodash":86}],289:[function(require,module,exports){
+},{"backbone":16,"lodash":86}],290:[function(require,module,exports){
 var _ = require('lodash');
 var Backbone = require('backbone');
 
@@ -69538,7 +69574,7 @@ var localzationManager = {
 
 module["exports"] = localzationManager;
 
-},{"./APIClients/GetDictionaryClient":253,"backbone":16,"lodash":86}],290:[function(require,module,exports){
+},{"./APIClients/GetDictionaryClient":253,"backbone":16,"lodash":86}],291:[function(require,module,exports){
 
 var _ = require('lodash');
 
@@ -69599,7 +69635,7 @@ var loginUserManager = {
 }
 
 module["exports"] = loginUserManager;
-},{"./consts":286,"./utils":292,"lodash":86}],291:[function(require,module,exports){
+},{"./consts":287,"./utils":293,"lodash":86}],292:[function(require,module,exports){
 "use strict";function r(a){throw a;}var w=void 0,B=!0,F=!1;function J(){return function(){}}
 var sjcl={cipher:{},hash:{},keyexchange:{},mode:{},misc:{},codec:{},exception:{corrupt:function(a){this.toString=function(){return"CORRUPT: "+this.message};this.message=a},invalid:function(a){this.toString=function(){return"INVALID: "+this.message};this.message=a},bug:function(a){this.toString=function(){return"BUG: "+this.message};this.message=a},notReady:function(a){this.toString=function(){return"NOT READY: "+this.message};this.message=a}}};
 "undefined"!==typeof module&&module.exports&&(module.exports=sjcl);"function"===typeof define&&define([],function(){return sjcl});
@@ -69735,7 +69771,7 @@ c.call(this,e)}a=this.c;this.reset();for(d=0;5>d;++d)a[d]=b(a[d]);return a}};for
 11,6,15,13],l=[5,14,7,0,9,2,11,4,13,6,15,8,1,10,3,12,6,11,3,7,0,13,5,10,14,15,8,12,4,9,1,2,15,5,1,3,7,14,6,9,11,8,12,2,10,0,4,13,8,6,4,1,3,11,15,0,5,12,2,13,9,7,10,14,12,15,10,4,1,5,8,7,6,2,13,14,0,3,9,11],m=[11,14,15,12,5,8,7,9,11,13,14,15,6,7,9,8,7,6,8,13,11,9,7,15,7,12,15,9,11,7,13,12,11,13,6,7,14,9,13,15,14,8,13,6,5,12,7,5,11,12,14,15,14,15,9,8,9,14,5,6,8,6,5,12,9,15,5,11,6,8,13,12,5,12,13,14,11,8,5,6],n=[8,9,9,11,13,15,15,5,7,7,8,11,14,14,12,6,9,13,15,7,12,8,9,11,7,7,12,7,6,15,13,11,9,7,15,11,
 8,6,6,14,12,13,5,14,13,13,7,5,15,5,8,11,14,14,6,14,6,9,12,9,12,5,15,8,8,5,12,9,12,5,14,6,8,13,6,5,15,13,11,11]})();
 
-},{"crypto":27}],292:[function(require,module,exports){
+},{"crypto":27}],293:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Config = require('./init');
 var Const = require('./consts');
 var sha1 = require('sha1');
@@ -70114,7 +70150,7 @@ var sha1 = require('sha1');
 })((this || 0).self || global);
 
 var localizationManager = require('./localzationManager');
-},{"./consts":286,"./init":287,"./localzationManager":289,"sha1":118}],293:[function(require,module,exports){
+},{"./consts":287,"./init":288,"./localzationManager":290,"sha1":118}],294:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Const = require('./consts');
 var Config = require('./init');
 
@@ -70280,7 +70316,7 @@ Handlebars.registerHelper('test', function(context, options) {
     module["exports"] = new ViewHelpers();
 
 })((this || 0).self || global);
-},{"./consts":286,"./init":287,"./utils.js":292,"hbsfy/runtime":66,"lodash":86}],294:[function(require,module,exports){
+},{"./consts":287,"./init":288,"./utils.js":293,"hbsfy/runtime":66,"lodash":86}],295:[function(require,module,exports){
 var Const = require('./consts');
 var _ = require('lodash');
 var U = require('./utils.js');
@@ -70349,7 +70385,7 @@ var windowManager = {
 
 module["exports"] = windowManager;
 
-},{"./consts":286,"./utils.js":292,"backbone":16,"lodash":86}],295:[function(require,module,exports){
+},{"./consts":287,"./utils.js":293,"backbone":16,"lodash":86}],296:[function(require,module,exports){
 window.$ = window.jQuery = require('jquery');
 var bootstrap = require('bootstrap-sass');
 var _ = require('lodash');
@@ -70368,6 +70404,7 @@ var localzationManager = require('./lib/localzationManager');
 var SocketIOManager = require('./lib/SocketIOManager');
 var SoundManager = require('./lib/SoundManager');
 var NotificationManager = require('./lib/NotificationManager');
+var KeepAliveManager = require('./lib/KeepAliveManager');
 var EncryptManager = require('./lib/EncryptionManager');
 var WebRTC = require('./lib/SimpleWebRTC/simplewebrtc');
 
@@ -70381,6 +70418,7 @@ $(function () {
     NotificationManager.init();
     SoundManager.init();
     EncryptManager.init();
+    KeepAliveManager.init();
     
     // Start Backbone history a necessary step for bookmarkable URL's
     localzationManager.fetchDictionary(function(){
@@ -70394,7 +70432,7 @@ $(function () {
 // disable ajax cache for old browsers
 $.ajaxSetup({ cache: false });
 
-},{"./lib/EncryptionManager":277,"./lib/NotificationManager":278,"./lib/SimpleWebRTC/simplewebrtc":280,"./lib/SocketIOManager":283,"./lib/SoundManager":284,"./lib/localstorageManager":288,"./lib/localzationManager":289,"./lib/viewHelpers":293,"./lib/windowManager":294,"./routing":296,"backbone":16,"bootstrap-sass":18,"jquery":69,"jquery-colorbox":68,"lodash":86}],296:[function(require,module,exports){
+},{"./lib/EncryptionManager":277,"./lib/KeepAliveManager":278,"./lib/NotificationManager":279,"./lib/SimpleWebRTC/simplewebrtc":281,"./lib/SocketIOManager":284,"./lib/SoundManager":285,"./lib/localstorageManager":289,"./lib/localzationManager":290,"./lib/viewHelpers":294,"./lib/windowManager":295,"./routing":297,"backbone":16,"bootstrap-sass":18,"jquery":69,"jquery-colorbox":68,"lodash":86}],297:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('lodash');
 
@@ -70588,5 +70626,5 @@ var Routing = function(){
 module["exports"] = new Routing();
 
 
-},{"./Views/Main/MainView.js":186,"./Views/Signin/SigninView.js":238,"./lib/APIClients/SignoutClient":269,"./lib/ChatManager":276,"./lib/SocketIOManager":283,"./lib/consts":286,"./lib/localstorageManager":288,"./lib/loginUserManager":290,"./lib/utils":292,"backbone":16,"lodash":86}]},{},[295])
+},{"./Views/Main/MainView.js":186,"./Views/Signin/SigninView.js":238,"./lib/APIClients/SignoutClient":269,"./lib/ChatManager":276,"./lib/SocketIOManager":284,"./lib/consts":287,"./lib/localstorageManager":289,"./lib/loginUserManager":291,"./lib/utils":293,"backbone":16,"lodash":86}]},{},[296])
 ;

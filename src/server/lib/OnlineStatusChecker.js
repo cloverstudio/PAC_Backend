@@ -11,137 +11,52 @@ var Utils = require('./utils.js');
 
 var DatabaseManager = require('./DatabaseManager');
 var SocketConnectionHandler = require("./SocketConnectionHandler");
-
 var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
 
 var OnlineStatusChecker = {
     
-    sentSocketIds: [],
-    answeredSocketdIds: [],
-    isStarted : false,
-    addSocketId: function(socketId){
-        
-        if(this.socketIds.indexOf(socketId) == -1){
-            this.socketIds.push(socketId);
-            this.answeredSocketdIds.push(socketId);
-        }
-
-    },
-    addAnswer: function(socketId){
-        
-        this.answeredSocketdIds.push(socketId);  
-        
-    },
     start:function(){
         
-        return;
-        
-        if( !Conf.isMasterServer )
-            return;
+        var redis = DatabaseManager.redisClient;
 
-        var self = this;
-        
-        if(this.isStarted)
-            return
-            
-        this.isStarted = true;
-        
-        this.check();
+        setInterval(() => {
 
-    },
-    sendPing: function(){
-	    
-	    var self = this;
-	    
-        async.waterfall([
-        
-	        function(done){
-		        
-		        var result = {};
-		        
-                result.socketIds = SocketConnectionHandler.getAllSockets();
+            redis.keys(Const.redisKeyOnlineStatus + '*', function (err, keys) {
 
-                done(null,result);
-		        
-	        },
-	        function(result,done){
-		        
-		        done(null,result);
-		        
-	        }
-	        
-        ],function(err,result){
-	        
-			self.sentSocketIds = [];
-			
-	        _.forEach(result.socketIds,function(socketId){
-	            
-	            self.sentSocketIds.push(socketId);
-	            SocketAPIHandler.emitToSocket(socketId,"spikaping",{});
-	             
-	        });
+                if (err) 
+                    return console.log(err);
 
-	        _.debounce(function(){
-	            
-	            self.check();
-	            
-	        },Const.heartBeatInterval * 1000)();
-	        
-        });
-        
-    },
-    check: function(){
-		
-        var self = this;
+                var now = Utils.now();
 
-        var noReply = _.filter(this.sentSocketIds,function(socketId){
-	    	
-	    	return self.answeredSocketdIds.indexOf(socketId) == -1;
-	    	 
-        });
-        
-        async.eachSeries(noReply,function(deleteSocketId,done){
+                async.eachLimit(keys,100,(key,doneEach) => {
 
-            async.waterfall([
-            
-                function(doneAsync){
-                    
-                    var result = {};
-                    
-                    // get user id
-                    DatabaseManager.redisGet(Const.redisKeySocketId + deleteSocketId,function(err,value){
-                        result.user = value;
-                        doneAsync(err,result);
+                    redis.get(key, function(err, value) {
+                        
+                        console.log(value);
+
+                        if(now - value > Const.offlineTimeLimit){
+
+                            // goes offline
+                            redis.del(key);
+                            
+                        }
+
+                        doneEach();
+                            
                     });
 
-                },
-                function(result,doneAsync){
-                    
-                    SocketConnectionHandler.deleteSocketId(deleteSocketId,result.user,function(err,value){
-                        doneAsync(null,result);
-                    });
-                    
-                },
-                function(result,doneAsync){
-                    
-                    doneAsync(null,result);
-                    
-                },
-            ],function(err,result){
+                },(err2) => {
 
-                done(err);
+                    console.log('online checker done');
+                    
+                });
 
             });
 
-        },function(err){
-
-	        self.answeredSocketdIds = [];
-	        self.sendPing();
-            
-        });
+        },Const.onlineCheckerIntertal);
 
     }
-    
+
 }
 
 module["exports"] = OnlineStatusChecker;

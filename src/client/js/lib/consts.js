@@ -93,5 +93,7 @@ Const.callFailedUserBusy = 2;
 Const.callFailedUserReject = 3;
 Const.callFailedUserNotSupport = 4;
 
+Const.keepAliveInterval = 30 * 1000;
+
 // Exports ----------------------------------------------
 module["exports"] = Const;

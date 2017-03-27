@@ -36,8 +36,6 @@ DisconnectActionHandler.prototype.attach = function(io,socket){
                 socket.emit('socketerror', {code:Const.responsecodeUnknownError});
                 return;
             }
-
-            SocketConnectionHandler.deleteSocketId(socket.id,userModel);
             
         });
           

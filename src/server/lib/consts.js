@@ -154,5 +154,8 @@
         enabled: 1
     };
 
+    Const.onlineCheckerIntertal = 180 * 1000;
+    Const.offlineTimeLimit = 180 * 1000;
+
     // Exports ----------------------------------------------
     module["exports"] = Const;

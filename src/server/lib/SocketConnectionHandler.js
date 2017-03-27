@@ -27,7 +27,7 @@ var SocketConnectionHandler = {
 		var redisClient = DatabaseManager.redisClient;
         
 		// make user online
-		DatabaseManager.redisSaveValue(Const.redisKeyOnlineStatus + user._id.toString(),true);
+		DatabaseManager.redisSaveValue(Const.redisKeyOnlineStatus + user._id.toString(),Utils.now());
 		
 		// save user data 
 		DatabaseManager.redisSave(Const.redisKeySocketId + socketId,user);

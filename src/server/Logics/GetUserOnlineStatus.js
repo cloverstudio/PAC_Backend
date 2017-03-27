@@ -22,70 +22,28 @@ var GetUserOnlineStatus = {
         var result = [];
         
         async.each(userIds,function(userId,done){
-            
-            result.push({
-                userId : userId,
-                onlineStatus : 0
-            });
 
-            done();
-
-            /*
-            DatabaseManager.redisGet(Const.redisKeyUserId + userId,function(err,redisResult){
+            DatabaseManager.redisGet(Const.redisKeyOnlineStatus + userId,function(err,redisResult){
 
                 if(redisResult){
 
-                    var onlinestatus = 0;
-
-                    async.each(redisResult,function(socketInfo,done2){
-
-                        var socketId = socketInfo.socketId;
-
-                        SocketAPIHandler.emitToSocket(socketId,"spikaping",{});
-
-                        SocketAPIHandler.temporaryListener(socketId,'pingok',2000,(param) => {
-
-                            if(param){
-                                // got pintok. so this user is online
-                                onlinestatus = 1;
-
-                                // send err to forece quit all
-                                done2(1);
-                            }else{
-                                done2(null);
-                            }
-                            
-                        });
-
-                    },function(err){
-
-                        console.log(" sent ping"," all done ");
-
-                        result.push({
-                            userId : userId,
-                            onlineStatus : onlinestatus
-                        });
-
-                        done(err);
-
+                    result.push({
+                        userId : userId,
+                        onlineStatus : 1
                     });
 
-                }else{
+                } else {
 
                     result.push({
                         userId : userId,
-                        onlineStatus : 0
+                        onlineStatus : redisResult
                     });
-
-                    done(err);
 
                 }
 
-                
+                done();
 
             });
-            
-            */
 
         },function(err){
             

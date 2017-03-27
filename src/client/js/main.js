@@ -16,6 +16,7 @@ var localzationManager = require('./lib/localzationManager');
 var SocketIOManager = require('./lib/SocketIOManager');
 var SoundManager = require('./lib/SoundManager');
 var NotificationManager = require('./lib/NotificationManager');
+var KeepAliveManager = require('./lib/KeepAliveManager');
 var EncryptManager = require('./lib/EncryptionManager');
 var WebRTC = require('./lib/SimpleWebRTC/simplewebrtc');
 
@@ -29,6 +30,7 @@ $(function () {
     NotificationManager.init();
     SoundManager.init();
     EncryptManager.init();
+    KeepAliveManager.init();
     
     // Start Backbone history a necessary step for bookmarkable URL's
     localzationManager.fetchDictionary(function(){
