@@ -32,8 +32,6 @@ var OnlineStatusChecker = {
 
                     redis.get(key, function(err, value) {
                         
-                        console.log(value);
-
                         if(now - value > Const.offlineTimeLimit){
 
                             // goes offline

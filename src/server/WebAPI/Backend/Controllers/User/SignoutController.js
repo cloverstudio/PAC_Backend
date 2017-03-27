@@ -65,8 +65,8 @@ SignoutController.prototype.init = function(app){
             },
             function(result,done){
                 
-                // disconnect from socket
-                
+                // make user offline
+                DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
 
                 done(null,result);
                 

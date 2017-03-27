@@ -133,8 +133,6 @@ LoginActionHandler.prototype.attach = function(io,socket){
         ],
         function(err,result){
 
-            console.log("-----------");
-            
 			SocketConnectionHandler.newSocketConnection(
 				result.user,
 				param.processId,
