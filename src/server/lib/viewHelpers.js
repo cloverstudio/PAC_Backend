@@ -21,9 +21,9 @@ var helpers = {
     "showAvatar" : function (fileID) {
 
         if(_.isEmpty(fileID)){
-            return init.BaseURL + "/img/noavatar.png"
+            return "/images/usernoavatar.png"
         }else{
-            return init.BaseURL + "/uploads/" + fileID;
+            return "/uploads/" + fileID;
         }
 
         return "";

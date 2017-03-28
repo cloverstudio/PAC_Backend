@@ -18,7 +18,13 @@
   <input style="display:none;" type="password" name="password" />
 
   <input type="hidden" name="_id" class="form-control" id="input1" value="{{formValues._id}}">
-  
+
+
+  <div class="form-group">
+    <label for="input1">{{l10n "Upload New Avatar"}}</label>
+    <input type="file" name="name" class="form-control" id="input1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">
+  </div>
+
   <div class="form-group">
     <label for="input1">{{l10n "User Name"}}</label>
     <input type="text" name="name" class="form-control" id="input1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">

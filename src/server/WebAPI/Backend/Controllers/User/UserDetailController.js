@@ -90,8 +90,7 @@ UserDetailController.prototype.init = function(app){
             }
             
             userModel.findOne({
-                _id:userId,
-                organizationId:request.user.organizationId
+                _id:userId
             },function(err,userFindResult){
                 
                 if(!userFindResult){
