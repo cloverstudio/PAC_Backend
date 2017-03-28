@@ -61539,6 +61539,7 @@ var MainView = Backbone.View.extend({
         });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
+
     },
     
     destroy: function(){

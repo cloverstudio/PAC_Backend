@@ -13626,6 +13626,7 @@ body.loading {
       height: 0px;
       display: none; }
     #main-container.chat #messaging-content #text-message-box-container {
+      background-color: #fff;
       position: absolute;
       bottom: 0;
       left: 0px;
@@ -13818,6 +13819,17 @@ body.loading {
         #main-container.chat #messaging-content #messages .message-cell.not-first .message div {
           padding-left: 10px;
           padding-top: 5px; }
+    #main-container.chat #messaging-content #file-drop-indicator {
+      transition: all 0.5s ease;
+      background-color: #d9534f;
+      color: #fff;
+      padding: 5px;
+      position: absolute;
+      width: 100%;
+      bottom: 0px;
+      left: 0px; }
+    #main-container.chat #messaging-content #file-drop-indicator.drag {
+      bottom: 40px; }
   #main-container.chat #message-info {
     width: 0px;
     position: absolute;

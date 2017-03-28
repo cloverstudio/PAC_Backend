@@ -5884,6 +5884,7 @@ button.close {
     height: 0px;
     display: none; }
   #messaging-content #text-message-box-container {
+    background-color: #fff;
     position: absolute;
     bottom: 0;
     left: 0px;
@@ -6076,6 +6077,17 @@ button.close {
       #messaging-content #messages .message-cell.not-first .message div {
         padding-left: 10px;
         padding-top: 5px; }
+  #messaging-content #file-drop-indicator {
+    transition: all 0.5s ease;
+    background-color: #d9534f;
+    color: #fff;
+    padding: 5px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    left: 0px; }
+  #messaging-content #file-drop-indicator.drag {
+    bottom: 40px; }
 
 #message-info {
   width: 0px;

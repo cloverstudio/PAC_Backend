@@ -1506,9 +1506,13 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "\n<div id=\"messages\">\n</div>\n\n<div id=\"additional-notification-container\"></div>\n\n<div id=\"text-message-box-container\">\n    <textarea id=\"text-message-box\" autocomplete=\"off\" placeholder=\""
-    + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"Type your text ...",{"name":"l10n","hash":{},"data":data}))
-    + "\"/></textarea>\n\n    <span id=\"btn-emoticons\">\n        <img src=\"/spika/img/emoticon.png\" />\n    </span>\n    \n    <span id=\"btn-fileupload\">\n        <img src=\"/spika/img/attach.png\" />\n    </span>\n    \n    <input type=\"file\" name=\"photo\" id=\"file-input\" style=\"display:none\"/>\n    \n</div>\n";
+    var alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
+
+  return "\n<div id=\"messages\">\n</div>\n\n<div id=\"additional-notification-container\"></div>\n\n<div id=\"text-message-box-container\">\n    <textarea id=\"text-message-box\" autocomplete=\"off\" placeholder=\""
+    + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Type your text ...",{"name":"l10n","hash":{},"data":data}))
+    + "\"/></textarea>\n\n    <span id=\"btn-emoticons\">\n        <img src=\"/spika/img/emoticon.png\" />\n    </span>\n    \n    <span id=\"btn-fileupload\">\n        <img src=\"/spika/img/attach.png\" />\n    </span>\n    \n    <input type=\"file\" name=\"photo\" id=\"file-input\" style=\"display:none\"/>\n    \n</div>\n\n<div id=\"file-drop-indicator\">\n    \n    "
+    + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Drop Files Here",{"name":"l10n","hash":{},"data":data}))
+    + "\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":80}],24:[function(require,module,exports){
@@ -1709,6 +1713,67 @@ var MessagingView = Backbone.View.extend({
 
         });
         
+
+        var da = document.getElementById('messages');
+
+        var counter = 0;
+        da.addEventListener('dragover', function(e){
+            e.preventDefault();  
+        });
+
+        da.addEventListener('dragenter', function(e){
+            e.preventDefault();  
+            counter++;
+            SS('#messages').addClass('drag');
+            SS('#file-drop-indicator').addClass('drag');
+
+        });
+
+        da.addEventListener('dragleave', function(e){
+            e.preventDefault();  
+            counter--;
+            if (counter === 0) { 
+                SS('#messages').removeClass('drag');
+                SS('#file-drop-indicator').removeClass('drag');
+            }
+            
+        });
+
+        da.addEventListener('drop', function(e){
+
+            e.preventDefault();  
+            e.stopPropagation();
+            
+            counter = 0;
+            SS('#messages').removeClass('drag');
+            SS('#file-drop-indicator').removeClass('drag');
+            
+            if(e.dataTransfer){
+                
+            var dt = e.dataTransfer;
+            if (dt.items) {
+                // Use DataTransferItemList interface to access the file(s)
+                for (var i=0; i < dt.items.length; i++) {
+
+                    if (dt.items[i].kind == "file") {
+                        var f = dt.items[i].getAsFile();
+
+                        self.fileUplaoder.uploadFileHTML5(f);
+                    }
+
+                }
+            } else {
+
+                for (var i=0; i < dt.files.length; i++) {
+                    var f = dt.files[i];
+                    self.fileUplaoder.uploadFileHTML5(f);
+                }  
+            }
+
+            }
+        });
+
+
         _.debounce(function(){
             self.adjustSize();
         },100)();

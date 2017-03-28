@@ -195,6 +195,67 @@ var MessagingView = Backbone.View.extend({
 
         });
         
+
+        var da = document.getElementById('messages');
+
+        var counter = 0;
+        da.addEventListener('dragover', function(e){
+            e.preventDefault();  
+        });
+
+        da.addEventListener('dragenter', function(e){
+            e.preventDefault();  
+            counter++;
+            SS('#messages').addClass('drag');
+            SS('#file-drop-indicator').addClass('drag');
+
+        });
+
+        da.addEventListener('dragleave', function(e){
+            e.preventDefault();  
+            counter--;
+            if (counter === 0) { 
+                SS('#messages').removeClass('drag');
+                SS('#file-drop-indicator').removeClass('drag');
+            }
+            
+        });
+
+        da.addEventListener('drop', function(e){
+
+            e.preventDefault();  
+            e.stopPropagation();
+            
+            counter = 0;
+            SS('#messages').removeClass('drag');
+            SS('#file-drop-indicator').removeClass('drag');
+            
+            if(e.dataTransfer){
+                
+            var dt = e.dataTransfer;
+            if (dt.items) {
+                // Use DataTransferItemList interface to access the file(s)
+                for (var i=0; i < dt.items.length; i++) {
+
+                    if (dt.items[i].kind == "file") {
+                        var f = dt.items[i].getAsFile();
+
+                        self.fileUplaoder.uploadFileHTML5(f);
+                    }
+
+                }
+            } else {
+
+                for (var i=0; i < dt.files.length; i++) {
+                    var f = dt.files[i];
+                    self.fileUplaoder.uploadFileHTML5(f);
+                }  
+            }
+
+            }
+        });
+
+
         _.debounce(function(){
             self.adjustSize();
         },100)();
