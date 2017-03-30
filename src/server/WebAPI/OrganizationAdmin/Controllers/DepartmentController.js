@@ -1513,30 +1513,14 @@ DepartmentController.prototype.init = function(app){
             },
             function(result, done) {
                 
-                // if user is orgadmin, then delete user, else remove groups from user
-                if (baseUser.permission == Const.userPermission.organizationAdmin) {
+                model.update(
+                    { _id: userId },
+                    { $pull: { groups: { $in: baseUser.groups } } },
+                function(err, updateUser) {
 
-                    model.remove({ _id: userId }, function(err, deleteResult) {
-
-                        fs.unlink(Config.uploadPath + "/" + result.obj.avatar.picture.nameOnServer, function() {});
-                        fs.unlink(Config.uploadPath + "/" + result.obj.avatar.thumbnail.nameOnServer, function() {});
-
-                        done(err, result);                        
-
-                    });
-                
-                } else {
-
-                    model.update(
-                        { _id: userId },
-                        { $pull: { groups: { $in: baseUser.groups } } },
-                    function(err, updateUser) {
-
-                        done(err, result);
-         
-                    });
-
-                };
+                    done(err, result);
+        
+                });
 
             },
             function(result, done) {
