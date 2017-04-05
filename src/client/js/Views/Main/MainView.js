@@ -143,6 +143,26 @@ var MainView = Backbone.View.extend({
              
         });
         
+    },
+
+    switchToTwoColumn: function(){
+
+        $('#detailinfo-container').removeClass('col-md-3');
+        $('#detailinfo-container').addClass('hidden-md');
+
+        $('#main-container').removeClass('col-md-6');
+        $('#main-container').addClass('col-md-9');
+
+    },
+
+    switchToThreeColumn: function(){
+
+        $('#detailinfo-container').addClass('col-md-3');
+        $('#detailinfo-container').removeClass('hidden-md');
+
+        $('#main-container').addClass('col-md-6');
+        $('#main-container').removeClass('col-md-9');
+
     }
     
 });

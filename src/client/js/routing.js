@@ -115,6 +115,8 @@ var Routing = function(){
 
         }
 
+        mainView.switchToThreeColumn();
+
     });
     
     appRouter.on('route:main', function(action) {
@@ -133,6 +135,8 @@ var Routing = function(){
                 // do nothings if mainView is alreay shown
             }
 
+            mainView.switchToThreeColumn();
+
         }
 
     });
@@ -148,7 +152,8 @@ var Routing = function(){
         }else{
 
             Backbone.trigger(Const.NotificationShowSearch);
-        
+            mainView.switchToTwoColumn();
+
         }
         
     });
@@ -164,6 +169,7 @@ var Routing = function(){
         }else{
 
             Backbone.trigger(Const.NotificationShowFavorite);
+            mainView.switchToTwoColumn();
         
         }
         
@@ -180,7 +186,8 @@ var Routing = function(){
         }else{
 
             Backbone.trigger(Const.NotificationShowWebHook);
-        
+            mainView.switchToTwoColumn();
+
         }
         
     });
