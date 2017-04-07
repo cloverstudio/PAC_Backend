@@ -128,6 +128,12 @@ var MainView = Backbone.View.extend({
             
         });
 
+        Backbone.on(Const.NotificationRemoveRoom, function(obj){
+
+            ChatManager.closeIfOpened("3-" + obj._id);
+
+        });
+
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
     },

@@ -157,7 +157,7 @@ var DetailInfoView = Backbone.View.extend({
 
                     LeaveRoomClient.send(loginUserManager.currentRoom._id,function(response){
                         
-                        Backbone.trigger(Const.NotificationRemoveRoom,self.currentChatData);
+                        Backbone.trigger(Const.NotificationRemoveRoom,self.currentChatData.room);
                         
                     },function(errCode){
 

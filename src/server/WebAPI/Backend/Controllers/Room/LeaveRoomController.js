@@ -86,8 +86,6 @@ LeaveRoomController.prototype.init = function(app){
                 
                 // delete from other user's history
 
-
-
                 // delete room
                 roomModel.remove({
                     _id : room.id
@@ -102,6 +100,26 @@ LeaveRoomController.prototype.init = function(app){
                     self.successResponse(response,Const.responsecodeSucceed);
                     
                 });
+
+                // delete from history
+                var historyModel = HistoryModel.get();
+                historyModel.remove({ chatId: room._id.toString() }, function(err, deleteResult) {
+
+                    // send socket
+                    _.forEach(room.users,function(userId){
+                        
+                        if(userId){
+                            SocketAPIHandler.emitToUser(
+                                userId,
+                                'delete_room',
+                                {conversation:room.toObject()}
+                            );
+                        }
+
+                    });
+                    
+                });
+
 
             }else{
                  
@@ -120,14 +138,17 @@ LeaveRoomController.prototype.init = function(app){
                     
                 });
                 
+                // delete from history
+                var historyModel = HistoryModel.get();
+                historyModel.remove({ 
+                    chatId: room._id.toString(),
+                    userId: loginUserId
+                }, function(err, deleteResult) {
+
+
+                });
+
             }
-            
-            // delete from history
-            var historyModel = HistoryModel.get();
-            historyModel.remove({ chatId: room._id.toString() }, function(err, deleteResult) {
-
-
-            });
             
             // stop sending notification
             SocketAPIHandler.leaveFrom(loginUserId,Const.chatTypeRoom,roomId);

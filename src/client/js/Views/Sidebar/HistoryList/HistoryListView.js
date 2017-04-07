@@ -93,7 +93,22 @@ var HistoryListView = Backbone.View.extend({
             
         });
 
-        
+        Backbone.on(Const.NotificationRemoveRoom, function(obj){
+
+            self.dataList = [];
+            self.currentPage = 1;
+            self.updateList();
+            
+        });
+
+        Backbone.on(Const.NotificationNewRoom, function(obj){
+
+            self.dataList = [];
+            self.currentPage = 1;
+            self.updateList();
+            
+        });
+
         this.loadNext();
         
     },

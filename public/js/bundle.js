@@ -60637,7 +60637,7 @@ var DetailInfoView = Backbone.View.extend({
 
                     LeaveRoomClient.send(loginUserManager.currentRoom._id,function(response){
                         
-                        Backbone.trigger(Const.NotificationRemoveRoom,self.currentChatData);
+                        Backbone.trigger(Const.NotificationRemoveRoom,self.currentChatData.room);
                         
                     },function(errCode){
 
@@ -61536,6 +61536,12 @@ var MainView = Backbone.View.extend({
                 document.title = Config.AppTitle;
             }
             
+        });
+
+        Backbone.on(Const.NotificationRemoveRoom, function(obj){
+
+            ChatManager.closeIfOpened("3-" + obj._id);
+
         });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
@@ -64903,7 +64909,22 @@ var HistoryListView = Backbone.View.extend({
             
         });
 
-        
+        Backbone.on(Const.NotificationRemoveRoom, function(obj){
+
+            self.dataList = [];
+            self.currentPage = 1;
+            self.updateList();
+            
+        });
+
+        Backbone.on(Const.NotificationNewRoom, function(obj){
+
+            self.dataList = [];
+            self.currentPage = 1;
+            self.updateList();
+            
+        });
+
         this.loadNext();
         
     },
@@ -67880,6 +67901,12 @@ var ChatManager = {
     close:function(){
         $('#main-container').removeClass('chat');
         $('#main-container').html('');
+
+        $('#chat-detail').html('');
+        $('#messages-tab').html('');
+        $('#message-info-title').html('');
+        $('#messages-tab-detail-panel').html('');
+
     },
     closeIfOpened:function(roomId){
 
@@ -69332,6 +69359,19 @@ var socketIOManager = {
 
         });
         
+
+        this.ioNsp.on('new_room', function(param){
+
+            Backbone.trigger(Const.NotificationNewRoom,param);
+
+        });
+
+        this.ioNsp.on('delete_room', function(param){
+
+            Backbone.trigger(Const.NotificationRemoveRoom,param.conversation);
+
+        });
+
         this.ioNsp.on('delete_group', function(param){
 
             Backbone.trigger(Const.NotificationDeletedFromGroup,param);
@@ -69505,6 +69545,7 @@ Const.NotificationCustomHeader  = "notification_show_customhader";
 Const.NotificationUpdateUnreadCount = "notification_update_unreadcount";
 Const.NotificationShowWebHook = "notification_show_webhook";
 Const.NotificationOpenChat = "notification_open_chat";
+Const.NotificationNewRoom = "notification_new_room";
 Const.NotificationRemoveRoom = "notification_remove_room";
 Const.NotificationSelectMessage = "notification_select_message";
 Const.NotificationStartCalling = "notification_startcalling";

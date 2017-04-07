@@ -67,6 +67,7 @@ Const.NotificationCustomHeader  = "notification_show_customhader";
 Const.NotificationUpdateUnreadCount = "notification_update_unreadcount";
 Const.NotificationShowWebHook = "notification_show_webhook";
 Const.NotificationOpenChat = "notification_open_chat";
+Const.NotificationNewRoom = "notification_new_room";
 Const.NotificationRemoveRoom = "notification_remove_room";
 Const.NotificationSelectMessage = "notification_select_message";
 Const.NotificationStartCalling = "notification_startcalling";

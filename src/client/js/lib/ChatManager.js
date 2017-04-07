@@ -337,6 +337,12 @@ var ChatManager = {
     close:function(){
         $('#main-container').removeClass('chat');
         $('#main-container').html('');
+
+        $('#chat-detail').html('');
+        $('#messages-tab').html('');
+        $('#message-info-title').html('');
+        $('#messages-tab-detail-panel').html('');
+
     },
     closeIfOpened:function(roomId){
 

@@ -186,34 +186,28 @@ CreateRoomController.prototype.init = function(app){
                         self.errorResponse(response,Const.httpCodeServerError);
                             
                     }else{
-                        
-                            //result.users = resultUsers;
+                    
+                        result.users = usersAry;
+                        result.users.push(request.user._id);
+
+                        UpdateHistoryLogic.newRoom(resultRoom);
+                        result.room = resultRoom;
+
+                        done(null,result);
+
+                        // send socket
+                        _.forEach(resultRoom.users,function(userId){
                             
-                            UpdateHistoryLogic.newRoom(result);
-                            result.room = resultRoom;
-
-                            done(null,result);
-
-                            /*
-                            // send socket
-                            _.forEach(request.body.users,function(userId){
-                                
+                            if(userId){
                                 SocketAPIHandler.emitToUser(
                                     userId,
-                                    Const.emitCommandNewConversation,
-                                    {conversation:result}
+                                    'new_room',
+                                    {conversation:resultRoom}
                                 );
-                                    
-                            });
+                            }
 
-                            SocketAPIHandler.emitToUser(
-                                request.user._id,
-                                Const.emitCommandNewConversation,
-                                {conversation:result}
-                            );
-                            
-                            */
-                            
+                        });
+
                     }
                     
                 });
@@ -398,7 +392,7 @@ CreateRoomController.prototype.logic = function(ownerUserId,users,useOld,default
                 return;
             }
             
-            callBack(model.toObject());
+            callBack(result);
 
     });
 }

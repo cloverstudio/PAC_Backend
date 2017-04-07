@@ -113,6 +113,19 @@ var socketIOManager = {
 
         });
         
+
+        this.ioNsp.on('new_room', function(param){
+
+            Backbone.trigger(Const.NotificationNewRoom,param);
+
+        });
+
+        this.ioNsp.on('delete_room', function(param){
+
+            Backbone.trigger(Const.NotificationRemoveRoom,param.conversation);
+
+        });
+
         this.ioNsp.on('delete_group', function(param){
 
             Backbone.trigger(Const.NotificationDeletedFromGroup,param);
