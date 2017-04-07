@@ -71,8 +71,10 @@ var SpikaBridge = {
 
                     }
 
-                    UpdateHistoryLogic.updateByMessage(obj);
-                    NotifyNewMessage.notify(obj);                    
+                    UpdateHistoryLogic.updateByMessage(obj,() => {
+                        NotifyNewMessage.notify(obj);  
+                    });
+                                      
                     
                 },
                 onNewUser:function(obj){

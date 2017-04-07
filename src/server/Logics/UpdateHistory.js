@@ -115,7 +115,7 @@ var UpdateHistory = {
         });
           
     },
-    updateByMessage: function(obj){
+    updateByMessage: function(obj,callBack){
 
         var rawRoomId = obj.roomID;
         var userId = obj.userID;
@@ -149,7 +149,10 @@ var UpdateHistory = {
                 toUserId = user1;
             }
             
-            this.updateByPrivateChat(fromUserId,toUserId,obj);
+            this.updateByPrivateChat(fromUserId,toUserId,obj,() => {
+                if(callBack)
+                    callBack();
+            });
             
         }
 
@@ -162,7 +165,10 @@ var UpdateHistory = {
            var groupId = roomIdSplitted[1];
            var fromUserId = userId;
            
-           this.updateByGroupChat(fromUserId,groupId,obj);
+           this.updateByGroupChat(fromUserId,groupId,obj,() => {
+                if(callBack)
+                    callBack();
+            });
             
         }
         
@@ -175,7 +181,10 @@ var UpdateHistory = {
            var roomId = roomIdSplitted[1];
            var fromUserId = userId;
            
-           this.updateByRoomChat(fromUserId,roomId,obj);
+           this.updateByRoomChat(fromUserId,roomId,obj,() => {
+                if(callBack)
+                    callBack();
+            });
             
         }
         
@@ -213,7 +222,7 @@ var UpdateHistory = {
         });
           
     },
-    updateByPrivateChat: function(fromUserId,toUserId,rawMessageObj){
+    updateByPrivateChat: function(fromUserId,toUserId,rawMessageObj,callBack){
         
         var self = this;
         
@@ -285,11 +294,14 @@ var UpdateHistory = {
                 console.log("Logic Error: UpdateHistory",err);
                 return;
             }
+
+            if(callBack)
+                callBack();
             
         });
         
     },
-    updateByRoomChat: function(fromUserId,roomId,rawMessageObj){
+    updateByRoomChat: function(fromUserId,roomId,rawMessageObj,callBack){
         
         var self = this;
         
@@ -372,12 +384,15 @@ var UpdateHistory = {
                 console.log("Logic Error: UpdateHistory",err);
                 return;
             }
-            
+
+            if(callBack)
+                callBack();
+
         });
         
     },
 
-    updateByGroupChat: function(fromUserId,groupId,rawMessageObj){
+    updateByGroupChat: function(fromUserId,groupId,rawMessageObj,callBack){
         
         var self = this;
         
@@ -491,7 +506,10 @@ var UpdateHistory = {
                 console.log("Logic Error: UpdateHistory",err);
                 return;
             }
-            
+
+            if(callBack)
+                callBack();
+                
         });
         
     },
