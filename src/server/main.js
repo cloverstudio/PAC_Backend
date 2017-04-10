@@ -80,6 +80,10 @@ DatabaseManager.init(function(success){
             console.log('Server listening on port ' + Conf.port + '!');
         });
 
+        process.on('uncaughtException', function(err) {
+            console.log('Caught exception: ' + err);
+        });
+        
     }
 
 });
