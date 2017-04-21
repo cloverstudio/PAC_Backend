@@ -27,7 +27,7 @@
     "express": "latest",
     "express-handlebars": "^2.0.1",
     "express-session": "^1.13.0",
-    "fcm-node": "^1.0.16",
+    "fcm-node": "1.0.16",
     "filereader": "^0.10.3",
     "filetransfer": "^2.0.4",
     "font-awesome": "latest",
