@@ -24,9 +24,15 @@ var ErrorDialog = require('../Views/Modals/ErrorDialog/ErrorDialog');
             }
             
             if(existingSocketIOConnection){
-                this.io = Settings.bootOptions.socketIOConnection(Settings.options.socketUrl);
+                this.io = Settings.bootOptions.socketIOConnection(Settings.options.socketUrl, {
+                    transports: ['websocket'], 
+                    upgrade: false
+                });
             }else{
-                this.io = socket.connect(Config.socketUrl);
+                this.io = socket.connect(Config.socketUr, {
+                    transports: ['websocket'], 
+                    upgrade: false
+                });
             }
 
             this.io.on('socketerror', function(param){
