@@ -1185,7 +1185,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n\n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -1218,7 +1218,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n    \n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -1261,7 +1261,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n      \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n\n    <div class=\"info\">\n        \n        \n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.isMainForIf : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "        \n"
@@ -1296,7 +1296,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n      \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n    \n    <div class=\"progress-container\">\n        \n        Uploading : "
     + ((stack1 = ((helper = (helper = helpers.filename || (depth0 != null ? depth0.filename : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"filename","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + " <span>("
@@ -1327,7 +1327,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n\n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -1368,7 +1368,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n\n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -1397,7 +1397,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n\n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -1442,7 +1442,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n\n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n    \n    <span class=\"info\">\n        \n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.isMainForIf : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "        \n"
@@ -1469,7 +1469,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + " typing\" id=\""
     + alias4(((helper = (helper = helpers.userID || (depth0 != null ? depth0.userID : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userID","hash":{},"data":data}) : helper)))
     + "-typing\">\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n    \n    <div class=\"typing\">\n        <div>"
     + ((stack1 = ((helper = (helper = helpers.message || (depth0 != null ? depth0.message : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"message","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "</div>\n    </div>\n    \n    <div class=\"clearfix\"></div>\n    \n</div>\n\n";
@@ -1492,7 +1492,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4(((helper = (helper = helpers.avatarURL || (depth0 != null ? depth0.avatarURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarURL","hash":{},"data":data}) : helper)))
+    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
     + "\" />\n    </div>\n\n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -3881,9 +3881,19 @@ Handlebars.registerHelper('test', function(context, options) {
 
         });
 
-        
+        Handlebars.registerHelper("stripHost", function(url) {
+
+          var URLsplit = url.split('/');
+          var host = URLsplit[0] + "//" + URLsplit[2] + "/";
+          var newURL = url.replace(host, '');
+
+          return newURL;
+
+        });
+
+
     }
-    
+
     // Exports ----------------------------------------------
     module["exports"] = new ViewHelpers();
 

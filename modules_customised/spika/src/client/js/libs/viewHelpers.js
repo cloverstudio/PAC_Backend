@@ -48,9 +48,19 @@ Handlebars.registerHelper('test', function(context, options) {
 
         });
 
-        
+        Handlebars.registerHelper("stripHost", function(url) {
+
+          var URLsplit = url.split('/');
+          var host = URLsplit[0] + "//" + URLsplit[2] + "/";
+          var newURL = url.replace(host, '');
+
+          return newURL;
+
+        });
+
+
     }
-    
+
     // Exports ----------------------------------------------
     module["exports"] = new ViewHelpers();
 
