@@ -69267,7 +69267,10 @@ var socketIOManager = {
         
         this.io = socket;
         
-        this.ioNsp = this.io(Config.socketUrl);
+        this.ioNsp = this.io(Config.socketUrl, {
+            transports: ['websocket'], 
+            upgrade: false
+        });
 
         this.ioNsp.on('connect',function(){
 
