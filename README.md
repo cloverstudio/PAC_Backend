@@ -30,10 +30,47 @@ sudo apt-get install -y nodejs
 
 - Install Packages
 ```
-sudo apt-get install -y git imagemagick build-essential libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool mongodb redis-server turnserver
+sudo apt-get install -y git imagemagick build-essential libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool mongodb redis-server turnserver python
 ```
 
 - Download Spika from github
 ```
 git clone https://github.com/cloverstudio/SFB_Server.git
 ```
+
+- Install npms
+```
+cd SFB_Server
+npm install
+```
+
+- Start Servers
+```
+/etc/init.d/mongodb start
+/etc/init.d/redis-server start
+```
+
+- Edit init.js
+```
+cp src/server/lib/init-sample.js src/server/lib/init.js
+```
+And edit init.js to fit to your environment
+
+- Start Spika
+```
+node src/server/main
+```
+
+## Setup Forever
+
+We recommend to setup forever so server automatically restarts if crashed
+
+```
+sudo npm install -g Forever
+```
+
+Start with forever
+```
+nohup forever src/server/main.js &
+```
+
