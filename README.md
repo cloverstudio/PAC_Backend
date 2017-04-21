@@ -74,3 +74,46 @@ Start with forever
 nohup forever src/server/main.js &
 ```
 
+## init.js
+
+Here is important params in init.js.
+** To activate changes please restart nodejs process.
+
+- Config.host
+Keep it localhost
+
+- Config.port
+In most case it will be 80 or 443
+
+- Config.databaseUrl
+Here comes uri string to connect to mongoDB
+
+- Config.supportUserId
+This user appears in all user as support. First create user and get the id of the user.
+
+- Config.redis
+Connect info to Redis server
+
+- Config.AESPassword
+Please be sure this to be same as iOS/Android/Web
+
+- Config.uploadPath
+Here comes files which users uploaded. Includeing avatars.
+
+- Config.hashSalt
+This is also need to be same as apps.
+
+- Config.username
+- Config.password
+Credentials to login service owner console
+
+- Config.apnsCertificates
+Path for certificates for push notification.
+
+- Config.fcmServerKey
+It is for Android's push notification
+
+- Config.protocol
+Needs to be https if ssl is supported in nodejs level
+
+- 
