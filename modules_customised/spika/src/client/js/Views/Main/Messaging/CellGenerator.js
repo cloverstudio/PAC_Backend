@@ -75,9 +75,9 @@ CellGenerator.prototype.generate = function(messageModel){
         if(messageModel.get('type') == CONST.MESSAGE_TYPE_TEXT)
             html = this.messageTemplate(flatData);
         
-        if(messageModel.get('type') == CONST.MESSAGE_TYPE_FILE){
+        if(messageModel.get('type') == CONST.MESSAGE_TYPE_FILE && flatData.file && flatData.file.file){
                     
-            if(!_.isUndefined(flatData.file.thumb)){
+            if(!_.isUndefined(flatData.file.thumb) && flatData.file && flatData.file.file){
                 
                 // thumbnail exists
                 //flatData.downloadURL = 'http://192.168.1.5:8080/img/ipad-art-wide-AVATAR2-420x0.jpg';
