@@ -46,6 +46,7 @@ SignoutController.prototype.init = function(app){
         var organizationModel = OrganizationModel.get();
         var UUID = request.headers['uuid']; 
 
+
         if(Config.forceLogoutAllDevice){
 
             // logout all devices
@@ -90,7 +91,7 @@ SignoutController.prototype.init = function(app){
 
             }); 
 
-        } else {
+        } else if(UUID){
 
             // logout only the device
             async.waterfall([
@@ -157,7 +158,7 @@ SignoutController.prototype.init = function(app){
 
                     });
 
-                    console.log(updateVoipPushTokens);
+                    result.updateTokens = updateTokens;
 
                     userModel.update({
                         _id: request.user._id
@@ -175,7 +176,9 @@ SignoutController.prototype.init = function(app){
                 function(result,done){
                     
                     // make user offline
-                    DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
+
+                    if(result.updateTokens.length == 0)
+                        DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
 
                     done(null,result);
                     
@@ -192,6 +195,70 @@ SignoutController.prototype.init = function(app){
                 self.successResponse(response,Const.responsecodeSucceed,[]);
 
             });
+
+        } else {
+
+            // if Config.forceLogoutAllDevice is false and no UUID just remove current access token
+            var currentAccessToken = request.headers['access-token'];
+
+            async.waterfall([
+
+                function(done){
+                    
+                    var result = {};
+                    
+                    userModel.findOne({
+                        _id : request.user._id
+                    },(err,findResult) => {
+
+                        result.user = findResult.toObject();
+
+                        done(null,result);
+
+                    });
+                    
+                },        
+                function(result, done){
+                    
+                    var updateTokens = _.filter(result.user.token,(token) => {
+                        return token.token != currentAccessToken;
+                    });
+
+                    result.updateTokens = updateTokens;
+
+                    userModel.update({
+                        _id: request.user._id
+                    },{
+                        token: updateTokens
+                    },{},function(){
+
+                        done(null,result);
+
+                    });
+                    
+                },
+                function(result,done){
+                    
+                    // make user offline
+                    if(result.updateTokens.length == 0)
+                        DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
+
+                    done(null,result);
+                    
+                }
+            ],
+            function(err,result){
+                
+                if(err){
+                    console.log("critical err",err);
+                    self.errorResponse(response,Const.httpCodeServerError);
+                    return;
+                }
+                
+                self.successResponse(response,Const.responsecodeSucceed,[]);
+
+            });
+
 
         }
 
