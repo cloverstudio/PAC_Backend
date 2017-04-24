@@ -46,8 +46,23 @@ SignoutController.prototype.init = function(app){
         var organizationModel = OrganizationModel.get();
         
         async.waterfall([
-        
+
 			function(done){
+                
+                var result = {};
+                
+                userModel.findOne({
+                    _id : request.user._id
+                },(err,findResult) => {
+
+                    console.log(findResult);
+
+                    done(null,result);
+
+                });
+                
+            },        
+			function(result, done){
                 
                 var result = {};
                 
@@ -57,9 +72,11 @@ SignoutController.prototype.init = function(app){
                     token: [],
                     pushToken: [],
                     voipPushToken: []
+
                 },{},function(){
 
                     done(null,result);
+
                 });
                 
             },

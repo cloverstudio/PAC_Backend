@@ -65,11 +65,11 @@ FileUploadHandler.prototype.attach = function(router){
             
             function (done) {
                 
-                //console.log('filupload',2);
+                console.log('filupload',2);
 
                 fs.exists(Settings.options.uploadDir, function (exists) {
                     
-                    //console.log('filupload',3);
+                    console.log('filupload',3);
 
                     if(exists){
                         
@@ -89,7 +89,7 @@ FileUploadHandler.prototype.attach = function(router){
                         }); 
                         */
                         
-                        //console.log('filupload',4);
+                        console.log('filupload',4);
 
                         done(null,{});
                         
@@ -105,22 +105,23 @@ FileUploadHandler.prototype.attach = function(router){
             },
             function (result,done) {
                 
-                //console.log('filupload',5);
+                console.log('filupload',5);
 
                 form.parse(request, function(err, fields, files) {
             
-                    //console.log('filupload',6);
+                    console.log('filupload',6);
+                    console.log('files',files);
                     
                     if(!files.file){
                         
-                        //console.log('filupload',7);
+                        console.log('filupload',7);
 
                         self.successResponse(response,Const.resCodeFileUploadNoFile);
                         return; 
                         
                     }else{
                         
-                        //console.log('filupload',8);
+                        console.log('filupload',8);
 
                         var tempPath = files.file.path;
                         var fileName = files.file.name;
