@@ -44,62 +44,156 @@ SignoutController.prototype.init = function(app){
 
         var userModel = UserModel.get();
         var organizationModel = OrganizationModel.get();
-        
-        async.waterfall([
+        var UUID = request.headers['uuid']; 
 
-			function(done){
-                
-                var result = {};
-                
-                userModel.findOne({
-                    _id : request.user._id
-                },(err,findResult) => {
+        if(Config.forceLogoutAllDevice){
 
-                    console.log(findResult);
+            // logout all devices
+            async.waterfall([
+    
+                function(done){
+                    
+                    var result = {};
+                    
+                    userModel.update({
+                        _id: request.user._id
+                    },{
+                        token: [],
+                        pushToken: [],
+                        voipPushToken: []
+
+                    },{},function(){
+
+                        done(null,result);
+
+                    });
+                    
+                },
+                function(result,done){
+                    
+                    // make user offline
+                    DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
 
                     done(null,result);
+                    
+                }
+            ],
+            function(err,result){
+                
+                if(err){
+                    console.log("critical err",err);
+                    self.errorResponse(response,Const.httpCodeServerError);
+                    return;
+                }
+                
+                self.successResponse(response,Const.responsecodeSucceed,[]);
 
-                });
-                
-            },        
-			function(result, done){
-                
-                var result = {};
-                
-                userModel.update({
-                    _id: request.user._id
-                },{
-                    token: [],
-                    pushToken: [],
-                    voipPushToken: []
+            }); 
 
-                },{},function(){
+        } else {
+
+            // logout only the device
+            async.waterfall([
+
+                function(done){
+                    
+                    var result = {};
+                    
+                    userModel.findOne({
+                        _id : request.user._id
+                    },(err,findResult) => {
+
+                        result.user = findResult.toObject();
+
+                        done(null,result);
+
+                    });
+                    
+                },        
+                function(result, done){
+
+                    // get pushtokens and tokens to remove
+                    var deviceData = _.find(result.user.UUID,(data) => {
+                        return data.UUID == UUID;
+                    });
+
+                    var pushTokensToRemove = deviceData.pushTokens;
+                    var tokenToRemove = deviceData.lastToken;
+
+                    // remove token from tokens
+                    var updateTokens = _.filter(result.user.token,(token) => {
+                        return token.token != tokenToRemove;
+                    });
+
+                    // remove pushtoken from pushToken
+                    var updatePushTokens = _.filter(result.user.pushToken,(token) => {
+
+                        var keep = true;
+
+                        pushTokensToRemove.forEach((pushTokenToRemove) => {
+                            
+                            if(token == pushTokenToRemove)
+                                keep = false;
+                        });
+
+                        return keep;
+
+                    });
+
+                    console.log(result.user.voipPushToken);
+
+                    // remove pushtoken from voipPushToken
+                    var updateVoipPushTokens = _.filter(result.user.voipPushToken,(token) => {
+
+                        var keep = true;
+
+                        pushTokensToRemove.forEach((pushTokenToRemove) => {
+                            
+                            if(token == pushTokenToRemove)
+                                keep = false;
+                        });
+
+                        return keep;
+
+                    });
+
+                    console.log(updateVoipPushTokens);
+
+                    userModel.update({
+                        _id: request.user._id
+                    },{
+                        token: updateTokens,
+                        pushToken: updatePushTokens,
+                        voipPushToken: updateVoipPushTokens
+                    },{},function(){
+
+                        done(null,result);
+
+                    });
+                    
+                },
+                function(result,done){
+                    
+                    // make user offline
+                    DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
 
                     done(null,result);
-
-                });
+                    
+                }
+            ],
+            function(err,result){
                 
-            },
-            function(result,done){
+                if(err){
+                    console.log("critical err",err);
+                    self.errorResponse(response,Const.httpCodeServerError);
+                    return;
+                }
                 
-                // make user offline
-                DatabaseManager.redisDel(Const.redisKeyOnlineStatus + request.user._id);
+                self.successResponse(response,Const.responsecodeSucceed,[]);
 
-                done(null,result);
-                
-            }
-        ],
-        function(err,result){
-            
-            if(err){
-                console.log("critical err",err);
-                self.errorResponse(response,Const.httpCodeServerError);
-                return;
-            }
-            
-            self.successResponse(response,Const.responsecodeSucceed,[]);
+            });
 
-        });
+        }
 
     });
 
