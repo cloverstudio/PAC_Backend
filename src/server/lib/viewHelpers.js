@@ -23,7 +23,7 @@ var helpers = {
         if(_.isEmpty(fileID)){
             return "/images/usernoavatar.png"
         }else{
-            return "/uploads/" + fileID;
+            return "/api/v2/avatar/user/" + fileID;
         }
 
         return "";
