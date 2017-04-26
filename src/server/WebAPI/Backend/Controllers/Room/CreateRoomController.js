@@ -419,4 +419,113 @@ CreateRoomController.prototype.generateConversationName = function(ownwerUserId,
 
 }
 
+
+CreateRoomController.prototype.setAvatar = function(file,callBack){
+
+    async.waterfall([function(done){
+        
+        var result = {};
+
+        // save to upload dir
+        var tempPath = file.path;
+        var fileName = file.name;
+        var destPath = Config.uploadPath + "/";
+        
+        var newFileName = Utils.getRandomString(32);                
+        result.newFileName = newFileName;
+
+        fs.copy(tempPath, destPath + newFileName, function(err) {
+
+            easyimg.rescrop({src:destPath + newFileName, dst:destPath + newFileName,
+                width:512, height:512,
+                cropwidth:512, cropheight:512,
+                x:0, y:0
+            }).then(function(image) {
+
+                easyimg.convert({src: destPath + newFileName, dst: destPath + newFileName + ".png", quality:100}).then(function (file) {
+
+                    fs.rename( destPath + newFileName + ".png", 
+                            destPath + newFileName, function(err) {
+                        
+                        done(err,result);
+                        
+                    });
+                                                    
+                });
+                
+            });
+        
+        });
+    
+    },
+    function(result,done){
+    
+        // generate thumbnail      
+        if(file.type.indexOf("jpeg") > -1 ||
+            file.type.indexOf("gif") > -1 ||
+            file.type.indexOf("png") > -1){
+                
+                var thumbFileName = Utils.getRandomString(32); 
+                result.thumbName = thumbFileName;
+
+                var destPathTmp = Config.uploadPath + "/" + thumbFileName;
+
+                easyimg.thumbnail({
+                        src: Config.uploadPath + "/" + result.newFileName, 
+                        dst:destPathTmp + ".png",
+                        width:Const.thumbSize, height:Const.thumbSize
+                    }).then(
+                    
+                    function(image) {
+                        
+                        fs.rename(destPathTmp + ".png", 
+                            destPathTmp, function(err) {
+                            
+                            done(err,result);
+                            
+                        });
+
+                    },
+                    function (err) {
+                    
+                        // ignore thubmnail error
+                        console.log(err);
+                        done(null,result);
+                    }
+                    
+                );
+            
+        } else {
+            
+            done(null,result);
+            
+        }
+        
+    }],
+    function(err,result){
+
+        var stats = fs.statSync(Config.uploadPath + "/" + result.thumbName);
+        
+        if(result.thumbName && result.newFileName){
+            callBack({
+                picture: {
+                    originalName:file.name,
+                    size:file.size,
+                    mimeType:"image/png",
+                    nameOnServer:result.newFileName
+                },
+                thumbnail: {
+                    originalName:file.name,
+                    size:stats["size"],
+                    mimeType:"image/png",
+                    nameOnServer:result.thumbName
+                }
+            });
+        }else{
+            callBack(null);
+        }
+        
+    });  
+};
+
 module["exports"] = new CreateRoomController();
