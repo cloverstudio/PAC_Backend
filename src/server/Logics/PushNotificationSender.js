@@ -354,7 +354,8 @@ PushNotificationSender = {
                         roomId: payload.roomId,
                         message: payload.message,
                         fromuser: payload.from,
-                        pushType: payload.pushType
+                        pushType: payload.pushType,
+                        unreadCount: unreadCount
                     };
                     
                     if(payload.file){
