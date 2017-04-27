@@ -136,7 +136,7 @@ var CreateRoom = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
 
             self.$('.alert-danger').text(message);
             self.$('.alert-danger').show();

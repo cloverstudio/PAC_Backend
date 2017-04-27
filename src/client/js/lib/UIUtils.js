@@ -16,7 +16,7 @@ var UIUtils = {
         if(Const.ErrorCodes[errorCode])
             message = Utils.l10n(Const.ErrorCodes[errorCode]);
         else
-            message = Utils.l10n("Critical Error");
+            message = Utils.l10n("No internet connection, please try again later.");
             
         alertDialog.show(Utils.l10n("Api Error"),message);
             

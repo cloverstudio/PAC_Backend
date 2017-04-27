@@ -60646,7 +60646,7 @@ var DetailInfoView = Backbone.View.extend({
                         if(Const.ErrorCodes[errCode])
                             message = Utils.l10n(Const.ErrorCodes[errCode]);
                         else
-                            message = Utils.l10n("Critical Error");
+                            message = Utils.l10n("No internet connection, please try again later.");
                         
                         var Alert = require('../Modals/AlertDialog/AlertDialog');
                         Alert.show(Utils.l10n('API Error'),message);
@@ -61808,7 +61808,7 @@ var ChangePassword = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
                 
             $('#modal-changepassword .alert-danger').text(message);
             $('#modal-changepassword .alert-danger').show();
@@ -62052,7 +62052,7 @@ var CreateRoom = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
 
             self.$('.alert-danger').text(message);
             self.$('.alert-danger').show();
@@ -62217,7 +62217,7 @@ var EditProfile = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
                 
             $('#form-signup #btn-signup').removeAttr('disabled');	
 
@@ -62591,7 +62591,7 @@ var GroupDetail = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
             
             var Alert = require('../AlertDialog/AlertDialog');
             Alert.show(Utils.l10n('API Error'),message);
@@ -63116,7 +63116,7 @@ var RoomDetail = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
             
             var Alert = require('../AlertDialog/AlertDialog');
             Alert.show(Utils.l10n('API Error'),message);
@@ -63316,7 +63316,7 @@ var UpdateRoom = {
                 if(Const.ErrorCodes[errCode])
                     message = Utils.l10n(Const.ErrorCodes[errCode]);
                 else
-                    message = Utils.l10n("Critical Error");
+                    message = Utils.l10n("No internet connection, please try again later.");
 
                 self.$('.alert-danger').text(message);
                 self.$('.alert-danger').show();
@@ -69466,7 +69466,7 @@ var UIUtils = {
         if(Const.ErrorCodes[errorCode])
             message = Utils.l10n(Const.ErrorCodes[errorCode]);
         else
-            message = Utils.l10n("Critical Error");
+            message = Utils.l10n("No internet connection, please try again later.");
             
         alertDialog.show(Utils.l10n("Api Error"),message);
             

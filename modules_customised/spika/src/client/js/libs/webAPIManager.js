@@ -158,7 +158,7 @@ var LoginUserManager = require('./loginUserManager.js');
                 },
                 error: function (e) {
                     
-                    ErrorDialog.show('Network Error','Critical Error',function(){
+                    ErrorDialog.show('Network Error','No internet connection, please try again later.',function(){
                             
                         ErrorDialog.hide(function(){
                             self.post(url,data,onSuccess,onError);
@@ -225,7 +225,7 @@ var LoginUserManager = require('./loginUserManager.js');
                 },
                 error: function (e) {
                         
-                    ErrorDialog.show('Network Error','Critical Error',function(){
+                    ErrorDialog.show('Network Error','No internet connection, please try again later.',function(){
                             
                         ErrorDialog.hide(function(){
                             self.get(url,onSuccess,onError);

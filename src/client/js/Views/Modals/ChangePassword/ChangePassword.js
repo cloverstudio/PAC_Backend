@@ -140,7 +140,7 @@ var ChangePassword = {
             if(Const.ErrorCodes[errCode])
                 message = Utils.l10n(Const.ErrorCodes[errCode]);
             else
-                message = Utils.l10n("Critical Error");
+                message = Utils.l10n("No internet connection, please try again later.");
                 
             $('#modal-changepassword .alert-danger').text(message);
             $('#modal-changepassword .alert-danger').show();
