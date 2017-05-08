@@ -61,8 +61,11 @@ OrganizationsController.prototype.init = function(app){
         var criteria = {};
         criteria.status = !disabledStatus;
                 
-        if(!_.isEmpty(keyword)){            
-            criteria.name = new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i")            
+        if(!_.isEmpty(keyword)){      
+            criteria['$or'] = {
+                name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i"),
+                email: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i")
+            }              
         }
         
         async.waterfall([
