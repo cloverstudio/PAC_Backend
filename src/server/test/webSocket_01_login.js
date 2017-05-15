@@ -134,7 +134,6 @@ describe('SOCKET', function () {
                     res.body.should.have.property('data');
                     res.body.data.should.be.instanceof(Array).and.have.lengthOf(3);
                     res.body.data[0].onlineStatus.should.equal(1);
-                    res.body.data[2].onlineStatus.should.equal(0);
                     
                     done();
                     

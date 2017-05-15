@@ -14,11 +14,13 @@ var socketIOManager = require('./SocketIOManager');
 var EncryptionManager = require('./EncryptionManager');
 
 var UIUtils = require('../lib/UIUtils');
+var ChatView = require('../Views/ChatView/ChatView.js'); 
 
 var ChatManager = {
     
     isLoading: false,
     currentRoomId: null,
+    chatView: null,
     open: function(roomId,messageId){
         
         var self = this;
@@ -61,6 +63,15 @@ var ChatManager = {
 
         this.currentRoomId = roomId;
 
+        if(this.chatView)
+            this.chatView.destroy();
+
+        this.chatView = new ChatView({
+            container : "#main-container",
+            roomId: roomId
+        });
+
+/*
 	    SpikaAdapter.attach({
 	        mode: "div", 
             spikaURL: Config.SpikaBaseURL,
@@ -164,7 +175,7 @@ var ChatManager = {
             }
 
         });
-        
+*/
     },
     
     openChatByUserId: function(userId,messageId){
