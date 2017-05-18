@@ -73,6 +73,8 @@
     Const.responsecodeSignupInvalidPassword = 4000066;
     Const.responsecodeMessageNoPermission = 4000067;
 
+    Const.responsecodeMessageListInvalidParam = 4000068;
+
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;
@@ -157,5 +159,13 @@
     Const.onlineCheckerIntertal = 180 * 1000;
     Const.offlineTimeLimit = 180 * 1000;
 
+    Const.messageTypeText = 1;
+    Const.messageTypeFile = 2;
+    Const.messageTypeLocation = 3;
+    Const.messageTypeContact = 4;
+    Const.messageTypeSticker = 5;
+
+    Const.pagingLimit = 50;
+    
     // Exports ----------------------------------------------
     module["exports"] = Const;

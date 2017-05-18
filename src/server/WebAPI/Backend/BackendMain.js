@@ -60,6 +60,8 @@ var BackendMain ={
         router.use("/message/favorite/list", require("./Controllers/Message/FavoriteListController").init(app));
         router.use("/message/forward", require("./Controllers/Message/ForwardMessageController").init(app));
         router.use("/message/send", require("./Controllers/Message/SendMessageController").init(app));
+
+        router.use("/message/list", require("./Controllers/Message/MessageListController").init(app));
         
         router.use("/search/all", require("./Controllers/Search/SearchAllController").init(app));
 

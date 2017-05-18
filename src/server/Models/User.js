@@ -94,4 +94,34 @@ User.getUserById = function(userId,callBack){
     
 };
 
+User.findUsersbyId = function(aryId,callBack){
+        
+        var conditions = [];
+        aryId.forEach(function(userId){
+            
+            conditions.push({
+                _id : userId 
+            });
+            
+        });
+        
+        var model = this.get();
+
+        var query = model.find({
+            $or : conditions
+        }).sort({'created': 1});        
+        
+        query.exec(function(err,data){
+            
+            if (err)
+                console.error(err);
+            
+            if(callBack)
+                callBack(err,data)
+            
+        });                
+                
+};
+
+
 module["exports"] = User;

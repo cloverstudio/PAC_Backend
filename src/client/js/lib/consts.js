@@ -58,6 +58,7 @@ Const.chatTypeRoom = 3;
 Const.credentialsMinLength = 6;
 
 Const.NotificationUpdateHeader = "notification_update_header";
+Const.NotificationNewMessage = "notification_new_message";
 Const.NotificationRefreshHistory = "notification_refresh_history";
 Const.NotificationRefreshUser = "notification_refresh_user";
 Const.NotificationRefreshGroup = "notification_refresh_group";
@@ -95,6 +96,12 @@ Const.callFailedUserReject = 3;
 Const.callFailedUserNotSupport = 4;
 
 Const.keepAliveInterval = 30 * 1000;
+
+Const.messageTypeText = 1;
+Const.messageTypeFile = 2;
+Const.messageTypeLocation = 3;
+Const.messageTypeContact = 4;
+Const.messageTypeSticker = 5;
 
 // Exports ----------------------------------------------
 module["exports"] = Const;

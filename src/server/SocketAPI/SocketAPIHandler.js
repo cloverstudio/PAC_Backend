@@ -33,6 +33,7 @@ var SocketAPIHandler = {
             require('./PongActionHandler').attach(self.nsp,socket);
             require('./CallingActionsHandler').attach(self.nsp,socket);
             require('./KeepAliveActionHandler').attach(self.nsp,socket);
+            require('./SendMessageActionHandler').attach(self.nsp,socket);
             
         });
 

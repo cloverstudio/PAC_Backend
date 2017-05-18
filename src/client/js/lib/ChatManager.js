@@ -176,6 +176,8 @@ var ChatManager = {
 
         });
 */
+
+        self.isLoading = false;
     },
     
     openChatByUserId: function(userId,messageId){
@@ -225,6 +227,7 @@ var ChatManager = {
             description: user.description
         });
         
+        this.isLoading = false;
     },
     
     openChatByGroup : function(group,messageId){
@@ -257,6 +260,7 @@ var ChatManager = {
             description: group.description
         });
         
+        this.isLoading = false;
     },
     
     openChatByRoom : function(room,messageId){
@@ -288,7 +292,8 @@ var ChatManager = {
             title: room.name,
             description: room.description
         });
-            
+        
+        this.isLoading = false;
     },
     
     openChatByPrivateRoomId: function(roomId,messageId){
@@ -338,10 +343,7 @@ var ChatManager = {
             
         });
         
-        /*
-
-        
-        */
+        this.isLoading = false;
         
     },
     

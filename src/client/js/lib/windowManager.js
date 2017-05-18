@@ -60,6 +60,9 @@ var windowManager = {
         //login
         $('#view-login div.col-md-6').height(height);
 
+        // chat view
+        $("#main-container #messages").height(height - headerHeight - $("#text-message-box-container").outerHeight());
+
     }
 
 }

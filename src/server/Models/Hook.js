@@ -11,7 +11,6 @@ var Utils = require("../lib/utils");
 
 var BaseModel = require('./BaseModel');
 
-var BaseModel = require('./BaseModel');
 
 var HookModel = function(){};
 

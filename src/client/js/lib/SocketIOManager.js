@@ -60,6 +60,7 @@ var socketIOManager = {
         this.ioNsp.on('newmessage', function(obj){
             
             Backbone.trigger(Const.NotificationRefreshHistory);
+            Backbone.trigger(Const.NotificationNewMessage,obj);
             NotificationManager.handleNewMessage(obj);
 
         });

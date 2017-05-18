@@ -11,9 +11,9 @@ var LoadMessageClient = function(){};
 
 _.extend(LoadMessageClient.prototype,APIClientBase.prototype);
 
-LoadMessageClient.prototype.send = function(roomID,lastMessageId,success,err){
+LoadMessageClient.prototype.send = function(roomID,lastMessageId,direction,success,err){
 
-    this.getRequst("/message/list/" + roomID + "/" + lastMessageId,success,err);
+    this.getRequst("/message/list/" + roomID + "/" + lastMessageId + "/" + direction,success,err);
     
 }
     

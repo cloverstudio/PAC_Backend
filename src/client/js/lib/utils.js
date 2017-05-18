@@ -33,7 +33,8 @@ var sha1 = require('sha1');
     Utils.prototype.chatIdByRoom = chatIdByRoom;
     Utils.prototype.escapeRegExp = escapeRegExp;
     Utils.prototype.strip = strip;
-    
+    Utils.prototype.contentExtract = contentExtract;
+
     // Implementation ---------------------------------------
     function logging(obj) {
         console.log(obj);
@@ -368,6 +369,77 @@ var sha1 = require('sha1');
 
         else
             return  text.substring(0,limit) + "…";
+    }
+
+
+    function linkify(inputText) {
+        var replacedText, replacePattern1, replacePattern2, replacePattern3;
+    
+        //URLs starting with http://, https://, or ftp://
+        replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    
+        //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+        replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+        replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    
+        //Change email addresses to mailto:: links.
+        replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+        replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+                
+        return replacedText;
+    }
+    
+
+    function videofy(inputText){
+
+        var Youtube = {},
+            embed = '<iframe width="560" height="315" src="//www.youtube.com/embed/$1"  frameborder="0" allowfullscreen></iframe>';
+    
+        // modified from http://stackoverflow.com/questions/7168987/
+        var	regularUrl = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com)\/(?:watch\?v=)(.+)/g;
+        var	shortUrl = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be)\/(.+)/g;
+        var	embedUrl = /(?:https?:\/\/)?(?:www\.)youtube.com\/embed\/([\w\-_]+)/;
+        
+        if (inputText.match(embedUrl)) {
+            inputText = inputText.replace(embedUrl, embed);
+        }
+
+        if (inputText.match(regularUrl)) {
+            inputText = inputText.replace(regularUrl, embed);
+        }
+
+
+        if (inputText.match(shortUrl)) {
+            inputText = inputText.replace(shortUrl, embed);
+        }
+
+        return inputText;
+
+    }
+    
+    function imagefy(inputText) {
+
+        return '<img style="max-width:500px" src="' + inputText + '" />';
+        
+    }
+    
+    
+    function contentExtract(inputText){
+       
+        if(/^http.+\.png$/.test(inputText) ||
+            /^http.+\.gif$/.test(inputText) ||
+            /^http.+\.jpg$/.test(inputText) ||
+            /^http.+\.jpeg$/.test(inputText))
+            
+            return imagefy(inputText)
+        
+        if(/.*youtube.+/.test(inputText) ||
+            /.*youtu\.be.+/.test(inputText))
+            return videofy(inputText);
+        else
+            return linkify(inputText);
+        
     }
 
     // Exports ----------------------------------------------

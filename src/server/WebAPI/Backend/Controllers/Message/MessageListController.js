@@ -1,5 +1,3 @@
-/** Called for /api/v2/message/send API */
-
 var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
@@ -7,221 +5,140 @@ var async = require('async');
 
 var pathTop = "../../../../";
 
-var Const = require(pathTop +"lib/consts");
-var Config = require(pathTop +"lib/init");
-var DatabaseManager = require(pathTop +'lib/DatabaseManager');
-var Utils = require(pathTop +'lib/utils');
+var Const = require( pathTop + "lib/consts");
+var Config = require( pathTop + "lib/init");
 
-var HookModel = require( pathTop + 'Models/Hook');
-var UserModel = require( pathTop + 'Models/User');
+var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
+var EncryptionManager = require( pathTop + 'lib/EncryptionManager');
 
-var SpikaDatabaseManager = require( pathTop + '../../modules_customised/spika/src/server/lib/DatabaseManager');
-var SpikaSendMessageLogic = require( pathTop + '../../modules_customised/spika/src/server/Logics/SendMessage');
-var SpikaLoginLogic = require( pathTop + '../../modules_customised/spika/src/server/Logics/Login');
+var MessageModel = require( pathTop + 'Models/Message');
 
-var tokenChecker = require( pathTop + 'lib/authApi');
+var Utils = require( pathTop + 'lib/utils');
 
-var BackendBase = require('../BackendBase');
-
-/** Called for /api/v2/message/send API */
-
-var express = require('express');
-var router = express.Router();
-var _ = require('lodash');
-var async = require('async');
-
-var pathTop = "../../../../";
-
-var Const = require(pathTop +"lib/consts");
-var Config = require(pathTop +"lib/init");
-var DatabaseManager = require(pathTop +'lib/DatabaseManager');
-var Utils = require(pathTop +'lib/utils');
-
+var PolulateMessageLogic = require( pathTop + 'Logics/PolulateMessage');
 
 var tokenChecker = require( pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
 
+var MessageLoadDirection = {
+    append:'new',
+    prepend:'old'
+};
 
 var MessageListController = function(){
 }
 
-_.extend(MessageListController.prototype,RequestHandlerBase.prototype);
+_.extend(MessageListController.prototype,BackendBase.prototype);
 
-MessageListController.prototype.init = function(router){
+MessageListController.prototype.init = function(app){
         
     var self = this;
 
-    /**
-     * @api {get} /message/list/:roomID/:lastMessageID Get messages sent to room
-     * @apiName Get messages of the room
+   /**
+     * @api {get} /api/v2/message/list/:roomId/:lastMessageId/:direction
+     * @apiName MessageList
      * @apiGroup WebAPI
-     * @apiDescription Get last 50 message from the room
-
-     * @apiParam {String} RoomID ID of room
-     * @apiParam {String} lastMessageID MessageID of last message already shown. To get last 50 message put this param 0
-     *
-     * @apiSuccess {String} Token
-     * @apiSuccess {String} User Model of loginned user
-     *     
+     * @apiDescription Returns list of messages. Direction should be string 'old' or 'new'
+     * @apiHeader {String} access-token Users unique access-token.
      * @apiSuccessExample Success-Response:
-{
-
-{
-    "code": 1,
-    "data": [
-        {
-            "__v": 0,
-            "_id": "55d2d194caf997b543836fc8",
-            "created": 1439879572232,
-            "message": "",
-            "roomID": "test",
-            "type": 1001,
-            "user": {
-                "userID": "test",
-                "name": "test",
-                "avatarURL": "http://45.55.81.215:80/img/noavatar.png",
-                "token": "UI6yHxeyZnXOZ1EgT6g5ftwD",
-                "created": 1439878817506,
-                "_id": "55d2cea1caf997b543836fb2",
-                "__v": 0
-            },
-            "userID": "test",
-            "seenBy": [
-                {
-                    "user": {
-                        "userID": "test2",
-                        "name": "test2",
-                        "avatarURL": "http://45.55.81.215:80/img/noavatar.png",
-                        "token": "YMsHeg3KEQIhtvt46W5fgnaf",
-                        "created": 1439878824411,
-                        "_id": "55d2cea8caf997b543836fb6",
-                        "__v": 0
-                    },
-                    "at": 1439879572353
-                },
-                {
-                    "user": {
-                        "userID": "test3",
-                        "name": "tset3",
-                        "avatarURL": "http://45.55.81.215:80/img/noavatar.png",
-                        "token": "TahnOaC6JzldCh6gAmJs3jMC",
-                        "created": 1439878820142,
-                        "_id": "55d2cea4caf997b543836fb4",
-                        "__v": 0
-                    },
-                    "at": 1439879572361
-                }
-            ]
-        },
-        ...
-    ]
-}
-
-    */
+     {}
+   **/
     
-    router.get('/:roomID/:lastMessageID',tokenChecker,function(request,response){
-                
-        var roomID = request.params.roomID;
-        var lastMessageID = request.params.lastMessageID;
+    router.get('/:roomId/:lastMessageId/:direction',tokenChecker,function(request,response){
         
-        if(Utils.isEmpty(roomID)){
-            
-            self.successResponse(response,Const.resCodeMessageListNoRoomID);
-                
+        var messageModel = MessageModel.get();
+
+        var roomId = request.params.roomId;
+        var lastMessageId = request.params.lastMessageId;
+        var direction = request.params.direction? request.params.direction : MessageLoadDirection.append;
+
+        if(!roomId){
+            self.successResponse(response,Const.responsecodeMessageListInvalidParam);
             return;
+        }
+
+        async.waterfall([function(done){
+            
+            if(direction == MessageLoadDirection.prepend){
+
+                MessageModel.findOldMessages(roomId,lastMessageId,Const.pagingLimit,function (err,data) {
+                    
+                    done(err,data);
+
+                });
+
+            }
+
+            else {
+
+                var limit = Const.pagingLimit;
+                if(lastMessageId != 0)
+                    limit = 0;
+
+                MessageModel.findNewMessages(roomId,lastMessageId,limit,function (err,data) {
+                    
+                    done(err,data);
+
+                });
+
+            }
+
+        },
+        function(messages,done){
+
+            // add seenby
+            MessageModel.populateMessages(messages,function (err,data) {
+                
+                done(err,data);
+
+            });
+            
+        },
+        function(result,done){
+            
+            // add favorite
+            done(null,result);
+            
+        },function(result,done){
+            
+             done(null,result);
+            
+        },function(result,done){
+            
+             done(null,result);
             
         }
-        
-        async.waterfall([
-        
-            function (done) {
-
-                MessageModel.findMessages(roomID,lastMessageID,Const.pagingLimit,function (err,data) {
-                    
-                    done(err,data);
-
-                });
-                
-            },
-            function (messages,done) {
-
-                MessageModel.populateMessages(messages,function (err,data) {
-                    
-                    done(err,data);
-
-                });
-                
-            },
-            function(messages,done){
-                
-                var userID = request.user.userID;
-                var favoriteModel = FavoriteModel.get();
-                
-                favoriteModel.find({
-                    userId:userID
-                },function(err,favoriteFindResult){
-                    
-                    var messageIds = _.map(favoriteFindResult,function(favorite){
-                        
-                        return favorite.messageId;
-                         
-                    });
-                    
-                    
-                    var messagesFav = _.map(messages,function(message){
-                        
-                        var isFavorite = false;
-                        
-                        if(messageIds.indexOf(message._id.toString()) != -1)
-                            isFavorite = true;
-                        
-                        message.isFavorite = isFavorite;
-                        
-                        return message;
-                            
-                    });
-                    
-                    done(null,messagesFav);
-                    
-                });
-
-            }
         ],
-            function (err, data) {
-                
-                if(err){
-
-                    self.errorResponse(
-                        response,
-                        Const.httpCodeSeverError
-                    );
-                
-                }else{
-                    
-                    // encrypt message
-                    var encryptedMessages = _.map(data,function(message){
-
-                        if(message.type == Const.messageTypeText){
-                            message.message = BridgeManager.hook('encryptMessage',message.message);
-                        }
-                        
-                        return message;
-                        
-                    });
-
-                    self.successResponse(response,Const.responsecodeSucceed,{messages:encryptedMessages});
-                    
-                }
-                     
+        function(err,result){
+            
+            if(err){
+                console.log("critical err",err);
+                self.errorResponse(response,Const.httpCodeServerError);
+                return;
             }
             
-        );
+            // encrypt message
+            var encryptedMessages = _.map(result,function(message){
+
+                if(message.type == Const.messageTypeText){
+                    message.message = EncryptionManager.encryptText(message.message)
+                }
+                
+                return message;
+                
+            });
+
+            self.successResponse(response,Const.responsecodeSucceed,{
+                messages:encryptedMessages
+            });
+            
+        });
         
     });
+   
+    return router;
 
 }
 
-
 module["exports"] = new MessageListController();
-

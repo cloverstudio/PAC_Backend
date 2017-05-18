@@ -156,7 +156,30 @@ Handlebars.registerHelper('test', function(context, options) {
            return U.getBaseURL();
             
         });
-        
+
+
+        Handlebars.registerHelper("stripHost", function(url) {
+
+          var URLsplit = url.split('/');
+          var host = URLsplit[0] + "//" + URLsplit[2] + "/";
+          var newURL = url.replace(host, '');
+
+          return newURL;
+
+        });
+
+        Handlebars.registerHelper("formatDate", function(ut) {
+          return  U.formatDate(ut,false);
+        });
+
+        Handlebars.registerHelper("formatTime", function(ut) {
+          return  U.formatTime(ut);
+        });
+
+        Handlebars.registerHelper("formatTimeForChat", function(ut) {
+          return  U.formatDate(ut,true);
+        });
+
     }
     
     // Exports ----------------------------------------------

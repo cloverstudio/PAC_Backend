@@ -139,12 +139,15 @@ var NotifyNewMessage = {
                     var user2 = splitAry[2];
                     
                     var toUser = null;
-                    
-                    if(user1 == obj.userID)
+                    var fromUser = null;
+
+                    if(user1 == obj.userID){
                         toUser = user2;
-                    else
+                        fromUser = user1;
+                    }else{
                         toUser = user1;
-                    
+                        fromUser = user2;
+                    }
                     var sendNotification = true;
 
                     
@@ -170,7 +173,24 @@ var NotifyNewMessage = {
 
                         }
 
+                        // send to my self
+                        DatabaseManager.redisGet(Const.redisKeyUserId + fromUser,function(err,redisResult){
+                            
+                            var socketIds = _.pluck(redisResult,"socketId");
+                            
+                            if(!_.isArray(redisResult))
+                                return;
+                            
+                            _.forEach(redisResult,function(socketIdObj){
+                                SocketAPIHandler.emitToSocket(socketIdObj.socketId,'newmessage',messageCloned);
+                            })
+                            
+                            console.log('sss');
+                        });
+
                         if(sendNotification) {
+
+                            // send to user who got message
                             DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
                                 
                                 var socketIds = _.pluck(redisResult,"socketId");

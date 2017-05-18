@@ -14947,3 +14947,221 @@ body.loading {
   #callingview.window-full .icon {
     max-width: 50px;
     cursor: pointer; }
+
+#main-container {
+  position: relative; }
+  #main-container #additional-notification-container {
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    background-color: rgba(238, 238, 238, 0.7);
+    color: #777777;
+    font-size: 12px;
+    padding: 5px;
+    height: 0px;
+    display: none; }
+  #main-container #text-message-box-container {
+    background-color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    width: 100%;
+    height: 40px;
+    border-top: 1px solid #eeeeee;
+    z-index: 100; }
+    #main-container #text-message-box-container textarea {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 85%;
+      height: 40px;
+      border: none;
+      padding: 10px;
+      resize: none; }
+    #main-container #text-message-box-container #btn-fileupload {
+      position: absolute;
+      right: 10px;
+      top: 0px;
+      z-index: 110;
+      font-size: 20pt;
+      cursor: pointer; }
+      #main-container #text-message-box-container #btn-fileupload img {
+        width: 30px; }
+    #main-container #text-message-box-container #btn-emoticons {
+      position: absolute;
+      right: 50px;
+      top: 0px;
+      z-index: 110;
+      font-size: 20pt;
+      cursor: pointer; }
+      #main-container #text-message-box-container #btn-emoticons img {
+        width: 30px; }
+  #main-container #messages {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; }
+    #main-container #messages .sticker img {
+      max-width: 256px; }
+    #main-container #messages .message-cell.marked {
+      border-top: 1px solid #5bc0de; }
+    #main-container #messages .message-cell:hover {
+      border-left: 5px solid #f0ad4e;
+      background-color: #ffffe7; }
+    #main-container #messages .message-cell.selected {
+      background-color: #ffffe7;
+      border-left: 5px solid #d9534f; }
+    #main-container #messages .message-cell {
+      border-left: 5px solid #fff;
+      margin-top: 20px;
+      width: 100%; }
+      #main-container #messages .message-cell .avatar {
+        width: 40px;
+        padding: 0px 10px 0px 5px;
+        text-align: center;
+        margin-right: 5px; }
+        #main-container #messages .message-cell .avatar img {
+          width: 40px;
+          vertical-align: bottom; }
+      #main-container #messages .message-cell .infoicon {
+        font-size: 20px;
+        margin-bottom: -5px; }
+      #main-container #messages .message-cell .info {
+        max-width: 100%;
+        font-size: 12px;
+        color: #999999; }
+      #main-container #messages .message-cell .message {
+        font-size: 15px; }
+        #main-container #messages .message-cell .message div {
+          word-wrap: normal;
+          display: inline-block;
+          padding: 0px 0px 0px 10px; }
+      #main-container #messages .message-cell .status {
+        z-index: 100;
+        font-size: 10px;
+        padding-right: 5px; }
+      #main-container #messages .message-cell .user-state-change {
+        color: #777777;
+        padding: 10px 0px 10px 5px;
+        vertical-align: middle;
+        background-color: #eeeeee; }
+        #main-container #messages .message-cell .user-state-change .timestamp {
+          color: #b7b7b7; }
+      #main-container #messages .message-cell .progress-container {
+        width: 50%; }
+        #main-container #messages .message-cell .progress-container span {
+          color: #777777;
+          font-size: 10pt; }
+      #main-container #messages .message-cell .file-container {
+        display: inline-block;
+        min-width: 300px;
+        top: 20px; }
+        #main-container #messages .message-cell .file-container div {
+          padding: 3px; }
+          #main-container #messages .message-cell .file-container div .icon {
+            font-size: 30px;
+            text-align: center; }
+      #main-container #messages .message-cell .thumb-container div {
+        display: inline-block;
+        padding: 10px; }
+      #main-container #messages .message-cell .typing {
+        width: 100%; }
+        #main-container #messages .message-cell .typing div {
+          display: inline-block;
+          padding: 10px; }
+    #main-container #messages .message-cell.mine .avatar {
+      float: right; }
+    #main-container #messages .message-cell.mine .info {
+      padding-right: 45px;
+      text-align: right; }
+    #main-container #messages .message-cell.mine .message {
+      float: right;
+      text-align: right; }
+      #main-container #messages .message-cell.mine .message div {
+        background-color: #337ab7;
+        color: #fff;
+        text-align: left; }
+    #main-container #messages .message-cell.mine .infoicon {
+      z-index: 100; }
+    #main-container #messages .message-cell.mine .status0 {
+      float: right;
+      color: #337ab7; }
+      #main-container #messages .message-cell.mine .status0 .sending {
+        display: inline-block; }
+      #main-container #messages .message-cell.mine .status0 .sent {
+        display: none; }
+    #main-container #messages .message-cell.mine .status1 {
+      float: right;
+      color: #5cb85c; }
+      #main-container #messages .message-cell.mine .status1 .sending {
+        display: none; }
+      #main-container #messages .message-cell.mine .status1 .sent {
+        display: inline-block; }
+    #main-container #messages .message-cell.mine .progress-container {
+      float: right; }
+    #main-container #messages .message-cell.mine .file-container {
+      float: right; }
+      #main-container #messages .message-cell.mine .file-container div {
+        background-color: #337ab7;
+        color: #fff;
+        text-align: left; }
+        #main-container #messages .message-cell.mine .file-container div a {
+          color: #fff;
+          text-decoration: underline; }
+    #main-container #messages .message-cell.mine .thumb-container {
+      float: right; }
+      #main-container #messages .message-cell.mine .thumb-container div {
+        background-color: #337ab7; }
+    #main-container #messages .message-cell.mine a {
+      color: #fff; }
+    #main-container #messages .message-cell.other .avatar {
+      float: left; }
+    #main-container #messages .message-cell.other .info {
+      margin-left: 55px; }
+    #main-container #messages .message-cell.other .message {
+      float: left; }
+      #main-container #messages .message-cell.other .message div {
+        color: #333333; }
+    #main-container #messages .message-cell.other .status {
+      display: none; }
+    #main-container #messages .message-cell.other .file-container div {
+      background-color: #eeeeee;
+      color: #333333;
+      text-align: left; }
+      #main-container #messages .message-cell.other .file-container div a {
+        color: #333333;
+        text-decoration: underline; }
+    #main-container #messages .message-cell.other .thumb-container {
+      padding-top: 5px;
+      padding-left: 10px; }
+      #main-container #messages .message-cell.other .thumb-container div {
+        background-color: #eeeeee;
+        vertical-align: top; }
+        #main-container #messages .message-cell.other .thumb-container div a {
+          margin-left: 5px;
+          display: block;
+          float: right; }
+    #main-container #messages .message-cell.other .typing {
+      padding-left: 45px; }
+      #main-container #messages .message-cell.other .typing div {
+        color: #eeeeee; }
+    #main-container #messages .message-cell.not-first {
+      padding-left: 45px;
+      margin-top: 0px; }
+      #main-container #messages .message-cell.not-first .avatar {
+        display: none; }
+      #main-container #messages .message-cell.not-first .info {
+        display: none; }
+      #main-container #messages .message-cell.not-first .message div {
+        padding-left: 10px;
+        padding-top: 5px; }
+  #main-container #file-drop-indicator {
+    transition: all 0.5s ease;
+    background-color: #d9534f;
+    color: #fff;
+    padding: 5px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    left: 0px; }
+  #main-container #file-drop-indicator.drag {
+    bottom: 40px; }

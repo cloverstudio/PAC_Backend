@@ -80,7 +80,7 @@ MessageModel.prototype.init = function(){
 
     }
     
-    this.model = mongoose.model(Settings.options.dbCollectionPrefix + "messages", messageSchema);
+    this.model = mongoose.model(Settings.options.dbCollectionPrefix + "messages_nouse", messageSchema);
     return this.model;
         
 }
