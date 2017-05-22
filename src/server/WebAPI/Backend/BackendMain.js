@@ -62,7 +62,9 @@ var BackendMain ={
         router.use("/message/send", require("./Controllers/Message/SendMessageController").init(app));
 
         router.use("/message/list", require("./Controllers/Message/MessageListController").init(app));
-        
+
+        router.use("/file", require("./Controllers/File/FileDownloadController").init(app));
+
         router.use("/search/all", require("./Controllers/Search/SearchAllController").init(app));
 
         router.use("/stickers", require("./Controllers/Sticker/StickersController").init(app));

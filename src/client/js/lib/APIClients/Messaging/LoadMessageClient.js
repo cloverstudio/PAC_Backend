@@ -16,6 +16,6 @@ LoadMessageClient.prototype.send = function(roomID,lastMessageId,direction,succe
     this.getRequst("/message/list/" + roomID + "/" + lastMessageId + "/" + direction,success,err);
     
 }
-    
+
 // returns instance
 module["exports"] = new LoadMessageClient();

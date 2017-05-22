@@ -13,10 +13,10 @@ function CellGenerator(){
     // loading templates
     this.messageTemplate = require('./MessageCells/Message.hbs');
     
-    //this.fileUploadingTemplate = require('./MessageCells/FileUploading.hbs');
+    this.fileUploadingTemplate = require('./MessageCells/FileUploading.hbs');
     //this.userStateChangeTemplate = require('./MessageCells/UserStateChange.hbs');
-    //this.fileTemplate = require('./MessageCells/File.hbs');
-    //this.thumbTemplate = require('./MessageCells/Thumbnail.hbs');
+    this.fileTemplate = require('./MessageCells/File.hbs');
+    this.thumbTemplate = require('./MessageCells/Thumbnail.hbs');
     //this.typingTemplate = require('./MessageCells/Typing.hbs');
     this.deletedTemplate = require('./MessageCells/DeletedMessage.hbs');
     //this.locationTemplate = require('./MessageCells/Location.hbs');
@@ -76,21 +76,21 @@ CellGenerator.prototype.generate = function(messageModel){
         if(messageModel.type == Const.messageTypeText)
             html = this.messageTemplate(flatData);
         
-        /*
-        if(messageModel.get('type') == CONST.MESSAGE_TYPE_FILE && flatData.file && flatData.file.file){
+
+        if(messageModel.type == Const.messageTypeFile && flatData.file && flatData.file.file){
                     
-            if(!_.isUndefined(flatData.file.thumb) && flatData.file && flatData.file.file){
+            if(flatData.file && flatData.file.thumb && flatData.file.file){
                 
                 // thumbnail exists
                 //flatData.downloadURL = 'http://192.168.1.5:8080/img/ipad-art-wide-AVATAR2-420x0.jpg';
-                flatData.downloadURL = UrlGenerator.downloadFile(flatData.file.file.id);
-                flatData.thumbURL = UrlGenerator.downloadFile(flatData.file.thumb.id);
+                flatData.downloadURL = "/api/v2/file/" + flatData.file.file.id;
+                flatData.thumbURL = "/api/v2/file/" + flatData.file.thumb.id;
                 html = this.thumbTemplate(flatData);
                                      
             }else{
     
                 flatData.file.file.size = Math.floor(flatData.file.file.size / 1024 / 1024 * 100) / 100; // MB
-                flatData.downloadURL = UrlGenerator.downloadFile(flatData.file.file.id);
+                flatData.downloadURL = "/api/v2/file/" + flatData.file.file.id;
                 
                 html = this.fileTemplate(flatData);
                 
@@ -98,6 +98,8 @@ CellGenerator.prototype.generate = function(messageModel){
             
         }
 
+        /*
+        
         if(messageModel.get('type') == CONST.MESSAGE_TYPE_LOCATION){
             html = this.locationTemplate(flatData);
         }

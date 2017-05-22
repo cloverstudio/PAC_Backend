@@ -8606,6 +8606,9 @@ button.close {
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px; }
 
+body {
+  overflow-y: hidden; }
+
 body.loading {
   cursor: wait !important; }
 
@@ -15063,6 +15066,8 @@ body.loading {
       #main-container #messages .message-cell .thumb-container div {
         display: inline-block;
         padding: 10px; }
+      #main-container #messages .message-cell .thumb-container img {
+        max-width: 200px; }
       #main-container #messages .message-cell .typing {
         width: 100%; }
         #main-container #messages .message-cell .typing div {

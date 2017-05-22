@@ -32,7 +32,7 @@ UserAvatarController.prototype.init = function(app){
      * @apiName User Avatar
      * @apiGroup WebAPI
      * @apiDescription Returns image of user avatar
-**/
+   **/
 
     router.get('/user/',function(request,response){
         

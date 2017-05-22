@@ -6,6 +6,10 @@
 $color-main : #009EA0;
 $sidebar-element-height: 80px;
 
+body {
+    overflow-y: hidden;
+}
+
 body.loading{
     cursor: wait !important;
 }

@@ -5,18 +5,16 @@ var Utils = require('../../lib/utils');
 var Const = require('../../lib/consts');
 var Config = require('../../lib/init');
 
+var SideMenu = require('../SideMenu/SideMenu');
+
 var template = require('./ChatView.hbs');
 
-var SideMenu = require('../SideMenu/SideMenu');
 var loginUserManager = require('../../lib/loginUserManager');
 var encryptionManager = require('../../lib/EncryptionManager');
 var socketIOManager = require('../../lib/SocketIOManager');
-
 var ChatManager = require('../../lib/ChatManager');
 
 var LoadMessageClient = require('../../lib/APIClients/Messaging/LoadMessageClient');
-
-
 var CellGenerator = require('./CellGenerator');
 
 var RenderDirection = {
@@ -68,6 +66,19 @@ var ChatView = Backbone.View.extend({
             
         });
 
+        var lastPosition = 0;
+        $( "#messages" ).scroll(function() {
+            var scrollPosition = $('#messages').scrollTop();
+
+            // scrolling to up
+            if(scrollPosition < lastPosition && scrollPosition == 0){
+                self.loadNextMessage();
+            }
+            
+            lastPosition = scrollPosition;
+            
+        });
+
         this.loadLatestMessage();
 
     },
@@ -80,6 +91,7 @@ var ChatView = Backbone.View.extend({
             
             if(res.messages && res.messages.length > 0){
 
+                self.lastMessageId = res.messages[0]._id;
                 self.firstMessageId = res.messages[res.messages.length - 1]._id;
                 self.renderMessages(res.messages,RenderDirection.append);
 
@@ -97,10 +109,19 @@ var ChatView = Backbone.View.extend({
 
         var self = this;
 
+        // keep scroll position
+        var currentScrollPos = $('#messages')[0].scrollHeight
+
         LoadMessageClient.send(this.currentRoomId,this.lastMessageId,RenderDirection.prepend,function(res){
-            
-            self.loadedMessages.concat(res.messages);
-            self.renderMessages(res.messages,RenderDirection.prepend);
+
+            if(res.messages && res.messages.length > 0){
+
+                self.lastMessageId = res.messages[res.messages.length - 1]._id;
+                self.renderMessages(res.messages,RenderDirection.prepend);
+                var newScrollPos = $('#messages')[0].scrollHeight
+                $('#messages').scrollTop(newScrollPos - currentScrollPos);
+
+            }
 
         },function(){
 
@@ -278,7 +299,6 @@ var ChatView = Backbone.View.extend({
         
     },
     scrollToBottom: function(){
-        console.log($('#messages')[0].scrollHeight);
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
     }
 

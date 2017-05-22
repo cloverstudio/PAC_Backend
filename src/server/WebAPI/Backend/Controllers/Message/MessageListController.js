@@ -67,7 +67,7 @@ MessageListController.prototype.init = function(app){
                     done(err,data);
 
                 });
-
+                
             }
 
             else {
@@ -102,11 +102,11 @@ MessageListController.prototype.init = function(app){
             
         },function(result,done){
             
-             done(null,result);
+            done(null,result);
             
         },function(result,done){
             
-             done(null,result);
+            done(null,result);
             
         }
         ],

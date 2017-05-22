@@ -151,21 +151,10 @@ Message.findNewMessages = function(roomID,lastMessageID,limit,callBack){
         query.exec(function(err,data){
             
             if (err) return console.error(err);
-        
-
-            data.forEach((o) => {
-                console.log(o.message,o.created);    
-            });
-
+            
             // re-sort to be asc
             data = _.sortBy(data,(o) => {
                 return o.created;
-            });
-
-            console.log("-------");
-
-            data.forEach((o) => {
-                console.log(o.message,o.created);    
             });
 
             if(callBack)
