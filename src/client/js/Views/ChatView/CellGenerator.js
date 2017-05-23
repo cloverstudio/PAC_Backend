@@ -38,7 +38,7 @@ CellGenerator.prototype.generate = function(messageModel){
         if(key == 'created')
             return;
             
-        if(key == 'id')
+        if(key == '_id')
             return;
             
         flatData[key] = val;
@@ -72,7 +72,7 @@ CellGenerator.prototype.generate = function(messageModel){
         html = this.deletedTemplate(flatData);
         
     } else {
-    
+        
         if(messageModel.type == Const.messageTypeText)
             html = this.messageTemplate(flatData);
         
@@ -97,6 +97,16 @@ CellGenerator.prototype.generate = function(messageModel){
             }
             
         }
+
+            
+        if(messageModel.type == Const.messageFileUploading){
+            
+            if(messageModel.isUploading == 1){
+                html = this.fileUploadingTemplate(flatData);                
+            }
+            
+        }
+    
 
         /*
         
@@ -123,15 +133,7 @@ CellGenerator.prototype.generate = function(messageModel){
         if(messageModel.get('type') == CONST.MESSAGE_TYPE_STICKER){
             html = this.stickerTemplate(flatData);
         }
-            
-        if(messageModel.get('type') == CONST.MESSAGE_TYPE_FILE_UPLOADIND){
-            
-            if(messageModel.get('isUploading') == 1){
-                html = this.fileUploadingTemplate(flatData);                
-            }
-            
-        }
-    
+
         if(messageModel.get('type') == CONST.MESSAGE_TYPE_TYPING){
             
             flatData.message = flatData.name + " is typing...";

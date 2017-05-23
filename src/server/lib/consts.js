@@ -74,6 +74,7 @@
     Const.responsecodeMessageNoPermission = 4000067;
 
     Const.responsecodeMessageListInvalidParam = 4000068;
+    Const.responsecodeMessageFileUploadFailed = 4000069;
 
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;

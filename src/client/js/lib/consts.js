@@ -102,6 +102,7 @@ Const.messageTypeFile = 2;
 Const.messageTypeLocation = 3;
 Const.messageTypeContact = 4;
 Const.messageTypeSticker = 5;
+Const.messageFileUploading = 10000;
 
 // Exports ----------------------------------------------
 module["exports"] = Const;

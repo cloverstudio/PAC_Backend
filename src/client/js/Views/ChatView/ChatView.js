@@ -16,6 +16,7 @@ var ChatManager = require('../../lib/ChatManager');
 
 var LoadMessageClient = require('../../lib/APIClients/Messaging/LoadMessageClient');
 var CellGenerator = require('./CellGenerator');
+var FileUplaoder = require('./FileUploader');
 
 var RenderDirection = {
     append:'new',
@@ -32,11 +33,17 @@ var ChatView = Backbone.View.extend({
     loadedMessages: [],
     initialTBHeight : 0,
     initialTBContainerHeight : 0,
-
+    fileUploader: null,
     initialize: function(options) {
+        
         this.container = options.container;
         this.currentRoomId = options.roomId;
         this.render();
+
+        this.fileUplaoder = new FileUplaoder({
+            view: this
+        });
+
     },
 
     render: function() {
@@ -78,6 +85,19 @@ var ChatView = Backbone.View.extend({
             lastPosition = scrollPosition;
             
         });
+
+        $('#btn-fileupload').on('click',function(){
+            
+            self.fileUplaoder.handleClick();
+            
+        });
+
+        $('#file-input').on('change',function(event){
+                        
+            self.fileUplaoder.startUploadingFile(event);
+
+        });
+        
 
         this.loadLatestMessage();
 
@@ -139,7 +159,6 @@ var ChatView = Backbone.View.extend({
 
             // get AvatarURL
             if(message.user && message.user.avatar && message.user.avatar.thumbnail){
-                console.log(message.user.avatar.thumbnail);
                 avatarFileId = message.user.avatar.thumbnail.nameOnServer;
             }
 
@@ -147,15 +166,28 @@ var ChatView = Backbone.View.extend({
             
             var cellHtml = cellGenerator.generate(message);
 
-            if(renderDirection == RenderDirection.append){
+            // check localId existed
+            var localIdCell = $('[localid="' + message.localID + '"]')
 
-                html += cellHtml;
+            if(localIdCell.length > 0){
 
-            }
+                // swap temporary message
+                $(cellHtml).insertAfter(localIdCell);
+                localIdCell.remove();
 
-            if(renderDirection == RenderDirection.prepend){
+            } else {
 
-                html = cellHtml + html;
+                if(renderDirection == RenderDirection.append){
+
+                    html += cellHtml;
+
+                }
+
+                if(renderDirection == RenderDirection.prepend){
+
+                    html = cellHtml + html;
+
+                }
 
             }
 
@@ -266,7 +298,7 @@ var ChatView = Backbone.View.extend({
         var filteredMessage = encryptionManager.encryptText(message);
 
         var message = {
-            _id: tempID,
+            _id: "temp",
             localID: tempID,
             userID: loginUserManager.user._id,
             message: filteredMessage,
@@ -275,8 +307,11 @@ var ChatView = Backbone.View.extend({
             user: loginUserManager.user
         };
         
-        //this.insertTempMessage(true,message);
-        
+        // insert temp message
+        this.insertTempMessage(message);
+
+        this.scrollToBottom();
+
         // Emit data to server
         socketIOManager.emit('sendMessage',{
             message: filteredMessage,
@@ -289,17 +324,19 @@ var ChatView = Backbone.View.extend({
             },
             user: loginUserManager.user
         });
-        
-        //this.scrollToBottom();
-        
+
         // Clear message_area
         $('#message_area').val('');
-        
         $( "#text-message-box" ).val('');
         
     },
     scrollToBottom: function(){
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
+    },
+    insertTempMessage:function(message){
+
+        this.renderMessages([message],RenderDirection.append);
+
     }
 
 });

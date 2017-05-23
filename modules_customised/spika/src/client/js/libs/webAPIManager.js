@@ -94,12 +94,9 @@ var LoginUserManager = require('./loginUserManager.js');
                 if(!_.isEmpty(token)){
                     header['access-token'] = token;
                     
-                    
-                    
                 }
             }
             
-
             var data = new FormData();
             
             data.append('file', file);
