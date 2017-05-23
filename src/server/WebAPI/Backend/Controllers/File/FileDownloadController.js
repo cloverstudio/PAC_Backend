@@ -17,6 +17,7 @@ var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 var Utils = require( pathTop + 'lib/utils');
 var UserModel = require( pathTop + 'Models/User');
 var GroupModel = require( pathTop + 'Models/Group');
+var FileModel = require( pathTop + 'Models/File');
 var OrganizationModel = require( pathTop + 'Models/Organization');
 
 var BackendBase = require('../BackendBase');
@@ -42,20 +43,54 @@ FileDownloadController.prototype.init = function(app){
         var fileId = request.params.fileId;
         var filePath = Config.uploadPath + "/" + fileId;
 
-        fs.exists(filePath, function (exists) {
-            
-            if(!exists){
-                
-                response.send('File Not Found', 404);
-                
-            } else {
-                
-                response.sendFile(filePath);
-                
-            }
-            
-        });
+        var fileModel = FileModel.get();
 
+        async.waterfall([
+
+            (done) => {
+
+                fileModel.findOne({
+                    _id:fileId
+                },function(err,findResult){
+
+                    done(err,{
+                        fileModel:findResult
+                    })
+                });
+
+            },
+            (result,done) => {
+
+                fs.exists(filePath, function (exists) {
+                    
+                    if(!exists){
+                        
+                        done("file not found",result);
+
+                        
+                        
+                    } else {
+                        
+                        result.filePath = filePath;
+                        done(null,result);
+                        
+                        
+                    }
+                    
+                });
+
+            },
+
+        ],(err, result) => {
+
+            if(err){
+                response.send('File Not Found', 404);
+                return;
+            }
+
+            response.download(filePath,result.fileModel.name);
+
+        });
 
     });
     

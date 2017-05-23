@@ -152,6 +152,7 @@ var ChatView = Backbone.View.extend({
 
         var html = "";
         var cellGenerator = new CellGenerator();
+        var self = this;
 
         newMessages.forEach(function(message){
 
@@ -197,6 +198,10 @@ var ChatView = Backbone.View.extend({
 
             $('#messages').append(html);
 
+            $('img').on('load',function(){
+                self.scrollToBottom();
+            });
+
         }
 
         if(renderDirection == RenderDirection.prepend){
@@ -205,6 +210,13 @@ var ChatView = Backbone.View.extend({
 
         }
 
+        $('.spika-thumb').colorbox({photo:true,fixed:true,width:'80%',height:'80%%¥',
+            onOpen:function(evt){
+
+
+
+            }
+        });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
@@ -334,6 +346,11 @@ var ChatView = Backbone.View.extend({
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
     },
     insertTempMessage:function(message){
+
+        this.renderMessages([message],RenderDirection.append);
+
+    },
+    updateTempMessage:function(message){
 
         this.renderMessages([message],RenderDirection.append);
 

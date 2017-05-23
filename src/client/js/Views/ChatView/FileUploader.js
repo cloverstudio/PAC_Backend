@@ -84,7 +84,8 @@ FileUploader.prototype.uploadFileHTML5 = function(file){
     FileUploadClient.send(file,
         function(progress){
             
-            console.log(progress);
+            message.uploadProgress = Math.floor(progress * 100);
+            self.parentView.updateTempMessage(message);
 
         },
         function(result){
@@ -94,7 +95,7 @@ FileUploader.prototype.uploadFileHTML5 = function(file){
                 roomID: self.parentView.currentRoomId,
                 userID: loginUserManager.user._id,
                 type: Const.messageTypeFile,
-                localID: this.tempID,
+                localID: self.tempID,
                 attributes:{
                     useclient: "web"
                 },

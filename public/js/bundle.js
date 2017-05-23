@@ -60791,6 +60791,7 @@ var ChatView = Backbone.View.extend({
 
         var html = "";
         var cellGenerator = new CellGenerator();
+        var self = this;
 
         newMessages.forEach(function(message){
 
@@ -60836,6 +60837,10 @@ var ChatView = Backbone.View.extend({
 
             $('#messages').append(html);
 
+            $('img').on('load',function(){
+                self.scrollToBottom();
+            });
+
         }
 
         if(renderDirection == RenderDirection.prepend){
@@ -60844,6 +60849,13 @@ var ChatView = Backbone.View.extend({
 
         }
 
+        $('.spika-thumb').colorbox({photo:true,fixed:true,width:'80%',height:'80%%¥',
+            onOpen:function(evt){
+
+
+
+            }
+        });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
@@ -60976,6 +60988,11 @@ var ChatView = Backbone.View.extend({
 
         this.renderMessages([message],RenderDirection.append);
 
+    },
+    updateTempMessage:function(message){
+
+        this.renderMessages([message],RenderDirection.append);
+
     }
 
 });
@@ -61069,7 +61086,8 @@ FileUploader.prototype.uploadFileHTML5 = function(file){
     FileUploadClient.send(file,
         function(progress){
             
-            console.log(progress);
+            message.uploadProgress = Math.floor(progress * 100);
+            self.parentView.updateTempMessage(message);
 
         },
         function(result){
@@ -61079,7 +61097,7 @@ FileUploader.prototype.uploadFileHTML5 = function(file){
                 roomID: self.parentView.currentRoomId,
                 userID: loginUserManager.user._id,
                 type: Const.messageTypeFile,
-                localID: this.tempID,
+                localID: self.tempID,
                 attributes:{
                     useclient: "web"
                 },
@@ -61213,7 +61231,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + ((stack1 = alias5(((stack1 = ((stack1 = (depth0 != null ? depth0.file : depth0)) != null ? stack1.file : stack1)) != null ? stack1.name : stack1), depth0)) != null ? stack1 : "")
     + "</span><br />\n                <span class=\"file-size\">"
     + ((stack1 = alias5(((stack1 = ((stack1 = (depth0 != null ? depth0.file : depth0)) != null ? stack1.file : stack1)) != null ? stack1.size : stack1), depth0)) != null ? stack1 : "")
-    + " MB</span><br />\n                <a class=\"download\" downloadlink=\""
+    + " MB</span><br />\n                <a class=\"download\" href=\""
     + alias4(((helper = (helper = helpers.downloadURL || (depth0 != null ? depth0.downloadURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"downloadURL","hash":{},"data":data}) : helper)))
     + "\" id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
