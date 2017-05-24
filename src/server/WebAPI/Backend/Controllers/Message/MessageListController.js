@@ -12,6 +12,7 @@ var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 var EncryptionManager = require( pathTop + 'lib/EncryptionManager');
 
 var MessageModel = require( pathTop + 'Models/Message');
+var FavoriteModel = require( pathTop + 'Models/Favorite');
 
 var Utils = require( pathTop + 'lib/utils');
 
@@ -95,10 +96,40 @@ MessageListController.prototype.init = function(app){
             });
             
         },
-        function(result,done){
+        function(messages,done){
             
             // add favorite
-            done(null,result);
+
+            var userID = request.user._id;
+            var favoriteModel = FavoriteModel.get();
+            
+            favoriteModel.find({
+                userId:userID
+            },function(err,favoriteFindResult){
+                
+                var messageIds = _.map(favoriteFindResult,function(favorite){
+                    
+                    return favorite.messageId;
+                        
+                });
+                
+                
+                var messagesFav = _.map(messages,function(message){
+                    
+                    var isFavorite = false;
+                    
+                    if(messageIds.indexOf(message._id.toString()) != -1)
+                        isFavorite = true;
+                    
+                    message.isFavorite = isFavorite;
+                    
+                    return message;
+                        
+                });
+                
+                done(null,messagesFav);
+                
+            });
             
         },function(result,done){
             

@@ -140,8 +140,6 @@ var MainView = Backbone.View.extend({
     
     destroy: function(){
         
-        console.log('main destroy');
-        
         _.forEach(this.views,function(view){
             
             if(view.destroy)

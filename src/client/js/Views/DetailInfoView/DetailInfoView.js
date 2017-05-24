@@ -29,7 +29,7 @@ var BlockClient = require('../../lib/APIClients/BlockClient');
 var DetailInfoView = Backbone.View.extend({
     
     currentChatData:null,
-    
+    views:[],
     initialize: function(options) {
         this.container = options.container;
         this.render();
@@ -40,8 +40,15 @@ var DetailInfoView = Backbone.View.extend({
         $(this.container).html(template({
             Config:Config
         }));
-        
+
         this.onLoad();
+        
+        var MessageDetailView = require('./MessageDetailView.js');   
+        var messageDetailView = new MessageDetailView({
+            container : "#messages-tab-detail-panel"
+        });
+
+        this.views.push(messageDetailView);
         
         return this;
 
@@ -393,7 +400,20 @@ var DetailInfoView = Backbone.View.extend({
             })
 
         }
-    }
+    },
+    destroy: function(){
+        
+        Backbone.off(Const.NotificationSelectMessage);
+
+        _.forEach(this.views,function(view){
+            
+            if(view.destroy)
+                view.destroy();
+             
+        });
+        
+
+    },
 
 });
 

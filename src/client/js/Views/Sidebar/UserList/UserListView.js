@@ -103,8 +103,6 @@ var UserListView = Backbone.View.extend({
         
         var self = this;
 
-        console.log('search');
-
         if(!_.isEmpty(keyword)){
             
             UserSearchClient.send(keyword,this.currentPage,function(data){

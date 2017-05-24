@@ -10,10 +10,13 @@ var pathTop = "../../../../";
 var Const = require( pathTop + "lib/consts");
 var Config = require( pathTop + "lib/init");
 var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var SpikaDatabaseManager = require( pathTop + '../../modules_customised/spika/src/server/lib/DatabaseManager');
+
+
 var Utils = require( pathTop + 'lib/utils');
 var FavoriteModel = require( pathTop + 'Models/Favorite');
 var OrganizationModel = require( pathTop + 'Models/Organization');
+var MessageModel = require( pathTop + 'Models/Message');
+
 var tokenChecker = require( pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
@@ -54,7 +57,7 @@ AddToFavoriteController.prototype.init = function(app){
     router.post('/',tokenChecker,function(request,response){
         
         var favoriteModel = FavoriteModel.get();
-        var spikaMessageModel = SpikaDatabaseManager.messageModel;
+        var messageModel = MessageModel.get();
         
         var messageId = request.body.messageId;
         
@@ -68,7 +71,7 @@ AddToFavoriteController.prototype.init = function(app){
             var result = {};
             
             // check existance
-            spikaMessageModel.findOne({
+            messageModel.findOne({
                 _id : messageId
             },function(err,findResult){
                 

@@ -34,6 +34,7 @@ var ChatView = Backbone.View.extend({
     initialTBHeight : 0,
     initialTBContainerHeight : 0,
     fileUploader: null,
+    messagePool: [],
     initialize: function(options) {
         
         this.container = options.container;
@@ -70,6 +71,12 @@ var ChatView = Backbone.View.extend({
         Backbone.on(Const.NotificationNewMessage, function(param){
             
             self.loadLatestMessage();
+            
+        });
+
+        Backbone.on(Const.NotificationMessageUpdated, function(messages){
+            
+            self.updateMessage(messages);
             
         });
 
@@ -156,6 +163,22 @@ var ChatView = Backbone.View.extend({
 
         newMessages.forEach(function(message){
 
+            // merge message arry
+            var isExist = _.find(self.messagePool,{'_id':message._id});
+            if(!isExist)
+                self.messagePool.push(message);
+            else{
+                self.messagePool = _.filter(self.messagePool,function(o){
+                    return o._id != message._id
+                });
+                self.messagePool.push(message);
+            }
+            _.sortBy(self.messagePool,function(o){
+                return o.created;
+            });
+
+            
+
             var avatarFileId = "";
 
             // get AvatarURL
@@ -170,11 +193,22 @@ var ChatView = Backbone.View.extend({
             // check localId existed
             var localIdCell = $('[localid="' + message.localID + '"]')
 
-            if(localIdCell.length > 0){
+            // check id existed
+            var idCell = $('[id="' + message._id + '"]')
+            
+            console.log('swap cell',idCell[0]);
+
+            if(localIdCell.length > 0 ){
 
                 // swap temporary message
                 $(cellHtml).insertAfter(localIdCell);
                 localIdCell.remove();
+
+            } else if(idCell.length > 0){
+
+                // swap temporary message
+                $(cellHtml).insertAfter(idCell);
+                idCell.remove();
 
             } else {
 
@@ -218,6 +252,23 @@ var ChatView = Backbone.View.extend({
             }
         });
 
+        $('.message-cell').css('cursor','pointer');
+        $('.message-cell').unbind().on('click',function(){
+            
+            $('.message-cell.selected').removeClass('selected');
+            $(this).addClass('selected');
+            
+            var cellElm = this;
+
+            var message = _.find(self.messagePool,function(o){
+                return o._id == $(cellElm).attr('id');
+            });
+
+            Backbone.trigger(Const.NotificationSelectMessage,{
+                message: message
+            });
+    
+        });
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
     },
@@ -231,7 +282,8 @@ var ChatView = Backbone.View.extend({
         });
 
         Backbone.off(Const.NotificationNewMessage);
-        
+        Backbone.off(Const.NotificationMessageUpdated);
+            
     },
     handleKeyEvents: function(){
         
@@ -350,9 +402,12 @@ var ChatView = Backbone.View.extend({
         this.renderMessages([message],RenderDirection.append);
 
     },
-    updateTempMessage:function(message){
+    updateMessage:function(message){
 
-        this.renderMessages([message],RenderDirection.append);
+        if(_.isArray(message))
+            this.renderMessages(message,RenderDirection.append);
+        else
+            this.renderMessages([message],RenderDirection.append);
 
     }
 
