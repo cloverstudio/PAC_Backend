@@ -116,10 +116,10 @@ MessageListController.prototype.init = function(app){
                 
                 var messagesFav = _.map(messages,function(message){
                     
-                    var isFavorite = false;
+                    var isFavorite = 0;
                     
                     if(messageIds.indexOf(message._id.toString()) != -1)
-                        isFavorite = true;
+                        isFavorite = 1;
                     
                     message.isFavorite = isFavorite;
                     
