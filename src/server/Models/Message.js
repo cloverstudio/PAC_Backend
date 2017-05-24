@@ -205,7 +205,7 @@ Message.populateMessages = function(messages,callBack){
                 _.forEach(userResult,function(userElement,userIndex){
                     
                     // replace user to userObj
-                    if(messageElement.user.toString() == userElement._id.toString()){
+                    if(messageElement.userID.toString() == userElement._id.toString()){
                         obj.user = userElement.toObject();
                     }
 
