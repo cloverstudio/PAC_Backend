@@ -183,14 +183,12 @@ Message.populateMessages = function(messages,callBack){
     
     messages.forEach(function(row){
         
-        ids.push(row.user); 
-
         // get users for seeny too
         _.forEach(row.seenBy,function(row2){
-            ids.push(row2.user); 
+            ids.push(row2.userID); 
         });
         
-        ids.push(row.user); 
+        ids.push(row.userID); 
         
     });
     
