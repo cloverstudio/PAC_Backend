@@ -67,7 +67,7 @@ CellGenerator.prototype.generate = function(messageModel){
     
     var html = '';
     
-    if(messageModel.deleted == 1){
+    if(messageModel.deleted && messageModel.deleted != 0){
 
         html = this.deletedTemplate(flatData);
         

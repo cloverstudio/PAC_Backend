@@ -76,6 +76,15 @@
     Const.responsecodeMessageListInvalidParam = 4000068;
     Const.responsecodeMessageFileUploadFailed = 4000069;
 
+    Const.resCodeSocketSendMessageNoRoomID = 4000070;
+    Const.resCodeSocketSendMessageNoUserId = 4000071;
+    Const.resCodeSocketSendMessageNoType = 4000072;
+    Const.resCodeSocketSendMessageNoMessage = 4000073;
+    Const.resCodeSocketSendMessageNoLocation = 4000074;
+    Const.resCodeSocketDeleteNoMessageID = 4000075;
+    Const.resCodeSocketDeleteNoUserID = 4000076;
+    Const.resCodeSocketUnknownError = 4000077;
+
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;

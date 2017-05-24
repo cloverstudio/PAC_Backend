@@ -11,10 +11,13 @@ var Config = require('../../lib/init');
 var NotificationManager = require('../../lib/NotificationManager');
 var loginUserManager = require('../../lib/loginUserManager');
 var ChatManager = require('../../lib/ChatManager');
+var localzationManager = require('../../lib/localzationManager');
 
 var AddToFavoriteClient = require('../../lib/APIClients/AddToFavoriteClient');
 var RemoveFromFavoriteClient = require('../../lib/APIClients/RemoveFromFavoriteClient');
 var UserDetailClient = require('../../lib/APIClients/UserDetailClient');
+
+var socketIOManager = require('../../lib/SocketIOManager');
 
 var template = require('./MessageDetail.hbs');
 
@@ -58,7 +61,15 @@ var MessageDetailView = Backbone.View.extend({
         
         $(self.el).html(template(obj));
         $(self.el).addClass('on');
-        
+
+        if(obj.deleted && obj.deleted != 0){
+            $('.deltedalert').show();
+            $('#btn-deletemessage').hide();  
+            $('#btn-removefromfavorite').hide();
+            $('#btn-addtofavorite').hide();
+            return;
+        }
+
         if(obj.userID == loginUserManager.user._id){
             $('#btn-deletemessage').show();
         }else{
@@ -86,15 +97,13 @@ var MessageDetailView = Backbone.View.extend({
         
         $('#btn-deletemessage').unbind().on('click',function(){
             
-            if(confirm(LocalizationManager.localize('Are you sure to delete this message ?'))){
+            if(confirm(localzationManager.get('Are you sure to delete this message ?'))){
                 
                 socketIOManager.emit('deleteMessage',{
-                    messageID: self.currentMessage.get('id'),
-                    userID: LoginUserManager.user.get('id')
+                    messageID: self.currentMessage._id,
+                    userID: loginUserManager.user._id,
                 });
                 
-                $(self.el).removeclass('on');
-                                
             }
             
         });
@@ -114,17 +123,6 @@ var MessageDetailView = Backbone.View.extend({
                 UIUtils.handleAPIErrors(errCode);
             });
 
-/*
-            window.SpikaAdapter.bridgeFunctions.addToFavorite(self.currentMessage.get('id'),function(data){
-
-                self.currentMessage.set('isFavorite',true);
-
-                Backbone.trigger(CONST.EVENT_MESSAGE_SELECTED,self.currentMessage);
-                Backbone.trigger(CONST.EVENT_ON_MESSAGE_UPDATED,[self.currentMessage.toObject()]);
-
-            });
-*/
-
         });
         
         $('#btn-removefromfavorite').unbind().on('click',function(){
@@ -143,15 +141,6 @@ var MessageDetailView = Backbone.View.extend({
                 UIUtils.handleAPIErrors(errCode);
             });
 
-/*
-            window.SpikaAdapter.bridgeFunctions.removeFromFavorite(self.currentMessage.get('id'),function(data){
-
-                self.currentMessage.set('isFavorite',false);
-                Backbone.trigger(CONST.EVENT_MESSAGE_SELECTED,self.currentMessage);
-                Backbone.trigger(CONST.EVENT_ON_MESSAGE_UPDATED,[self.currentMessage.toObject()]);
-                
-            });
-*/
         });
         
         $('#btn-getlink').unbind().on('click',function(){

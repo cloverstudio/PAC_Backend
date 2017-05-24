@@ -177,8 +177,6 @@ var ChatView = Backbone.View.extend({
                 return o.created;
             });
 
-            
-
             var avatarFileId = "";
 
             // get AvatarURL
@@ -264,6 +262,8 @@ var ChatView = Backbone.View.extend({
                 return o._id == $(cellElm).attr('id');
             });
 
+            console.log(message);
+            
             Backbone.trigger(Const.NotificationSelectMessage,{
                 message: message
             });

@@ -34,7 +34,7 @@ var SocketAPIHandler = {
             require('./CallingActionsHandler').attach(self.nsp,socket);
             require('./KeepAliveActionHandler').attach(self.nsp,socket);
             require('./SendMessageActionHandler').attach(self.nsp,socket);
-            
+            require('./DeleteMessageActionHandler').attach(self.nsp,socket);
         });
 
     },

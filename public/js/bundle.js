@@ -60522,7 +60522,7 @@ CellGenerator.prototype.generate = function(messageModel){
     
     var html = '';
     
-    if(messageModel.deleted == 1){
+    if(messageModel.deleted && messageModel.deleted != 0){
 
         html = this.deletedTemplate(flatData);
         
@@ -60816,8 +60816,6 @@ var ChatView = Backbone.View.extend({
                 return o.created;
             });
 
-            
-
             var avatarFileId = "";
 
             // get AvatarURL
@@ -60903,6 +60901,8 @@ var ChatView = Backbone.View.extend({
                 return o._id == $(cellElm).attr('id');
             });
 
+            console.log(message);
+            
             Backbone.trigger(Const.NotificationSelectMessage,{
                 message: message
             });
@@ -61222,15 +61222,15 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
   return "<div class=\"message-cell "
     + alias4(((helper = (helper = helpers.isMine || (depth0 != null ? depth0.isMine : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"isMine","hash":{},"data":data}) : helper)))
     + " text\" id=\""
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + "\" userid=\""
     + alias4(((helper = (helper = helpers.userID || (depth0 != null ? depth0.userID : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"userID","hash":{},"data":data}) : helper)))
     + "\" ts=\""
     + alias4(((helper = (helper = helpers.created || (depth0 != null ? depth0.created : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"created","hash":{},"data":data}) : helper)))
     + "\">\n    \n    <div class=\"status status"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
-    + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\""
-    + alias4((helpers.stripHost || (depth0 && depth0.stripHost) || alias2).call(alias1,(depth0 != null ? depth0.avatarURL : depth0),{"name":"stripHost","hash":{},"data":data}))
+    + "\">\n        \n        <span class=\"sending glyphicon glyphicon-arrow-right\"></span>\n        <span class=\"sent glyphicon glyphicon-ok-circle  \"></span>\n        \n    </div>\n        \n	<div class=\"avatar\">\n		<img class=\"img-circle\" src=\"/api/v2/avatar/user/"
+    + alias4(((helper = (helper = helpers.avatarFileId || (depth0 != null ? depth0.avatarFileId : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"avatarFileId","hash":{},"data":data}) : helper)))
     + "\" />\n    </div>\n    \n    <div class=\"info\">\n        \n        <span class=\"name\"> "
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " </span>\n        <span class=\"time\"> "
@@ -61949,10 +61949,13 @@ var Config = require('../../lib/init');
 var NotificationManager = require('../../lib/NotificationManager');
 var loginUserManager = require('../../lib/loginUserManager');
 var ChatManager = require('../../lib/ChatManager');
+var localzationManager = require('../../lib/localzationManager');
 
 var AddToFavoriteClient = require('../../lib/APIClients/AddToFavoriteClient');
 var RemoveFromFavoriteClient = require('../../lib/APIClients/RemoveFromFavoriteClient');
 var UserDetailClient = require('../../lib/APIClients/UserDetailClient');
+
+var socketIOManager = require('../../lib/SocketIOManager');
 
 var template = require('./MessageDetail.hbs');
 
@@ -61996,7 +61999,15 @@ var MessageDetailView = Backbone.View.extend({
         
         $(self.el).html(template(obj));
         $(self.el).addClass('on');
-        
+
+        if(obj.deleted && obj.deleted != 0){
+            $('.deltedalert').show();
+            $('#btn-deletemessage').hide();  
+            $('#btn-removefromfavorite').hide();
+            $('#btn-addtofavorite').hide();
+            return;
+        }
+
         if(obj.userID == loginUserManager.user._id){
             $('#btn-deletemessage').show();
         }else{
@@ -62024,15 +62035,13 @@ var MessageDetailView = Backbone.View.extend({
         
         $('#btn-deletemessage').unbind().on('click',function(){
             
-            if(confirm(LocalizationManager.localize('Are you sure to delete this message ?'))){
+            if(confirm(localzationManager.get('Are you sure to delete this message ?'))){
                 
                 socketIOManager.emit('deleteMessage',{
-                    messageID: self.currentMessage.get('id'),
-                    userID: LoginUserManager.user.get('id')
+                    messageID: self.currentMessage._id,
+                    userID: loginUserManager.user._id,
                 });
                 
-                $(self.el).removeclass('on');
-                                
             }
             
         });
@@ -62052,17 +62061,6 @@ var MessageDetailView = Backbone.View.extend({
                 UIUtils.handleAPIErrors(errCode);
             });
 
-/*
-            window.SpikaAdapter.bridgeFunctions.addToFavorite(self.currentMessage.get('id'),function(data){
-
-                self.currentMessage.set('isFavorite',true);
-
-                Backbone.trigger(CONST.EVENT_MESSAGE_SELECTED,self.currentMessage);
-                Backbone.trigger(CONST.EVENT_ON_MESSAGE_UPDATED,[self.currentMessage.toObject()]);
-
-            });
-*/
-
         });
         
         $('#btn-removefromfavorite').unbind().on('click',function(){
@@ -62081,15 +62079,6 @@ var MessageDetailView = Backbone.View.extend({
                 UIUtils.handleAPIErrors(errCode);
             });
 
-/*
-            window.SpikaAdapter.bridgeFunctions.removeFromFavorite(self.currentMessage.get('id'),function(data){
-
-                self.currentMessage.set('isFavorite',false);
-                Backbone.trigger(CONST.EVENT_MESSAGE_SELECTED,self.currentMessage);
-                Backbone.trigger(CONST.EVENT_ON_MESSAGE_UPDATED,[self.currentMessage.toObject()]);
-                
-            });
-*/
         });
         
         $('#btn-getlink').unbind().on('click',function(){
@@ -62186,7 +62175,7 @@ var MessageDetailView = Backbone.View.extend({
 
 module.exports = MessageDetailView;
 
-},{"../../lib/APIClients/AddToFavoriteClient":254,"../../lib/APIClients/RemoveFromFavoriteClient":277,"../../lib/APIClients/UserDetailClient":286,"../../lib/ChatManager":289,"../../lib/NotificationManager":292,"../../lib/UIUtils":299,"../../lib/consts":300,"../../lib/init":301,"../../lib/loginUserManager":304,"../../lib/utils":306,"./MessageDetail.hbs":186,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],188:[function(require,module,exports){
+},{"../../lib/APIClients/AddToFavoriteClient":254,"../../lib/APIClients/RemoveFromFavoriteClient":277,"../../lib/APIClients/UserDetailClient":286,"../../lib/ChatManager":289,"../../lib/NotificationManager":292,"../../lib/SocketIOManager":297,"../../lib/UIUtils":299,"../../lib/consts":300,"../../lib/init":301,"../../lib/localzationManager":303,"../../lib/loginUserManager":304,"../../lib/utils":306,"./MessageDetail.hbs":186,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],188:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
