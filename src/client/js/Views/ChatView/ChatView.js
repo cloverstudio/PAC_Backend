@@ -123,7 +123,7 @@ var ChatView = Backbone.View.extend({
                 self.renderMessages(res.messages,RenderDirection.append);
 
                 self.scrollToBottom();
-
+                Backbone.trigger(Const.NotificationRefreshHistory);
             }
 
         },function(){

@@ -155,12 +155,10 @@ var MessageDetailView = Backbone.View.extend({
         });
         
         $('#btn-forward').unbind().on('click',function(){
-            
-            window.SpikaAdapter.bridgeFunctions.forwardMessage(self.currentMessage.get('id'),function(data){
-                
 
-            });
-                
+            var ForwardMessageDialog = require("../Modals/ForwardMessage/ForwardMessageDialog")
+            ForwardMessageDialog.show(self.currentMessage._id);
+
         });
             
             

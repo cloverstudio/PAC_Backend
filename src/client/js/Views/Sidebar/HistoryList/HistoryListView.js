@@ -132,8 +132,6 @@ var HistoryListView = Backbone.View.extend({
         
         HistoryListClient.sendUpdate(lastUpdate,function(data){
             
-            console.log("history data",data);
-            
             self.mergeData(data.list);
             self.renderList(); 
             

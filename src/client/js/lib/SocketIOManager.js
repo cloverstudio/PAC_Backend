@@ -59,12 +59,23 @@ var socketIOManager = {
 
         this.ioNsp.on('newmessage', function(obj){
             
-            Backbone.trigger(Const.NotificationRefreshHistory);
+            // History is refreshed by ChatView when the chat is opened
+            if(loginUserManager.currentConversation != obj.roomID)
+                Backbone.trigger(Const.NotificationRefreshHistory);
+
             Backbone.trigger(Const.NotificationNewMessage,obj);
-            NotificationManager.handleNewMessage(obj);
+
+            if(loginUserManager.user._id != obj.userID)
+                NotificationManager.handleNewMessage(obj);
 
         });
             
+        this.ioNsp.on('updatemessage', function(obj){
+            
+            Backbone.trigger(Const.NotificationMessageUpdated,[obj]);
+
+        });
+
         this.ioNsp.on('spikaping', function(obj){
 
             self.emit('pingok',{

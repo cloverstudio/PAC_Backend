@@ -60762,7 +60762,7 @@ var ChatView = Backbone.View.extend({
                 self.renderMessages(res.messages,RenderDirection.append);
 
                 self.scrollToBottom();
-
+                Backbone.trigger(Const.NotificationRefreshHistory);
             }
 
         },function(){
@@ -62093,12 +62093,10 @@ var MessageDetailView = Backbone.View.extend({
         });
         
         $('#btn-forward').unbind().on('click',function(){
-            
-            window.SpikaAdapter.bridgeFunctions.forwardMessage(self.currentMessage.get('id'),function(data){
-                
 
-            });
-                
+            var ForwardMessageDialog = require("../Modals/ForwardMessage/ForwardMessageDialog")
+            ForwardMessageDialog.show(self.currentMessage._id);
+
         });
             
             
@@ -62175,7 +62173,7 @@ var MessageDetailView = Backbone.View.extend({
 
 module.exports = MessageDetailView;
 
-},{"../../lib/APIClients/AddToFavoriteClient":254,"../../lib/APIClients/RemoveFromFavoriteClient":277,"../../lib/APIClients/UserDetailClient":286,"../../lib/ChatManager":289,"../../lib/NotificationManager":292,"../../lib/SocketIOManager":297,"../../lib/UIUtils":299,"../../lib/consts":300,"../../lib/init":301,"../../lib/localzationManager":303,"../../lib/loginUserManager":304,"../../lib/utils":306,"./MessageDetail.hbs":186,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],188:[function(require,module,exports){
+},{"../../lib/APIClients/AddToFavoriteClient":254,"../../lib/APIClients/RemoveFromFavoriteClient":277,"../../lib/APIClients/UserDetailClient":286,"../../lib/ChatManager":289,"../../lib/NotificationManager":292,"../../lib/SocketIOManager":297,"../../lib/UIUtils":299,"../../lib/consts":300,"../../lib/init":301,"../../lib/localzationManager":303,"../../lib/loginUserManager":304,"../../lib/utils":306,"../Modals/ForwardMessage/ForwardMessageDialog":209,"./MessageDetail.hbs":186,"backbone":16,"bootstrap-switch":19,"jquery":69,"lodash":86}],188:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -66222,8 +66220,6 @@ var HistoryListView = Backbone.View.extend({
         }
         
         HistoryListClient.sendUpdate(lastUpdate,function(data){
-            
-            console.log("history data",data);
             
             self.mergeData(data.list);
             self.renderList(); 
@@ -70688,12 +70684,23 @@ var socketIOManager = {
 
         this.ioNsp.on('newmessage', function(obj){
             
-            Backbone.trigger(Const.NotificationRefreshHistory);
+            // History is refreshed by ChatView when the chat is opened
+            if(loginUserManager.currentConversation != obj.roomID)
+                Backbone.trigger(Const.NotificationRefreshHistory);
+
             Backbone.trigger(Const.NotificationNewMessage,obj);
-            NotificationManager.handleNewMessage(obj);
+
+            if(loginUserManager.user._id != obj.userID)
+                NotificationManager.handleNewMessage(obj);
 
         });
             
+        this.ioNsp.on('updatemessage', function(obj){
+            
+            Backbone.trigger(Const.NotificationMessageUpdated,[obj]);
+
+        });
+
         this.ioNsp.on('spikaping', function(obj){
 
             self.emit('pingok',{

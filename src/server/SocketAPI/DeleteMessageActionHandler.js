@@ -13,7 +13,7 @@ var SocketHandlerBase = require("./SocketHandlerBase");
 var UserModel = require("../Models/User");
 var MessageModel = require("../Models/Message");
 
-var NotifyNewMessage = require("../Logics/NotifyNewMessage");
+var NotifyUpdateMessage = require("../Logics/NotifyUpdateMessage");
 
 var DeleteMessageActionHandler = function(){
     
@@ -103,6 +103,8 @@ DeleteMessageActionHandler.prototype.attach = function(io,socket){
 
                         }
 
+                        NotifyUpdateMessage.notify(obj);
+                        
                         done(null,result);     
 
                     });

@@ -3,7 +3,6 @@ var _ = require('lodash');
 var async = require('async');
 
 var DatabaseManager = require("../lib/DatabaseManager");
-var EncryptionManager = require("../lib/EncryptionManager");
 
 var Utils = require("../lib/utils");
 var Const = require("../lib/consts");
@@ -13,7 +12,7 @@ var SocketHandlerBase = require("./SocketHandlerBase");
 var UserModel = require("../Models/User");
 var MessageModel = require("../Models/Message");
 
-var NotifyNewMessage = require("../Logics/NotifyNewMessage");
+var SendMessageLogic = require("../Logics/SendMessage");
 
 var SendMessageActionHandler = function(){
     
@@ -72,108 +71,20 @@ SendMessageActionHandler.prototype.attach = function(io,socket){
             return;
         
         }
-        
-        var userID = param.userID;
-
-        // decript message
-        if(param.type == Const.messageTypeText){
-
-            param.message = EncryptionManager.decryptText(param.message);
-
-        }
 
         param.ipAddress = socket.handshake.headers['x-forwarded-for'];
 
         if(!param.ipAddress)
             param.ipAddress = socket.handshake.address;
 
-        var userID = param.userID;
-        
-        var userModel = UserModel.get();
+        SendMessageLogic.send(param,() => {
 
-        //save to DB
-        userModel.findOne({
-                _id:userID
-            },function (err,user) {
-                        
-            var objMessage = {
-                remoteIpAddress:param.ipAddress,
-                user:user._id,
-                userID: userID,
-                roomID: param.roomID,
-                message: param.message,
-                localID: param.localID,
-                type: param.type,
-                file: null,
-                attributes: param.attributes,
-                created: Utils.now()                   
-            };
-            
-            if(!_.isEmpty(param.file)){
-                
-                objMessage.file = {
-                    file : {
-		                id: param.file.file.id,
-    		            name: param.file.file.name,
-    		            size: param.file.file.size,
-    		            mimeType: param.file.file.mimeType
-                    }
-                };
-                
-                if(!_.isEmpty(param.file.thumb)){
-                 
-                    objMessage.file.thumb = {
-		                id: param.file.thumb.id,
-    		            name: param.file.thumb.name,
-    		            size: param.file.thumb.size,
-    		            mimeType: param.file.thumb.mimeType
-                    };
-                
-                }
-                
-            }
+            socket.emit('socketerror', {code:Const.resCodeSocketUnknownError});  
 
-            if(!_.isEmpty(param.location)){
-                objMessage.location = param.location;
-            }
+        },() => {
 
-            // save to database
-            var messageModel = MessageModel.get();
+            // success
 
-            var newMessage = new messageModel(objMessage);
-
-            newMessage.save(function(err,message){
-
-                if(err) {
-                    if(onError)
-                        onError(err);
-                        
-                    return;
-                }
-
-                MessageModel.populateMessages(message,function (err,data) {
-                                        
-                    var messageObj = data[0];
-                    messageObj.localID = '';
-                    messageObj.deleted = 0;
-                    
-                    if(!_.isEmpty(param.localID))
-                        messageObj.localID = param.localID;
-                    
-                    // ecrypt message
-                    var sendData = _.cloneDeep(data[0]);
-
-                    if(sendData.type == Const.messageTypeText){
-                        var encryptedMessage = EncryptionManager.encryptText(sendData.message);
-                        sendData.message = encryptedMessage;
-                    }
-    
-                    NotifyNewMessage.notify(messageObj);
-                
-                });
-
-            });
-            
         });
 
     });

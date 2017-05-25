@@ -14,12 +14,12 @@ var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 var Utils = require( pathTop + 'lib/utils');
 
 var OrganizationModel = require( pathTop + 'Models/Organization');
+var MessageModel = require( pathTop + 'Models/Message');
 var tokenChecker = require( pathTop + 'lib/authApi');
 
-var SpikaDatabaseManager = require( pathTop + '../../modules_customised/spika/src/server/lib/DatabaseManager');
-var SpikaSendMessageLogic = require( pathTop + '../../modules_customised/spika/src/server/Logics/SendMessage');
-
 var BackendBase = require('../BackendBase');
+
+var SendMessageLogic = require(pathTop +  "Logics/SendMessage");
 
 var ForwardMessageController = function(){
 }
@@ -90,13 +90,13 @@ ForwardMessageController.prototype.init = function(app){
             return;
         }
         
-        var spikaMessageModel = SpikaDatabaseManager.messageModel;
+        var messageModel = MessageModel.get();
 
         async.waterfall([function(done){
             
             var result = {};
             
-            spikaMessageModel.findOne({_id:messageId},function(err,messageFindResult){
+            messageModel.findOne({_id:messageId},function(err,messageFindResult){
                 
                 if(!messageFindResult){
                     self.successResponse(response,Const.responsecodeForwardMessageInvalidMessageId);
@@ -115,26 +115,12 @@ ForwardMessageController.prototype.init = function(app){
             messageParam.roomID = roomId;
             messageParam.localID = "";
              
-            SpikaSendMessageLogic.execute(
-                
-                request.user._id.toString(),
-                
-                messageParam,
-                
-                function(data){
-                    
-                    var messageObj = data.toObject();
-
-                    result.sendMessageResult = messageObj;
-                    done(null,result);
-                    
-                },
-                function(err){
-                    
-                    done("faild to send message");
-                    
-                }
-            )
+            
+            SendMessageLogic.send(messageParam,() => {
+                done("unknown error",result);
+            },() => {
+                done(null,result);
+            });
             
         }
         ],

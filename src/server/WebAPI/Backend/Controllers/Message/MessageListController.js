@@ -17,6 +17,7 @@ var FavoriteModel = require( pathTop + 'Models/Favorite');
 var Utils = require( pathTop + 'lib/utils');
 
 var PolulateMessageLogic = require( pathTop + 'Logics/PolulateMessage');
+var UpdateHistory = require( pathTop + 'Logics/UpdateHistory');
 
 var tokenChecker = require( pathTop + 'lib/authApi');
 
@@ -133,6 +134,12 @@ MessageListController.prototype.init = function(app){
             
         },function(result,done){
             
+            // update history
+            UpdateHistory.resetUnreadCount({
+                roomID:roomId,
+                userID:request.user._id
+            });
+
             done(null,result);
             
         },function(result,done){
