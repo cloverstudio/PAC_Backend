@@ -11,7 +11,9 @@ var pathTop = "../../../../";
 var Const = require( pathTop + "lib/consts");
 var Config = require( pathTop + "lib/init");
 var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var SpikaDatabaseManager = require( pathTop + '../../modules_customised/spika/src/server/lib/DatabaseManager');
+
+var MessageModel = require( pathTop + 'Models/Message');
+
 var Utils = require( pathTop + 'lib/utils');
 var FavoriteModel = require( pathTop + 'Models/Favorite');
 var OrganizationModel = require( pathTop + 'Models/Organization');
@@ -269,7 +271,7 @@ UserDetailController.prototype.init = function(app){
         
         var page = request.params.page - 1;
         var favoriteModel = FavoriteModel.get();
-        var spikaMessageModel = SpikaDatabaseManager.messageModel;
+        var messageModel = MessageModel.get();
         
         async.waterfall([function(done){
             
@@ -315,7 +317,7 @@ UserDetailController.prototype.init = function(app){
             // get message models
             var messagesIds = _.pluck(result.list,"messageId");
             
-            spikaMessageModel.find({
+            messageModel.find({
                 _id : { $in : messagesIds }
             },function(err,findResult){
                 

@@ -11,11 +11,13 @@ var pathTop = "../../../../";
 var Const = require( pathTop + "lib/consts");
 var Config = require( pathTop + "lib/init");
 var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var SpikaDatabaseManager = require( pathTop + '../../modules_customised/spika/src/server/lib/DatabaseManager');
+
 var Utils = require( pathTop + 'lib/utils');
 var GroupModel = require( pathTop + 'Models/Group');
 var UserModel = require( pathTop + 'Models/User');
 var OrganizationModel = require( pathTop + 'Models/Organization');
+var MessageModel = require( pathTop + 'Models/Message');
+
 var PermissionLogic = require( pathTop + 'Logics/Permission');
 var PolulateMessageLogic = require( pathTop + 'Logics/PolulateMessage');
 var tokenChecker = require( pathTop + 'lib/authApi');
@@ -249,7 +251,7 @@ SearchMessageController.prototype.init = function(app){
     
     router.get('/:keyword/:page',tokenChecker,function(request,response){
         
-        var spikaMessageModel = SpikaDatabaseManager.messageModel;
+        var messageModel = MessageModel.get();
         
         var keyword = decodeURIComponent(request.params.keyword);
         var page = request.params.page - 1;
@@ -296,7 +298,7 @@ SearchMessageController.prototype.init = function(app){
             var regexUserId = RegExp("^1.+" + request.user._id.toString(),"i");
             
             //search private message
-            spikaMessageModel.find({
+            messageModel.find({
 				$and:[
 					{roomID:{ $regex: regexUserId }},
 					{$or : [
@@ -313,7 +315,7 @@ SearchMessageController.prototype.init = function(app){
                 result.messages = result.messages.concat(objects);
                 
                 // get counts
-                spikaMessageModel.count({
+                messageModel.count({
                     roomID:{ $regex: regexUserId },
                     $or : [
                         { message : { $regex:regexMessage}},
@@ -338,7 +340,7 @@ SearchMessageController.prototype.init = function(app){
             });
             
             //search group message
-            spikaMessageModel.find({
+            messageModel.find({
                 roomID:{ $in: groupRoomIds },
                 $or : [
                    { message : { $regex:regexMessage}},
@@ -353,7 +355,7 @@ SearchMessageController.prototype.init = function(app){
                 result.messages = result.messages.concat(objects);
                 
                 // get counts
-                spikaMessageModel.count({
+                messageModel.count({
                     roomID:{ $in: groupRoomIds },
                     $or : [
                         { message : { $regex:regexMessage}},
@@ -377,7 +379,7 @@ SearchMessageController.prototype.init = function(app){
             });
 
             //search room message
-            spikaMessageModel.find({
+            messageModel.find({
                 roomID:{ $in: roomRoomIds },
                 $or : [
                    { message : { $regex:regexMessage}},
@@ -392,7 +394,7 @@ SearchMessageController.prototype.init = function(app){
                 result.messages = result.messages.concat(objects);
                 
                 // get counts
-                spikaMessageModel.count({
+                messageModel.count({
                     roomID:{ $in: roomRoomIds },
                     $or : [
                         { message : { $regex:regexMessage}},

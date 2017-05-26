@@ -160,7 +160,7 @@ var PolulateMessage = {
             var newMessageList = _.map(messageList,function(message){
                 
                 // search user
-                message.userModel = _.find(result.users,function(user){
+                message.user = _.find(result.users,function(user){
                     
                     return user._id.toString() == message.userID;
                      
