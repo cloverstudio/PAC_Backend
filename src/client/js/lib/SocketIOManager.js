@@ -57,6 +57,12 @@ var socketIOManager = {
             
         });
 
+        this.ioNsp.on('typing', function(obj){
+            
+            Backbone.trigger(Const.NotificationTyping,obj);
+            
+        });
+
         this.ioNsp.on('newmessage', function(obj){
             
             // History is refreshed by ChatView when the chat is opened

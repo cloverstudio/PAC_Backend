@@ -59,6 +59,7 @@ Const.credentialsMinLength = 6;
 
 Const.NotificationUpdateHeader = "notification_update_header";
 Const.NotificationNewMessage = "notification_new_message";
+Const.NotificationTyping = "notification_typing";
 Const.NotificationRefreshHistory = "notification_refresh_history";
 Const.NotificationRefreshUser = "notification_refresh_user";
 Const.NotificationRefreshGroup = "notification_refresh_group";
@@ -104,6 +105,10 @@ Const.messageTypeLocation = 3;
 Const.messageTypeContact = 4;
 Const.messageTypeSticker = 5;
 Const.messageFileUploading = 10000;
+
+Const.typingOff = 0;
+Const.typingOn = 1;
+
 
 // Exports ----------------------------------------------
 module["exports"] = Const;

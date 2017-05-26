@@ -14957,11 +14957,12 @@ body.loading {
     overflow: hidden;
     position: absolute;
     width: 100%;
-    background-color: rgba(238, 238, 238, 0.7);
+    background-color: rgba(238, 238, 238, 0.9);
     color: #777777;
     font-size: 12px;
     padding: 5px;
-    height: 0px;
+    height: 30px;
+    bottom: 40px;
     display: none; }
   #main-container #text-message-box-container {
     background-color: #fff;
@@ -15002,7 +15003,8 @@ body.loading {
   #main-container #messages {
     overflow-y: auto;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch; }
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 30px; }
     #main-container #messages .sticker img {
       max-width: 256px; }
     #main-container #messages .message-cell.marked {

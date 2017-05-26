@@ -61,7 +61,7 @@ var windowManager = {
         $('#view-login div.col-md-6').height(height);
 
         // chat view
-        $("#main-container #messages").height(height - headerHeight - $("#text-message-box-container").outerHeight());
+        $("#main-container #messages").height(height - headerHeight - $("#text-message-box-container").outerHeight() - 30); // 50 is padding bottom
 
     }
 

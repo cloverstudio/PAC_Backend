@@ -84,6 +84,10 @@
     Const.resCodeSocketDeleteNoMessageID = 4000075;
     Const.resCodeSocketDeleteNoUserID = 4000076;
     Const.resCodeSocketUnknownError = 4000077;
+    Const.resCodeSocketTypingNoUserID = 4000078;
+    Const.resCodeSocketTypingNoRoomID = 4000079;
+    Const.resCodeSocketTypingNoType = 4000080;
+    Const.resCodeSocketTypingFaild = 4000081;
 
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
@@ -176,6 +180,9 @@
     Const.messageTypeSticker = 5;
 
     Const.pagingLimit = 50;
-    
+
+    Const.typingOff = 0;
+    Const.typingOn = 1;
+
     // Exports ----------------------------------------------
     module["exports"] = Const;

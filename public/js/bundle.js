@@ -60674,6 +60674,7 @@ var ChatView = Backbone.View.extend({
     initialTBContainerHeight : 0,
     fileUploader: null,
     messagePool: [],
+    lastTextLength: 0,
     initialize: function(options) {
         
         this.container = options.container;
@@ -60718,6 +60719,14 @@ var ChatView = Backbone.View.extend({
             self.updateMessage(messages);
             
         });
+
+
+        Backbone.on(Const.NotificationTyping, function(param){
+            
+            self.updateTyping(param);
+            
+        });
+
 
         var lastPosition = 0;
         $( "#messages" ).scroll(function() {
@@ -60832,8 +60841,6 @@ var ChatView = Backbone.View.extend({
 
             // check id existed
             var idCell = $('[id="' + message._id + '"]')
-            
-            console.log('swap cell',idCell[0]);
 
             if(localIdCell.length > 0 ){
 
@@ -60901,13 +60908,12 @@ var ChatView = Backbone.View.extend({
                 return o._id == $(cellElm).attr('id');
             });
 
-            console.log(message);
-            
             Backbone.trigger(Const.NotificationSelectMessage,{
                 message: message
             });
     
         });
+
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
     },
@@ -60964,24 +60970,31 @@ var ChatView = Backbone.View.extend({
             
             var length = $(this).val().length;
             
-            /*
             if(self.lastTextLength == 0 && length > 0){
-                socketIOManager.emit('sendTyping',{
-                    roomID: loginUserManager.roomID,
-                    userID: loginUserManager.user.get('id'),
-                    type:CONST.TYPING_ON
-                });
+
+                var param = {
+                    roomID: self.currentRoomId,
+                    userID: loginUserManager.user._id,
+                    userName: loginUserManager.user.name,
+                    type:Const.typingOn
+                };
+
+                socketIOManager.emit('sendtyping',param);
+
             }
             
             if(self.lastTextLength > 0 && length == 0){
-                socketIOManager.emit('sendTyping',{
-                    roomID: loginUserManager.roomID,
-                    userID: loginUserManager.user.get('id'),
-                    type:CONST.TYPING_OFF
-                });
+
+                var param = {
+                    roomID: self.currentRoomId,
+                    userID: loginUserManager.user._id,
+                    type:Const.typingOff
+                };
+
+                socketIOManager.emit('sendtyping',param);
                 
             }
-            */
+
             self.lastTextLength = length;
  
         });
@@ -61048,8 +61061,91 @@ var ChatView = Backbone.View.extend({
         else
             this.renderMessages([message],RenderDirection.append);
 
-    }
+    },
+    removeTyping: function(userID){
 
+        var userIDEscapted = encodeURIComponent(userID).replace("'","quote").replace("%","");
+        var emlContainer = SS('#additional-notification-container');
+        
+        SS('#' + userIDEscapted + "-typing").remove();
+
+       if(_.isEmpty(emlContainer.html())){
+            emlContainer.height(0);
+            emlContainer.fadeOut();
+            this.adjustSize();
+        }
+                        
+    },
+    addTyping: function(obj){
+        
+        var emlContainer = SS('#additional-notification-container');
+        var userIDEscapted = encodeURIComponent(obj.userID).replace("'","quote").replace("%","");
+
+        var text = obj.user.name + " is typing...";
+        var id = userIDEscapted + "-typing";
+        
+        var html = '<span id="' + id + '">' + text + '</span>';
+
+        console.log("eee",$('#' + id).length);
+
+        if($('#' + id).length > 0)
+            return;
+
+        if(_.isEmpty(emlContainer.html())){
+
+             emlContainer.height(20);
+             emlContainer.fadeIn();
+             this.adjustSize();
+
+            if(this.isScrollNearBottom())
+                this.scrollToBottom();  
+
+        }
+        
+        if($('#' + id).length == 0)
+            emlContainer.html( emlContainer.html() + html );
+
+    },
+
+    updateTyping: function(param){
+
+        if(param.userID == loginUserManager.user._id)
+            return;
+            
+        var emlContainer = $('#additional-notification-container');
+
+        var text = param.userName + " is typing...";
+        var id = param.userID + "-typing";
+
+        if(param.type == Const.typingOn){
+
+            if($('#' + id).length > 0)
+                return;
+                
+            var html = '<span id="' + id + '">' + text + '</span>';
+            
+            if(_.isEmpty(emlContainer.html())){
+                emlContainer.fadeIn();
+            }
+            
+            emlContainer.html( emlContainer.html() + html );
+
+        }
+
+        if(param.type == Const.typingOff){
+
+            if($('#' + id).length == 0)
+                return;
+            
+            $('#' + id).remove();
+
+            if(_.isEmpty(emlContainer.html())){
+                emlContainer.fadeOut();
+            }
+
+        }
+
+    }
 });
 
 module.exports = ChatView;
@@ -69597,7 +69693,7 @@ var NotificationManager = {
         }
         
         else{
-            
+
             
             var avatar = "/api/v2/avatar/user/";
 
@@ -70682,6 +70778,12 @@ var socketIOManager = {
             
         });
 
+        this.ioNsp.on('typing', function(obj){
+            
+            Backbone.trigger(Const.NotificationTyping,obj);
+            
+        });
+
         this.ioNsp.on('newmessage', function(obj){
             
             // History is refreshed by ChatView when the chat is opened
@@ -70931,6 +71033,7 @@ Const.credentialsMinLength = 6;
 
 Const.NotificationUpdateHeader = "notification_update_header";
 Const.NotificationNewMessage = "notification_new_message";
+Const.NotificationTyping = "notification_typing";
 Const.NotificationRefreshHistory = "notification_refresh_history";
 Const.NotificationRefreshUser = "notification_refresh_user";
 Const.NotificationRefreshGroup = "notification_refresh_group";
@@ -70976,6 +71079,10 @@ Const.messageTypeLocation = 3;
 Const.messageTypeContact = 4;
 Const.messageTypeSticker = 5;
 Const.messageFileUploading = 10000;
+
+Const.typingOff = 0;
+Const.typingOn = 1;
+
 
 // Exports ----------------------------------------------
 module["exports"] = Const;
@@ -71993,7 +72100,7 @@ var windowManager = {
         $('#view-login div.col-md-6').height(height);
 
         // chat view
-        $("#main-container #messages").height(height - headerHeight - $("#text-message-box-container").outerHeight());
+        $("#main-container #messages").height(height - headerHeight - $("#text-message-box-container").outerHeight() - 30); // 50 is padding bottom
 
     }
 

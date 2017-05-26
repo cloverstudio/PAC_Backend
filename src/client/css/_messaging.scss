@@ -7,11 +7,12 @@
         overflow: hidden;
         position: absolute;
         width: 100%;
-        background-color: rgba( $gray-lighter, .7 );
+        background-color: rgba( $gray-lighter, 0.9 );
         color: $gray-light;
         font-size: 12px;
         padding: 5px;
-        height: 0px;
+        height: 30px;
+        bottom: 40px;
         display: none;
     }
     
@@ -71,6 +72,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        padding-bottom: 30px;
 
         .sticker{
             img{
@@ -422,9 +424,6 @@
             }
 
         }
-    }
-
-    #messages.drag{
 
     }
 

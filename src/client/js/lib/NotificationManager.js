@@ -85,7 +85,7 @@ var NotificationManager = {
         }
         
         else{
-            
+
             
             var avatar = "/api/v2/avatar/user/";
 
