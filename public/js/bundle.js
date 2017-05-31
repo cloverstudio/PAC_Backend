@@ -60723,7 +60723,6 @@ var ChatView = Backbone.View.extend({
 
             }, 1000 * Math.random(), 'later');
 
-
         });
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){

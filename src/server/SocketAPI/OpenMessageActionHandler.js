@@ -102,8 +102,56 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
                 socket.emit('socketerror', {code:Const.resCodeSocketUnknownError});  
                 return;
             }
+            
+            var chatType = message.roomID.split("-")[0];
 
-            SocketAPIHandler.emitToRoom(message.roomID,'updatemessages',[message]);
+            // websocket notification
+            if(chatType == Const.chatTypeGroup){
+                
+                SocketAPIHandler.emitToRoom(message.roomID,'updatemessages',[message]);
+                
+            } else if(chatType == Const.chatTypeRoom) {
+                
+                SocketAPIHandler.emitToRoom(message.roomID,'updatemessages',[message]);
+
+            } else if(chatType == Const.chatTypePrivate){
+                
+                var splitAry = message.roomID.split("-");
+                
+                if(splitAry.length < 2)
+                    return;
+                
+                var user1 = splitAry[1];
+                var user2 = splitAry[2];
+                
+                var toUser = null;
+                var fromUser = null;
+
+                if(user1 == param.userID){
+                    toUser = user2;
+                    fromUser = user1;
+                }else{
+                    toUser = user1;
+                    fromUser = user2;
+                }
+
+                // send to user who got message
+                DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
+                    
+                    var socketIds = _.pluck(redisResult,"socketId");
+                    
+                    if(!_.isArray(redisResult))
+                        return;
+                    
+                    _.forEach(redisResult,function(socketIdObj){
+                        SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',[message]);
+                    })
+
+                });
+
+            }
+            
+            
 
         });
 
