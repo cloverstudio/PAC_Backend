@@ -102,7 +102,7 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
                 socket.emit('socketerror', {code:Const.resCodeSocketUnknownError});  
                 return;
             }
-            
+
             var chatType = message.roomID.split("-")[0];
 
             // websocket notification
@@ -134,6 +134,20 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
                     toUser = user1;
                     fromUser = user2;
                 }
+
+                // send to myself
+                DatabaseManager.redisGet(Const.redisKeyUserId + fromUser,function(err,redisResult){
+                    
+                    var socketIds = _.pluck(redisResult,"socketId");
+                    
+                    if(!_.isArray(redisResult))
+                        return;
+                    
+                    _.forEach(redisResult,function(socketIdObj){
+                        SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',[message]);
+                    })
+
+                });
 
                 // send to user who got message
                 DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
