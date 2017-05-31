@@ -60710,12 +60710,25 @@ var ChatView = Backbone.View.extend({
 
         Backbone.on(Const.NotificationNewMessage, function(param){
             
-            self.loadLatestMessage();
+            //self.loadLatestMessage();
+            self.renderMessages([param],RenderDirection.append);
             
+            // prevent sending massive openMessage to server
+            _.delay(function() {
+
+                socketIOManager.emit('openMessage',{
+                    messageID: param._id,
+                    userID: loginUserManager.user._id,
+                });
+
+            }, 1000 * Math.random(), 'later');
+
+
         });
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
             
+            console.log('messages',messages);
             self.updateMessage(messages);
             
         });
@@ -60766,12 +60779,17 @@ var ChatView = Backbone.View.extend({
             
             if(res.messages && res.messages.length > 0){
 
+                if(self.lastMessageId == 0){
+                    Backbone.trigger(Const.NotificationChatLoaded);
+                }
+
                 self.lastMessageId = res.messages[0]._id;
                 self.firstMessageId = res.messages[res.messages.length - 1]._id;
                 self.renderMessages(res.messages,RenderDirection.append);
 
                 self.scrollToBottom();
                 Backbone.trigger(Const.NotificationRefreshHistory);
+
             }
 
         },function(){
@@ -61988,14 +62006,14 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"Users Seen",{"name":"l10n","hash":{},"data":data}))
     + "</h4>\n";
 },"7":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
-  return "        <tr>\n            <td width=\"30px\"><img src=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.avatarURL : stack1), depth0))
+  return "        <tr>\n            <td width=\"30px\"><img src=\"/api/v2/avatar/user/"
+    + alias3(((helper = (helper = helpers.avatarFileId || (depth0 != null ? depth0.avatarFileId : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"avatarFileId","hash":{},"data":data}) : helper)))
     + "\" class=\"img-circle\"/></td>\n            <td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1), depth0))
     + "</td>\n            <td>"
-    + ((stack1 = (helpers.formatDate || (depth0 && depth0.formatDate) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.at : depth0),{"name":"formatDate","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.formatDate || (depth0 && depth0.formatDate) || alias2).call(alias1,(depth0 != null ? depth0.at : depth0),{"name":"formatDate","hash":{},"data":data})) != null ? stack1 : "")
     + "\n        </td></tr>";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
@@ -62092,6 +62110,24 @@ var MessageDetailView = Backbone.View.extend({
         var self = this;
         
         self.currentMessage = obj;
+
+
+        obj.seenBy = _.map(obj.seenBy,function(seenBy){
+
+            var avatarFileId = "";
+
+            // get AvatarURL
+            if(seenBy.user && seenBy.user.avatar && seenBy.user.avatar.thumbnail){
+                avatarFileId = seenBy.user.avatar.thumbnail.nameOnServer;
+            }
+
+            seenBy.avatarFileId = avatarFileId;
+
+            return seenBy;
+        
+
+        });
+        
         
         $(self.el).html(template(obj));
         $(self.el).addClass('on');
@@ -69055,7 +69091,6 @@ var ChatManager = {
             console.log('blocked');
             return;
         }
-            
         
         loginUserManager.currentConversation = roomId;
         
@@ -69075,11 +69110,10 @@ var ChatManager = {
         
         Utils.goPage('main');
         
-        SpikaAdapter.functions.leaveCurrentRoom();
-        
         $('#main-container').addClass('chat');
         
         $(document.body).addClass("loading");
+        
         this.isLoading = true;
         
         var self = this;
@@ -69097,113 +69131,12 @@ var ChatManager = {
             roomId: roomId
         });
 
-/*
-	    SpikaAdapter.attach({
-	        mode: "div", 
-            spikaURL: Config.SpikaBaseURL,
-            attachTo : "main-container",
-            socketIOConnection : socketIOManager.io,
-            messageId: messageId,
-            user : {
-                id : me._id,
-                name : me.name,
-                avatarURL : myAvatarURL,
-                roomID : roomId
-            },
-            config : {
-                apiBaseUrl : window.location.origin + Config.SpikaBaseURL + "/v1",
-                socketUrl : Config.SpikaSocketURL,
-                showSidebar : false,
-                showTitlebar : false,
-                useBothSide: false
-            },
-            listener : {
-
-                onPageLoad: function(){
-                    
-                    self.isLoading = false;
-                    $(document.body).removeClass("loading");
-                    Backbone.trigger(Const.NotificationRefreshHistory);
-                    
-                    
-                },
-                onNewMessage:function(obj){
-                    
-                },
-                onNewUser:function(obj){
-
-                },
-                onUserLeft:function(obj){
-
-                },
-                OnUserTyping:function(obj){
-
-                },
-                OnMessageChanges:function(obj){
-
-                },
-                onOpenMessage:function(obj){
-                    return true;
-                },
-                OnOpenFile:function(obj){
-                    return true;
-                },
-                onSelectMessage:function(obj){
-
-                    Backbone.trigger(Const.NotificationSelectMessage,{
-                        messsage: obj
-                    });
-        
-                }
-            },
-            functions : {
-                
-                addToFavorite: function(messageId,callBack){
-
-                    AddToFavoriteClient.send(messageId,function(data){
-                        
-                        callBack(data);
-                        
-                    },function(errCode){
-                        var UIUtils = require('./UIUtils');
-                        UIUtils.handleAPIErrors(errCode);
-                    });
-
-                },
-                removeFromFavorite: function(messageId,callBack){
-
-                    RemoveFromFavoriteClient.send(messageId,function(data){
-                        
-                        callBack(data);
-                        
-                    },function(errCode){
-                        var UIUtils = require('./UIUtils');
-                        UIUtils.handleAPIErrors(errCode);
-                    });
-
-                },
-                forwardMessage : function(messageId,callBack){
-                    var ForwardMessageDialog = require("../Views/Modals/ForwardMessage/ForwardMessageDialog")
-                    ForwardMessageDialog.show(messageId);
-                    
-                },
-                encryptMessage : function(text){
-                    
-                    return EncryptionManager.encryptText(text);
-
-                },
-                decryptMessage : function(text){
-                    
-                    return EncryptionManager.decryptText(text);
-
-                }
-                
-            }
-
+  
+        Backbone.on(Const.NotificationChatLoaded, function(param){                        
+            self.isLoading = false;
+            $(document.body).removeClass("loading");
         });
-*/
 
-        self.isLoading = false;
     },
     
     openChatByUserId: function(userId,messageId){
@@ -69223,7 +69156,7 @@ var ChatManager = {
             console.log('blocked');
             return;
         }
-        
+
         var me = loginUserManager.getUser();
         
         if(!me)
@@ -69252,8 +69185,7 @@ var ChatManager = {
             title: user.name,
             description: user.description
         });
-        
-        this.isLoading = false;
+
     },
     
     openChatByGroup : function(group,messageId){
@@ -69286,7 +69218,6 @@ var ChatManager = {
             description: group.description
         });
         
-        this.isLoading = false;
     },
     
     openChatByRoom : function(room,messageId){
@@ -69318,8 +69249,7 @@ var ChatManager = {
             title: room.name,
             description: room.description
         });
-        
-        this.isLoading = false;
+
     },
     
     openChatByPrivateRoomId: function(roomId,messageId){
@@ -69369,8 +69299,7 @@ var ChatManager = {
             
         });
         
-        this.isLoading = false;
-        
+
     },
     
     close:function(){
@@ -70797,9 +70726,9 @@ var socketIOManager = {
 
         });
             
-        this.ioNsp.on('updatemessage', function(obj){
+        this.ioNsp.on('updatemessages', function(ary){
             
-            Backbone.trigger(Const.NotificationMessageUpdated,[obj]);
+            Backbone.trigger(Const.NotificationMessageUpdated,ary);
 
         });
 
@@ -71056,6 +70985,7 @@ Const.NotificationCallAnswer = "notification_callanswer";
 Const.NotificationCallClose = "notification_callclose";
 Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 Const.NotificationMessageUpdated = "notification_message_updated"
+Const.NotificationChatLoaded = "notification_chat_loaded"
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;

@@ -76,9 +76,9 @@ var socketIOManager = {
 
         });
             
-        this.ioNsp.on('updatemessage', function(obj){
+        this.ioNsp.on('updatemessages', function(ary){
             
-            Backbone.trigger(Const.NotificationMessageUpdated,[obj]);
+            Backbone.trigger(Const.NotificationMessageUpdated,ary);
 
         });
 

@@ -88,6 +88,8 @@
     Const.resCodeSocketTypingNoRoomID = 4000079;
     Const.resCodeSocketTypingNoType = 4000080;
     Const.resCodeSocketTypingFaild = 4000081;
+    Const.resCodeSocketOpenMessageWrongMessageID = 4000082;
+    Const.resCodeSocketOpenMessageNoUserId = 4000083;
 
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;

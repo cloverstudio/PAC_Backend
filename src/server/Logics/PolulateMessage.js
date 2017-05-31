@@ -144,7 +144,6 @@ var PolulateMessage = {
                 _id:{$in:roomIds}
             },function(err,findResult){
 
-
                 if(err)
                     console.log(err);
                     

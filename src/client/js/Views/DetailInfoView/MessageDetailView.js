@@ -58,6 +58,24 @@ var MessageDetailView = Backbone.View.extend({
         var self = this;
         
         self.currentMessage = obj;
+
+
+        obj.seenBy = _.map(obj.seenBy,function(seenBy){
+
+            var avatarFileId = "";
+
+            // get AvatarURL
+            if(seenBy.user && seenBy.user.avatar && seenBy.user.avatar.thumbnail){
+                avatarFileId = seenBy.user.avatar.thumbnail.nameOnServer;
+            }
+
+            seenBy.avatarFileId = avatarFileId;
+
+            return seenBy;
+        
+
+        });
+        
         
         $(self.el).html(template(obj));
         $(self.el).addClass('on');

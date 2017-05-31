@@ -46,7 +46,7 @@
         
     {{#each seenBy}}
         <tr>
-            <td width="30px"><img src="{{user.avatarURL}}" class="img-circle"/></td>
+            <td width="30px"><img src="/api/v2/avatar/user/{{avatarFileId}}" class="img-circle"/></td>
             <td>{{user.name}}</td>
             <td>{{{formatDate at}}}
         </td></tr>

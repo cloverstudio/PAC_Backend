@@ -12,6 +12,8 @@ var Utils = require("../lib/utils");
 var BaseModel = require('./BaseModel');
 var UserModel = require('./User');
 
+var OldOpenSourceUser = require('./OldOpenSourceUser');
+
 var Message = function(){};
 
 _.extend(Message.prototype,BaseModel.prototype);
@@ -170,6 +172,7 @@ Message.findNewMessages = function(roomID,lastMessageID,limit,callBack){
 
 Message.populateMessages = function(messages,callBack){
     
+    var model = Message.get();
     var modelUser = UserModel.get();
 
     if(!_.isArray(messages)){
@@ -180,23 +183,105 @@ Message.populateMessages = function(messages,callBack){
     
     // collect ids
     var ids = [];
-    
+    var oldIds = [];
+
     messages.forEach(function(row){
         
+        if(row.seenBy.length > 3)
+            console.log(row.toObject());
+
         // get users for seeny too
         _.forEach(row.seenBy,function(row2){
-            ids.push(row2.userID); 
+
+            if(row2.version == 2){
+                ids.push(row2.user); 
+            }else{
+                oldIds.push(row2.user.toString());
+            }
+
         });
         
         ids.push(row.userID); 
         
     });
     
-    if(ids.length > 0){
-    
-        UserModel.findUsersbyId(ids,function(err,userResult){
+    oldIds = _.uniq(oldIds);
+
+    if(ids.length == 0 && oldIds.length == 0){
+        callBack(null,messages);
+    }
+
+    async.waterfall([(done) => {
+
+        if(oldIds.length == 0){
+            done(null,null);
+            return;
+        }
+
+        // convert MF olduserid to spika for business user id
+        var oldOpenSourceUser = OldOpenSourceUser.get();
+
+        var condition = _.map(oldIds,(value) => { return {user:value} } );
+
+        var query = model.find({
+            $or : condition
+        }).sort({'created': 1}).limit(500).exec((err,data) => {    
             
-            var resultAry = [];
+            var convTable = {};
+
+            if (err){
+                done(null,null);
+                return;
+            }
+
+            data.forEach((messageObj) => {
+                ids.push(messageObj.userID.toString());
+                convTable[messageObj.user] = messageObj.userID.toString();
+            });
+
+            ids = _.uniq(ids);
+
+            messages.forEach(function(row){
+                
+                var oldSeenBy = row.seenBy;
+
+                row.seenBy = _.map(row.seenBy,(obj) => {
+
+                    var newUserId = convTable[obj.user.toString()];
+                    if(!newUserId){
+                        return obj;
+                    }else{
+                        return {
+                            user: newUserId.toString(),
+                            at: obj.at,
+                            version:2
+                        }
+                    }
+
+
+                });
+
+                // update to new seenby
+                model.update({ 
+                    _id: row._id
+                },{ 
+                    seenBy: row.seenBy
+                },(err,updateResult) => {
+                    if(err)
+                        console.log(err);
+                });
+
+            });
+
+            done(null,null);
+
+        }); 
+
+    },function(result,done){
+
+        var resultAry = [];
+
+        UserModel.findUsersbyId(ids,function(err,userResult){
             
             _.forEach(messages,function(messageElement,messageIndex,messagesEntity){
                 
@@ -218,10 +303,13 @@ Message.populateMessages = function(messages,callBack){
                     
                     _.forEach(userResult,function(userElement,userIndex){
                         
+                        var userId = seenByRow.user;
+
                         // replace user to userObj
-                        if(seenByRow.user.toString() == userElement._id.toString()){
+                        if(userId == userElement._id.toString()){
                             
                             seenByAry.push({
+                                userID:userId,
                                 user:userElement,
                                 at:seenByRow.at 
                             });
@@ -231,22 +319,24 @@ Message.populateMessages = function(messages,callBack){
                     });
                                                     
                 });
-                
+
                 obj.seenBy = seenByAry;
                     
                 resultAry.push(obj);
                 
             });
             
-                              
-            callBack(err,resultAry);
-                                   
+            done(null,resultAry)           
+            
+                                
         });
-        
-    }else{
-        callBack(null,messages);
-    }
-    
+                    
+    }],
+    function(err,resultAry){
+
+        callBack(err,resultAry);
+
+    });
 }
 
 

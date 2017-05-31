@@ -39,13 +39,13 @@ var NotifyUpdateMessage = {
                 // websocket notification
                 if(chatType == Const.chatTypeGroup){
                     
-                    SocketAPIHandler.emitToRoom(obj.roomID,'updatemessage',obj);
+                    SocketAPIHandler.emitToRoom(obj.roomID,'updatemessages',[obj]);
                     
                     done(null,{});
                     
                 } else if(chatType == Const.chatTypeRoom) {
                     
-                    SocketAPIHandler.emitToRoom(obj.roomID,'updatemessage',obj);
+                    SocketAPIHandler.emitToRoom(obj.roomID,'updatemessages',[obj]);
                     
                     done(null,{});
                     
@@ -103,7 +103,7 @@ var NotifyUpdateMessage = {
                                 return;
                             
                             _.forEach(redisResult,function(socketIdObj){
-                                SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessage',obj);
+                                SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',[obj]);
                             })
                             
                         });
@@ -119,7 +119,7 @@ var NotifyUpdateMessage = {
                                     return;
                                 
                                 _.forEach(redisResult,function(socketIdObj){
-                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessage',obj);
+                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',[obj]);
                                 })
 
                             });

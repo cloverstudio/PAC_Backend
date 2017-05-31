@@ -82,6 +82,7 @@ Const.NotificationCallAnswer = "notification_callanswer";
 Const.NotificationCallClose = "notification_callclose";
 Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 Const.NotificationMessageUpdated = "notification_message_updated"
+Const.NotificationChatLoaded = "notification_chat_loaded"
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;

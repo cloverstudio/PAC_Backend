@@ -29,7 +29,6 @@ var ChatManager = {
             console.log('blocked');
             return;
         }
-            
         
         loginUserManager.currentConversation = roomId;
         
@@ -49,11 +48,10 @@ var ChatManager = {
         
         Utils.goPage('main');
         
-        SpikaAdapter.functions.leaveCurrentRoom();
-        
         $('#main-container').addClass('chat');
         
         $(document.body).addClass("loading");
+        
         this.isLoading = true;
         
         var self = this;
@@ -71,113 +69,12 @@ var ChatManager = {
             roomId: roomId
         });
 
-/*
-	    SpikaAdapter.attach({
-	        mode: "div", 
-            spikaURL: Config.SpikaBaseURL,
-            attachTo : "main-container",
-            socketIOConnection : socketIOManager.io,
-            messageId: messageId,
-            user : {
-                id : me._id,
-                name : me.name,
-                avatarURL : myAvatarURL,
-                roomID : roomId
-            },
-            config : {
-                apiBaseUrl : window.location.origin + Config.SpikaBaseURL + "/v1",
-                socketUrl : Config.SpikaSocketURL,
-                showSidebar : false,
-                showTitlebar : false,
-                useBothSide: false
-            },
-            listener : {
-
-                onPageLoad: function(){
-                    
-                    self.isLoading = false;
-                    $(document.body).removeClass("loading");
-                    Backbone.trigger(Const.NotificationRefreshHistory);
-                    
-                    
-                },
-                onNewMessage:function(obj){
-                    
-                },
-                onNewUser:function(obj){
-
-                },
-                onUserLeft:function(obj){
-
-                },
-                OnUserTyping:function(obj){
-
-                },
-                OnMessageChanges:function(obj){
-
-                },
-                onOpenMessage:function(obj){
-                    return true;
-                },
-                OnOpenFile:function(obj){
-                    return true;
-                },
-                onSelectMessage:function(obj){
-
-                    Backbone.trigger(Const.NotificationSelectMessage,{
-                        messsage: obj
-                    });
-        
-                }
-            },
-            functions : {
-                
-                addToFavorite: function(messageId,callBack){
-
-                    AddToFavoriteClient.send(messageId,function(data){
-                        
-                        callBack(data);
-                        
-                    },function(errCode){
-                        var UIUtils = require('./UIUtils');
-                        UIUtils.handleAPIErrors(errCode);
-                    });
-
-                },
-                removeFromFavorite: function(messageId,callBack){
-
-                    RemoveFromFavoriteClient.send(messageId,function(data){
-                        
-                        callBack(data);
-                        
-                    },function(errCode){
-                        var UIUtils = require('./UIUtils');
-                        UIUtils.handleAPIErrors(errCode);
-                    });
-
-                },
-                forwardMessage : function(messageId,callBack){
-                    var ForwardMessageDialog = require("../Views/Modals/ForwardMessage/ForwardMessageDialog")
-                    ForwardMessageDialog.show(messageId);
-                    
-                },
-                encryptMessage : function(text){
-                    
-                    return EncryptionManager.encryptText(text);
-
-                },
-                decryptMessage : function(text){
-                    
-                    return EncryptionManager.decryptText(text);
-
-                }
-                
-            }
-
+  
+        Backbone.on(Const.NotificationChatLoaded, function(param){                        
+            self.isLoading = false;
+            $(document.body).removeClass("loading");
         });
-*/
 
-        self.isLoading = false;
     },
     
     openChatByUserId: function(userId,messageId){
@@ -197,7 +94,7 @@ var ChatManager = {
             console.log('blocked');
             return;
         }
-        
+
         var me = loginUserManager.getUser();
         
         if(!me)
@@ -226,8 +123,7 @@ var ChatManager = {
             title: user.name,
             description: user.description
         });
-        
-        this.isLoading = false;
+
     },
     
     openChatByGroup : function(group,messageId){
@@ -260,7 +156,6 @@ var ChatManager = {
             description: group.description
         });
         
-        this.isLoading = false;
     },
     
     openChatByRoom : function(room,messageId){
@@ -292,8 +187,7 @@ var ChatManager = {
             title: room.name,
             description: room.description
         });
-        
-        this.isLoading = false;
+
     },
     
     openChatByPrivateRoomId: function(roomId,messageId){
@@ -343,8 +237,7 @@ var ChatManager = {
             
         });
         
-        this.isLoading = false;
-        
+
     },
     
     close:function(){

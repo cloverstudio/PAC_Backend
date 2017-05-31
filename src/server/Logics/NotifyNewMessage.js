@@ -372,7 +372,7 @@ var NotifyNewMessage = {
                     }else if(chatType == Const.chatTypeRoom){
                         targetId = obj.roomModel._id.toString();
                     }else{
-                        targetId = obj.userModel._id.toString();
+                        targetId = obj.user._id.toString();
                     }
 
                     if(_.isArray(mutedList)){

@@ -71,12 +71,24 @@ var ChatView = Backbone.View.extend({
 
         Backbone.on(Const.NotificationNewMessage, function(param){
             
-            self.loadLatestMessage();
+            //self.loadLatestMessage();
+            self.renderMessages([param],RenderDirection.append);
             
+            // prevent sending massive openMessage to server
+            _.delay(function() {
+
+                socketIOManager.emit('openMessage',{
+                    messageID: param._id,
+                    userID: loginUserManager.user._id,
+                });
+
+            }, 1000 * Math.random(), 'later');
+
         });
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
             
+            console.log('messages',messages);
             self.updateMessage(messages);
             
         });
@@ -127,12 +139,17 @@ var ChatView = Backbone.View.extend({
             
             if(res.messages && res.messages.length > 0){
 
+                if(self.lastMessageId == 0){
+                    Backbone.trigger(Const.NotificationChatLoaded);
+                }
+
                 self.lastMessageId = res.messages[0]._id;
                 self.firstMessageId = res.messages[res.messages.length - 1]._id;
                 self.renderMessages(res.messages,RenderDirection.append);
 
                 self.scrollToBottom();
                 Backbone.trigger(Const.NotificationRefreshHistory);
+
             }
 
         },function(){

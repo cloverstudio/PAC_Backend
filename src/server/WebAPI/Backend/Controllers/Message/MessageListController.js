@@ -19,6 +19,8 @@ var Utils = require( pathTop + 'lib/utils');
 var PolulateMessageLogic = require( pathTop + 'Logics/PolulateMessage');
 var UpdateHistory = require( pathTop + 'Logics/UpdateHistory');
 
+var SocketAPIHandler = require( pathTop + 'SocketAPI/SocketAPIHandler');
+
 var tokenChecker = require( pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
@@ -89,13 +91,71 @@ MessageListController.prototype.init = function(app){
         },
         function(messages,done){
 
-            // add seenby
             MessageModel.populateMessages(messages,function (err,data) {
                 
                 done(err,data);
 
             });
             
+        },
+        function(messages,done){
+
+            //
+            done(null,messages);
+
+            // handle seen by
+            var userID = request.user._id.toString();
+
+            var messagesToNotifyUpdate = [];
+
+            messages.forEach((message) => {
+
+                var seenBy = message.seenBy;
+
+                if(!seenBy)
+                    seenBy = [];
+                
+                var isExist = _.find(seenBy,(seenByRow) => {
+
+                    return userID == seenByRow.userID;
+
+                });
+
+                if(!isExist){
+
+                    // add seenby
+                    seenBy.push({
+                        user:request.user._id.toString(),
+                        at:Utils.now(),
+                        version:2
+                    });
+
+                    messageModel.update({ 
+                        _id: message._id 
+                    },{ 
+                        seenBy: seenBy
+                    },(err,updateResult) => {
+
+                        //console.log(message._id);
+                        //console.log(err,updateResult);
+
+                    });
+
+                    message.seenBy = seenBy;
+                    
+                    messagesToNotifyUpdate.push(message);
+
+                }
+              
+            });
+
+            // notify if exists
+            if(messagesToNotifyUpdate.length > 0){
+
+                SocketAPIHandler.emitToRoom(roomId,'updatemessages',messagesToNotifyUpdate);
+
+            };
+
         },
         function(messages,done){
             
@@ -113,7 +173,6 @@ MessageListController.prototype.init = function(app){
                     return favorite.messageId;
                         
                 });
-                
                 
                 var messagesFav = _.map(messages,function(message){
                     
