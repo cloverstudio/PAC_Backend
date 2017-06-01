@@ -186,9 +186,6 @@ Message.populateMessages = function(messages,callBack){
     var oldIds = [];
 
     messages.forEach(function(row){
-        
-        if(row.seenBy.length > 3)
-            console.log(row.toObject());
 
         // get users for seeny too
         _.forEach(row.seenBy,function(row2){

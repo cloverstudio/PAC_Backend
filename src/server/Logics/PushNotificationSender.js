@@ -400,7 +400,7 @@ PushNotificationSender = {
                             if (err) {
                                 console.log(pushToken + " Something has gone wrong!", response);
                             } else {
-                                console.log(pushToken + "Successfully sent with response: ", response);
+                                //console.log(pushToken + "Successfully sent with response: ", response);
                             }
                         });
                         

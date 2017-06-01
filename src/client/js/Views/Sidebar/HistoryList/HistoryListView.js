@@ -249,8 +249,6 @@ var HistoryListView = Backbone.View.extend({
             return row;
         });
 
-        console.log(this.dataList);
-
         var html = templateContents({
             list: this.dataList
         });
@@ -292,8 +290,6 @@ var HistoryListView = Backbone.View.extend({
 
     },
     destroy: function(){
-        
-        console.log('history destroy');
         
         Backbone.off(Const.NotificationRefreshHistory);
         Backbone.off(Const.NotificationRemoveRoom);

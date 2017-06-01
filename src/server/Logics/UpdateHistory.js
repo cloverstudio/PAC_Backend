@@ -517,7 +517,12 @@ var UpdateHistory = {
     updateData: function(data,rawMessageObj,callBack){
         
         var historyModel = HistoryModel.get();
-
+        
+        if(data.userId == rawMessageObj.userID){
+            callBack(null);
+            return;
+        }
+        
         async.waterfall([function(done){
                 
                 var result = {};
@@ -535,33 +540,7 @@ var UpdateHistory = {
             },
             function(result,done){
                 
-                // check online status
-                DatabaseManager.redisGetValue(Const.redisKeyOnlineStatus + data.userId,function(err,redisResult){
-                    
-                    if(redisResult){
-                        result.isOnline = true;
-                    }else{
-                        result.isOnline = false;
-                    }
-                    
-                   
-                    done(null,result);
-                    
-                });
-                
-                
-            },
-            function(result,done){
-                
-                
-                // check current room
-                DatabaseManager.redisGetValue(Const.redisKeyCurrentRoomId + data.userId,function(err,redisResult){
-                    
-                    result.currentRoomID = redisResult;
-                    done(null,result);
-                    
-                });
-                
+                done(null,result);
                 
             },
             function(result,done){

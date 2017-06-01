@@ -100,8 +100,6 @@ DatabaseManager.init(function(success){
                                             
                                             if(Math.random() > 0.5){
                                                 
-                                                console.log('avatar on');
-                                                
                                                 model = new groupModel({
                                                     organizationId:organizationId,
                                                     name:groupName,
@@ -127,8 +125,6 @@ DatabaseManager.init(function(success){
                                                 });
                                                 
                                             } else {
-                                                
-                                                console.log('avatar off');
                                                 
                                                 model = new groupModel({
                                                     organizationId:organizationId,

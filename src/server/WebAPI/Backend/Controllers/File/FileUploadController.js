@@ -43,7 +43,6 @@ FileUploadController.prototype.init = function(app){
         
         var form = new formidable.IncomingForm();
         form.maxFieldsSize = 2 * 1024 * 1024;
-        //console.log('filupload',1);
 
         async.waterfall([
             
@@ -51,8 +50,6 @@ FileUploadController.prototype.init = function(app){
             
                 fs.exists(Config.uploadPath, function (exists) {
                     
-                    console.log('filupload',3);
-
                     if(exists){
 
                         done(null,{});
@@ -69,23 +66,14 @@ FileUploadController.prototype.init = function(app){
             },
             function (result,done) {
                 
-                console.log('filupload',5);
-
                 form.parse(request, function(err, fields, files) {
-            
-                    console.log('filupload',6);
-                    console.log('files',files);
                     
                     if(!files.file){
-                        
-                        console.log('filupload',7);
 
                         self.successResponse(response,Const.responsecodeMessageFileUploadFailed);
                         return; 
                         
                     }else{
-                        
-                        console.log('filupload',8);
 
                         var tempPath = files.file.path;
                         var fileName = files.file.name;
@@ -256,8 +244,6 @@ FileUploadController.prototype.init = function(app){
             
         ],
             function (err, result) {
-                
-                console.log('filupload',11);
 
                 if(err){
 
@@ -267,8 +253,6 @@ FileUploadController.prototype.init = function(app){
                 
                 }else{
 
-                    console.log('filupload',13);
-
                     var responseJson = {
                         file:{
     		                id: result.fileModel.id,
@@ -277,12 +261,8 @@ FileUploadController.prototype.init = function(app){
         		            mimeType: result.file.type
                         }
                     };
-                    
-                    console.log('filupload',14);
 
                     if(!_.isUndefined(result.thumbModel)){
-
-                        console.log('filupload',15);
 
                         responseJson.thumb = {
     		                id: result.thumbModel.id,

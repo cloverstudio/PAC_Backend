@@ -94,6 +94,11 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
 
             });
 
+        },
+        (message,done) => {
+
+            done(null,message);
+
         }],
 
         (err,message) => {

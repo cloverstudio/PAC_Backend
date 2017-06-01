@@ -109,12 +109,9 @@ EncryptManager = {
         
         var timer = setInterval(function () {
 
-            console.log(sjcl.random.isReady());
-            
             if(sjcl.random.isReady()) {
 
                 clearInterval(timer);
-                console.log(sjcl.random.randomWords(5,8));
             }
             
         }, 100);

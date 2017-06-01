@@ -141,8 +141,6 @@ SignoutController.prototype.init = function(app){
 
                     });
 
-                    console.log(result.user.voipPushToken);
-
                     // remove pushtoken from voipPushToken
                     var updateVoipPushTokens = _.filter(result.user.voipPushToken,(token) => {
 

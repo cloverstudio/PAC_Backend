@@ -36,8 +36,6 @@ describe('WEB API', function () {
                     res.body.should.have.property('code');
                     res.body.code.should.equal(1);
                     
-                    console.log(util.inspect(res.body, {showHidden: false, depth: null}));
-                    
                     done();
                     
                 });   

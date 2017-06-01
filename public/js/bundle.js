@@ -60708,37 +60708,40 @@ var ChatView = Backbone.View.extend({
         this.initialTBHeight = $( "#text-message-box" ).height();
         this.initialTBContainerHeight = $( "#text-message-box-container" ).height();
 
-        Backbone.on(Const.NotificationNewMessage, function(param){
+        Backbone.on(Const.NotificationNewMessage, function(message){
             
-            //self.loadLatestMessage();
-            self.renderMessages([param],RenderDirection.append);
-            
-            // prevent sending massive openMessage to server
-            _.delay(function() {
+            if(message.roomID == self.currentRoomId){
 
-                socketIOManager.emit('openMessage',{
-                    messageID: param._id,
-                    userID: loginUserManager.user._id,
-                });
+                self.renderMessages([message],RenderDirection.append);
 
-            }, 1000 * Math.random(), 'later');
+                // prevent sending massive openMessage to server
+                _.delay(function() {
+
+                    socketIOManager.emit('openMessage',{
+                        messageID: message._id,
+                        userID: loginUserManager.user._id,
+                    });
+
+                }, 1000 * Math.random(), 'later');
+
+            }
 
         });
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
             
-            console.log('messages',messages);
-            self.updateMessage(messages);
-            
+            if(messages.length > 0 && messages[0].roomID == self.currentRoomId) {
+                self.updateMessage(messages);
+            }
+
         });
 
 
         Backbone.on(Const.NotificationTyping, function(param){
-            
+
             self.updateTyping(param);
             
         });
-
 
         var lastPosition = 0;
         $( "#messages" ).scroll(function() {
@@ -61102,8 +61105,6 @@ var ChatView = Backbone.View.extend({
         var id = userIDEscapted + "-typing";
         
         var html = '<span id="' + id + '">' + text + '</span>';
-
-        console.log("eee",$('#' + id).length);
 
         if($('#' + id).length > 0)
             return;
@@ -66469,8 +66470,6 @@ var HistoryListView = Backbone.View.extend({
             return row;
         });
 
-        console.log(this.dataList);
-
         var html = templateContents({
             list: this.dataList
         });
@@ -66512,8 +66511,6 @@ var HistoryListView = Backbone.View.extend({
 
     },
     destroy: function(){
-        
-        console.log('history destroy');
         
         Backbone.off(Const.NotificationRefreshHistory);
         Backbone.off(Const.NotificationRemoveRoom);
@@ -69431,13 +69428,11 @@ EncryptManager = {
         window.orientation = 1;
         
         var timer = setInterval(function () {
-
-            console.log(sjcl.random.isReady());
             
             if(sjcl.random.isReady()) {
 
                 clearInterval(timer);
-                console.log(sjcl.random.randomWords(5,8));
+
             }
             
         }, 100);
