@@ -2490,12 +2490,14 @@ var EmoticonPanelView = Backbone.View.extend({
     ignoreClose : false,
     initialize: function(options,callBack) {
     
+        // ignore if already exists
     	if($("#sticker-panel")[0])
     		return;
     		
 		this.callBack = callBack;
         this.el = options.el;
         this.render();
+        
     }, 
 
     render: function() {
@@ -2505,12 +2507,12 @@ var EmoticonPanelView = Backbone.View.extend({
         this.onLoad();
         
         return this;
+
     },
 
     onLoad: function(){
         
         var self = this;
-
         
         WebAPIManager.get(
             

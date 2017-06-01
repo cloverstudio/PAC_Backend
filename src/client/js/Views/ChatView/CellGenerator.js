@@ -21,7 +21,7 @@ function CellGenerator(){
     this.deletedTemplate = require('./MessageCells/DeletedMessage.hbs');
     //this.locationTemplate = require('./MessageCells/Location.hbs');
     //this.contactTemplate = require('./MessageCells/Contact.hbs');
-    //this.stickerTemplate = require('./MessageCells/Sticker.hbs');
+    this.stickerTemplate = require('./MessageCells/Sticker.hbs');
 };
 
 CellGenerator.prototype.parentView = null;
@@ -98,7 +98,11 @@ CellGenerator.prototype.generate = function(messageModel){
             
         }
 
-            
+        if(messageModel.type == Const.messageTypeSticker){
+            html = this.stickerTemplate(flatData);
+        }
+        
+
         if(messageModel.type == Const.messageFileUploading){
             
             if(messageModel.isUploading == 1){
@@ -107,7 +111,6 @@ CellGenerator.prototype.generate = function(messageModel){
             
         }
     
-
         /*
         
         if(messageModel.get('type') == CONST.MESSAGE_TYPE_LOCATION){

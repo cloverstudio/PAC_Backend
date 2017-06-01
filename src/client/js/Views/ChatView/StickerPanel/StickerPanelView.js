@@ -1,16 +1,20 @@
 var Backbone = require('backbone');
 var _ = require('lodash');
-var socket = require('socket.io-client');
 
-var U = require('../../../../libs/utils.js');
-var LoginUserManager = require('../../../../libs/loginUserManager.js');
-var socketIOManager = require('../../../../libs/socketIOManager');
-var UrlGenerator = require('../../../../libs/urlGenerator');
-var WebAPIManager = require('../../../../libs/webAPIManager');
-var CONST = require('../../../../consts');
-var ProcessingDialog = require('../../../Modals/ProcessingDialog/ProcessingDialog');
-var User = require('../../../../Models/user.js');
-var LocalizationManager = require('../../../../libs/localizationManager');
+var Utils = require('../../../lib/utils');
+var Const = require('../../../lib/consts');
+var Config = require('../../../lib/init');
+
+var SideMenu = require('../../SideMenu/SideMenu');
+
+var template = require('../ChatView.hbs');
+
+var loginUserManager = require('../../../lib/loginUserManager');
+var encryptionManager = require('../../../lib/EncryptionManager');
+var socketIOManager = require('../../../lib/SocketIOManager');
+var ChatManager = require('../../../lib/ChatManager');
+
+var StickerListClient = require('../../../lib/APIClients/StickerListClient');
 
 var template = require('./StickerPanel.hbs');
 var templateContents = require('./StickerContent.hbs');
@@ -24,14 +28,13 @@ var EmoticonPanelView = Backbone.View.extend({
     ignoreClose : false,
     initialize: function(options,callBack) {
     
-        // ignore if already exists
     	if($("#sticker-panel")[0])
     		return;
     		
 		this.callBack = callBack;
         this.el = options.el;
         this.render();
-        
+
     }, 
 
     render: function() {
@@ -47,54 +50,42 @@ var EmoticonPanelView = Backbone.View.extend({
     onLoad: function(){
         
         var self = this;
-        
-        WebAPIManager.get(
-            
-            UrlGenerator.stickerList(), 
-            
-            // success
-            function(data){
-                
-                self.dataList = data.stickers;
 
-		        Backbone.on(CONST.EVENT_ON_GLOBAL_CLICK,function(){
-		            
+        StickerListClient.send(loginUserManager.user.organizationId,function(data){
+
+            Backbone.on(Const.NotificationGlobalClick ,function(){
+                
+                if(self.ignoreClose){
                     
-                    if(self.ignoreClose){
+                    _.debounce(function(){
+                        self.ignoreClose = false;
+                    },100)();
+                    
+                    return;
+                }
+                    
+                self.hide();
                         
-                        _.debounce(function(){
-                            self.ignoreClose = false;
-                        },100)();
-                        
-                        return;
-                    }
-                        
-                        
-		            self.hide();
-		                 
-		        });
+            });
+            
+            self.dataList = data.stickers;
 
-		        $('#sticker-panel').html(templateContents({
-		        	list:data.stickers
-		        }));
-        
-				self.afterRender();
-            },
+            $('#sticker-panel').html(templateContents({
+                list:data.stickers
+            }));
+    
+            self.afterRender();
             
-            //error
-            function(error){
-                
-                console.log(error);
-            }
-            
-        );
-        
+        },function(){
+
+        });
+
         
     },
     hide:function(){
 
 	    $("#sticker-panel").remove();
-	    Backbone.off(CONST.EVENT_ON_GLOBAL_CLICK);
+	    Backbone.off(Const.NotificationGlobalClick );
 	    
 	    if(this.callBack)
 	    	this.callBack(null);
@@ -165,9 +156,10 @@ var EmoticonPanelView = Backbone.View.extend({
         
         socketIOManager.emit('sendMessage',{
             message: url,
-            roomID: LoginUserManager.roomID,
-            userID: LoginUserManager.user.get('id'),
-            type:CONST.MESSAGE_TYPE_STICKER,
+            roomID: loginUserManager.currentConversation,
+            userID: loginUserManager.user._id,
+            type:Const.messageTypeSticker,
+            localID: '_' + Utils.getRandomString(),
             attributes:{
                 useclient: "web"
             }

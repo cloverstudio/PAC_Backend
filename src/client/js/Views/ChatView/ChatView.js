@@ -18,6 +18,8 @@ var LoadMessageClient = require('../../lib/APIClients/Messaging/LoadMessageClien
 var CellGenerator = require('./CellGenerator');
 var FileUplaoder = require('./FileUploader');
 
+var stickerPanelView = require('./StickerPanel/StickerPanelView');
+
 var RenderDirection = {
     append:'new',
     prepend:'old'
@@ -75,7 +77,7 @@ var ChatView = Backbone.View.extend({
 
                 self.renderMessages([message],RenderDirection.append);
 
-                // prevent sending massive openMessage to server
+                // prevent sending massive openMessage in same time to server
                 _.delay(function() {
 
                     socketIOManager.emit('openMessage',{
@@ -97,11 +99,8 @@ var ChatView = Backbone.View.extend({
 
         });
 
-
         Backbone.on(Const.NotificationTyping, function(param){
-
             self.updateTyping(param);
-            
         });
 
         var lastPosition = 0;
@@ -129,6 +128,21 @@ var ChatView = Backbone.View.extend({
 
         });
         
+        $('#btn-emoticons').on('click',function(){
+
+            var view = new stickerPanelView({
+                'el': "#main-container"
+            },function(selectedSticker){
+	            
+	            if(selectedSticker){
+		            
+	            }
+	            
+	            view = null;
+	            
+            });
+
+        });
 
         this.loadLatestMessage();
 

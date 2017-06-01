@@ -136,6 +136,12 @@ var MainView = Backbone.View.extend({
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
+        $(window).on('click',function(){
+	    	
+	    	Backbone.trigger(Const.NotificationGlobalClick );
+	    	 
+        });
+
     },
     
     destroy: function(){
