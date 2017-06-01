@@ -60786,6 +60786,67 @@ var ChatView = Backbone.View.extend({
 
         });
 
+        var counter = 0;
+
+        var da = document.getElementById('messages');
+
+        da.addEventListener('dragover', function(e){
+            e.preventDefault();  
+        });
+
+        da.addEventListener('dragenter', function(e){
+            e.preventDefault();  
+            counter++;
+            $('#messages').addClass('drag');
+            $('#file-drop-indicator').addClass('drag');
+
+        });
+
+        da.addEventListener('dragleave', function(e){
+            e.preventDefault();  
+            counter--;
+            if (counter === 0) { 
+                $('#messages').removeClass('drag');
+                $('#file-drop-indicator').removeClass('drag');
+            }
+            
+        });
+
+        da.addEventListener('drop', function(e){
+
+            e.preventDefault();  
+            e.stopPropagation();
+            
+            counter = 0;
+            
+            $('#messages').removeClass('drag');
+            $('#file-drop-indicator').removeClass('drag');
+            
+            if(e.dataTransfer){
+                
+                var dt = e.dataTransfer;
+                if (dt.items) {
+                    // Use DataTransferItemList interface to access the file(s)
+                    for (var i=0; i < dt.items.length; i++) {
+
+                        if (dt.items[i].kind == "file") {
+                            var f = dt.items[i].getAsFile();
+
+                            self.fileUplaoder.uploadFileHTML5(f);
+                        }
+
+                    }
+                } else {
+
+                    for (var i=0; i < dt.files.length; i++) {
+                        var f = dt.files[i];
+                        self.fileUplaoder.uploadFileHTML5(f);
+                    }  
+                }
+
+            }
+        });
+
         this.loadLatestMessage();
 
     },
