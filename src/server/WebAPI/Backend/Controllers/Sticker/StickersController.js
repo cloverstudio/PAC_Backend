@@ -70,7 +70,7 @@ StickersController.prototype.init = function(app){
 
 **/
     
-    router.get('/:organizationId',tokenChecker,function(request,response){
+    router.get('/',tokenChecker,function(request,response){
         
         var model = StickerModel.get();
         var organizationModel = OrganizationModel.get();

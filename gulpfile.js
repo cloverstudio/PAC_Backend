@@ -88,34 +88,13 @@ gulp.task('build-apidoc', function(done){
 
 });
 
-gulp.task('build-jsdoc', function(done){
-
-    var config = {
-    "opts": {
-        "encoding": "utf8",
-        "destination": "./public/doc/JS",
-        "recurse": true,
-        }
-    }
-    
-    gulp.src(['./src/**/*.js'], {read: false})
-        .pipe(jsdoc(config));
-
-});
-
-gulp.task('build-dist',['build-apidoc','copy','browserify-build','build-css','spika'],function(){
+gulp.task('build-dist',['build-apidoc','copy','browserify-build','build-css'],function(){
     
     
 });
 
 
 // tests
-gulp.task('spika-test', function (done) {
-    return gulp.src('modules_customised/spika/src/server/test/**/*.js', { read: false })
-    .pipe(mocha({ reporter: 'spec' }))
-    .pipe(exit());
-});
-
 
 gulp.task('messenger-test', function (done) {
     return gulp.src('src/server/test/**/*.js', { read: false })
@@ -123,59 +102,12 @@ gulp.task('messenger-test', function (done) {
     .pipe(exit());
 });
 
-gulp.task('server-test',['spika-test'], function (done) {
+gulp.task('server-test', function (done) {
     return gulp.src('src/server/test/**/*.js', { read: false })
     .pipe(mocha({ reporter: 'spec' }))
     .pipe(exit());
 });
 
-gulp.task('spika',function(){
-    
-    var spikaDir = "./modules_customised/spika/";
-    
-    fs.mkdirsSync(spikaDir + 'public/uploads')
-    gulp.src(spikaDir + 'src/client/js/adapter.js').pipe( gulp.dest(spikaDir + 'public/js') );
-    gulp.src(spikaDir + 'src/client/*.html').pipe( gulp.dest(spikaDir + 'public') );
-    gulp.src(spikaDir + 'src/client/img/**/*').pipe( gulp.dest(spikaDir + 'public/img') );
-    gulp.src(spikaDir + 'node_modules/bootstrap-sass/assets/fonts/**/*').pipe( gulp.dest(spikaDir + 'public/fonts') );
-    gulp.src(spikaDir + 'src/client/css/backgroundsize.min.htc').pipe( gulp.dest(spikaDir + 'public') );
-    gulp.src(spikaDir + 'node_modules/jquery-colorbox/example1/images/*').pipe( gulp.dest(spikaDir + 'public/css/images') );
-    
-    gulp.src(spikaDir + 'src/client/css/*.scss')
-        .pipe(plumber())
-        .pipe(sass())
-        .pipe(gulp.dest(spikaDir + 'public/css/'));
-    
-    var bundler = browserify({
-        // Required watchify args
-        cache: {}, 
-        packageCache: {}, 
-        fullPaths: true,
-        // Browserify Options
-        entries: spikaDir + 'src/client/js/main.js',
-        debug: true
-    });
-    
-    hbsfy.configure({
-        extensions: ['hbs']
-    });
-    
-    var bundle = function() {
-        return bundler
-        .transform(hbsfy)
-        .bundle()
-        .on('error', function(err){
-            console.log(err.message);
-            this.emit('end');
-        })
-        .pipe(source('bundle.js'))
-        .pipe(gulp.dest(spikaDir + 'public/js/'));
-    };
-    
-
-    return bundle();
-
-});
 
 gulp.task('default',['build-dist'],function(){
     
