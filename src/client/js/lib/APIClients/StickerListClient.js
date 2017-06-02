@@ -13,7 +13,7 @@ _.extend(StickerListClient.prototype,APIClientBase.prototype);
 
 StickerListClient.prototype.send = function(organizationId,success,err){
             
-    this.getRequst("//stickers/" + organizationId,success,err);
+    this.getRequst("/stickers/" + organizationId,success,err);
     
 }
     

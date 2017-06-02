@@ -29,7 +29,7 @@ StickersController.prototype.init = function(app){
     var self = this;
 
    /**
-     * @api {get} /api/v2/stickers/:organizationId Sticker List
+     * @api {get} /api/v2/stickers Sticker List
      * @apiName StickerList
      * @apiGroup WebAPI
      * @apiDescription Returns list of stickers
@@ -70,11 +70,11 @@ StickersController.prototype.init = function(app){
 
 **/
     
-    router.get('/:organizationId',function(request,response){
+    router.get('/:organizationId',tokenChecker,function(request,response){
         
         var model = StickerModel.get();
         var organizationModel = OrganizationModel.get();
-        var organizationId = request.params.organizationId;
+        var organizationId = request.user.organizationId;
         
         async.waterfall([function(done){
             
