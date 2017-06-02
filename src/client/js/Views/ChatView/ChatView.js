@@ -104,7 +104,9 @@ var ChatView = Backbone.View.extend({
         });
 
         var lastPosition = 0;
+        
         $( "#messages" ).scroll(function() {
+
             var scrollPosition = $('#messages').scrollTop();
 
             // scrolling to up
@@ -381,6 +383,16 @@ var ChatView = Backbone.View.extend({
                 view.destroy();
              
         });
+
+        console.log('typing off');
+        
+        var param = {
+            roomID: this.currentRoomId,
+            userID: loginUserManager.user._id,
+            type:Const.typingOff
+        };
+
+        socketIOManager.emit('sendtyping',param);
 
         Backbone.off(Const.NotificationNewMessage);
         Backbone.off(Const.NotificationMessageUpdated);
