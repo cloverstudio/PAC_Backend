@@ -220,8 +220,6 @@ var ChatView = Backbone.View.extend({
 
         var loadType = RenderDirection.append;
 
-        console.log('this.autoLoadMessageId',this.autoLoadMessageId);
-
         if(this.autoLoadMessageId){
             this.firstMessageId = this.autoLoadMessageId;
             loadType = RenderDirection.allto;
@@ -239,7 +237,12 @@ var ChatView = Backbone.View.extend({
                 self.firstMessageId = res.messages[res.messages.length - 1]._id;
                 self.renderMessages(res.messages,RenderDirection.append);
 
-                self.scrollToBottom();
+                if(self.autoLoadMessageId){
+                    self.scrollToTop();
+                } else {
+                    self.scrollToBottom();
+                }
+                    
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
             }
@@ -346,10 +349,12 @@ var ChatView = Backbone.View.extend({
 
             $('#messages').append(html);
 
-            $('img').on('load',function(){
-                self.scrollToBottom();
-            });
-
+            if(!self.autoLoadMessageId){
+                $('img').on('load',function(){
+                    self.scrollToBottom();
+                });
+            }
+            
         }
 
         if(renderDirection == RenderDirection.prepend){
@@ -528,6 +533,9 @@ var ChatView = Backbone.View.extend({
     },
     scrollToBottom: function(){
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
+    },
+    scrollToTop: function(){
+        $('#messages').scrollTop(0);
     },
     insertTempMessage:function(message){
 

@@ -193,13 +193,13 @@ var ChatManager = {
     
     openChatByPrivateRoomId: function(roomId,messageId){
 
+        var self = this;
+
         if(this.isLoading){
             return;
         }
         
         var chatId = roomId;
-        
-        ChatManager.open(chatId,messageId);
         
         var roomIdSplitted = roomId.split('-');
         
@@ -218,12 +218,11 @@ var ChatManager = {
             var user = data.user;
             var url = "/api/v2/avatar/user/";
             
+
             if(user.avatar && user.avatar && user.avatar.thumbnail)
                 url = "/api/v2/avatar/user/" + user.avatar.thumbnail.nameOnServer;
-
-            loginUserManager.openChat({
-                user: user
-            });
+            
+            self.openChatByUser(user,messageId);
             
             Backbone.trigger(Const.NotificationUpdateHeader,{
                 online: user.onlineStatus,
