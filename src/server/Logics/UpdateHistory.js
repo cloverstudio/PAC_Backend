@@ -318,12 +318,14 @@ var UpdateHistory = {
                         type: rawMessageObj.type
                     }
                 };
-            
+                
+                console.log('roomId',roomId);
+
                 // get room
                 roomModel.findOne({_id:roomId},function(err,findRoomResult){
                     
                     if(findRoomResult == null){
-                        done('invalid room id',null);
+                        done('invalid room id',roomId);
                         return;
                     }
                     
@@ -349,7 +351,7 @@ var UpdateHistory = {
                     done('empty room',null);
                     return;
                 }
-                
+
                 async.each(result.room.users,function(userId,doneEach){
                     
                     var historyData = {
@@ -370,7 +372,7 @@ var UpdateHistory = {
                     
                     
                 },function(err){
-                    
+
                     done(err,result);
                 })
                 
@@ -489,7 +491,6 @@ var UpdateHistory = {
                         
                     });
                     
-                    
                 }, function(err){
                     
                     done(err,result);
@@ -518,11 +519,6 @@ var UpdateHistory = {
         
         var historyModel = HistoryModel.get();
         
-        if(data.userId == rawMessageObj.userID){
-            callBack(null);
-            return;
-        }
-        
         async.waterfall([function(done){
                 
                 var result = {};
@@ -544,16 +540,16 @@ var UpdateHistory = {
                 
             },
             function(result,done){
-                
+
                 if(rawMessageObj){
                     
-                    if(result.isOnline && result.currentRoomID == rawMessageObj.roomID){
+                    if(!rawMessageObj || (result.isOnline && result.currentRoomID == rawMessageObj.roomID)){
 
                     }else{
                         
                         if(!result.existingData || result.existingData.unreadCount == undefined || result.existingData.unreadCount == null)
                             data.unreadCount = 1;
-                        else    
+                        else  if(rawMessageObj && data.userId != rawMessageObj.userID)   
                             data.unreadCount = result.existingData.unreadCount + 1;
     
                     }

@@ -125,7 +125,7 @@ var NotifyNewMessage = {
                     
                     messageCloned.room = result.room;
                     SocketAPIHandler.emitToRoom(messageCloned.roomID,'newmessage',messageCloned);
-                    
+
                     done(null,result);
                     
                 } else if(chatType == Const.chatTypePrivate){
@@ -185,7 +185,6 @@ var NotifyNewMessage = {
                                 SocketAPIHandler.emitToSocket(socketIdObj.socketId,'newmessage',messageCloned);
                             })
                             
-                            console.log('sss');
                         });
 
                         if(sendNotification) {

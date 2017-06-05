@@ -1,35 +1,32 @@
 var should = require('should');
 var request = require('supertest');
 var app = require('../mainTest');
-var sha1 = require('sha1');
 var util = require('util');
 
 describe('WEB API', function () {
 
     var req, res;
 
-    describe('/stickers GET', function () {
 
-        it('works', function (done) {
+    describe('/file/download GET', function () {
 
+        it('download file works', function (done) {
+    	
             request(app)
-                .get('/api/v2/stickers')
-                .set('access-token', global.user1.accessToken)
+                .get('/api/v2/file/' + global.file1)
+        		.expect(200) 
                 .end(function (err, res) {
 
     			if (err) {
     				throw err;
     			}
-
-                res.body.should.have.property('code');
-                res.body.code.should.equal(1);
-
+                                
                 done();
-                
+            
             });   
             
         });
-
+               
     });
     
 });

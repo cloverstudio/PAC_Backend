@@ -169,6 +169,62 @@ Message.findNewMessages = function(roomID,lastMessageID,limit,callBack){
 
 }
 
+Message.findAllMessages = function(roomID,fromMessageID,callBack){
+
+    var model = Message.get();
+
+    if(lastMessageID != 0){
+        
+        var self = this;
+        
+        model.findOne({ _id: lastMessageID },function (err, message) {
+
+            if (err) return console.error(err);
+            
+            var lastCreated = message.created;
+            
+            var query = model.find({
+                roomID:roomID,
+                created:{$gte:lastCreated}
+            }).sort({'created': 'asc'});        
+            
+            query.exec(function(err,data){
+                
+                if (err)
+                    console.error(err);
+                
+                if(callBack)
+                    callBack(err,data)
+                
+            });                
+                
+        
+        });
+        
+    }else{
+        
+        var query = model.find({roomID:roomID}).sort({'created': 'desc'}).limit(limit);        
+    
+        query.exec(function(err,data){
+            
+            if (err) return console.error(err);
+            
+            // re-sort to be asc
+            data = _.sortBy(data,(o) => {
+                return o.created;
+            });
+
+            if(callBack)
+                callBack(err,data)
+            
+        });
+    
+    
+    }
+
+}
+
+
 
 Message.populateMessages = function(messages,callBack){
     

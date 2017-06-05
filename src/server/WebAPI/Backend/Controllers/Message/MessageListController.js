@@ -26,6 +26,7 @@ var tokenChecker = require( pathTop + 'lib/authApi');
 var BackendBase = require('../BackendBase');
 
 var MessageLoadDirection = {
+    appendNoLimit:'allto',
     append:'new',
     prepend:'old'
 };
@@ -74,7 +75,7 @@ MessageListController.prototype.init = function(app){
                 
             }
 
-            else {
+            else if(direction == MessageLoadDirection.append){
 
                 var limit = Const.pagingLimit;
                 if(lastMessageId != 0)
@@ -88,15 +89,33 @@ MessageListController.prototype.init = function(app){
 
             }
 
+            else if(direction == MessageLoadDirection.appendNoLimit){
+
+                MessageModel.findAllMessages(roomId,lastMessageId,function (err,data) {
+                    
+                    done(err,data);
+
+                });
+
+            }
+
         },
         function(messages,done){
 
-            MessageModel.populateMessages(messages,function (err,data) {
-                
-                done(err,data);
+            if(messages.length > 0){
 
-            });
-            
+                MessageModel.populateMessages(messages,function (err,data) {
+                    
+                    done(err,data);
+
+                });
+
+            } else {
+
+                done(null,messages);
+
+            }
+  
         },
         function(messages,done){
 

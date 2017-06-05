@@ -20,7 +20,7 @@ describe('WEB API', function () {
                 .field('roomId', global.room1._id)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
                 .end(function (err, res) {
-        
+
         		if (err) {
         			throw err;
         		}
