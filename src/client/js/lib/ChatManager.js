@@ -66,7 +66,8 @@ var ChatManager = {
 
         this.chatView = new ChatView({
             container : "#main-container",
-            roomId: roomId
+            roomId: roomId,
+            autoLoadMessageId: messageId
         });
 
   

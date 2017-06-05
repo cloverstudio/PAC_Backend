@@ -173,11 +173,11 @@ Message.findAllMessages = function(roomID,fromMessageID,callBack){
 
     var model = Message.get();
 
-    if(lastMessageID != 0){
+    if(fromMessageID != 0){
         
         var self = this;
         
-        model.findOne({ _id: lastMessageID },function (err, message) {
+        model.findOne({ _id: fromMessageID },function (err, message) {
 
             if (err) return console.error(err);
             
@@ -190,6 +190,14 @@ Message.findAllMessages = function(roomID,fromMessageID,callBack){
             
             query.exec(function(err,data){
                 
+                if(data.length < Const.pagingLimit){
+
+                    self.findNewMessages(roomID,0,Const.pagingLimit,callBack);
+
+                    return;
+                    
+                }
+
                 if (err)
                     console.error(err);
                 

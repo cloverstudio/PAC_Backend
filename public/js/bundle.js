@@ -60664,7 +60664,8 @@ var stickerPanelView = require('./StickerPanel/StickerPanelView');
 
 var RenderDirection = {
     append:'new',
-    prepend:'old'
+    prepend:'old',
+    allto: "allto"
 };
 
 var ChatView = Backbone.View.extend({
@@ -60674,6 +60675,7 @@ var ChatView = Backbone.View.extend({
     currentRoomId: '',
     lastMessageId: 0,
     firstMessageId: 0,
+    autoLoadMessageId: 0,
     loadedMessages: [],
     initialTBHeight : 0,
     initialTBContainerHeight : 0,
@@ -60684,6 +60686,7 @@ var ChatView = Backbone.View.extend({
         
         this.container = options.container;
         this.currentRoomId = options.roomId;
+        this.autoLoadMessageId = options.autoLoadMessageId;
         this.render();
 
         this.fileUplaoder = new FileUplaoder({
@@ -60857,7 +60860,16 @@ var ChatView = Backbone.View.extend({
 
         var self = this;
 
-        LoadMessageClient.send(this.currentRoomId,this.firstMessageId,RenderDirection.append,function(res){
+        var loadType = RenderDirection.append;
+
+        console.log('this.autoLoadMessageId',this.autoLoadMessageId);
+
+        if(this.autoLoadMessageId){
+            this.firstMessageId = this.autoLoadMessageId;
+            loadType = RenderDirection.allto;
+        }
+
+        LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
             
             if(res.messages && res.messages.length > 0){
 
@@ -65591,7 +65603,7 @@ var templateList = require('./SearchResult.hbs');
 var loginUserManager = require('../../lib/loginUserManager');
 var ChatManager = require('../../lib/ChatManager');
 
-var searachMessageClient = require('../../lib/APIClients/SearchMessageClient');
+var searchMessageClient = require('../../lib/APIClients/SearchMessageClient');
 
 var SideMenu = require('../SideMenu/SideMenu');
 
@@ -65670,6 +65682,7 @@ var SearchView = Backbone.View.extend({
         }
 
         this.loadNext(keyword);
+
     },
 
    loadNext : function(keyword){
@@ -65684,7 +65697,7 @@ var SearchView = Backbone.View.extend({
 
         this.isLoading = true;
 
-        searachMessageClient.send(keyword,this.currentPage,function(data){
+        searchMessageClient.send(keyword,this.currentPage,function(data){
 
             self.isLoading = false;
 
@@ -69495,7 +69508,8 @@ var ChatManager = {
 
         this.chatView = new ChatView({
             container : "#main-container",
-            roomId: roomId
+            roomId: roomId,
+            autoLoadMessageId: messageId
         });
 
   

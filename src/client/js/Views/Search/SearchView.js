@@ -13,7 +13,7 @@ var templateList = require('./SearchResult.hbs');
 var loginUserManager = require('../../lib/loginUserManager');
 var ChatManager = require('../../lib/ChatManager');
 
-var searachMessageClient = require('../../lib/APIClients/SearchMessageClient');
+var searchMessageClient = require('../../lib/APIClients/SearchMessageClient');
 
 var SideMenu = require('../SideMenu/SideMenu');
 
@@ -92,6 +92,7 @@ var SearchView = Backbone.View.extend({
         }
 
         this.loadNext(keyword);
+
     },
 
    loadNext : function(keyword){
@@ -106,7 +107,7 @@ var SearchView = Backbone.View.extend({
 
         this.isLoading = true;
 
-        searachMessageClient.send(keyword,this.currentPage,function(data){
+        searchMessageClient.send(keyword,this.currentPage,function(data){
 
             self.isLoading = false;
 
