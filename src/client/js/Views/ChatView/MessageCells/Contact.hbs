@@ -1,4 +1,4 @@
-<div class="message-cell {{isMine}} text" id="{{id}}" userid="{{userID}}" ts="{{created}}">
+<div class="message-cell {{isMine}} text" id="{{_id}}" userid="{{userID}}" ts="{{created}}" localId="{{localID}}">
     
     <div class="status status{{status}}">
         
@@ -8,7 +8,7 @@
     </div>
         
 	<div class="avatar">
-		<img src="{{stripHost avatarURL }}" />
+		<img class="img-circle" src="/api/v2/avatar/user/{{avatarFileId}}" />
     </div>
 
     <div class="info">

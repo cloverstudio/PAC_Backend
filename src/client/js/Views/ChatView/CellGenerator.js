@@ -19,8 +19,8 @@ function CellGenerator(){
     this.thumbTemplate = require('./MessageCells/Thumbnail.hbs');
     //this.typingTemplate = require('./MessageCells/Typing.hbs');
     this.deletedTemplate = require('./MessageCells/DeletedMessage.hbs');
-    //this.locationTemplate = require('./MessageCells/Location.hbs');
-    //this.contactTemplate = require('./MessageCells/Contact.hbs');
+    this.locationTemplate = require('./MessageCells/Location.hbs');
+    this.contactTemplate = require('./MessageCells/Contact.hbs');
     this.stickerTemplate = require('./MessageCells/Sticker.hbs');
 };
 
@@ -111,13 +111,13 @@ CellGenerator.prototype.generate = function(messageModel){
             
         }
     
-        /*
+
         
-        if(messageModel.get('type') == CONST.MESSAGE_TYPE_LOCATION){
+        if(messageModel.get('type') == Const.messageTypeLocation){
             html = this.locationTemplate(flatData);
         }
         
-        if(messageModel.get('type') == CONST.MESSAGE_TYPE_CONTACT){
+        if(messageModel.get('type') == Const.messageTypeContact){
 
             var vcard = new VCardParser({
                 vCardToJSONAttributeMapping: {
@@ -133,6 +133,8 @@ CellGenerator.prototype.generate = function(messageModel){
             html = this.contactTemplate(flatData);
         }
         
+        /*
+
         if(messageModel.get('type') == CONST.MESSAGE_TYPE_STICKER){
             html = this.stickerTemplate(flatData);
         }

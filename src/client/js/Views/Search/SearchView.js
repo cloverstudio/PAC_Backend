@@ -50,7 +50,7 @@ var SearchView = Backbone.View.extend({
         Backbone.trigger(Const.NotificationCustomHeader,{
             html:templateHeader({})
         });
-
+        
         $("#tb-search-message").on('change keydown paste input',function() {
 
             var keyword = $(this).val();
@@ -175,7 +175,6 @@ var SearchView = Backbone.View.extend({
             $(this).html(text);
 
             $(this).removeClass('new');
-
 
         });
 
