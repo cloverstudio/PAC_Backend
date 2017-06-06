@@ -103,7 +103,7 @@ var CallView = Backbone.View.extend({
         }
             
         this.updateMediaButton();
-        
+
         this.webRTC = new SimpleWebRTC({
             debug: true,
             localVideoEl: 'video-mine',
@@ -114,6 +114,10 @@ var CallView = Backbone.View.extend({
             peerConnectionConfig  : {
                 iceTransports : "all"
             },
+            socketio : {
+                transports: ['websocket'], 
+                upgrade: false
+            }
         });
 
         this.webRTC.on('connectionReady', function (sessionId) {
@@ -282,7 +286,6 @@ var CallView = Backbone.View.extend({
     tuggleAudio: function(){
 
         this.audioStatus = !this.audioStatus;
-        
         
         if(this.audioStatus)
             this.webRTC.unmute();
