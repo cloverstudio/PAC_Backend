@@ -113,11 +113,11 @@ CellGenerator.prototype.generate = function(messageModel){
     
 
         
-        if(messageModel.get('type') == Const.messageTypeLocation){
+        if(messageModel.type == Const.messageTypeLocation){
             html = this.locationTemplate(flatData);
         }
         
-        if(messageModel.get('type') == Const.messageTypeContact){
+        if(messageModel.type == Const.messageTypeContact){
 
             var vcard = new VCardParser({
                 vCardToJSONAttributeMapping: {

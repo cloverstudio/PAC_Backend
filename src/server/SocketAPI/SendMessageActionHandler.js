@@ -63,9 +63,9 @@ SendMessageActionHandler.prototype.attach = function(io,socket){
         }
 
         if(param.type == Const.messageTypeLocation && (
-                                        _.isEmpty(param.location) ||
-                                        _.isEmpty(param.location.lat) ||
-                                        _.isEmpty(param.location.lng))){
+                                        !param.location ||
+                                        !param.location.lat ||
+                                        !param.location.lng )){
                                         
             socket.emit('socketerror', {code:Const.resCodeSocketSendMessageNoLocation});               
             return;
