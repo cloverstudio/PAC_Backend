@@ -148,7 +148,7 @@ var NotifyNewMessage = {
                         toUser = user1;
                         fromUser = user2;
                     }
-                    var sendNotification = true;
+                    var muteNotification = false;
 
                     
                     result.toUserId = toUser;
@@ -169,7 +169,7 @@ var NotifyNewMessage = {
                         if(result.sender && _.isArray(toUserObj.muted)){
                             
                             if(toUserObj.muted.indexOf(result.sender._id.toString()) != -1)
-                                sendNotification = false;
+                                muteNotification = true;
 
                         }
 
@@ -187,23 +187,22 @@ var NotifyNewMessage = {
                             
                         });
 
-                        if(sendNotification) {
+                        // send to user who got message
+                        DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
+                            
+                            var socketIds = _.pluck(redisResult,"socketId");
+                            
+                            if(!_.isArray(redisResult))
+                                return;
+                            
+                            if(muteNotification)
+                                messageCloned.muted = 1;
 
-                            // send to user who got message
-                            DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
-                                
-                                var socketIds = _.pluck(redisResult,"socketId");
-                                
-                                if(!_.isArray(redisResult))
-                                    return;
-                                
-                                _.forEach(redisResult,function(socketIdObj){
-                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId,'newmessage',messageCloned);
-                                })
+                            _.forEach(redisResult,function(socketIdObj){
+                                SocketAPIHandler.emitToSocket(socketIdObj.socketId,'newmessage',messageCloned);
+                            })
 
-                            });
-
-                        }
+                        });
                         
                         done(null,result);
                         

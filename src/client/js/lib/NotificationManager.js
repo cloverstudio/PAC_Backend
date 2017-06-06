@@ -32,6 +32,13 @@ var NotificationManager = {
 	},
     handleNewMessage: function(obj){
 
+        console.log("message",obj);
+
+        if(obj.muted){
+            console.log("muted");
+            return;
+        }
+
         if(obj.roomID == loginUserManager.currentConversation)
             return;
         
