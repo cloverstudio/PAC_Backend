@@ -201,7 +201,7 @@ var NotifyNewMessage = {
                             _.forEach(redisResult,function(socketIdObj){
                                 SocketAPIHandler.emitToSocket(socketIdObj.socketId,'newmessage',messageCloned);
                             })
-
+                            
                         });
                         
                         done(null,result);

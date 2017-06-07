@@ -57,6 +57,12 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
             },(err,findResult) => {
 
                 result.message = findResult;
+
+                // do nothing for message sent user
+                if(findResult.userID == param.userID){
+                    return;
+                }
+
                 done(err,result);
 
             });

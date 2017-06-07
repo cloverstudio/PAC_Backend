@@ -14,9 +14,9 @@ describe('SOCKET', function () {
         'force new connection': true
     };
 
-    describe('open message', function () {
+    describe('SeenBy Updated By API', function () {
         
-        it('works for private chat', function (done) {
+        it('seen by works for private chat', function (done) {
             
             // scenario is following
             // user1 send message to user2
@@ -80,11 +80,19 @@ describe('SOCKET', function () {
 
             client2.on('newmessage', function(param){
 
-                // send openmessage
-                client2.emit('openMessage',{
-                    messageID: param._id,
-                    userID: global.user2._id
-                });
+                // open list
+                request(app)
+                    .get('/api/v2/message/list/' + "1-" + global.user1._id + "-" + global.user2._id + '/0/new')
+                    .set('access-token', global.user2.accessToken)
+                    .end(function (err, res) {
+
+                    if (err) {
+                        throw err;
+                    }
+
+                    // update message should sent to client1
+                
+                });   
 
                 
             });
@@ -110,7 +118,7 @@ describe('SOCKET', function () {
         });
 
 
-        it('works for group chat', function (done) {
+        it('seen by works for group chat', function (done) {
             
             // scenario is following
             // user1 send message to group
@@ -174,12 +182,19 @@ describe('SOCKET', function () {
 
             client2.on('newmessage', function(param){
 
-                // send openmessage
-                client2.emit('openMessage',{
-                    messageID: param._id,
-                    userID: global.user2._id
-                });
+                // open list
+                request(app)
+                    .get('/api/v2/message/list/' + "2-" + global.group1._id + '/0/new')
+                    .set('access-token', global.user2.accessToken)
+                    .end(function (err, res) {
 
+                    if (err) {
+                        throw err;
+                    }
+
+                    // update message should sent to client1
+                
+                });   
                 
             });
 
@@ -204,7 +219,7 @@ describe('SOCKET', function () {
         });
 
 
-        it('works for room chat', function (done) {
+        it('seen by works for room chat', function (done) {
             
             // scenario is following
             // user1 send message to room
@@ -268,12 +283,19 @@ describe('SOCKET', function () {
 
             client2.on('newmessage', function(param){
 
-                // send openmessage
-                client2.emit('openMessage',{
-                    messageID: param._id,
-                    userID: global.user2._id
-                });
+                // open list
+                request(app)
+                    .get('/api/v2/message/list/' + "3-" + global.room2._id + '/0/new')
+                    .set('access-token', global.user2.accessToken)
+                    .end(function (err, res) {
 
+                    if (err) {
+                        throw err;
+                    }
+
+                    // update message should sent to client1
+                
+                });   
                 
             });
 

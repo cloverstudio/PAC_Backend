@@ -54,6 +54,7 @@ MessageListController.prototype.init = function(app){
         
         var messageModel = MessageModel.get();
 
+        var userID = request.user._id.toString();
         var roomId = request.params.roomId;
         var lastMessageId = request.params.lastMessageId;
         var direction = request.params.direction? request.params.direction : MessageLoadDirection.append;
@@ -102,32 +103,21 @@ MessageListController.prototype.init = function(app){
         },
         function(messages,done){
 
-            if(messages.length > 0){
-
-                MessageModel.populateMessages(messages,function (err,data) {
-                    
-                    done(err,data);
-
-                });
-
-            } else {
-
-                done(null,messages);
-
-            }
-  
-        },
-        function(messages,done){
-
-            //
-            done(null,messages);
-
             // handle seen by
-            var userID = request.user._id.toString();
 
             var messagesToNotifyUpdate = [];
 
-            messages.forEach((message) => {
+            if(messages.length == 0){
+
+                done(null,{
+                    messagesToNotifyUpdate:[],
+                    messages:[]
+                });
+
+                return;
+            }
+
+            async.eachSeries(messages,(message,doneEach) => {
 
                 var seenBy = message.seenBy;
 
@@ -136,11 +126,15 @@ MessageListController.prototype.init = function(app){
                 
                 var isExist = _.find(seenBy,(seenByRow) => {
 
-                    return userID == seenByRow.userID;
+                    return userID == seenByRow.user;
 
                 });
 
-                if(!isExist){
+
+                if(!isExist)
+                    console.log(request.user._id.toString(),message.userID)
+
+                if(!isExist && message.userID != request.user._id.toString()){
 
                     // add seenby
                     seenBy.push({
@@ -149,31 +143,117 @@ MessageListController.prototype.init = function(app){
                         version:2
                     });
 
+                    message.seenBy = seenBy;
+                    messagesToNotifyUpdate.push(message._id.toString());
+
                     messageModel.update({ 
                         _id: message._id 
                     },{ 
                         seenBy: seenBy
                     },(err,updateResult) => {
 
-                        //console.log(message._id);
-                        //console.log(err,updateResult);
+                        doneEach(err);
+
+                    });
+                    
+                } else {
+
+                    doneEach();
+
+                }
+
+            },(err) => {
+
+                done(null,{
+                    messagesToNotifyUpdate:messagesToNotifyUpdate,
+                    messages:messages
+                });
+
+            });
+
+        },
+        function(result,done){
+    
+
+            var messages = result.messages;
+            var messageIdsToNotify = result.messagesToNotifyUpdate;
+
+            if(messages.length > 0){
+
+                MessageModel.populateMessages(messages,function (err,data) {
+                    
+                    done(err,data);
+
+                    // send notification
+
+                    var messagesToNotify = _.filter(data,(obj) => {
+
+                        return messageIdsToNotify.indexOf(obj._id.toString()) != -1
 
                     });
 
-                    message.seenBy = seenBy;
-                    
-                    messagesToNotifyUpdate.push(message);
+                    // notify if exists
+                    if(messagesToNotify.length > 0){
 
-                }
-              
-            });
+                        var roomID = messagesToNotify[0].roomID;
+                        var chatType = roomID.split("-")[0];
+                        var roomIDSplitted = roomID.split("-");
 
-            // notify if exists
-            if(messagesToNotifyUpdate.length > 0){
+                        // websocket notification
+                        if(chatType == Const.chatTypeGroup){
+                            
+                            SocketAPIHandler.emitToRoom(roomID,'updatemessages',messagesToNotify);
+                            
+                        } else if(chatType == Const.chatTypeRoom) {
+                            
+                            SocketAPIHandler.emitToRoom(roomID,'updatemessages',messagesToNotify);
 
-                SocketAPIHandler.emitToRoom(roomId,'updatemessages',messagesToNotifyUpdate);
+                        } else if(chatType == Const.chatTypePrivate){
+                            
+                            var splitAry = roomID.split("-");
+                            
+                            if(splitAry.length < 2)
+                                return;
+                            
+                            var user1 = splitAry[1];
+                            var user2 = splitAry[2];
+                            
+                            var toUser = null;
+                            var fromUser = null;
 
-            };
+                            if(user1 == userID){
+                                toUser = user2;
+                                fromUser = user1;
+                            }else{
+                                toUser = user1;
+                                fromUser = user2;
+                            }
+
+                            // send to user who got message
+                            DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
+                                
+                                var socketIds = _.pluck(redisResult,"socketId");
+                                
+                                if(!_.isArray(redisResult))
+                                    return;
+                                
+                                _.forEach(redisResult,function(socketIdObj){
+                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',messagesToNotify);
+                                })
+
+                            });
+
+                        }
+                        
+                    };
+
+                });
+
+            } else {
+
+                done(null,messages);
+            }
+
 
         },
         function(messages,done){

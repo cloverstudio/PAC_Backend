@@ -36,7 +36,7 @@ describe('SOCKET', function () {
                     roomID : "3-" + global.room2._id,
                     userID : global.user1._id,
                     type : 1,
-                    message : "0301b8a755b0d074259a98114f78b6738401681b3762c87d6f25249001e903067cc7009beae2288379e456e6856bb3c4f22084811c05d10fa7869ac660aec60c04259926d75506a83284368805bdaca07563"
+                    message : global.encryptedText
                 };
 
                 client1.emit('sendMessage',sendMessageParams);

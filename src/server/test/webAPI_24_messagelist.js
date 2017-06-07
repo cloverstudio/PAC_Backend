@@ -14,10 +14,6 @@ describe('WEB API', function () {
             request(app)
                 .get('/api/v2/message/list/' + global.room1 + '/0/new')
                 .set('access-token', global.user1.accessToken)
-                .send({
-                    action : 'block',
-                    target : global.user2._id
-                })
                 .end(function (err, res) {
 
     			if (err) {

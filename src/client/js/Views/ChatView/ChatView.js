@@ -83,11 +83,13 @@ var ChatView = Backbone.View.extend({
                 // prevent sending massive openMessage in same time to server
                 _.delay(function() {
 
+                    console.log("send openmessage");
+                    
                     socketIOManager.emit('openMessage',{
                         messageID: message._id,
                         userID: loginUserManager.user._id,
                     });
-
+                    
                 }, 1000 * Math.random(), 'later');
 
             }

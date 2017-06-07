@@ -14,9 +14,9 @@ describe('SOCKET', function () {
         'force new connection': true
     };
 
-    describe('open message', function () {
+    describe('SeenBy Updated By Socket', function () {
         
-        it('works for private chat', function (done) {
+        it('seen by works for private chat', function (done) {
             
             // scenario is following
             // user1 send message to user2
@@ -110,7 +110,7 @@ describe('SOCKET', function () {
         });
 
 
-        it('works for group chat', function (done) {
+        it('seen by works for group chat', function (done) {
             
             // scenario is following
             // user1 send message to group
@@ -204,7 +204,7 @@ describe('SOCKET', function () {
         });
 
 
-        it('works for room chat', function (done) {
+        it('seen by works for room chat', function (done) {
             
             // scenario is following
             // user1 send message to room
