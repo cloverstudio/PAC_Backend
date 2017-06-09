@@ -24,6 +24,7 @@ var SendMessage = {
     send: function(param,errorCB,successCB){
 
         var userID = param.userID;
+        var roomID = param.roomID;
 
         // decript message
         if(param.type == Const.messageTypeText){
@@ -33,25 +34,91 @@ var SendMessage = {
         }
 
         var userID = param.userID;
-        
         var userModel = UserModel.get();
 
-        //save to DB
-        userModel.findOne({
+        async.waterfall([(done) => {
+
+            var result = {};
+
+            //save to DB
+            userModel.findOne({
                 _id:userID
-            },function (err,user) {
+            }, (err,user) => {
             
-            if(err || !user ){
+                if(err || !user ){
+
+                    if(errorCB)
+                        errorCB();
+                        
+                    return;
+                }
+                
+                result.user = user;
+
+                done(null,result);
+
+            });
+
+        },(result,done) => {
+            // check block
+            var messageTargetTypeAry = roomID.split("-");
+            if(messageTargetTypeAry.length < 2){
 
                 if(errorCB)
                     errorCB();
                     
                 return;
+
             }
+
+            var messageTargetType = messageTargetTypeAry[0];
+
+            if(messageTargetType == Const.chatTypePrivate){
+
+                var userIdTo = messageTargetTypeAry[1];
+
+                if(userIdTo == userID)
+                    userIdTo = messageTargetTypeAry[2];
+                
+                // find block
+                userModel.findOne({
+                    _id:userIdTo
+                }, (err,user) => {
+                
+                    if(err || !user ){
+
+                        if(errorCB)
+                            errorCB();
+                            
+                        return;
+                    }
+                    
+                    console.log(user.blocked);
+
+                    var isBlocked = _.find(user.blocked,(userIdTmp) => {
+
+                        return userIdTmp == userID;
+
+                    });
+
+                    if(isBlocked){
+                        // do nothing
+                        return;
+                    }
+
+                    done(null,result);
+
+                });
+
+            }else{
+                done(null,result);
+            }
+
+        },(result,done) => {
 
             var objMessage = {
                 remoteIpAddress:param.ipAddress,
-                user:user._id,
+                user:result.user._id,
                 userID: userID,
                 roomID: param.roomID,
                 message: param.message,
@@ -102,33 +169,52 @@ var SendMessage = {
                     return;
                 }
 
-                MessageModel.populateMessages(message,function (err,data) {
-                                        
-                    var messageObj = data[0];
-                    messageObj.localID = '';
-                    messageObj.deleted = 0;
-                    
-                    if(!_.isEmpty(param.localID))
-                        messageObj.localID = param.localID;
-                    
-                    // ecrypt message
-                    var sendData = _.cloneDeep(data[0]);
+                result.message = message;
 
-                    if(sendData.type == Const.messageTypeText){
-                        var encryptedMessage = EncryptionManager.encryptText(sendData.message);
-                        sendData.message = encryptedMessage;
-                    }
-    
-                    UpdateHistory.updateByMessage(messageObj,() => {
-                        NotifyNewMessage.notify(messageObj);
-                    });
-                    
-                    if(successCB)
-                        successCB(messageObj);
+                done(err,result);
+
+            });
+
+        },(result,done) => {
+
+            MessageModel.populateMessages(result.message,function (err,data) {
+                                    
+                var messageObj = data[0];
+                messageObj.localID = '';
+                messageObj.deleted = 0;
+                
+                if(!_.isEmpty(param.localID))
+                    messageObj.localID = param.localID;
+                
+                // ecrypt message
+                var sendData = _.cloneDeep(data[0]);
+
+                if(sendData.type == Const.messageTypeText){
+                    var encryptedMessage = EncryptionManager.encryptText(sendData.message);
+                    sendData.message = encryptedMessage;
+                }
+
+                UpdateHistory.updateByMessage(messageObj,() => {
+                    NotifyNewMessage.notify(messageObj);
                 });
+
+                result.messagePopulated = messageObj;
+
+                done(err,result);
 
             });
             
+        }],
+        (err,result) => {
+
+            if(err){
+                console.log("errro while sending message",err);
+                return;
+            }
+
+            if(successCB)
+                successCB(result.messagePopulated);
+                
         });
 
     }
