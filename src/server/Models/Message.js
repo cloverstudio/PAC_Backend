@@ -278,7 +278,7 @@ Message.populateMessages = function(messages,callBack){
             done(null,null);
             return;
         }
-
+        
         // convert MF olduserid to spika for business user id
         var oldOpenSourceUser = OldOpenSourceUser.get();
 
