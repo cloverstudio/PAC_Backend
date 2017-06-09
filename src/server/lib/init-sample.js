@@ -130,4 +130,6 @@
 
     Config.useVoipPush = true;
 
+    Config.useCluster = false;
+
     module["exports"] = Config;
