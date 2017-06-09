@@ -12,7 +12,6 @@ var Conf = require('./lib/init.js');
 var WebAPI = require('./WebAPI/WebAPIMain');
 var SocketAPI = require('./SocketAPI/SocketAPIHandler');
 
-var SpikaBridge = require('./lib/SpikaBridge');
 var DatabaseManager = require('./lib/DatabaseManager');
 var SocketConnectionHandler = require('./lib/SocketConnectionHandler');
 var OnlineStatusChecker = require('./lib/OnlineStatusChecker');
@@ -80,8 +79,6 @@ function startServer(){
             if(!SocketConnectionHandler.init()){
                 process.exit(1);
             }
-            
-            SpikaBridge.init(app,SocketAPI.io);
             
             // start signaling server
             signaling(io, Conf.webRTCConfig);  

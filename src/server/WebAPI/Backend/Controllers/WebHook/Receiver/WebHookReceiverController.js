@@ -15,9 +15,6 @@ var Utils = require(pathTop +'lib/utils');
 var HookModel = require( pathTop + 'Models/Hook');
 var UserModel = require( pathTop + 'Models/User');
 
-var SpikaDatabaseManager = require( pathTop + '../../modules_customised/spika/src/server/lib/DatabaseManager');
-var SpikaSendMessageLogic = require( pathTop + '../../modules_customised/spika/src/server/Logics/SendMessage');
-var SpikaLoginLogic = require( pathTop + '../../modules_customised/spika/src/server/Logics/Login');
 
 var BackendBase = require('../../BackendBase');
 

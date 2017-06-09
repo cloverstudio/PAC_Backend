@@ -14,10 +14,6 @@ body.loading{
     cursor: wait !important;
 }
 
-#main-container.chat{
-    @import "../../../modules_customised/spika/src/client/css/style";
-    padding: 0px;
-}
 
 #main-container{
     padding: 0px;

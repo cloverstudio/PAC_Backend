@@ -92,8 +92,6 @@ var SendMessage = {
                             
                         return;
                     }
-                    
-                    console.log(user.blocked);
 
                     var isBlocked = _.find(user.blocked,(userIdTmp) => {
 
