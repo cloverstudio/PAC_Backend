@@ -16,7 +16,7 @@ _.extend(OldUser.prototype,BaseModel.prototype);
 OldUser.prototype.init = function(mongoose){
     
     // Defining a schema
-    var userSchema = new mongoose.Schema({
+    this.schema = new mongoose.Schema({
         userID: { type: String, index: true },
         name: String,
         avatarURL: String,
@@ -25,7 +25,7 @@ OldUser.prototype.init = function(mongoose){
         created: Number
     });
 
-    this.model = mongoose.model(Config.dbCollectionPrefix + "spika_users", userSchema);
+    this.model = mongoose.model(Config.dbCollectionPrefix + "spika_users", this.schema);
 
 }
 

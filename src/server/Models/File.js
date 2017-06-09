@@ -19,7 +19,7 @@ _.extend(File.prototype,BaseModel.prototype);
 File.prototype.init = function(mongoose){
 
     // Defining a schema
-    var fileSchema = new mongoose.Schema({
+    this.schema = new mongoose.Schema({
         name: String,
         mimeType: String,
         size: Number,
