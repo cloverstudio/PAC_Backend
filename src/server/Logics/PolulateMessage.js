@@ -196,7 +196,7 @@ var PolulateMessage = {
                 
                 if(roomType == Const.chatTypeGroup){
                     
-                    message.groupModel = _.find(result.groups,function(group){
+                    message.group = _.find(result.groups,function(group){
                         
                         return group._id.toString() == Utils.getObjectIdFromRoomID(message.roomID);
                          
@@ -206,7 +206,7 @@ var PolulateMessage = {
 
                 if(roomType == Const.chatTypeRoom){
                     
-                    message.roomModel = _.find(result.rooms,function(room){
+                    message.room = _.find(result.rooms,function(room){
                         
                         return room._id.toString() == Utils.getObjectIdFromRoomID(message.roomID);
                          
