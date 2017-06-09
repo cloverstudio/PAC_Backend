@@ -62906,7 +62906,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
   return " \n                <div class=\"name-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/user/"
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.group : stack1)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" /> "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.groupModel : stack1)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.group : stack1)) != null ? stack1.name : stack1), depth0))
     + "\n                </div>\n                \n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
@@ -62914,7 +62914,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
   return "\n                <div class=\"name-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/user/"
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.room : stack1)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" /> "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.roomModel : stack1)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.room : stack1)) != null ? stack1.name : stack1), depth0))
     + "\n                </div>\n                \n";
 },"8":function(container,depth0,helpers,partials,data) {
     var stack1;
