@@ -161,13 +161,13 @@ var FavoriteView = Backbone.View.extend({
             return row.messageModel._id == messageId
         }).messageModel;
         
-        if(messageObj.roomModel){
+        if(messageObj.room){
 
-            ChatManager.openChatByRoom(messageObj.roomModel,messageId);
+            ChatManager.openChatByRoom(messageObj.room,messageId);
 
-        }else if(messageObj.groupModel){
+        }else if(messageObj.group){
 
-            ChatManager.openChatByGroup(messageObj.groupModel,messageId);
+            ChatManager.openChatByGroup(messageObj.group,messageId);
 
         }else {
 

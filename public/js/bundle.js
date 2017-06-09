@@ -62868,9 +62868,9 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n           \n"
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.userModelTarget : stack1),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            \n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.groupModel : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.group : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            \n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.roomModel : stack1),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.room : stack1),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            \n            <div class=\"info-holder\">\n\n\n                "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Posted on ",{"name":"l10n","hash":{},"data":data}))
     + " "
@@ -62904,7 +62904,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return " \n                <div class=\"name-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/user/"
-    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.groupModel : stack1)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.group : stack1)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" /> "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.groupModel : stack1)) != null ? stack1.name : stack1), depth0))
     + "\n                </div>\n                \n";
@@ -62912,7 +62912,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "\n                <div class=\"name-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/user/"
-    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.roomModel : stack1)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.room : stack1)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" /> "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.roomModel : stack1)) != null ? stack1.name : stack1), depth0))
     + "\n                </div>\n                \n";
@@ -63128,13 +63128,13 @@ var FavoriteView = Backbone.View.extend({
             return row.messageModel._id == messageId
         }).messageModel;
         
-        if(messageObj.roomModel){
+        if(messageObj.room){
 
-            ChatManager.openChatByRoom(messageObj.roomModel,messageId);
+            ChatManager.openChatByRoom(messageObj.room,messageId);
 
-        }else if(messageObj.groupModel){
+        }else if(messageObj.group){
 
-            ChatManager.openChatByGroup(messageObj.groupModel,messageId);
+            ChatManager.openChatByGroup(messageObj.group,messageId);
 
         }else {
 
