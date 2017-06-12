@@ -366,9 +366,9 @@ var NotifyNewMessage = {
                     var targetId = null;
 
                     if(chatType == Const.chatTypeGroup){
-                        targetId = obj.groupModel._id.toString();
+                        targetId = obj.group._id.toString();
                     }else if(chatType == Const.chatTypeRoom){
-                        targetId = obj.roomModel._id.toString();
+                        targetId = obj.room._id.toString();
                     }else{
                         targetId = obj.user._id.toString();
                     }

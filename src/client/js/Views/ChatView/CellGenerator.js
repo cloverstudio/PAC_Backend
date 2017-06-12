@@ -1,5 +1,6 @@
 var Backbone = require('backbone');
 var _ = require('lodash');
+var VCardParser = require('oniyi-vcard-parser');
 
 var Utils = require('../../lib/utils');
 var Const = require('../../lib/consts');
@@ -7,6 +8,8 @@ var Config = require('../../lib/init');
 
 var encryptionManager = require('../../lib/EncryptionManager');
 var loginUserManager = require('../../lib/loginUserManager');
+
+console.log('VCardParser',VCardParser);
 
 function CellGenerator(){
     
