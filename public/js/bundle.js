@@ -73184,7 +73184,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
 
   return "\n<div id=\"messages\">\n</div>\n\n<div id=\"additional-notification-container\"></div>\n\n<div id=\"text-message-box-container\">\n    <textarea id=\"text-message-box\" autocomplete=\"off\" placeholder=\""
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Type your text ...",{"name":"l10n","hash":{},"data":data}))
-    + "\"/></textarea>\n\n    <span id=\"btn-emoticons\">\n        <img src=\"/spika/img/emoticon.png\" />\n    </span>\n    \n    <span id=\"btn-fileupload\">\n        <img src=\"/spika/img/attach.png\" />\n    </span>\n    \n    <input type=\"file\" name=\"photo\" id=\"file-input\" style=\"display:none\"/>\n    \n</div>\n\n<div id=\"file-drop-indicator\">\n    \n    "
+    + "\"/></textarea>\n\n    <span id=\"btn-emoticons\">\n        <img src=\"/images/emoticon.png\" />\n    </span>\n    \n    <span id=\"btn-fileupload\">\n        <img src=\"/images/attach.png\" />\n    </span>\n    \n    <input type=\"file\" name=\"photo\" id=\"file-input\" style=\"display:none\"/>\n    \n</div>\n\n<div id=\"file-drop-indicator\">\n    \n    "
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Drop Files Now",{"name":"l10n","hash":{},"data":data}))
     + "\n</div>";
 },"useData":true});
