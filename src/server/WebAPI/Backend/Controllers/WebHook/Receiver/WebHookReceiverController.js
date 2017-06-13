@@ -15,9 +15,9 @@ var Utils = require(pathTop +'lib/utils');
 var HookModel = require( pathTop + 'Models/Hook');
 var UserModel = require( pathTop + 'Models/User');
 
-
 var BackendBase = require('../../BackendBase');
 
+var SendMessageLogic = require(pathTop + "Logics/SendMessage");
 var AdapterFactory = require('./Adapter/AdapterFactory');
 
 var WebHookReceiverController = function(){
@@ -108,16 +108,9 @@ WebHookReceiverController.prototype.init = function(app){
                 avatarURL:result.messageObj.avatarURL,
                 roomID:result.roomId,
                 userID:Const.botUserIdPrefix + result.messageObj.serviceIdentifier
-            }
+            };
                 
-            SpikaLoginLogic.execute(result.userParam,function(userObj){
-                
-                result.spikaUser = userObj;
-                done(null,result);
-                
-            },function(errCode){
-                done(errCode,result)
-            });
+            done(null,result);
             
         },
         function(result,done){
@@ -136,21 +129,25 @@ WebHookReceiverController.prototype.init = function(app){
             
             }
 
-            SpikaSendMessageLogic.execute(
-                
-                Const.botUserIdPrefix + result.messageObj.serviceIdentifier,
+            result.messageParam.userID = Const.botUserIdPrefix + result.messageObj.serviceIdentifier;
+
+            SendMessageLogic.send(
                 
                 result.messageParam,
-                
-                function(data){
+
+                (err) => {
                     
-                    result.sendMessageResult = data;
-                    done(null,result);
+                    console.log('err',err);
+
+                    done(err,result);
                     
                 },
-                function(err){
-                    
-                    done(err,result);
+                
+                (data) => {
+
+                    result.sendMessageResult = data;
+
+                    done(null,result);
                     
                 }
                 

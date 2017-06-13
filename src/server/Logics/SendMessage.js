@@ -45,10 +45,10 @@ var SendMessage = {
                 _id:userID
             }, (err,user) => {
             
-                if(err || !user ){
+                if(err){
 
                     if(errorCB)
-                        errorCB();
+                        errorCB(err);
                         
                     return;
                 }
@@ -65,7 +65,7 @@ var SendMessage = {
             if(messageTargetTypeAry.length < 2){
 
                 if(errorCB)
-                    errorCB();
+                    errorCB("invalid room id");
                     
                 return;
 
@@ -88,7 +88,7 @@ var SendMessage = {
                     if(err || !user ){
 
                         if(errorCB)
-                            errorCB();
+                            errorCB("no user found");
                             
                         return;
                     }
@@ -116,7 +116,6 @@ var SendMessage = {
 
             var objMessage = {
                 remoteIpAddress:param.ipAddress,
-                user:result.user._id,
                 userID: userID,
                 roomID: param.roomID,
                 message: param.message,
@@ -127,6 +126,10 @@ var SendMessage = {
                 created: Utils.now()                   
             };
             
+            if(result.user){
+                objMessage.user = result.user._id
+            }
+
             if(!_.isEmpty(param.file)){
                 
                 objMessage.file = {
@@ -163,7 +166,7 @@ var SendMessage = {
             newMessage.save(function(err,message){
 
                 if(err && errorCB){
-                    errorCB();
+                    errorCB(err);
                     return;
                 }
 
@@ -207,6 +210,10 @@ var SendMessage = {
 
             if(err){
                 console.log("errro while sending message",err);
+
+                if(errorCB)
+                    errorCB(err);
+                    
                 return;
             }
 

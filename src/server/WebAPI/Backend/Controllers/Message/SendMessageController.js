@@ -19,6 +19,7 @@ var tokenChecker = require( pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
 
+var SendMessageLogic = require(pathTop + "Logics/SendMessage");
 
 var SendMessageController = function(){
 }
@@ -85,23 +86,23 @@ SendMessageController.prototype.init = function(app){
     router.post('/',tokenChecker,function(request,response){
 
         request.body.encrypted = true;
-        
-        SpikaSendMessageLogic.execute(
-            
-            request.user._id.toString(),
+        request.body.userID = request.user._id.toString();
+
+        SendMessageLogic.send(
             
             request.body,
             
-            function(data){
-                
-                self.successResponse(response,Const.responsecodeSucceed,{
-                    message: data.toObject()
-                });
-                
-            },
             function(err){
                 
                 self.successResponse(response,Const.responsecodeFailedToSendMessage,{
+                });
+                
+            },
+
+            function(data){
+                
+                self.successResponse(response,Const.responsecodeSucceed,{
+                    message: data
                 });
                 
             }

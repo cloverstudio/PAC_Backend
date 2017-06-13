@@ -20,7 +20,6 @@ var io = socket.listen(server);
 var WebAPI = require('./WebAPI/WebAPIMain');
 var SocketAPI = require('./SocketAPI/SocketAPIHandler');
 
-var SpikaBridge = require('./lib/SpikaBridge');
 var DatabaseManager = require('./lib/DatabaseManager');
 
 DatabaseManager.init(function(success){
@@ -32,7 +31,6 @@ DatabaseManager.init(function(success){
 
     } else {
 
-        SpikaBridge.init(app,io);
         WebAPI.init(app);
         SocketAPI.init(io);
 
