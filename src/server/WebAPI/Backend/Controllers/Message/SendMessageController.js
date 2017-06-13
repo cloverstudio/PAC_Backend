@@ -88,26 +88,48 @@ SendMessageController.prototype.init = function(app){
         request.body.encrypted = true;
         request.body.userID = request.user._id.toString();
 
-        SendMessageLogic.send(
-            
-            request.body,
-            
-            function(err){
+        async.waterfall([(done) => {
+
+            var result = {};
+
+            SendMessageLogic.send(
                 
+                request.body,
+                
+                function(err){
+                    
+                    done(err,null);
+                    
+                },
+
+                function(data){
+                    
+                    result.origMessageObj = data;
+                    
+                    done(null,result);
+                    
+                }
+                
+            )
+
+        },
+        (result,done) => {
+
+
+            done(null,result)
+        }
+        ],
+        function(err,result){
+
+            if(err){
                 self.successResponse(response,Const.responsecodeFailedToSendMessage,{
                 });
-                
-            },
-
-            function(data){
-                
+            } else {
                 self.successResponse(response,Const.responsecodeSucceed,{
-                    message: data
+                    message: result.origMessageObj
                 });
-                
             }
-            
-        )
+        });
             
     });
    
