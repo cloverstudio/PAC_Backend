@@ -75423,7 +75423,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\n                \n                "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"From ",{"name":"l10n","hash":{},"data":data}))
     + " "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.userModel : stack1)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.user : stack1)) != null ? stack1.name : stack1), depth0))
     + "\n                \n            </div>\n\n            <div class=\"message-holder new\">\n                \n"
     + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.messageModel : depth0)) != null ? stack1.type : stack1),1,{"name":"condition","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
@@ -78151,9 +78151,9 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.userModelTarget : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            \n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.groupModel : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.group : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            \n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.roomModel : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.room : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                \n            <div class=\"info-holder\">\n\n                "
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Posted on ",{"name":"l10n","hash":{},"data":data}))
     + " "
@@ -78161,7 +78161,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\n                \n                "
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"From ",{"name":"l10n","hash":{},"data":data}))
     + " "
-    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.userModel : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias3(container.lambda(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1), depth0))
     + "\n\n            </div>\n\n            <div class=\"message-holder new\">\n                \n"
     + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),1,{"name":"condition","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n"
@@ -78179,17 +78179,17 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return " \n                 <div class=\"img-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/group/"
-    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.groupModel : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n                </div>\n                \n                <div class=\"name-holder\">\n                    "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.groupModel : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.name : stack1), depth0))
     + "\n                </div>\n                \n";
 },"6":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "\n                 <div class=\"img-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/room/"
-    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.roomModel : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n                </div>\n                \n                <div class=\"name-holder\">\n                    "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.roomModel : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.name : stack1), depth0))
     + "\n                </div>\n                \n";
 },"8":function(container,depth0,helpers,partials,data) {
     var helper;

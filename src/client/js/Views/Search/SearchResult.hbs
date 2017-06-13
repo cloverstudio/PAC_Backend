@@ -14,26 +14,26 @@
                 
             {{/if}}
             
-            {{#if groupModel}}
+            {{#if group}}
  
                  <div class="img-holder">
-                    <img class="img-circle" src="/api/v2/avatar/group/{{groupModel.avatar.thumbnail.nameOnServer}}" />
+                    <img class="img-circle" src="/api/v2/avatar/group/{{group.avatar.thumbnail.nameOnServer}}" />
                 </div>
                 
                 <div class="name-holder">
-                    {{groupModel.name}}
+                    {{group.name}}
                 </div>
                 
             {{/if}}
             
-            {{#if roomModel}}
+            {{#if room}}
 
                  <div class="img-holder">
-                    <img class="img-circle" src="/api/v2/avatar/room/{{roomModel.avatar.thumbnail.nameOnServer}}" />
+                    <img class="img-circle" src="/api/v2/avatar/room/{{room.avatar.thumbnail.nameOnServer}}" />
                 </div>
                 
                 <div class="name-holder">
-                    {{roomModel.name}}
+                    {{room.name}}
                 </div>
                 
             {{/if}}
@@ -42,7 +42,7 @@
 
                 {{l10n "Posted on "}} {{formatDate created}}
                 
-                {{l10n "From "}} {{userModel.name}}
+                {{l10n "From "}} {{user.name}}
 
             </div>
 
