@@ -129,7 +129,7 @@ WebHookReceiverController.prototype.init = function(app){
             
             }
 
-            result.messageParam.userID = Const.botUserIdPrefix + result.messageObj.serviceIdentifier;
+            result.messageParam.userID = Config.robotUserId;
 
             SendMessageLogic.send(
                 

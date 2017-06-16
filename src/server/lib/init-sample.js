@@ -132,4 +132,6 @@
 
     Config.useCluster = false;
 
+    Config.robotUserId = "5943eb4cc72acf1d96bba0ef";
+    
     module["exports"] = Config;
