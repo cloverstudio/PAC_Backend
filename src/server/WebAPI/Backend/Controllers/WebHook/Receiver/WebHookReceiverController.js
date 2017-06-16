@@ -15,6 +15,7 @@ var Utils = require(pathTop +'lib/utils');
 var HookModel = require( pathTop + 'Models/Hook');
 var UserModel = require( pathTop + 'Models/User');
 
+var EncryptionManager = require(pathTop + 'lib/EncryptionManager');
 var BackendBase = require('../../BackendBase');
 
 var SendMessageLogic = require(pathTop + "Logics/SendMessage");
@@ -121,7 +122,7 @@ WebHookReceiverController.prototype.init = function(app){
             }
             
             if(result.messageObj.message)
-                result.messageParam.message = result.messageObj.message;
+                result.messageParam.message = EncryptionManager.encryptText(result.messageObj.message);
 
             if(result.messageObj.file) {
 
