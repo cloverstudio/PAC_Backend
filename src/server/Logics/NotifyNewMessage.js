@@ -446,36 +446,36 @@ var NotifyNewMessage = {
                     payload.location = obj.location;
                 }
                 
-                if(obj.groupModel){
+                if(obj.group){
                 
                     var avatarURL = "/api/v2/avatar/group/";
 
-                    if(obj.groupModel.avatar && obj.groupModel.avatar.thumbnail)
-                        avatarURL += obj.groupModel.avatar.thumbnail.nameOnServer;
+                    if(obj.group.avatar && obj.group.avatar.thumbnail)
+                        avatarURL += obj.group.avatar.thumbnail.nameOnServer;
 
                     payload.group = {
-                        id:obj.groupModel._id.toString(),
-                        name:obj.groupModel.name,
+                        id:obj.group._id.toString(),
+                        name:obj.group.name,
                         thumb:avatarURL
                     }
 
-                    payload.message.messageiOS = obj.groupModel.name + " - " + payload.message.messageiOS;
+                    payload.message.messageiOS = obj.group.name + " - " + payload.message.messageiOS;
                 }
 
-                if(obj.roomModel){
+                if(obj.room){
                 
                     var avatarURL = "/api/v2/avatar/room/";
 
-                    if(obj.roomModel.avatar && obj.roomModel.avatar.thumbnail)
-                        avatarURL += obj.roomModel.avatar.thumbnail.nameOnServer;
+                    if(obj.room.avatar && obj.room.avatar.thumbnail)
+                        avatarURL += obj.room.avatar.thumbnail.nameOnServer;
 
                     payload.room = {
-                        id:obj.roomModel._id.toString(),
-                        name:obj.roomModel.name,
+                        id:obj.room._id.toString(),
+                        name:obj.room.name,
                         thumb:avatarURL
                     }
 
-                    payload.message.messageiOS = obj.roomModel.name + " - " + payload.message.messageiOS;
+                    payload.message.messageiOS = obj.room.name + " - " + payload.message.messageiOS;
                 }
 
                 payload.pushType = Const.pushTypeNewMessage;

@@ -17,7 +17,9 @@ var SocketConnectionHandler = require('./lib/SocketConnectionHandler');
 var OnlineStatusChecker = require('./lib/OnlineStatusChecker');
 
 if(!Conf.useCluster){
+    
     startServer();
+
 }else{
 
     var cluster = require('cluster');
