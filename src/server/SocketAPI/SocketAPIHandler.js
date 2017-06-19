@@ -20,11 +20,6 @@ var SocketAPIHandler = {
         var self = this;
         this.io = io;
         this.nsp = io.of(Config.socketNameSpace);
-
-        // Use redis to scale server
-        var redis = require('socket.io-redis');
-        io.adapter(redis(Config.redis));
-        io.set('transports', ['websocket']);
     
         this.nsp.on('connection', function(socket) {
 

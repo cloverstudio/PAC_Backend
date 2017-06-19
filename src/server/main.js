@@ -6,6 +6,7 @@ var http = require('http');
 var signaling = require('../../modules_customised/webrtcsignaling/sockets')
 var geoip = require('geoip-lite');
 var path = require('path');
+var redis = require('socket.io-redis');
 
 var Conf = require('./lib/init.js');
 
@@ -43,8 +44,9 @@ if(!Conf.useCluster){
         startServer();
 
         console.log(`Worker ${process.pid} started`);
-    }
 
+    }
+    
 }
 
 function startServer(){
@@ -54,6 +56,10 @@ function startServer(){
     var server = http.createServer(app);
     var port = Conf.port;
     var io = socket.listen(server);
+
+    // Use redis to scale server
+    io.adapter(redis(Conf.redis));
+    io.set('transports', ['websocket']);
 
     DatabaseManager.init(function(success){
 
