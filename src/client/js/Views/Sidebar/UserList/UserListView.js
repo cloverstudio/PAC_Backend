@@ -59,18 +59,15 @@ var UserListView = Backbone.View.extend({
             
         });
 
-       $("#tb-search-user").on('change keydown paste input',function() {
+       $("#tb-search-user").on('keyup',function() {
 
             var keyword = $(this).val();
             self.currentKeyword = keyword;
-            
             self.resetResultAndLoadNext(self.currentKeyword);
             
         });
 
         Backbone.on(Const.NotificationRefreshUser, function(){
-            
-            console.log('NotificationRefreshUser');
 
             self.resetResultAndLoadNext(self.currentKeyword);
 
@@ -128,6 +125,7 @@ var UserListView = Backbone.View.extend({
                 
                 self.isLoading = false;
                 self.lastBlockedSearchKeyword = "";
+
             });
             
         }else{
@@ -167,7 +165,9 @@ var UserListView = Backbone.View.extend({
     },
     
     renderAppend: function(list){
-        
+
+        console.log('render');
+
         var self = this;
         
         var html = templateContents({
@@ -176,14 +176,18 @@ var UserListView = Backbone.View.extend({
 
         $("#sidebar-userlist .listview").append(html);
         
-        
         $('#sidebar-userlist .chat-target').unbind().on('click',function(){
             
+            console.log('click');
+
             var userId = $(this).attr('id');
             
+            console.log('userId',userId);
+
             self.startChat(userId);
              
         });
+
     },
     startChat: function(userId){
         

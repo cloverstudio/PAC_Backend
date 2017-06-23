@@ -544,9 +544,7 @@ var ChatView = Backbone.View.extend({
         $('#messages').scrollTop(0);
     },
     insertTempMessage:function(message){
-
         this.renderMessages([message],RenderDirection.append);
-
     },
     updateMessage:function(message){
 
