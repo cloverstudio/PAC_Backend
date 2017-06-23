@@ -98,6 +98,8 @@ var ChatView = Backbone.View.extend({
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
             
+            console.log('messages.length',messages.length);
+            
             if(messages.length > 0 && messages[0].roomID == self.currentRoomId) {
                 self.updateMessage(messages);
             }
@@ -229,6 +231,8 @@ var ChatView = Backbone.View.extend({
 
         LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
             
+            console.log('sssss',res.messages.length);
+
             if(res.messages && res.messages.length > 0){
 
                 if(self.lastMessageId == 0){
@@ -278,7 +282,7 @@ var ChatView = Backbone.View.extend({
         });
 
     },
-    renderMessages: function(newMessages,renderDirection){
+    renderMessages: function(newMessages,renderDirection,isUpdate){
 
         var html = "";
         var cellGenerator = new CellGenerator();
@@ -329,7 +333,7 @@ var ChatView = Backbone.View.extend({
                 $(cellHtml).insertAfter(idCell);
                 idCell.remove();
 
-            } else {
+            } else if (!isUpdate){
 
                 if(renderDirection == RenderDirection.append){
 
@@ -547,9 +551,9 @@ var ChatView = Backbone.View.extend({
     updateMessage:function(message){
 
         if(_.isArray(message))
-            this.renderMessages(message,RenderDirection.append);
+            this.renderMessages(message,RenderDirection.append,true);
         else
-            this.renderMessages([message],RenderDirection.append);
+            this.renderMessages([message],RenderDirection.append,true);
 
     },
     removeTyping: function(userID){
