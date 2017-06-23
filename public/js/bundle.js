@@ -71918,6 +71918,8 @@ var ChatView = Backbone.View.extend({
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
             
+            console.log('messages.length',messages.length);
+            
             if(messages.length > 0 && messages[0].roomID == self.currentRoomId) {
                 self.updateMessage(messages);
             }
@@ -72049,6 +72051,8 @@ var ChatView = Backbone.View.extend({
 
         LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
             
+            console.log('sssss',res.messages.length);
+
             if(res.messages && res.messages.length > 0){
 
                 if(self.lastMessageId == 0){
@@ -72098,7 +72102,7 @@ var ChatView = Backbone.View.extend({
         });
 
     },
-    renderMessages: function(newMessages,renderDirection){
+    renderMessages: function(newMessages,renderDirection,isUpdate){
 
         var html = "";
         var cellGenerator = new CellGenerator();
@@ -72149,7 +72153,7 @@ var ChatView = Backbone.View.extend({
                 $(cellHtml).insertAfter(idCell);
                 idCell.remove();
 
-            } else {
+            } else if (!isUpdate){
 
                 if(renderDirection == RenderDirection.append){
 
@@ -72360,16 +72364,14 @@ var ChatView = Backbone.View.extend({
         $('#messages').scrollTop(0);
     },
     insertTempMessage:function(message){
-
         this.renderMessages([message],RenderDirection.append);
-
     },
     updateMessage:function(message){
 
         if(_.isArray(message))
-            this.renderMessages(message,RenderDirection.append);
+            this.renderMessages(message,RenderDirection.append,true);
         else
-            this.renderMessages([message],RenderDirection.append);
+            this.renderMessages([message],RenderDirection.append,true);
 
     },
     removeTyping: function(userID){
@@ -77622,7 +77624,7 @@ var GroupListView = Backbone.View.extend({
             
         });
 
-       $("#tb-search-group").on('change keydown paste input',function() {
+       $("#tb-search-group").on('keyup',function() {
 
             var keyword = $(this).val();
             self.currentKeyword = keyword;
@@ -78429,18 +78431,15 @@ var UserListView = Backbone.View.extend({
             
         });
 
-       $("#tb-search-user").on('change keydown paste input',function() {
+       $("#tb-search-user").on('keyup',function() {
 
             var keyword = $(this).val();
             self.currentKeyword = keyword;
-            
             self.resetResultAndLoadNext(self.currentKeyword);
             
         });
 
         Backbone.on(Const.NotificationRefreshUser, function(){
-            
-            console.log('NotificationRefreshUser');
 
             self.resetResultAndLoadNext(self.currentKeyword);
 
@@ -78498,6 +78497,7 @@ var UserListView = Backbone.View.extend({
                 
                 self.isLoading = false;
                 self.lastBlockedSearchKeyword = "";
+
             });
             
         }else{
@@ -78537,7 +78537,9 @@ var UserListView = Backbone.View.extend({
     },
     
     renderAppend: function(list){
-        
+
+        console.log('render');
+
         var self = this;
         
         var html = templateContents({
@@ -78546,14 +78548,18 @@ var UserListView = Backbone.View.extend({
 
         $("#sidebar-userlist .listview").append(html);
         
-        
         $('#sidebar-userlist .chat-target').unbind().on('click',function(){
             
+            console.log('click');
+
             var userId = $(this).attr('id');
             
+            console.log('userId',userId);
+
             self.startChat(userId);
              
         });
+
     },
     startChat: function(userId){
         

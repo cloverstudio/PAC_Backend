@@ -29,6 +29,7 @@ module.exports = function (io, config) {
             }
             
             otherClient.emit('message', details);
+            
         });
 
         client.on('shareScreen', function () {

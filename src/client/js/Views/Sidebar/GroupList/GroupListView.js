@@ -60,7 +60,7 @@ var GroupListView = Backbone.View.extend({
             
         });
 
-       $("#tb-search-group").on('change keydown paste input',function() {
+       $("#tb-search-group").on('keyup',function() {
 
             var keyword = $(this).val();
             self.currentKeyword = keyword;
