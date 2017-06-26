@@ -182,9 +182,8 @@ MessageListController.prototype.init = function(app){
 
                 MessageModel.populateMessages(messages,function (err,data) {
                     
-                    done(null,messages);
+                    done(null,data);
                     
-                    var data = messages;
                     
                     // send notification
 
