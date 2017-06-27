@@ -249,6 +249,7 @@ Message.populateMessages = function(messages,callBack){
     var ids = [];
     var oldIds = [];
 
+    var newIds = []; // only user from
     messages.forEach(function(row){
 
         // get users for seeny too
@@ -262,7 +263,8 @@ Message.populateMessages = function(messages,callBack){
 
         });
         
-        ids.push(row.userID); 
+        ids.push(row.userID);
+        newIds.push(row.userID); 
         
     });
     
@@ -342,7 +344,7 @@ Message.populateMessages = function(messages,callBack){
 
         var resultAry = [];
 
-        UserModel.findUsersbyId(ids,function(err,userResult){
+        UserModel.findUsersbyId(newIds,function(err,userResult){
             
             _.forEach(messages,function(messageElement,messageIndex,messagesEntity){
                 
@@ -356,33 +358,7 @@ Message.populateMessages = function(messages,callBack){
                     }
 
                 }); 
-                
-                var seenByAry = [];
-                
-                // replace seenby.user to userObj
-                _.forEach(messageElement.seenBy,function(seenByRow){
-                    
-                    _.forEach(userResult,function(userElement,userIndex){
-                        
-                        var userId = seenByRow.user;
-
-                        // replace user to userObj
-                        if(userId == userElement._id.toString()){
-                            
-                            seenByAry.push({
-                                userID:userId,
-                                user:userElement,
-                                at:seenByRow.at 
-                            });
-                            
-                        }
-
-                    });
-                                                    
-                });
-
-                obj.seenBy = seenByAry;
-                    
+        
                 resultAry.push(obj);
                 
             });
