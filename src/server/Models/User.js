@@ -123,5 +123,13 @@ User.findUsersbyId = function(aryId,callBack){
                 
 };
 
+User.defaultResponseFields = {
+    _id:true,
+    description:true,
+    name:true,
+    organizationId:true,
+    userid:true,
+    avatar:true
+}
 
 module["exports"] = User;

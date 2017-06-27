@@ -91,6 +91,8 @@
     Const.resCodeSocketOpenMessageWrongMessageID = 4000082;
     Const.resCodeSocketOpenMessageNoUserId = 4000083;
 
+    Const.responsecodeSeenByInvalidMessageId = 4000084;
+
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;
