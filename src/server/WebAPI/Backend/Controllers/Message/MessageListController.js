@@ -180,10 +180,11 @@ MessageListController.prototype.init = function(app){
 
             if(messages.length > 0){
 
-                MessageModel.populateMessages(messages,function (err,data) {
+                //MessageModel.populateMessages(messages,function (err,data) {
                     
-                    done(null,data);
+                    done(null,messages);
                     
+                    var data = messages;
                     
                     // send notification
 
@@ -248,7 +249,7 @@ MessageListController.prototype.init = function(app){
                         
                     };
 
-                });
+                //});
 
             } else {
 
