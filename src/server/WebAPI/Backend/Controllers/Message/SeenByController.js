@@ -57,6 +57,7 @@ SeenByController.prototype.init = function(app){
                 }
 
                 result.message = findResult;
+                result.seebBy = findResult.seenBy;
                 done(err,result);
 
             });
@@ -85,8 +86,22 @@ SeenByController.prototype.init = function(app){
                 return;
             }
 
+            var responseAry = _.map(result.seebBy,function(obj){
+
+                var user = _.find(result.users,(userRow) => {
+                    return userRow._id.toString() == obj.user;
+                });
+
+                obj.user = user;
+
+                return obj;
+
+            });
+
+            console.log(responseAry);
+            
             self.successResponse(response,Const.responsecodeSucceed,{
-                users:result.users
+                seenBy:responseAry
             });
 
         });

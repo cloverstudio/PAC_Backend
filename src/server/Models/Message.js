@@ -258,7 +258,10 @@ Message.populateMessages = function(messages,callBack){
             if(row2.version == 2){
                 ids.push(row2.user); 
             }else{
-                oldIds.push(row2.user.toString());
+                if(Utils.isObjectId(row2.user))
+                    oldIds.push(row2.user.toString());
+                else
+                    oldIds.push(row2.userID);
             }
 
         });
@@ -344,7 +347,9 @@ Message.populateMessages = function(messages,callBack){
 
         var resultAry = [];
 
-        UserModel.findUsersbyId(newIds,function(err,userResult){
+        modelUser.find({_id:{$in:newIds}},UserModel.defaultResponseFields,
+            
+            function(err,userResult){
             
             _.forEach(messages,function(messageElement,messageIndex,messagesEntity){
                 

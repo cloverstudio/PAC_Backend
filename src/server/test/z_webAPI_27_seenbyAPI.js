@@ -18,7 +18,7 @@ describe('WEB API', function () {
     				throw err;
     			}
 
-                res.body.data.users[0]._id.should.be.exactly(global.user2._id);
+                res.body.data.seenBy[0].user._id.should.be.exactly(global.user2._id);
                 
                 done();
             

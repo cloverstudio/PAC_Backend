@@ -16,10 +16,12 @@ var localzationManager = require('../../lib/localzationManager');
 var AddToFavoriteClient = require('../../lib/APIClients/AddToFavoriteClient');
 var RemoveFromFavoriteClient = require('../../lib/APIClients/RemoveFromFavoriteClient');
 var UserDetailClient = require('../../lib/APIClients/UserDetailClient');
+var MessageSeenByClient = require('../../lib/APIClients/MessageSeenByClient');
 
 var socketIOManager = require('../../lib/SocketIOManager');
 
 var template = require('./MessageDetail.hbs');
+var templateSeenBy = require('./SeenBy.hbs');
 
 var MessageDetailView = Backbone.View.extend({
 
@@ -58,25 +60,37 @@ var MessageDetailView = Backbone.View.extend({
         var self = this;
         
         self.currentMessage = obj;
+        self.seenByUsers = [];
 
+        MessageSeenByClient.send(obj._id,function(data){
+            
+            var seenBy = data.seenBy;
 
-        obj.seenBy = _.map(obj.seenBy,function(seenBy){
+            self.seenByUsers = _.map(seenBy,function(obj){
 
-            var avatarFileId = "";
+                console.log(obj);
 
-            // get AvatarURL
-            if(seenBy.user && seenBy.user.avatar && seenBy.user.avatar.thumbnail){
-                avatarFileId = seenBy.user.avatar.thumbnail.nameOnServer;
-            }
+                var avatarFileId = "";
 
-            seenBy.avatarFileId = avatarFileId;
+                // get AvatarURL
+                if(obj.user && obj.user.avatar && obj.user.avatar.thumbnail){
+                    avatarFileId = obj.user.avatar.thumbnail.nameOnServer;
+                    obj.user.avatarFileId = avatarFileId;
+                }
 
-            return seenBy;
-        
+                return obj;
+            
+            });
+
+            $("#seenby-container").html(templateSeenBy({seenBy:self.seenByUsers}));
+
+        },function(errCode){
+
+            var UIUtils = require('../../lib/UIUtils');
+            UIUtils.handleAPIErrors(errCode);
 
         });
-        
-        
+
         $(self.el).html(template(obj));
         $(self.el).addClass('on');
 

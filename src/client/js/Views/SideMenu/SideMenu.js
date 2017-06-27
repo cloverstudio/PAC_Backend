@@ -43,110 +43,6 @@ var SideMenu = {
             }));
             
             var notificationKey = "";
-            
-            
-            /*
-            if(loginUserManager.currentUser){
-
-                $('#submenu').html(templateUser({
-                    loginUser: loginUserManager.getUser(),
-                    user: loginUserManager.currentUser
-                }));
-            
-                notificationKey = loginUserManager.currentUser._id;
-            }
-
-            else if(loginUserManager.currentGroup){
-
-                $('#submenu').html(templateGroup({
-                    loginUser: loginUserManager.getUser(),
-                    group: loginUserManager.currentGroup
-                }));
-
-                $('#btn-groupdetail').on('click',function(){
-                    
-                    var GroupDetailDialog = require('../Modals/GroupDetail/GroupDetail');
-                    GroupDetailDialog.show(loginUserManager.currentGroup);
-                    self.tuggle();
-                    
-                });
-                
-                notificationKey = loginUserManager.currentGroup._id;
-                
-            }
-
-            else if(loginUserManager.currentRoom){
-                
-                $('#submenu').html(templateRoom({
-                    loginUser: loginUserManager.getUser(),
-                    room: loginUserManager.currentRoom
-                }));
-                
-                $('#btn-leaveroom').on('click',function(){
-                    
-                    ConfirmDialog.show(Utils.l10n('Confirm'),
-                                        Utils.l10n('Please press OK to proceed.'),
-                                        function(){
-
-                        LeaveRoomClient.send(loginUserManager.currentRoom._id,function(response){
-                            
-                            Backbone.trigger(Const.NotificationRefreshHistory);
-                            self.tuggle();
-                            
-                        },function(errCode){
-
-                            var message = "";
-                            
-                            if(Const.ErrorCodes[errCode])
-                                message = Utils.l10n(Const.ErrorCodes[errCode]);
-                            else
-                                message = Utils.l10n("Critical Error");
-                            
-                            var Alert = require('../Modals/AlertDialog/AlertDialog');
-                            Alert.show(Utils.l10n('API Error'),message);
-                            
-                        });
-
-                    });
-
-                });
-                
-                $('#btn-editroom').on('click',function(){
-                    
-                    var updateRoomDialog = require('../Modals/UpdateRoom/UpdateRoom');
-                    updateRoomDialog.show(loginUserManager.currentRoom);
-                    self.tuggle();
-                    
-                });
-
-                $('#btn-roomdetail').on('click',function(){
-                    
-                    var RoomDetailDialog = require('../Modals/RoomDetail/RoomDetail');
-                    RoomDetailDialog.show(loginUserManager.currentRoom);
-                    self.tuggle();
-                    
-                });
-                
-                notificationKey = loginUserManager.currentRoom._id;
-                
-            }
-
-            if($("[name='checkbox-notify']").bootstrapSwitch){
-
-                $("[name='checkbox-notify']").bootstrapSwitch({
-                    onText: Utils.l10n("Notify"),
-                    offText: Utils.l10n("Mute"),
-                    state: NotificationManager.getNotificationStatus(notificationKey),
-                    onSwitchChange:function(event,state){
-                        
-                        NotificationManager.setNotificationStatus(notificationKey,state);
-                        
-                    }
-                });
-            
-            }
-
-            */
              
             $( "#sidemenu-cover" ).css('opacity',0);
             
@@ -268,6 +164,7 @@ var SideMenu = {
         });
 
         this.$("#btn-search").click(function(e) {
+            
             e.preventDefault();
             
             self.tuggle();
@@ -287,6 +184,7 @@ var SideMenu = {
         });
 
         this.$("#btn-webhook").click(function(e) {
+
             e.preventDefault();
             
             self.tuggle();

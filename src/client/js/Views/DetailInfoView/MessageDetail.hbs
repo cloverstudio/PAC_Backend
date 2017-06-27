@@ -42,15 +42,9 @@
     {{#if seenBy}}
         <h4>{{l10n "Users Seen"}}</h4>
     {{/if}}
-    <table class="table users">
+    <table class="table users" id="seenby-container">
         
-    {{#each seenBy}}
-        <tr>
-            <td width="30px"><img src="/api/v2/avatar/user/{{avatarFileId}}" class="img-circle"/></td>
-            <td>{{user.name}}</td>
-            <td>{{{formatDate at}}}
-        </td></tr>
-    {{~/each}}
+
     
     </table>
 
