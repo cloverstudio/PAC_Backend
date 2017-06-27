@@ -105,9 +105,7 @@ describe('SOCKET', function () {
                 param[0].seenBy.should.Array();
                 param[0].seenBy.should.have.length(1);
                 
-                param[0].seenBy[0].should.have.property('user');
-                param[0].seenBy[0].user.should.have.property('_id');
-                param[0].seenBy[0].user._id.should.equal(global.user2._id);
+                param[0].seenBy[0].user.should.equal(global.user2._id);
 
                 client1.disconnect();
 
@@ -206,9 +204,7 @@ describe('SOCKET', function () {
                 param[0].seenBy.should.Array();
                 param[0].seenBy.should.have.length(1);
                 
-                param[0].seenBy[0].should.have.property('user');
-                param[0].seenBy[0].user.should.have.property('_id');
-                param[0].seenBy[0].user._id.should.equal(global.user2._id);
+                param[0].seenBy[0].user.should.equal(global.user2._id);
 
                 client1.disconnect();
 
@@ -306,10 +302,8 @@ describe('SOCKET', function () {
 
                 param[0].seenBy.should.Array();
                 param[0].seenBy.should.have.length(1);
-                
-                param[0].seenBy[0].should.have.property('user');
-                param[0].seenBy[0].user.should.have.property('_id');
-                param[0].seenBy[0].user._id.should.equal(global.user2._id);
+
+                param[0].seenBy[0].user.should.equal(global.user2._id);
 
                 client1.disconnect();
 
