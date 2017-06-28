@@ -107,7 +107,12 @@ var ChatView = Backbone.View.extend({
         });
 
         Backbone.on(Const.NotificationTyping, function(param){
+
+            if(param.roomID != self.currentRoomId)
+                return;
+
             self.updateTyping(param);
+            
         });
 
         var lastPosition = 0;
