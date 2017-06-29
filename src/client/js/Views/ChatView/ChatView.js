@@ -236,8 +236,6 @@ var ChatView = Backbone.View.extend({
 
         LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
             
-            console.log('sssss',res.messages.length);
-
             if(res.messages && res.messages.length > 0){
 
                 if(self.lastMessageId == 0){
@@ -256,6 +254,8 @@ var ChatView = Backbone.View.extend({
                     
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
+            } else {
+                Backbone.trigger(Const.NotificationChatLoaded);
             }
 
         },function(){
