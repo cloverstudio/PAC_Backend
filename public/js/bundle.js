@@ -72989,7 +72989,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div id=\"sticker-panel\">\n	\n	 <img class=\"loader\" src=\"/spika/img/loader.gif\" />\n	\n</div>";
+    return "<div id=\"sticker-panel\">\n	\n	 <img class=\"loader\" src=\"/images/loader.gif\" />\n	\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":67}],163:[function(require,module,exports){
