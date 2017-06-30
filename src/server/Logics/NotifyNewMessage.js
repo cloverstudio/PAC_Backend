@@ -526,7 +526,7 @@ var NotifyNewMessage = {
                 
                 async.each(result.hookTarget,function(hook,eachDone){
                     
-                    var fromUser = result.message.userModel;
+                    var fromUser = result.message.user;
                     var message = result.message;
                     
                     var name = "";
