@@ -71925,8 +71925,10 @@ var ChatView = Backbone.View.extend({
             }
 
         });
-
+        
         Backbone.on(Const.NotificationTyping, function(param){
+
+            console.log(param.roomID,self.currentRoomId);
 
             if(param.roomID != self.currentRoomId)
                 return;
@@ -72071,7 +72073,7 @@ var ChatView = Backbone.View.extend({
                 } else {
                     self.scrollToBottom();
                 }
-                    
+
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
             } else {
@@ -77854,6 +77856,12 @@ var HistoryListView = Backbone.View.extend({
             
         });
 
+        Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+            
+            self.updateListWithoutLoading(obj);
+            
+        });
+
         Backbone.on(Const.NotificationRemoveRoom, function(obj){
             
             var newDataList = _.filter(self.dataList,function(historyObj){
@@ -77932,6 +77940,11 @@ var HistoryListView = Backbone.View.extend({
             
         });
         
+    },
+    updateListWithoutLoading: function(obj){
+
+        console.log("updateListWithoutLoading",obj);
+
     },
     loadNext: function(){
         
@@ -78080,6 +78093,7 @@ var HistoryListView = Backbone.View.extend({
     destroy: function(){
         
         Backbone.off(Const.NotificationRefreshHistory);
+        Backbone.off(Const.NotificationRefreshHistoryLocally);
         Backbone.off(Const.NotificationRemoveRoom);
         
     }
@@ -82319,7 +82333,6 @@ var socketIOManager = {
                 var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
                 var message = Utils.l10n(Const.ErrorCodes[error.code]);
                 alertDialog.show(Utils.l10n("Api Error"),message);
-
             }
             
         });
@@ -82335,6 +82348,8 @@ var socketIOManager = {
             // History is refreshed by ChatView when the chat is opened
             if(loginUserManager.currentConversation != obj.roomID)
                 Backbone.trigger(Const.NotificationRefreshHistory);
+            else
+                Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
 
             Backbone.trigger(Const.NotificationNewMessage,obj);
 
@@ -82606,6 +82621,7 @@ Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 Const.NotificationMessageUpdated = "notification_message_updated"
 Const.NotificationChatLoaded = "notification_chat_loaded"
 Const.NotificationGlobalClick = "notification_global_click"
+Const.NotificationRefreshHistoryLocally = "notification_refresh_history_locally";
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;

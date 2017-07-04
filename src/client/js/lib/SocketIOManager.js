@@ -52,7 +52,6 @@ var socketIOManager = {
                 var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
                 var message = Utils.l10n(Const.ErrorCodes[error.code]);
                 alertDialog.show(Utils.l10n("Api Error"),message);
-
             }
             
         });
@@ -68,6 +67,8 @@ var socketIOManager = {
             // History is refreshed by ChatView when the chat is opened
             if(loginUserManager.currentConversation != obj.roomID)
                 Backbone.trigger(Const.NotificationRefreshHistory);
+            else
+                Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
 
             Backbone.trigger(Const.NotificationNewMessage,obj);
 

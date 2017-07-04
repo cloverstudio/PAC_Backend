@@ -105,8 +105,10 @@ var ChatView = Backbone.View.extend({
             }
 
         });
-
+        
         Backbone.on(Const.NotificationTyping, function(param){
+
+            console.log(param.roomID,self.currentRoomId);
 
             if(param.roomID != self.currentRoomId)
                 return;
@@ -251,7 +253,7 @@ var ChatView = Backbone.View.extend({
                 } else {
                     self.scrollToBottom();
                 }
-                    
+
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
             } else {

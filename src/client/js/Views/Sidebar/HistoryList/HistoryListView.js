@@ -66,6 +66,12 @@ var HistoryListView = Backbone.View.extend({
             
         });
 
+        Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+            
+            self.updateListWithoutLoading(obj);
+            
+        });
+
         Backbone.on(Const.NotificationRemoveRoom, function(obj){
             
             var newDataList = _.filter(self.dataList,function(historyObj){
@@ -144,6 +150,11 @@ var HistoryListView = Backbone.View.extend({
             
         });
         
+    },
+    updateListWithoutLoading: function(obj){
+
+        console.log("updateListWithoutLoading",obj);
+
     },
     loadNext: function(){
         
@@ -292,6 +303,7 @@ var HistoryListView = Backbone.View.extend({
     destroy: function(){
         
         Backbone.off(Const.NotificationRefreshHistory);
+        Backbone.off(Const.NotificationRefreshHistoryLocally);
         Backbone.off(Const.NotificationRemoveRoom);
         
     }
