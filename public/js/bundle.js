@@ -77957,7 +77957,6 @@ var HistoryListView = Backbone.View.extend({
         if(messageObj.type == Const.messageTypeText)
             messageObj.message = EncryptionManager.decryptText(messageObj.message);
 
-        console.log(messageObj);
         historyObj.lastMessage = messageObj;
 
         self.mergeData([historyObj]);
