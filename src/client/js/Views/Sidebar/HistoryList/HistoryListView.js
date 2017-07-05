@@ -9,6 +9,7 @@ var Config = require('../../../lib/init');
 var loginUserManager = require('../../../lib/loginUserManager');
 var ChatManager = require('../../../lib/ChatManager');
 var localzationManager = require('../../../lib/localzationManager');
+var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
 
@@ -145,17 +146,34 @@ var HistoryListView = Backbone.View.extend({
             
         },function(errorCode){
             
-            console.log(errorCode);
             UIUtils.handleAPIErrors(errorCode);
             
         });
         
     },
-    updateListWithoutLoading: function(obj){
+    updateListWithoutLoading: function(messageObj){
 
-        console.log("updateListWithoutLoading",obj);
+        var self = this;
+
+        var historyObj = _.find(self.dataList,function(historyObj){
+
+            var roomID = historyObj.chatType + "-" + historyObj.chatId;
+
+            return roomID == messageObj.roomID;
+            
+        });
+
+        historyObj.lastUpdate = messageObj.created;
+        if(messageObj.type == Const.messageTypeText)
+            messageObj.message = EncryptionManager.decryptText(messageObj.message);
+
+        historyObj.lastMessage = messageObj;
+
+        self.mergeData([historyObj]);
+        self.renderList(); 
 
     },
+
     loadNext: function(){
         
         if(this.isReachedToEnd)

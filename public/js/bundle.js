@@ -77799,6 +77799,7 @@ var Config = require('../../../lib/init');
 var loginUserManager = require('../../../lib/loginUserManager');
 var ChatManager = require('../../../lib/ChatManager');
 var localzationManager = require('../../../lib/localzationManager');
+var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
 
@@ -77935,17 +77936,35 @@ var HistoryListView = Backbone.View.extend({
             
         },function(errorCode){
             
-            console.log(errorCode);
             UIUtils.handleAPIErrors(errorCode);
             
         });
         
     },
-    updateListWithoutLoading: function(obj){
+    updateListWithoutLoading: function(messageObj){
 
-        console.log("updateListWithoutLoading",obj);
+        var self = this;
+
+        var historyObj = _.find(self.dataList,function(historyObj){
+
+            var roomID = historyObj.chatType + "-" + historyObj.chatId;
+
+            return roomID == messageObj.roomID;
+            
+        });
+
+        historyObj.lastUpdate = messageObj.created;
+        if(messageObj.type == Const.messageTypeText)
+            messageObj.message = EncryptionManager.decryptText(messageObj.message);
+
+        console.log(messageObj);
+        historyObj.lastMessage = messageObj;
+
+        self.mergeData([historyObj]);
+        self.renderList(); 
 
     },
+
     loadNext: function(){
         
         if(this.isReachedToEnd)
@@ -78103,7 +78122,7 @@ var HistoryListView = Backbone.View.extend({
 
 module.exports = HistoryListView;
 
-},{"../../../lib/APIClients/HistoryListClient":251,"../../../lib/ChatManager":273,"../../../lib/UIUtils":283,"../../../lib/consts":284,"../../../lib/init":285,"../../../lib/localzationManager":287,"../../../lib/loginUserManager":288,"../../../lib/utils":290,"./HistoryListContents.hbs":222,"./HistoryListView.hbs":223,"backbone":7,"lodash":75}],225:[function(require,module,exports){
+},{"../../../lib/APIClients/HistoryListClient":251,"../../../lib/ChatManager":273,"../../../lib/EncryptionManager":274,"../../../lib/UIUtils":283,"../../../lib/consts":284,"../../../lib/init":285,"../../../lib/localzationManager":287,"../../../lib/loginUserManager":288,"../../../lib/utils":290,"./HistoryListContents.hbs":222,"./HistoryListView.hbs":223,"backbone":7,"lodash":75}],225:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
