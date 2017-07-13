@@ -527,7 +527,8 @@ var NotifyNewMessage = {
                     return;
                 }
 
-                if(!result.originalRequestData.allowRelay){
+                if(result.originalRequestData.isHook && 
+                    !result.originalRequestData.allowRelay){
                     done(null,result);
                     return;
                 }

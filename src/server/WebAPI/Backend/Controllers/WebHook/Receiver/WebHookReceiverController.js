@@ -132,6 +132,7 @@ WebHookReceiverController.prototype.init = function(app){
 
             result.messageParam.userID = Config.robotUserId;
             result.messageParam.allowRelay = request.body.allowRelay;
+            result.messageParam.isHook = true;
 
             SendMessageLogic.send(
                 
