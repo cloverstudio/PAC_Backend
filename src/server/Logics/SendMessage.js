@@ -196,7 +196,7 @@ var SendMessage = {
                 }
 
                 UpdateHistory.updateByMessage(messageObj,() => {
-                    NotifyNewMessage.notify(messageObj);
+                    NotifyNewMessage.notify(messageObj,param);
                 });
 
                 result.messagePopulated = messageObj;
