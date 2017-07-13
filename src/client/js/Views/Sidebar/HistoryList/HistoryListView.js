@@ -159,18 +159,29 @@ var HistoryListView = Backbone.View.extend({
 
             var roomID = historyObj.chatType + "-" + historyObj.chatId;
 
+            // generate roomID by users
+            if(historyObj.chatType == Const.chatTypePrivate){
+                
+                roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
+
+            }
+
             return roomID == messageObj.roomID;
             
         });
 
-        historyObj.lastUpdate = messageObj.created;
-        if(messageObj.type == Const.messageTypeText)
-            messageObj.message = EncryptionManager.decryptText(messageObj.message);
+        if(historyObj){
 
-        historyObj.lastMessage = messageObj;
+            historyObj.lastUpdate = messageObj.created;
+            if(messageObj.type == Const.messageTypeText)
+                messageObj.message = EncryptionManager.decryptText(messageObj.message);
 
-        self.mergeData([historyObj]);
-        self.renderList(); 
+            historyObj.lastMessage = messageObj;
+
+            self.mergeData([historyObj]);
+            self.renderList(); 
+            
+        }
 
     },
 

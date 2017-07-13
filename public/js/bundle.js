@@ -77945,22 +77945,37 @@ var HistoryListView = Backbone.View.extend({
 
         var self = this;
 
+        console.log("messageObj",messageObj);
+
         var historyObj = _.find(self.dataList,function(historyObj){
 
             var roomID = historyObj.chatType + "-" + historyObj.chatId;
+
+            // generate roomID by users
+            if(historyObj.chatType == Const.chatTypePrivate){
+                
+                roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
+
+            }
+
+            console.log("roomID",roomID);
 
             return roomID == messageObj.roomID;
             
         });
 
-        historyObj.lastUpdate = messageObj.created;
-        if(messageObj.type == Const.messageTypeText)
-            messageObj.message = EncryptionManager.decryptText(messageObj.message);
+        if(historyObj){
 
-        historyObj.lastMessage = messageObj;
+            historyObj.lastUpdate = messageObj.created;
+            if(messageObj.type == Const.messageTypeText)
+                messageObj.message = EncryptionManager.decryptText(messageObj.message);
 
-        self.mergeData([historyObj]);
-        self.renderList(); 
+            historyObj.lastMessage = messageObj;
+
+            self.mergeData([historyObj]);
+            self.renderList(); 
+            
+        }
 
     },
 
