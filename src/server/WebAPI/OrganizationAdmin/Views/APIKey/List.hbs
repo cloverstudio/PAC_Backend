@@ -30,12 +30,12 @@
 
         {{#each list}}
 
-            <tr>
+            <tr {{#if state}} class="enabled" {{else}} class="disabled" {{/if}}>
                 <td>
                     {{#if state}}
-                        Enabled
+                        <strong>Enabled</strong>
                     {{else}}
-                        Disabled
+                        <strong>Disabled</strong>
                     {{/if}}
                 </td>
                 <td>
