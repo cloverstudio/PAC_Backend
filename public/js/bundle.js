@@ -77945,8 +77945,6 @@ var HistoryListView = Backbone.View.extend({
 
         var self = this;
 
-        console.log("messageObj",messageObj);
-
         var historyObj = _.find(self.dataList,function(historyObj){
 
             var roomID = historyObj.chatType + "-" + historyObj.chatId;
@@ -77957,8 +77955,6 @@ var HistoryListView = Backbone.View.extend({
                 roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
 
             }
-
-            console.log("roomID",roomID);
 
             return roomID == messageObj.roomID;
             
