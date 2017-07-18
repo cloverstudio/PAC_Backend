@@ -64,7 +64,9 @@
                 <li>
                     <a href="/admin/sticker/list"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Stickers"}}</a>
                 </li>
-
+                <li>
+                    <a href="/admin/apikeys/list"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Settings"}}</a>
+                </li>
                 <li>
                     <a href="/admin/settings"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Settings"}}</a>
                 </li>
@@ -113,6 +115,11 @@
                 <li {{{printIfEqual page 'sticker-list' 'class="active1"'}}}>
                     <a href="/admin/sticker/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-smile-o fa-stack-1x"></i></span>{{l10n "Stickers"}}</a>
                 </li>
+
+                <li {{{printIfEqual page 'api-list' 'class="active1"'}}}>
+                    <a href="/admin/apikey/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-key fa-stack-1x"></i></span>{{l10n "API Keys"}}</a>
+                </li>
+
 
                 <li>
                     <a href="/admin/settings"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cog fa-stack-1x"></i></span>{{l10n "Settings"}}</a>

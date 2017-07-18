@@ -23,6 +23,7 @@ var OrganizationAdminMain = {
         router.use("/department", require("./Controllers/DepartmentController").init(app));
         router.use("/sticker", require("./Controllers/StickerController").init(app));
         router.use("/settings", require("./Controllers/SettingsController").init(app));
+        router.use("/apikey", require("./Controllers/APIKeyController").init(app));
         
         router.get('/file', function(request, response){
             

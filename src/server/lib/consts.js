@@ -188,5 +188,7 @@
     Const.typingOff = 0;
     Const.typingOn = 1;
 
+    Const.APIKeyLength = 32;
+
     // Exports ----------------------------------------------
     module["exports"] = Const;
