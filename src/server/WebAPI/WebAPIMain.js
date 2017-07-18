@@ -105,7 +105,7 @@ var WebAPIMain = {
         router.use("/admin", require("./OrganizationAdmin/OrganizationAdminMain").init(app));
         router.use("/owner", require("./SuperAdmin/SuperAdminMain").init(app));
         router.use("/api/v2", require("./Backend/BackendMain").init(app));
-
+        router.use("/api/v3", require("./API/APIMain").init(app));
         app.use(init.urlPrefix, router);
 
     }

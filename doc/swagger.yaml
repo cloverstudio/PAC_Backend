@@ -1,0 +1,164 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Spika for Business API v3
+  description: New set of API to use Spika for Business
+schemes:
+  - https
+host: spika.chat
+basePath: /api/v3
+paths:
+  /user/signin:
+    post:
+      summary: Signin to system.
+      description: Signin to the system and get access token to call other API.
+      parameters:
+        - in: header
+          name: apikey
+          description: API key which admin can create in admin console.
+          type: string
+          required: true
+        - name: JSON Body
+          required: true
+          in: body
+          description: Parameters to send
+          schema:
+            required:
+              - username
+            properties:
+              organization:
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        '200':
+          description: Access tokan and User and Organization
+          schema:
+            properties:
+              access-token:
+                type: string
+              user:
+                $ref: '#/definitions/UserLogin'
+              organization:
+                $ref: '#/definitions/Organization'
+        '403':
+          description: Wrong username or password
+        '500':
+          description: Server error
+  /test:
+    post:
+      summary: Just to test API documentation
+      description: test
+      parameters:
+        - name: persons
+          in: body
+          description: The person to create.
+          schema:
+            required:
+              - username
+            properties:
+              firstName:
+                type: string
+              lastName:
+                type: string
+              username:
+                type: string
+              test:
+                properties:
+                  test:
+                    type: string
+      responses:
+        '200':
+          description: A list of Person
+          schema:
+            type: array
+            items:
+              required:
+                - username
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                username:
+                  type: string
+  /test2:
+    post:
+      summary: Just to test API documentation
+      description: test
+      parameters:
+        - name: persons
+          in: body
+          description: The person to create.
+          schema:
+            required:
+              - username
+            properties:
+              firstName:
+                type: string
+              lastName:
+                type: string
+              username:
+                type: string
+              test:
+                properties:
+                  test:
+                    type: string
+      responses:
+        '200':
+          description: Access tokan and User and Organization
+          schema:
+            properties:
+              access-token:
+                type: string
+              user:
+                properties:
+                  test:
+                    type: string
+              organization:
+                type: object
+definitions:
+  UserLogin:
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      avatar:
+        $ref: '#/definitions/File'
+      description:
+        type: string
+      organizationId:
+        type: string
+      sortName:
+        type: string
+      userid:
+        type: string
+      blocked:
+        type: array
+        items:
+          type: string
+      muted:
+        type: array
+        items:
+          type: string
+      created:
+        type: integer
+  File:
+    properties:
+      size:
+        type: integer
+      nameOnServer:
+        type: string
+      mimeType:
+        type: string
+  Organization:
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      created:
+        type: integer
