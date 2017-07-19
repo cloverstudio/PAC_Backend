@@ -1,6 +1,7 @@
 /**  Called for /api/v2/test API */
 
 var _ = require('lodash');
+var async = require('async');
 var express = require('express');
 var router = express.Router();
 
@@ -15,8 +16,7 @@ var checkAPIKey = require( pathTop + 'lib/authApiV3');
 
 var APIBase = require('./APIBase');
 
-var apikeyModel = require(pathTop + 'Models/APIKey.js').get();
-var organizationModel = require(pathTop + 'Models/Organization.js').get();
+var UserModel = require(pathTop + 'Models/User');
 
 var SendMessageLogic = require(pathTop + "Logics/SendMessage");
 var EncryptionManager = require(pathTop + 'lib/EncryptionManager');
@@ -41,6 +41,8 @@ SendMessageController.prototype.init = function(app){
         var messageType = request.body.messageType;
         var message = request.body.message;
 
+        var userModel = UserModel.get();
+
         if(!targetType){
             response.status(422).send('Bad Parameter');
             return;
@@ -63,50 +65,101 @@ SendMessageController.prototype.init = function(app){
 
         var roomId = targetType + "-" + target;
 
-        SendMessageLogic.send(
-            
-            {
-                userID: request.user._id,
-                roomID: roomId,
-                message: message,
-                plainTextMessage: true,
-                type: messageType
-            },
-            
-            function(err){
-                
-                response.status(500).send('Server error');
-                
-            },
+        async.waterfall([(done) => {
 
-            function(data){
-                
-                self.successResponse(response,Const.responsecodeSucceed,
-                                        
-                    {
-                        "message": {
-                            "_id": data._id,
-                            "message": data.message,
-                            "roomID": data.roomID,
-                            "created": data.created
-                        },
-                        "user": {
-                            "_id": request.user._id,
-                            "name": request.user.name,
-                            "avatar": request.user.avatar,
-                            "description": request.user.description,
-                            "organizationId": request.user.organizationId,
-                            "sortName": request.user.sortName,
-                            "userid": request.user.userid,
-                            "created": request.user.created
-                        }
-                    }
-                
-                );
+            var result = {};
 
+            if(targetType != Const.chatTypePrivate){
+                done(null,result);
+                return;
             }
+
+             // find user
+            userModel.findOne({
+                _id:target
+            },function(err,findResult){
+                
+                if(!findResult){
+                    done({
+                        status: 422,
+                        message: "Bad Parameter"
+                    },null);
+                    
+                    return;
+                }
+                
+                roomId = Utils.chatIdByUser(findResult,request.user);
+
+                done(null,result);
+
+            });
             
-        )
+        },
+        (result,done) => {
+
+            SendMessageLogic.send(
+                
+                {
+                    userID: request.user._id,
+                    roomID: roomId,
+                    message: message,
+                    plainTextMessage: true,
+                    type: messageType
+                },
+                
+                function(err){
+                    
+                    done(err,result);
+                    
+                },
+
+                function(data){
+                    
+                    result.message = data;
+                    done(null,result);
+
+                }
+                
+            )
+
+        }
+        ],
+        (err,result) => {
+
+            if(err){    
+
+                if(err.status && err.message)
+                    response.status(err.status).send(err.message);
+                else
+                    response.status(500).send("Server Error");
+
+                return;
+            }
+
+            self.successResponse(response,Const.responsecodeSucceed,
+                                    
+                {
+                    "message": {
+                        "_id": result.message._id,
+                        "message": result.message.message,
+                        "roomID": result.message.roomID,
+                        "created": result.message.created
+                    },
+                    "user": {
+                        "_id": request.user._id,
+                        "name": request.user.name,
+                        "avatar": request.user.avatar,
+                        "description": request.user.description,
+                        "organizationId": request.user.organizationId,
+                        "sortName": request.user.sortName,
+                        "userid": request.user.userid,
+                        "created": request.user.created
+                    }
+                }
+            
+            );
+
+        });
 
     });
 
