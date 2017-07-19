@@ -12,6 +12,8 @@ describe('WEB API', function () {
 
             request(app)
                 .get('/api/v3/test')
+                .set('apikey', global.apikey)
+                .expect(200) 
                 .end(function (err, res) {
 
     			if (err) {

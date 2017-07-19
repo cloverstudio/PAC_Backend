@@ -79,7 +79,6 @@ global.group4 = {
 
 global.encryptedText = "0301b8a755b0d074259a98114f78b6738401681b3762c87d6f25249001e903067cc7009beae2288379e456e6856bb3c4f22084811c05d10fa7869ac660aec60c04259926d75506a83284368805bdaca07563";
 
-
 before(function(doneMain){
     
     this.timeout(15000);
@@ -115,6 +114,29 @@ before(function(doneMain){
             }); 
 
         },
+
+        function(result, done) {
+
+            // create apikey
+            request(app)
+                .post('/api/v3/test/createapikey')
+                .send({
+                    organizationId:global.organization1._id
+                })
+                .end(function (err, res) {
+                
+    			if (err) {
+    				throw err;
+    			}
+                
+                global.apikey = res.body.key;
+                
+                done(null,result)
+            
+            });   
+            
+        },
+
         function(result, done) {
 
             // create user

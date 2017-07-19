@@ -10,6 +10,7 @@ Conf.port = 8081;
 Conf.socketNameSpace = '/spikaenterprise';
 Conf.dbCollectionPrefix = '';
 Conf.databaseUrl = "mongodb://localhost/spikaenterprisetest";
+Conf.isTest = true;
 
 // initialization
 var app = express();

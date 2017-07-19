@@ -49,197 +49,199 @@ TestController.prototype.init = function(app){
 
     });
     
-    // need for unit test - disable this in production
-    router.post('/createtempuser',function(request,response){
+    if(Config.isTest){
         
-        var model = UserModel.get();
-        var body = request.body;
-        
-        var user = new model({
+        router.post('/createtempuser',function(request,response){
             
-            name: body.name,
-            userid: body.userid,
-            password: body.password,
-            organizationId : body.organizationId,
-            created: Utils.now(),
-            status: 1
+            var model = UserModel.get();
+            var body = request.body;
+            
+            var user = new model({
                 
-        });
-        
-        user.save(function(err,saveResult){
-            
-            self.successResponse(response,Const.responsecodeSucceed,{
-                user : saveResult.toObject()
+                name: body.name,
+                userid: body.userid,
+                password: body.password,
+                organizationId : body.organizationId,
+                created: Utils.now(),
+                status: 1
+                    
             });
             
+            user.save(function(err,saveResult){
+                
+                self.successResponse(response,Const.responsecodeSucceed,{
+                    user : saveResult.toObject()
+                });
+                
+            });
+
         });
 
-    });
-
-    router.post('/createtempgroup', function(request, response) {
-        
-        var model = GroupModel.get();
-        var uploadPathError = self.checkUploadPath();
-
-        async.waterfall([
+        router.post('/createtempgroup', function(request, response) {
             
-            function(done) {
-               
-                var form = new formidable.IncomingForm();
-                form.uploadDir = Config.uploadPath;
+            var model = GroupModel.get();
+            var uploadPathError = self.checkUploadPath();
 
-                form.on('fileBegin', function(name, file) {
+            async.waterfall([
+                
+                function(done) {
+                
+                    var form = new formidable.IncomingForm();
+                    form.uploadDir = Config.uploadPath;
 
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
+                    form.on('fileBegin', function(name, file) {
 
-                });
+                        file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
 
-                form.onPart = function(part) {
+                    });
 
-                    if (part.filename) {
+                    form.onPart = function(part) {
 
-                        if (!uploadPathError) form.handlePart(part);
+                        if (part.filename) {
 
-                    } else if (part.filename != "") { 
+                            if (!uploadPathError) form.handlePart(part);
 
-                        form.handlePart(part);
+                        } else if (part.filename != "") { 
+
+                            form.handlePart(part);
+
+                        }
 
                     }
 
-                }
+                    form.parse(request, function(err, fields, files) {
 
-                form.parse(request, function(err, fields, files) {
+                        done(err, { file: files.file, fields: fields });
 
-                    done(err, { file: files.file, fields: fields });
+                    });
 
-                });
+                },
+                function(result, done) {
 
-            },
-            function(result, done) {
+                    if (uploadPathError) {
+                        done(uploadPathError, result);
+                        return;
+                    }
 
-                if (uploadPathError) {
-                    done(uploadPathError, result);
-                    return;
-                }
+                    var file = result.file;
+                    var fields = result.fields;
 
-                var file = result.file;
-                var fields = result.fields;
+                    var sortName = _.isEmpty(fields.sortName) ? fields.name.toLowerCase() : fields.sortName;
+                    var group = null;
+                    
+                    var data = {
 
-                var sortName = _.isEmpty(fields.sortName) ? fields.name.toLowerCase() : fields.sortName;
-                var group = null;
-                
-                var data = {
+                        name: fields.name,
+                        sortName: sortName,
+                        description: fields.description,
+                        created: Utils.now(),
+                        organizationId: fields.organizationId,
+                        users: fields.users.split(',')
 
-                    name: fields.name,
-                    sortName: sortName,
-                    description: fields.description,
-                    created: Utils.now(),
-                    organizationId: fields.organizationId,
-                    users: fields.users.split(',')
+                    };
 
-                };
+                    if (file) {
 
-                if (file) {
+                        easyImg.thumbnail({
+                            src: file.path,
+                            dst: path.dirname(file.path) + "/" + Utils.getRandomString(),
+                            width: Const.thumbSize,
+                            height: Const.thumbSize
+                        }).then(
+                            function(thumbnail) {
 
-                    easyImg.thumbnail({
-                         src: file.path,
-                         dst: path.dirname(file.path) + "/" + Utils.getRandomString(),
-                         width: Const.thumbSize,
-                         height: Const.thumbSize
-                    }).then(
-                        function(thumbnail) {
+                                data.avatar = {
 
-                            data.avatar = {
+                                    picture: {
+                                        originalName: file.name,
+                                        size: file.size,
+                                        mimeType: file.type,
+                                        nameOnServer: path.basename(file.path)
+                                    },
+                                    thumbnail: {
+                                        originalName: file.name,
+                                        size: thumbnail.size,
+                                        mimeType: thumbnail.type,
+                                        nameOnServer: thumbnail.name
+                                    }
 
-                                picture: {
-                                    originalName: file.name,
-                                    size: file.size,
-                                    mimeType: file.type,
-                                    nameOnServer: path.basename(file.path)
-                                },
-                                thumbnail: {
-                                    originalName: file.name,
-                                    size: thumbnail.size,
-                                    mimeType: thumbnail.type,
-                                    nameOnServer: thumbnail.name
                                 }
 
-                            }
+                                result.thumbnailPath = thumbnail.path;
 
-                            result.thumbnailPath = thumbnail.path;
+                                group = new model(data);
+                                // save to DB          
+                                group.save(function(err, saveResult){
 
-                            group = new model(data);
-                            // save to DB          
-                            group.save(function(err, saveResult){
+                                    result.saveResult = saveResult;
+                                    done(err, result);
+                                
+                                });
 
-                                result.saveResult = saveResult;
+                            },
+                            function (err) {
                                 done(err, result);
-                            
-                            });
+                            }
+                        );
 
-                        },
-                        function (err) {
+                    } else {
+
+                        group = new model(data);
+                        // save to DB          
+                        group.save(function(err, saveResult){
+
+                            result.saveResult = saveResult;
                             done(err, result);
-                        }
-                    );
+                        
+                        });
+
+                    } 
+                                
+                }
+            ],
+            function(err, result) {
+                
+                if (err) {
+                    
+                    if (result.file) fs.unlink(result.file.path, function() {});
+                    if (result.file) fs.unlink(result.thumbnailPath, function() {});
+
+                    throw err;
 
                 } else {
 
-                    group = new model(data);
-                    // save to DB          
-                    group.save(function(err, saveResult){
-
-                        result.saveResult = saveResult;
-                        done(err, result);
-                    
+                    self.successResponse(response, Const.responsecodeSucceed, {
+                        group : result.saveResult.toObject()
                     });
-
-                } 
-                             
-            }
-        ],
-        function(err, result) {
-            
-            if (err) {
-                
-                if (result.file) fs.unlink(result.file.path, function() {});
-                if (result.file) fs.unlink(result.thumbnailPath, function() {});
-
-                throw err;
-
-            } else {
-
-                self.successResponse(response, Const.responsecodeSucceed, {
-                    group : result.saveResult.toObject()
-                });
-            }            
-                    
-        });
-        
-    });
-
-    // need for unit test - disable this in production
-    router.post('/createtemporg', function(request, response) {
-        
-        var model = OrganizationModel.get();
-        var body = request.body;
-
-        var org = new model({
-            name: body.name,
-            organizationId:body.name,
-            created: Utils.now(),
-            status: 1
-        });
-        
-        org.save(function(err, saveResult) {
-
-            self.successResponse(response, Const.responsecodeSucceed, {
-                org : saveResult.toObject()
+                }            
+                        
             });
             
         });
 
-    });
+        // need for unit test - disable this in production
+        router.post('/createtemporg', function(request, response) {
+            
+            var model = OrganizationModel.get();
+            var body = request.body;
+
+            var org = new model({
+                name: body.name,
+                organizationId:body.name,
+                created: Utils.now(),
+                status: 1
+            });
+            
+            org.save(function(err, saveResult) {
+
+                self.successResponse(response, Const.responsecodeSucceed, {
+                    org : saveResult.toObject()
+                });
+                
+            });
+
+        });
+    }
     
     return router;
 

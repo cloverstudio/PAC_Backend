@@ -12,11 +12,13 @@ describe('WEB API', function () {
 
             request(app)
                 .post('/api/v3/user/signin')
+                .set('apikey', global.apikey)
                 .send({
                     organizationid:global.organization1.name,
                     userid: global.user2.userid,
                     password: global.user2.password
                 })
+                .expect(200) 
                 .end(function (err, res) {
 
     			if (err) {

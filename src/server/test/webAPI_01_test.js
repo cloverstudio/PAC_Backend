@@ -12,6 +12,7 @@ describe('WEB API', function () {
 
             request(app)
                 .get('/api/v2/test')
+                .expect(200) 
                 .end(function (err, res) {
 
     			if (err) {
