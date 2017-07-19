@@ -48,11 +48,13 @@ function checkAPIKey(request, response, next) {
 
         organizationModel.findOne({
             _id: result.apikey.organizationId
+        },{
+            organizationId
         },(err,findResult) => {
 
             console.log('findResult',findResult);
             done(null,result);
-            
+
         });
 
     }],
