@@ -9,6 +9,7 @@ var Config = require('../../../lib/init');
 var loginUserManager = require('../../../lib/loginUserManager');
 var ChatManager = require('../../../lib/ChatManager');
 var localzationManager = require('../../../lib/localzationManager');
+var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
 
@@ -63,6 +64,12 @@ var HistoryListView = Backbone.View.extend({
         Backbone.on(Const.NotificationRefreshHistory, function(){
             
             self.updateList();
+            
+        });
+
+        Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+            
+            self.updateListWithoutLoading(obj);
             
         });
 
@@ -139,12 +146,45 @@ var HistoryListView = Backbone.View.extend({
             
         },function(errorCode){
             
-            console.log(errorCode);
             UIUtils.handleAPIErrors(errorCode);
             
         });
         
     },
+    updateListWithoutLoading: function(messageObj){
+
+        var self = this;
+
+        var historyObj = _.find(self.dataList,function(historyObj){
+
+            var roomID = historyObj.chatType + "-" + historyObj.chatId;
+
+            // generate roomID by users
+            if(historyObj.chatType == Const.chatTypePrivate){
+                
+                roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
+
+            }
+
+            return roomID == messageObj.roomID;
+            
+        });
+
+        if(historyObj){
+
+            historyObj.lastUpdate = messageObj.created;
+            if(messageObj.type == Const.messageTypeText)
+                messageObj.message = EncryptionManager.decryptText(messageObj.message);
+
+            historyObj.lastMessage = messageObj;
+
+            self.mergeData([historyObj]);
+            self.renderList(); 
+            
+        }
+
+    },
+
     loadNext: function(){
         
         if(this.isReachedToEnd)
@@ -292,6 +332,7 @@ var HistoryListView = Backbone.View.extend({
     destroy: function(){
         
         Backbone.off(Const.NotificationRefreshHistory);
+        Backbone.off(Const.NotificationRefreshHistoryLocally);
         Backbone.off(Const.NotificationRemoveRoom);
         
     }

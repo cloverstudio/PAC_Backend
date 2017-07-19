@@ -612,9 +612,12 @@ HistioryListController.prototype.getList = function(lastUpdate,page,request,resp
         var model = UserModel.get();
         
         
-        model.find({
-            _id: {$in : userIds }
-        },function(err,findResult){
+        model.find(
+			{
+            	_id: {$in : userIds }
+			},
+			UserModel.defaultResponseFields,
+		function(err,findResult){
 
             _.forEach(result.list,function(row,index,alias){
                 

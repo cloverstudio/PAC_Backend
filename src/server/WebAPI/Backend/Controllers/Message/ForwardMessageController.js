@@ -17,6 +17,8 @@ var OrganizationModel = require( pathTop + 'Models/Organization');
 var MessageModel = require( pathTop + 'Models/Message');
 var tokenChecker = require( pathTop + 'lib/authApi');
 
+var EncryptionManager = require( pathTop + 'lib/EncryptionManager');
+
 var BackendBase = require('../BackendBase');
 
 var SendMessageLogic = require(pathTop +  "Logics/SendMessage");
@@ -114,8 +116,15 @@ ForwardMessageController.prototype.init = function(app){
             var messageParam = result.originalMessage.toObject();
             messageParam.roomID = roomId;
             messageParam.localID = "";
+            messageParam.userID = request.user._id.toString();
              
-            
+            // encrypt if text
+            if( messageParam.type == Const.messageTypeText ){
+
+                messageParam.message = EncryptionManager.encryptText(messageParam.message);
+
+            }
+
             SendMessageLogic.send(messageParam,() => {
                 done("unknown error",result);
             },() => {

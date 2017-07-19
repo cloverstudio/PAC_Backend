@@ -240,7 +240,7 @@ var UpdateHistory = {
                     }
                 };
         
-                userModel.findOne({_id:fromUserId},function(err,findUserResult){
+                userModel.findOne({_id:fromUserId},UserModel.defaultResponseFields,function(err,findUserResult){
                     
                     result.fromUser = findUserResult;
                     done(err,result);
@@ -337,7 +337,9 @@ var UpdateHistory = {
             },
             function(result,done){
                 
-                userModel.findOne({_id:fromUserId},function(err,findUserResult){
+                userModel.findOne({_id:fromUserId},
+                    UserModel.defaultResponseFields,
+                    function(err,findUserResult){
                     
                     result.fromUser = findUserResult;
                     done(null,result);
@@ -429,7 +431,7 @@ var UpdateHistory = {
             },
             function(result,done){
                 
-                userModel.findOne({_id:fromUserId},function(err,findUserResult){
+                userModel.findOne({_id:fromUserId},UserModel.defaultResponseFields,function(err,findUserResult){
                     
                     result.fromUser = findUserResult;
                     done(err, result);

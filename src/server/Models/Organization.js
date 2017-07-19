@@ -44,7 +44,7 @@ Organization.prototype.init = function(mongoose){
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "organization", this.schema);
-
+    
 }
 
 Organization.get = function(){

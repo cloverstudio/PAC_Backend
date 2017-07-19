@@ -84,6 +84,7 @@ Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 Const.NotificationMessageUpdated = "notification_message_updated"
 Const.NotificationChatLoaded = "notification_chat_loaded"
 Const.NotificationGlobalClick = "notification_global_click"
+Const.NotificationRefreshHistoryLocally = "notification_refresh_history_locally";
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;

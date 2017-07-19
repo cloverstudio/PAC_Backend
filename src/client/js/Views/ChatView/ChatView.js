@@ -105,9 +105,16 @@ var ChatView = Backbone.View.extend({
             }
 
         });
-
+        
         Backbone.on(Const.NotificationTyping, function(param){
+
+            console.log(param.roomID,self.currentRoomId);
+
+            if(param.roomID != self.currentRoomId)
+                return;
+
             self.updateTyping(param);
+            
         });
 
         var lastPosition = 0;
@@ -231,8 +238,6 @@ var ChatView = Backbone.View.extend({
 
         LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
             
-            console.log('sssss',res.messages.length);
-
             if(res.messages && res.messages.length > 0){
 
                 if(self.lastMessageId == 0){
@@ -248,9 +253,11 @@ var ChatView = Backbone.View.extend({
                 } else {
                     self.scrollToBottom();
                 }
-                    
+
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
+            } else {
+                Backbone.trigger(Const.NotificationChatLoaded);
             }
 
         },function(){

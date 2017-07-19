@@ -24,7 +24,7 @@ var HistoryModel = require('../Models/History');
 
 var NotifyNewMessage = {
     
-    notify: function(obj){
+    notify: function(obj,originalRequestData){
 
         var chatType = obj.roomID.split("-")[0];
         var roomIDSplitted = obj.roomID.split("-");
@@ -36,7 +36,9 @@ var NotifyNewMessage = {
             
             function(done){
                 
-                var result = {};
+                var result = {
+                    originalRequestData:originalRequestData
+                };
                 
                 if(chatType == Const.chatTypeGroup){
                     
@@ -522,11 +524,18 @@ var NotifyNewMessage = {
                 
                 if(!result.hookTarget){
                     done(null,result);
+                    return;
                 }
-                
+
+                if(result.originalRequestData.isHook && 
+                    !result.originalRequestData.allowRelay){
+                    done(null,result);
+                    return;
+                }
+
                 async.each(result.hookTarget,function(hook,eachDone){
                     
-                    var fromUser = result.message.userModel;
+                    var fromUser = result.message.user;
                     var message = result.message;
                     
                     var name = "";

@@ -115,7 +115,8 @@ var Routing = function(){
 
         }
 
-        mainView.switchToThreeColumn();
+        if(mainView)
+            mainView.switchToThreeColumn();
 
     });
     

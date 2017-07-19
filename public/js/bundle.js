@@ -71925,9 +71925,16 @@ var ChatView = Backbone.View.extend({
             }
 
         });
-
+        
         Backbone.on(Const.NotificationTyping, function(param){
+
+            console.log(param.roomID,self.currentRoomId);
+
+            if(param.roomID != self.currentRoomId)
+                return;
+
             self.updateTyping(param);
+            
         });
 
         var lastPosition = 0;
@@ -72051,8 +72058,6 @@ var ChatView = Backbone.View.extend({
 
         LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
             
-            console.log('sssss',res.messages.length);
-
             if(res.messages && res.messages.length > 0){
 
                 if(self.lastMessageId == 0){
@@ -72068,9 +72073,11 @@ var ChatView = Backbone.View.extend({
                 } else {
                     self.scrollToBottom();
                 }
-                    
+
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
+            } else {
+                Backbone.trigger(Const.NotificationChatLoaded);
             }
 
         },function(){
@@ -72984,7 +72991,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div id=\"sticker-panel\">\n	\n	 <img class=\"loader\" src=\"/spika/img/loader.gif\" />\n	\n</div>";
+    return "<div id=\"sticker-panel\">\n	\n	 <img class=\"loader\" src=\"/images/loader.gif\" />\n	\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":67}],163:[function(require,module,exports){
@@ -77792,6 +77799,7 @@ var Config = require('../../../lib/init');
 var loginUserManager = require('../../../lib/loginUserManager');
 var ChatManager = require('../../../lib/ChatManager');
 var localzationManager = require('../../../lib/localzationManager');
+var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
 
@@ -77846,6 +77854,12 @@ var HistoryListView = Backbone.View.extend({
         Backbone.on(Const.NotificationRefreshHistory, function(){
             
             self.updateList();
+            
+        });
+
+        Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+            
+            self.updateListWithoutLoading(obj);
             
         });
 
@@ -77922,12 +77936,45 @@ var HistoryListView = Backbone.View.extend({
             
         },function(errorCode){
             
-            console.log(errorCode);
             UIUtils.handleAPIErrors(errorCode);
             
         });
         
     },
+    updateListWithoutLoading: function(messageObj){
+
+        var self = this;
+
+        var historyObj = _.find(self.dataList,function(historyObj){
+
+            var roomID = historyObj.chatType + "-" + historyObj.chatId;
+
+            // generate roomID by users
+            if(historyObj.chatType == Const.chatTypePrivate){
+                
+                roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
+
+            }
+
+            return roomID == messageObj.roomID;
+            
+        });
+
+        if(historyObj){
+
+            historyObj.lastUpdate = messageObj.created;
+            if(messageObj.type == Const.messageTypeText)
+                messageObj.message = EncryptionManager.decryptText(messageObj.message);
+
+            historyObj.lastMessage = messageObj;
+
+            self.mergeData([historyObj]);
+            self.renderList(); 
+            
+        }
+
+    },
+
     loadNext: function(){
         
         if(this.isReachedToEnd)
@@ -78075,6 +78122,7 @@ var HistoryListView = Backbone.View.extend({
     destroy: function(){
         
         Backbone.off(Const.NotificationRefreshHistory);
+        Backbone.off(Const.NotificationRefreshHistoryLocally);
         Backbone.off(Const.NotificationRemoveRoom);
         
     }
@@ -78084,7 +78132,7 @@ var HistoryListView = Backbone.View.extend({
 
 module.exports = HistoryListView;
 
-},{"../../../lib/APIClients/HistoryListClient":251,"../../../lib/ChatManager":273,"../../../lib/UIUtils":283,"../../../lib/consts":284,"../../../lib/init":285,"../../../lib/localzationManager":287,"../../../lib/loginUserManager":288,"../../../lib/utils":290,"./HistoryListContents.hbs":222,"./HistoryListView.hbs":223,"backbone":7,"lodash":75}],225:[function(require,module,exports){
+},{"../../../lib/APIClients/HistoryListClient":251,"../../../lib/ChatManager":273,"../../../lib/EncryptionManager":274,"../../../lib/UIUtils":283,"../../../lib/consts":284,"../../../lib/init":285,"../../../lib/localzationManager":287,"../../../lib/loginUserManager":288,"../../../lib/utils":290,"./HistoryListContents.hbs":222,"./HistoryListView.hbs":223,"backbone":7,"lodash":75}],225:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -82314,7 +82362,6 @@ var socketIOManager = {
                 var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
                 var message = Utils.l10n(Const.ErrorCodes[error.code]);
                 alertDialog.show(Utils.l10n("Api Error"),message);
-
             }
             
         });
@@ -82330,6 +82377,8 @@ var socketIOManager = {
             // History is refreshed by ChatView when the chat is opened
             if(loginUserManager.currentConversation != obj.roomID)
                 Backbone.trigger(Const.NotificationRefreshHistory);
+            else
+                Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
 
             Backbone.trigger(Const.NotificationNewMessage,obj);
 
@@ -82601,6 +82650,7 @@ Const.NotificationDeletedFromGroup = "notification_deleted_from_group"
 Const.NotificationMessageUpdated = "notification_message_updated"
 Const.NotificationChatLoaded = "notification_chat_loaded"
 Const.NotificationGlobalClick = "notification_global_click"
+Const.NotificationRefreshHistoryLocally = "notification_refresh_history_locally";
 
 Const.hookTypeInbound = 1;
 Const.hookTypeOutgoing = 2;
@@ -83818,7 +83868,8 @@ var Routing = function(){
 
         }
 
-        mainView.switchToThreeColumn();
+        if(mainView)
+            mainView.switchToThreeColumn();
 
     });
     
