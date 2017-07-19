@@ -42,6 +42,21 @@ SigninController.prototype.init = function(app){
         var userModel = UserModel.get();
         var organizationModel = OrganizationModel.get();
 
+        if(!organization){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+        
+        if(!username){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+
+        if(!password){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+
         async.waterfall([(done) => {
 
             var result = {};

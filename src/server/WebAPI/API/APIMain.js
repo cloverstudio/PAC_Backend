@@ -17,6 +17,7 @@ var APIMain ={
         
         router.use("/test", require("./Controllers/TestController").init(app));
         router.use("/user/signin", require("./Controllers/SigninController").init(app));
+        router.use("/message/send", require("./Controllers/SendMessageController").init(app));
         return router;
     }
 }

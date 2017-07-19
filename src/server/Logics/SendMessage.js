@@ -27,7 +27,8 @@ var SendMessage = {
         var roomID = param.roomID;
 
         // decript message
-        if(param.type == Const.messageTypeText){
+        if(param.type == Const.messageTypeText &&
+            !param.plainTextMessage){
 
             param.message = EncryptionManager.decryptText(param.message);
 

@@ -2,7 +2,7 @@ var should = require('should');
 var request = require('supertest');
 var app = require('../mainTest');
 
-describe('WEB API', function () {
+describe('API', function () {
 
     var req, res;
 
@@ -26,7 +26,8 @@ describe('WEB API', function () {
     			}
 
                 res.body.should.have.property('access-token');
-                
+                global.apiaccesstoken = res.body['access-token'];
+
                 done();
             
             });   

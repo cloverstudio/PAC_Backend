@@ -114,8 +114,6 @@ SendMessageController.prototype.init = function(app){
 
         },
         (result,done) => {
-
-
             done(null,result)
         }
         ],
