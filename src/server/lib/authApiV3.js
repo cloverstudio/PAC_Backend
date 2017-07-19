@@ -47,13 +47,24 @@ function checkAPIKey(request, response, next) {
     (result,done) => {
 
         organizationModel.findOne({
-            _id: result.apikey.organizationId
+            _id: result.apikey.organizationId,
+            status:1
         },{
-            organizationId
+            _id:true,
+            organizationId:true,
+            name:true,
+            craeted:true,
+            status:true
         },(err,findResult) => {
 
-            console.log('findResult',findResult);
-            done(null,result);
+            if(_.isEmpty(findResult)){
+                response.status(401).send('Wront API Key');
+                return;
+            }
+
+            result.organization = findResult;
+
+            done(err,result);
 
         });
 
@@ -65,7 +76,10 @@ function checkAPIKey(request, response, next) {
             return;
         }
 
+        request.organization = result.organization;
+
         next();
+
     });
 
 }

@@ -14,9 +14,9 @@ describe('WEB API', function () {
                 .post('/api/v3/user/signin')
                 .set('apikey', global.apikey)
                 .send({
-                    organizationid:global.organization1.name,
-                    userid: global.user2.userid,
-                    password: global.user2.password
+                    organization:global.organization1.name,
+                    username: global.user2.userid,
+                    password: global.user2.passwordOrig
                 })
                 .expect(200) 
                 .end(function (err, res) {
@@ -25,7 +25,7 @@ describe('WEB API', function () {
     				throw err;
     			}
 
-                res.body.should.be.exactly("test");
+                res.body.should.have.property('access-token');
                 
                 done();
             

@@ -23,35 +23,45 @@ global.organization1 = {
     name: "organization1" + global.getRandomStr(),
 }
 
+var password = "password"  + global.getRandomStr();
+
 global.user1 = {
     name: "user1",
     userid: "userid1" + global.getRandomStr(),
-    password: sha1("password"  + global.getRandomStr()),
+    password: sha1(password + global.hashsalt),
+    passwordOrig: password,
     organizationId : 1
 }
+
+password = "password"  + global.getRandomStr();
 
 global.user2 = {
     name: "user2",
     userid: "userid2" + global.getRandomStr(),
-    password: sha1("password"  + global.getRandomStr()),
+    password: sha1(password + global.hashsalt),
+    passwordOrig: password,
     organizationId : 1
 }
+
+password = "password"  + global.getRandomStr();
 
 global.user3 = {
     name: "user3",
     userid: "userid3" + global.getRandomStr(),
-    password: sha1("password"  + global.getRandomStr()),
+    password: sha1(password + global.hashsalt),
+    passwordOrig: password,
     organizationId : 1
 }
+
+password = "password"  + global.getRandomStr();
 
 global.user4 = {
     name: "user4",
     userid: "userid4" + global.getRandomStr(),
-    password: sha1("password"  + global.getRandomStr()),
+    password: sha1(password + global.hashsalt),
+    passwordOrig: password,
     organizationId : 1
 }
-
-
 
 global.group1 = {
     name: "group1",

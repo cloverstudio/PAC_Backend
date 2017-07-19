@@ -151,10 +151,10 @@ SigninController.prototype.init = function(app){
                 
                 // get user 
                 userModel.findOne({
-                					organizationId:result.organization._id.toString(),
-                					userid:userid,
-                                    status:1,
-                					password:password},function(err,findResult){
+                    organizationId:result.organization._id.toString(),
+                    userid:userid,
+                    status:1,
+                    password:password},function(err,findResult){
                     
                     if(_.isEmpty(findResult)){
                         self.successResponse(response,Const.responsecodeSigninWrongUserCredentials);
