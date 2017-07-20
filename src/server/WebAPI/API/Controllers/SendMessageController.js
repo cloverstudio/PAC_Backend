@@ -40,6 +40,7 @@ SendMessageController.prototype.init = function(app){
         var target = request.body.target;
         var messageType = request.body.messageType;
         var message = request.body.message;
+        var file = request.body.file;
 
         var userModel = UserModel.get();
 
@@ -58,7 +59,12 @@ SendMessageController.prototype.init = function(app){
             return;
         }
 
-        if(!message){
+        if(messageType == Const.messageTypeText && !message){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+
+        if(messageType == Const.messageTypeFile && !file){
             response.status(422).send('Bad Parameter');
             return;
         }
@@ -104,7 +110,8 @@ SendMessageController.prototype.init = function(app){
                     roomID: roomId,
                     message: message,
                     plainTextMessage: true,
-                    type: messageType
+                    type: messageType,
+                    file:file
                 },
                 
                 function(err){
