@@ -58,11 +58,46 @@ gulp.task('browserify-build', function() {
   
 });
 
+// build for sdk
+gulp.task('sdk', function() {
+
+    var bundler = browserify({
+        // Required watchify args
+        cache: {}, 
+        packageCache: {}, 
+        fullPaths: true,
+        // Browserify Options
+        entries: './src/client/js/sdk/main.js',
+        debug: true
+    });
+
+    hbsfy.configure({
+        extensions: ['hbs']
+    });
+    
+    var bundle = function() {
+        return bundler
+        .transform(hbsfy)
+        .bundle()
+        .on('error', function(err){
+            console.log(err.message);
+            this.emit('end');
+        })
+        .pipe(source('spika.js'))
+        .pipe(gulp.dest('./public/js/sdk/'));
+    };
+
+    return bundle();
+  
+});
+
+
 gulp.task('copy', function() {
 
     gulp.src('node_modules/bootstrap-sass/assets/fonts/**/*').pipe( gulp.dest('public/fonts') );
     gulp.src('node_modules/font-awesome/fonts/**/*').pipe( gulp.dest('public/fonts') );
     gulp.src('src/client/index.html').pipe( gulp.dest('public') );
+    gulp.src('src/client/js/sdk/index.html').pipe( gulp.dest('public/js/sdk/') );
     gulp.src('src/client/images/**/*').pipe( gulp.dest('public/images') );
     gulp.src('src/client/sounds/**/*').pipe( gulp.dest('public/sounds') );
     gulp.src('src/server/assets/**/*').pipe( gulp.dest('public/assets') );
@@ -88,7 +123,7 @@ gulp.task('build-apidoc', function(done){
 
 });
 
-gulp.task('build-dist',['build-apidoc','copy','browserify-build','build-css'],function(){
+gulp.task('build-dist',['sdk','build-apidoc','copy','browserify-build','build-css'],function(){
     
     
 });

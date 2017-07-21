@@ -58,6 +58,12 @@ var WebAPIMain = {
             cookie: { path: '/', httpOnly: false, secure: false, maxAge: null }
         }));
 
+        app.use(function(request, response, next) {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, access-token, apikey");
+        next();
+        });
+
         app.all('*', function(request, response, next) {
             
             if(request.cookies.lang){
