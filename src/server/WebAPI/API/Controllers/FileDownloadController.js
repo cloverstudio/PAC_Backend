@@ -38,6 +38,12 @@ FileDownloadController.prototype.init = function(app){
     router.get('/:fileId',checkAPIKey,function(request,response){
 
         var fileId = request.params.fileId;
+        
+        if(!fileId){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+
         var filePath = Config.uploadPath + "/" + fileId;
 
         var fileModel = FileModel.get();

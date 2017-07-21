@@ -20,6 +20,7 @@ var APIMain ={
         router.use("/message/send", require("./Controllers/SendMessageController").init(app));
         router.use("/file/upload", require("./Controllers/FileUploadController").init(app));
         router.use("/file/download", require("./Controllers/FileDownloadController").init(app));
+        router.use("/message/list", require("./Controllers/MessageListController").init(app));
         
         return router;
     }

@@ -195,7 +195,7 @@ paths:
         500:
           description: Server error
 
-  /message/list/{roomID}/{order}/{lastmessageID}:
+  /message/list/{roomID}/{lastmessageID}/{direction}:
     get:
       summary: Get file
       parameters:
@@ -215,15 +215,15 @@ paths:
           required: true
           description: roomID to get message
         - in: path
-          name: order
-          type: string
-          required: true
-          description: new to get new messages old to get old messages
-        - in: path
           name: lastmessageID
           type: string
           required: true
           description: use for paging
+        - in: path
+          name: direction
+          type: string
+          required: true
+          description: new to get new messages old to get old messages
       responses:
         401:
           description: Wrong apikey
@@ -236,9 +236,11 @@ paths:
         200:
           description: A list of Person
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/Message"
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "#/definitions/Message"
   /test:
     post:
       summary: Just to test API documentation
