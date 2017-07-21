@@ -11,7 +11,7 @@ var pathTop = "../../../";
 
 var Const = require( pathTop + "lib/consts");
 var Config = require( pathTop + "lib/init");
-var Utils = require( pathTop + "lib/Utils");
+var Utils = require( pathTop + "lib/utils");
 var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 
 var APIBase = require('./APIBase');
