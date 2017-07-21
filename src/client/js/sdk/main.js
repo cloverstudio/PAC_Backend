@@ -33,13 +33,15 @@ var _spikaInit = (function(root) { // receives global object
 
     SpikaSDK.signin = function(organization,username,password,cb){
         
+        var self = this;
+
         var postData = {
             organization:organization,
             username:username,
             password:password
         };
 
-        console.log(fetch);
+        var result = {};
 
         fetch(this.baseURL + '/user/signin', 
                 {   method: 'POST', 
@@ -53,6 +55,8 @@ var _spikaInit = (function(root) { // receives global object
                 })
             .then(function(res) {
                 
+                result.status = res.status;
+
                 if(res.status == 200){
                     return res.json();
                 }else{
@@ -60,13 +64,57 @@ var _spikaInit = (function(root) { // receives global object
                 }
 
             }).then(function(response) {
-                
-                cb(response);
+
+                result.body = response;
+
+                self.accessToken = response['access-token'];
+                cb(result.status,result.body);
 
             });
     }
 
     SpikaSDK.sendMessage = function(targetType,target,messageType,message,file,cb){
+
+        var self = this;
+
+        var postData = {
+            targetType:targetType,
+            target:target,
+            messageType:messageType,
+            message:message,
+            file:file
+        };
+
+
+        var result = {};
+
+        fetch(this.baseURL + '/message/send', 
+                {   method: 'POST', 
+                    body: JSON.stringify(postData),
+                    mode: 'cors',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        apikey:this.apiKey,
+                        'access-token':this.accessToken
+                    }
+                })
+            .then(function(res) {
+                
+                result.status = res.status;
+
+                if(res.status == 200){
+                    return res.json();
+                }else{
+                    return res.text();
+                }
+
+            }).then(function(response) {
+
+                result.body = response;
+                cb(result.status,result.body);
+
+            });
 
     }
 

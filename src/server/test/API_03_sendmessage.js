@@ -16,7 +16,7 @@ describe('API', function () {
                 .set('access-token', global.apiaccesstoken)
                 .send({
                     targetType:1, // private message
-                    target: global.user1._id,
+                    target: global.user1.userid,
                     messageType: 1, // text message
                     message: "hi"
                 })
@@ -63,8 +63,8 @@ describe('API', function () {
                     .set('access-token', global.apiaccesstoken)
                     .send({
                         targetType:1, // private message
-                        target: global.user1._id,
-                        messageType: 2, // text message
+                        target: global.user1.userid,
+                        messageType: 2, // file message
                         file:{
                             file:{
                                 id:file.fileId,

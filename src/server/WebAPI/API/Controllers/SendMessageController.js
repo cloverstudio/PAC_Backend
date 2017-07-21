@@ -82,7 +82,7 @@ SendMessageController.prototype.init = function(app){
 
              // find user
             userModel.findOne({
-                _id:target
+                userid:target
             },function(err,findResult){
                 
                 if(!findResult){

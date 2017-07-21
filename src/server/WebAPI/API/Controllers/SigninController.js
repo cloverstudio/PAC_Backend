@@ -35,8 +35,6 @@ SigninController.prototype.init = function(app){
 
     router.post('',function(request,response){
 
-        console.log(request.body);
-        
         var organization = request.body.organization;
         var username = request.body.username;
         var password = request.body.password;

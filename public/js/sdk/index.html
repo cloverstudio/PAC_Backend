@@ -31,10 +31,22 @@
                 global.user1.passwordOrig,
                 function(statusCode,body){
 
-                    console.log(statusCode,body);
-                    done();
+                    sendMessage();
 
             });
+
+            function sendMessage(){
+
+                SpikaSDK.sendMessage(1,
+                    "ken.yasue",
+                    1,
+                    'hi',
+                    null,
+                    function(statusCode,body){
+
+                });
+
+            }
 
     </script>
     
