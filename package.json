@@ -32,6 +32,7 @@
     "filereader": "^0.10.3",
     "filetransfer": "^2.0.4",
     "font-awesome": "latest",
+    "form-data": "^2.2.0",
     "formidable": "^1.0.17",
     "fs": "0.0.2",
     "fs-extra": "^0.20.1",

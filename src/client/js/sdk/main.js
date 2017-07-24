@@ -85,7 +85,6 @@ var _spikaInit = (function(root) { // receives global object
             file:file
         };
 
-
         var result = {};
 
         fetch(this.baseURL + '/message/send', 
@@ -118,16 +117,110 @@ var _spikaInit = (function(root) { // receives global object
 
     }
 
-    SpikaSDK.uploadFile = function(file){
+    SpikaSDK.uploadFile = function(file,cb){
+
+        var self = this;
+        var FormData = FormData;
+
+        if(!isBrowser()){
+            FormData = require('form-data');
+        }
+
+        var data = new FormData()
+        data.append('file', file)
+
+        var result = {};
+
+        fetch(this.baseURL + '/file/upload', {
+            method: 'POST',
+            body: data,
+            mode: 'cors',
+            headers:{
+                apikey:this.apiKey,
+                'access-token':this.accessToken
+            }
+        }).then(function(res) {
+                
+            result.status = res.status;
+
+            if(res.status == 200){
+                return res.json();
+            }else{
+                return res.text();
+            }
+
+        }).then(function(response) {
+
+            result.body = response;
+            cb(result.status,result.body);
+
+        });
 
     }
 
-    SpikaSDK.downloadFile = function(fileID){
+    SpikaSDK.downloadFile = function(fileID,cb){
+
+        var result = {};
         
+        fetch(this.baseURL + '/file/download/' + fileID, {
+            method: 'GET',
+            mode: 'cors',
+            headers:{
+                apikey:this.apiKey,
+                'access-token':this.accessToken
+            }
+        }).then(function(res) {
+                
+            result.status = res.status;
+            
+            if(res.status == 200){
+                if(isBrowser())
+                    return res.blob();
+                else
+                    return res.buffer();
+            }else{
+                return res.text();
+            }
+
+        }).then(function(response) {
+
+            result.body = response;
+            cb(result.status,result.body);
+
+        });
+
     }
 
-    SpikaSDK.messageList = function(roomID,lastMessageID,direction){
+    SpikaSDK.messageList = function(roomID,lastMessageID,direction,cb){
         
+        var result = {};
+        
+        fetch(this.baseURL + '/message/list/' + roomID + '/' + lastMessageID + '/' + direction, {
+            method: 'GET',
+            mode: 'cors',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                apikey:this.apiKey,
+                'access-token':this.accessToken
+            }
+        }).then(function(res) {
+                
+            result.status = res.status;
+            
+            if(res.status == 200){
+                return res.json();
+            }else{
+                return res.text();
+            }
+
+        }).then(function(response) {
+
+            result.body = response;
+            cb(result.status,result.body);
+
+        });
+
     }
 
 

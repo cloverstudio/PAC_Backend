@@ -1396,7 +1396,7 @@ function endReadable(stream) {
   }
 }
 
-},{"__browserify_process":67,"_shims":3,"buffer":20,"events":10,"stream":13,"string_decoder":14,"timers":15,"util":17}],7:[function(require,module,exports){
+},{"__browserify_process":68,"_shims":3,"buffer":20,"events":10,"stream":13,"string_decoder":14,"timers":15,"util":17}],7:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2584,7 +2584,7 @@ https.request = function (params, cb) {
     params.scheme = 'https';
     return http.request.call(this, params, cb);
 }
-},{"http":37}],12:[function(require,module,exports){
+},{"http":38}],12:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6210,7 +6210,7 @@ function to_base64(buf) {
 }
 
 
-},{"base64-js":2,"to-utf8":68}],33:[function(require,module,exports){
+},{"base64-js":2,"to-utf8":69}],33:[function(require,module,exports){
 module.exports = {
     writeUInt8:      write_uint8
   , writeInt8:       write_int8
@@ -6413,7 +6413,7 @@ function checkEncoding(name) {
     toUpperCase();
 }
 
-},{"./iconv-loader":35,"__browserify_Buffer":59,"iconv-lite":58}],35:[function(require,module,exports){
+},{"./iconv-loader":35,"__browserify_Buffer":60,"iconv-lite":59}],35:[function(require,module,exports){
 'use strict';
 
 var iconv_package;
@@ -6789,6 +6789,10 @@ module.exports = Iconv;
 })();
 
 },{}],37:[function(require,module,exports){
+/* eslint-env browser */
+module.exports = typeof self == 'object' ? self.FormData : window.FormData;
+
+},{}],38:[function(require,module,exports){
 var http = module.exports;
 var EventEmitter = require('events').EventEmitter;
 var Request = require('./lib/request');
@@ -6853,7 +6857,7 @@ var xhrHttp = (function () {
     }
 })();
 
-},{"./lib/request":38,"events":10}],38:[function(require,module,exports){
+},{"./lib/request":39,"events":10}],39:[function(require,module,exports){
 var Stream = require('stream');
 var Response = require('./response');
 var concatStream = require('concat-stream');
@@ -6987,7 +6991,7 @@ var indexOf = function (xs, x) {
     return -1;
 };
 
-},{"./response":39,"Base64":1,"concat-stream":22,"stream":13,"util":17}],39:[function(require,module,exports){
+},{"./response":40,"Base64":1,"concat-stream":22,"stream":13,"util":17}],40:[function(require,module,exports){
 var Stream = require('stream');
 var util = require('util');
 
@@ -7109,7 +7113,7 @@ var isArray = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{"stream":13,"util":17}],40:[function(require,module,exports){
+},{"stream":13,"util":17}],41:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;"use strict"
 
 // Multibyte codec. In this scheme, a character is represented by 1 or more bytes.
@@ -7665,7 +7669,7 @@ function findIdx(table, val) {
 }
 
 
-},{"__browserify_Buffer":59}],41:[function(require,module,exports){
+},{"__browserify_Buffer":60}],42:[function(require,module,exports){
 "use strict"
 
 // Description of supported double byte encodings and aliases.
@@ -7843,7 +7847,7 @@ module.exports = {
     'xxbig5': 'big5hkscs',
 };
 
-},{"./tables/big5-added.json":47,"./tables/cp936.json":48,"./tables/cp949.json":49,"./tables/cp950.json":50,"./tables/eucjp.json":51,"./tables/gb18030-ranges.json":52,"./tables/gbk-added.json":53,"./tables/shiftjis.json":54}],42:[function(require,module,exports){
+},{"./tables/big5-added.json":48,"./tables/cp936.json":49,"./tables/cp949.json":50,"./tables/cp950.json":51,"./tables/eucjp.json":52,"./tables/gb18030-ranges.json":53,"./tables/gbk-added.json":54,"./tables/shiftjis.json":55}],43:[function(require,module,exports){
 "use strict"
 
 // Update this array if you add/rename/remove files in this directory.
@@ -7867,7 +7871,7 @@ for (var i = 0; i < modules.length; i++) {
             exports[enc] = module[enc];
 }
 
-},{"./dbcs-codec":40,"./dbcs-data":41,"./internal":43,"./sbcs-codec":44,"./sbcs-data":46,"./sbcs-data-generated":45,"./utf16":55,"./utf7":56}],43:[function(require,module,exports){
+},{"./dbcs-codec":41,"./dbcs-data":42,"./internal":44,"./sbcs-codec":45,"./sbcs-data":47,"./sbcs-data-generated":46,"./utf16":56,"./utf7":57}],44:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;"use strict"
 
 // Export Node.js internal encodings.
@@ -8056,7 +8060,7 @@ InternalDecoderCesu8.prototype.end = function() {
     return res;
 }
 
-},{"__browserify_Buffer":59,"string_decoder":14}],44:[function(require,module,exports){
+},{"__browserify_Buffer":60,"string_decoder":14}],45:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;"use strict"
 
 // Single-byte codec. Needs a 'chars' string parameter that contains 256 or 128 chars that
@@ -8130,7 +8134,7 @@ SBCSDecoder.prototype.write = function(buf) {
 SBCSDecoder.prototype.end = function() {
 }
 
-},{"__browserify_Buffer":59}],45:[function(require,module,exports){
+},{"__browserify_Buffer":60}],46:[function(require,module,exports){
 "use strict"
 
 // Generated data for sbcs codec. Don't edit manually. Regenerate using generation/gen-sbcs.js script.
@@ -8582,7 +8586,7 @@ module.exports = {
     "chars": "���������������������������������กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู����฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛����"
   }
 }
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict"
 
 // Manually added data to be used by sbcs codec in addition to generated one.
@@ -8753,7 +8757,7 @@ module.exports = {
 };
 
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 module.exports=[
 ["8740","䏰䰲䘃䖦䕸𧉧䵷䖳𧲱䳢𧳅㮕䜶䝄䱇䱀𤊿𣘗𧍒𦺋𧃒䱗𪍑䝏䗚䲅𧱬䴇䪤䚡𦬣爥𥩔𡩣𣸆𣽡晍囻"],
 ["8767","綕夝𨮹㷴霴𧯯寛𡵞媤㘥𩺰嫑宷峼杮薓𩥅瑡璝㡵𡵓𣚞𦀡㻬"],
@@ -8877,7 +8881,7 @@ module.exports=[
 ["fea1","𤅟𤩹𨮏孆𨰃𡢞瓈𡦈甎瓩甞𨻙𡩋寗𨺬鎅畍畊畧畮𤾂㼄𤴓疎瑝疞疴瘂瘬癑癏癯癶𦏵皐臯㟸𦤑𦤎皡皥皷盌𦾟葢𥂝𥅽𡸜眞眦着撯𥈠睘𣊬瞯𨥤𨥨𡛁矴砉𡍶𤨒棊碯磇磓隥礮𥗠磗礴碱𧘌辸袄𨬫𦂃𢘜禆褀椂禀𥡗禝𧬹礼禩渪𧄦㺨秆𩄍秔"]
 ]
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127,"€"],
 ["8140","丂丄丅丆丏丒丗丟丠両丣並丩丮丯丱丳丵丷丼乀乁乂乄乆乊乑乕乗乚乛乢乣乤乥乧乨乪",5,"乲乴",9,"乿",6,"亇亊"],
@@ -9143,7 +9147,7 @@ module.exports=[
 ["fe40","兀嗀﨎﨏﨑﨓﨔礼﨟蘒﨡﨣﨤﨧﨨﨩"]
 ]
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127],
 ["8141","갂갃갅갆갋",4,"갘갞갟갡갢갣갥",6,"갮갲갳갴"],
@@ -9418,7 +9422,7 @@ module.exports=[
 ["fda1","爻肴酵驍侯候厚后吼喉嗅帿後朽煦珝逅勛勳塤壎焄熏燻薰訓暈薨喧暄煊萱卉喙毁彙徽揮暉煇諱輝麾休携烋畦虧恤譎鷸兇凶匈洶胸黑昕欣炘痕吃屹紇訖欠欽歆吸恰洽翕興僖凞喜噫囍姬嬉希憙憘戱晞曦熙熹熺犧禧稀羲詰"]
 ]
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127],
 ["a140","　，、。．‧；：？！︰…‥﹐﹑﹒·﹔﹕﹖﹗｜–︱—︳╴︴﹏（）︵︶｛｝︷︸〔〕︹︺【】︻︼《》︽︾〈〉︿﹀「」﹁﹂『』﹃﹄﹙﹚"],
@@ -9597,7 +9601,7 @@ module.exports=[
 ["f9a1","龤灨灥糷虪蠾蠽蠿讞貜躩軉靋顳顴飌饡馫驤驦驧鬤鸕鸗齈戇欞爧虌躨钂钀钁驩驨鬮鸙爩虋讟钃鱹麷癵驫鱺鸝灩灪麤齾齉龘碁銹裏墻恒粧嫺╔╦╗╠╬╣╚╩╝╒╤╕╞╪╡╘╧╛╓╥╖╟╫╢╙╨╜║═╭╮╰╯▓"]
 ]
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",127],
 ["8ea1","｡",62],
@@ -9781,9 +9785,9 @@ module.exports=[
 ["8feda1","黸黿鼂鼃鼉鼏鼐鼑鼒鼔鼖鼗鼙鼚鼛鼟鼢鼦鼪鼫鼯鼱鼲鼴鼷鼹鼺鼼鼽鼿齁齃",4,"齓齕齖齗齘齚齝齞齨齩齭",4,"齳齵齺齽龏龐龑龒龔龖龗龞龡龢龣龥"]
 ]
 
-},{}],52:[function(require,module,exports){
-module.exports={"uChars":[128,165,169,178,184,216,226,235,238,244,248,251,253,258,276,284,300,325,329,334,364,463,465,467,469,471,473,475,477,506,594,610,712,716,730,930,938,962,970,1026,1104,1106,8209,8215,8218,8222,8231,8241,8244,8246,8252,8365,8452,8454,8458,8471,8482,8556,8570,8596,8602,8713,8720,8722,8726,8731,8737,8740,8742,8748,8751,8760,8766,8777,8781,8787,8802,8808,8816,8854,8858,8870,8896,8979,9322,9372,9548,9588,9616,9622,9634,9652,9662,9672,9676,9680,9702,9735,9738,9793,9795,11906,11909,11913,11917,11928,11944,11947,11951,11956,11960,11964,11979,12284,12292,12312,12319,12330,12351,12436,12447,12535,12543,12586,12842,12850,12964,13200,13215,13218,13253,13263,13267,13270,13384,13428,13727,13839,13851,14617,14703,14801,14816,14964,15183,15471,15585,16471,16736,17208,17325,17330,17374,17623,17997,18018,18212,18218,18301,18318,18760,18811,18814,18820,18823,18844,18848,18872,19576,19620,19738,19887,40870,59244,59336,59367,59413,59417,59423,59431,59437,59443,59452,59460,59478,59493,63789,63866,63894,63976,63986,64016,64018,64021,64025,64034,64037,64042,65074,65093,65107,65112,65127,65132,65375,65510,65536],"gbChars":[0,36,38,45,50,81,89,95,96,100,103,104,105,109,126,133,148,172,175,179,208,306,307,308,309,310,311,312,313,341,428,443,544,545,558,741,742,749,750,805,819,820,7922,7924,7925,7927,7934,7943,7944,7945,7950,8062,8148,8149,8152,8164,8174,8236,8240,8262,8264,8374,8380,8381,8384,8388,8390,8392,8393,8394,8396,8401,8406,8416,8419,8424,8437,8439,8445,8482,8485,8496,8521,8603,8936,8946,9046,9050,9063,9066,9076,9092,9100,9108,9111,9113,9131,9162,9164,9218,9219,11329,11331,11334,11336,11346,11361,11363,11366,11370,11372,11375,11389,11682,11686,11687,11692,11694,11714,11716,11723,11725,11730,11736,11982,11989,12102,12336,12348,12350,12384,12393,12395,12397,12510,12553,12851,12962,12973,13738,13823,13919,13933,14080,14298,14585,14698,15583,15847,16318,16434,16438,16481,16729,17102,17122,17315,17320,17402,17418,17859,17909,17911,17915,17916,17936,17939,17961,18664,18703,18814,18962,19043,33469,33470,33471,33484,33485,33490,33497,33501,33505,33513,33520,33536,33550,37845,37921,37948,38029,38038,38064,38065,38066,38069,38075,38076,38078,39108,39109,39113,39114,39115,39116,39265,39394,189000]}
 },{}],53:[function(require,module,exports){
+module.exports={"uChars":[128,165,169,178,184,216,226,235,238,244,248,251,253,258,276,284,300,325,329,334,364,463,465,467,469,471,473,475,477,506,594,610,712,716,730,930,938,962,970,1026,1104,1106,8209,8215,8218,8222,8231,8241,8244,8246,8252,8365,8452,8454,8458,8471,8482,8556,8570,8596,8602,8713,8720,8722,8726,8731,8737,8740,8742,8748,8751,8760,8766,8777,8781,8787,8802,8808,8816,8854,8858,8870,8896,8979,9322,9372,9548,9588,9616,9622,9634,9652,9662,9672,9676,9680,9702,9735,9738,9793,9795,11906,11909,11913,11917,11928,11944,11947,11951,11956,11960,11964,11979,12284,12292,12312,12319,12330,12351,12436,12447,12535,12543,12586,12842,12850,12964,13200,13215,13218,13253,13263,13267,13270,13384,13428,13727,13839,13851,14617,14703,14801,14816,14964,15183,15471,15585,16471,16736,17208,17325,17330,17374,17623,17997,18018,18212,18218,18301,18318,18760,18811,18814,18820,18823,18844,18848,18872,19576,19620,19738,19887,40870,59244,59336,59367,59413,59417,59423,59431,59437,59443,59452,59460,59478,59493,63789,63866,63894,63976,63986,64016,64018,64021,64025,64034,64037,64042,65074,65093,65107,65112,65127,65132,65375,65510,65536],"gbChars":[0,36,38,45,50,81,89,95,96,100,103,104,105,109,126,133,148,172,175,179,208,306,307,308,309,310,311,312,313,341,428,443,544,545,558,741,742,749,750,805,819,820,7922,7924,7925,7927,7934,7943,7944,7945,7950,8062,8148,8149,8152,8164,8174,8236,8240,8262,8264,8374,8380,8381,8384,8388,8390,8392,8393,8394,8396,8401,8406,8416,8419,8424,8437,8439,8445,8482,8485,8496,8521,8603,8936,8946,9046,9050,9063,9066,9076,9092,9100,9108,9111,9113,9131,9162,9164,9218,9219,11329,11331,11334,11336,11346,11361,11363,11366,11370,11372,11375,11389,11682,11686,11687,11692,11694,11714,11716,11723,11725,11730,11736,11982,11989,12102,12336,12348,12350,12384,12393,12395,12397,12510,12553,12851,12962,12973,13738,13823,13919,13933,14080,14298,14585,14698,15583,15847,16318,16434,16438,16481,16729,17102,17122,17315,17320,17402,17418,17859,17909,17911,17915,17916,17936,17939,17961,18664,18703,18814,18962,19043,33469,33470,33471,33484,33485,33490,33497,33501,33505,33513,33520,33536,33550,37845,37921,37948,38029,38038,38064,38065,38066,38069,38075,38076,38078,39108,39109,39113,39114,39115,39116,39265,39394,189000]}
+},{}],54:[function(require,module,exports){
 module.exports=[
 ["a140","",62],
 ["a180","",32],
@@ -9840,7 +9844,7 @@ module.exports=[
 ["fe80","䜣䜩䝼䞍⻊䥇䥺䥽䦂䦃䦅䦆䦟䦛䦷䦶䲣䲟䲠䲡䱷䲢䴓",6,"䶮",93]
 ]
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 module.exports=[
 ["0","\u0000",128],
 ["a1","｡",62],
@@ -9967,7 +9971,7 @@ module.exports=[
 ["fc40","髜魵魲鮏鮱鮻鰀鵰鵫鶴鸙黑"]
 ]
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;"use strict"
 
 // Note: UTF16-LE (or UCS2) codec is Node.js native. See encodings/internal.js
@@ -10145,7 +10149,7 @@ function detectEncoding(buf, defaultEncoding) {
 
 
 
-},{"__browserify_Buffer":59}],56:[function(require,module,exports){
+},{"__browserify_Buffer":60}],57:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;"use strict"
 
 // UTF-7 codec, according to https://tools.ietf.org/html/rfc2152
@@ -10436,7 +10440,7 @@ Utf7IMAPDecoder.prototype.end = function() {
 
 
 
-},{"__browserify_Buffer":59}],57:[function(require,module,exports){
+},{"__browserify_Buffer":60}],58:[function(require,module,exports){
 "use strict"
 
 var BOMChar = '\uFEFF';
@@ -10490,7 +10494,7 @@ StripBOMWrapper.prototype.end = function() {
 }
 
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 var process=require("__browserify_process"),Buffer=require("__browserify_Buffer").Buffer;"use strict"
 
 var bomHandling = require('./bom-handling'),
@@ -10633,7 +10637,7 @@ if (nodeVer) {
 }
 
 
-},{"../encodings":42,"./bom-handling":57,"./extend-node":18,"./streams":18,"__browserify_Buffer":59,"__browserify_process":67}],59:[function(require,module,exports){
+},{"../encodings":43,"./bom-handling":58,"./extend-node":18,"./streams":18,"__browserify_Buffer":60,"__browserify_process":68}],60:[function(require,module,exports){
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
@@ -13013,7 +13017,7 @@ function hasOwnProperty(obj, prop) {
 },{"_shims":5}]},{},[])
 ;;module.exports=require("buffer-browserify")
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 var isStream = module.exports = function (stream) {
@@ -13036,7 +13040,7 @@ isStream.transform = function (stream) {
 	return isStream.duplex(stream) && typeof stream._transform === 'function' && typeof stream._transformState === 'object';
 };
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},Buffer=require("__browserify_Buffer").Buffer;
 /**
  * index.js
@@ -13309,7 +13313,7 @@ Fetch.Response = Response;
 Fetch.Headers = Headers;
 Fetch.Request = Request;
 
-},{"./lib/body":62,"./lib/fetch-error":63,"./lib/headers":64,"./lib/request":65,"./lib/response":66,"__browserify_Buffer":59,"http":37,"https":11,"stream":13,"url":16,"zlib":69}],62:[function(require,module,exports){
+},{"./lib/body":63,"./lib/fetch-error":64,"./lib/headers":65,"./lib/request":66,"./lib/response":67,"__browserify_Buffer":60,"http":38,"https":11,"stream":13,"url":16,"zlib":70}],63:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},Buffer=require("__browserify_Buffer").Buffer;
 /**
  * body.js
@@ -13572,7 +13576,7 @@ Body.prototype._clone = function(instance) {
 // expose Promise
 Body.Promise = global.Promise;
 
-},{"./fetch-error":63,"__browserify_Buffer":59,"encoding":34,"is-stream":60,"stream":13}],63:[function(require,module,exports){
+},{"./fetch-error":64,"__browserify_Buffer":60,"encoding":34,"is-stream":61,"stream":13}],64:[function(require,module,exports){
 
 /**
  * fetch-error.js
@@ -13608,7 +13612,7 @@ function FetchError(message, type, systemError) {
 
 require('util').inherits(FetchError, Error);
 
-},{"util":17}],64:[function(require,module,exports){
+},{"util":17}],65:[function(require,module,exports){
 
 /**
  * headers.js
@@ -13751,7 +13755,7 @@ Headers.prototype.raw = function() {
 	return this._headers;
 };
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 
 /**
  * request.js
@@ -13828,7 +13832,7 @@ Request.prototype.clone = function() {
 	return new Request(this);
 };
 
-},{"./body":62,"./headers":64,"url":16}],66:[function(require,module,exports){
+},{"./body":63,"./headers":65,"url":16}],67:[function(require,module,exports){
 
 /**
  * response.js
@@ -13880,7 +13884,7 @@ Response.prototype.clone = function() {
 	});
 };
 
-},{"./body":62,"./headers":64,"http":37}],67:[function(require,module,exports){
+},{"./body":63,"./headers":65,"http":38}],68:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -13935,7 +13939,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 module.exports = to_utf8
 
 var out = []
@@ -14010,7 +14014,7 @@ function reduced(list) {
   return out
 }
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;var Zlib = module.exports = require('./zlib');
 
 // the least I can do is make error messages for the rest of the node.js/zlib api.
@@ -14055,7 +14059,7 @@ Zlib.gzip = function gzip(stringOrBuffer, callback) {
   return _gzip(Buffer(stringOrBuffer), callback);
 };
 
-},{"./zlib":70,"__browserify_Buffer":59}],70:[function(require,module,exports){
+},{"./zlib":71,"__browserify_Buffer":60}],71:[function(require,module,exports){
 var process=require("__browserify_process"),Buffer=require("__browserify_Buffer").Buffer;/** @license zlib.js 0.1.7 2012 - imaya [ https://github.com/imaya/zlib.js ] The MIT License */(function() {'use strict';function q(b){throw b;}var t=void 0,u=!0;var A="undefined"!==typeof Uint8Array&&"undefined"!==typeof Uint16Array&&"undefined"!==typeof Uint32Array;function E(b,a){this.index="number"===typeof a?a:0;this.m=0;this.buffer=b instanceof(A?Uint8Array:Array)?b:new (A?Uint8Array:Array)(32768);2*this.buffer.length<=this.index&&q(Error("invalid index"));this.buffer.length<=this.index&&this.f()}E.prototype.f=function(){var b=this.buffer,a,c=b.length,d=new (A?Uint8Array:Array)(c<<1);if(A)d.set(b);else for(a=0;a<c;++a)d[a]=b[a];return this.buffer=d};
 E.prototype.d=function(b,a,c){var d=this.buffer,f=this.index,e=this.m,g=d[f],k;c&&1<a&&(b=8<a?(G[b&255]<<24|G[b>>>8&255]<<16|G[b>>>16&255]<<8|G[b>>>24&255])>>32-a:G[b]>>8-a);if(8>a+e)g=g<<a|b,e+=a;else for(k=0;k<a;++k)g=g<<1|b>>a-k-1&1,8===++e&&(e=0,d[f++]=G[g],g=0,f===d.length&&(d=this.f()));d[f]=g;this.buffer=d;this.m=e;this.index=f};E.prototype.finish=function(){var b=this.buffer,a=this.index,c;0<this.m&&(b[a]<<=8-this.m,b[a]=G[b[a]],a++);A?c=b.subarray(0,a):(b.length=a,c=b);return c};
 var aa=new (A?Uint8Array:Array)(256),J;for(J=0;256>J;++J){for(var N=J,Q=N,ba=7,N=N>>>1;N;N>>>=1)Q<<=1,Q|=N&1,--ba;aa[J]=(Q<<ba&255)>>>0}var G=aa;function R(b,a,c){var d,f="number"===typeof a?a:a=0,e="number"===typeof c?c:b.length;d=-1;for(f=e&7;f--;++a)d=d>>>8^S[(d^b[a])&255];for(f=e>>3;f--;a+=8)d=d>>>8^S[(d^b[a])&255],d=d>>>8^S[(d^b[a+1])&255],d=d>>>8^S[(d^b[a+2])&255],d=d>>>8^S[(d^b[a+3])&255],d=d>>>8^S[(d^b[a+4])&255],d=d>>>8^S[(d^b[a+5])&255],d=d>>>8^S[(d^b[a+6])&255],d=d>>>8^S[(d^b[a+7])&255];return(d^4294967295)>>>0}
@@ -14111,7 +14115,7 @@ k+4&&(this.a=new Uint8Array(g.length+4),this.a.set(g),g=this.a),g=g.subarray(0,k
 function xb(b,a){var c;b.subarray=b.slice;c=(new pb(b)).i();a||(a={});return a.noBuffer?c:Cb(c)}function yb(b,a,c){process.nextTick(function(){var d,f;try{f=zb(b,c)}catch(e){d=e}a(d,f)})}function zb(b,a){var c;b.subarray=b.slice;c=(new Aa(b)).h();a||(a={});return a.H?c:Cb(c)}function Ab(b,a,c){process.nextTick(function(){var d,f;try{f=Bb(b,c)}catch(e){d=e}a(d,f)})}function Bb(b,a){var c;b.subarray=b.slice;c=(new nb(b)).i();a||(a={});return a.H?c:Cb(c)}
 function Cb(b){var a=new Buffer(b.length),c,d;c=0;for(d=b.length;c<d;++c)a[c]=b[c];return a};}).call(this); //@ sourceMappingURL=node-zlib.js.map
 
-},{"__browserify_Buffer":59,"__browserify_process":67}],71:[function(require,module,exports){
+},{"__browserify_Buffer":60,"__browserify_process":68}],72:[function(require,module,exports){
 function isBrowser(){
     return typeof window !== 'undefined';
 }
@@ -14199,7 +14203,6 @@ var _spikaInit = (function(root) { // receives global object
             file:file
         };
 
-
         var result = {};
 
         fetch(this.baseURL + '/message/send', 
@@ -14232,16 +14235,110 @@ var _spikaInit = (function(root) { // receives global object
 
     }
 
-    SpikaSDK.uploadFile = function(file){
+    SpikaSDK.uploadFile = function(file,cb){
+
+        var self = this;
+        var FormData = FormData;
+
+        if(!isBrowser()){
+            FormData = require('form-data');
+        }
+
+        var data = new FormData()
+        data.append('file', file)
+
+        var result = {};
+
+        fetch(this.baseURL + '/file/upload', {
+            method: 'POST',
+            body: data,
+            mode: 'cors',
+            headers:{
+                apikey:this.apiKey,
+                'access-token':this.accessToken
+            }
+        }).then(function(res) {
+                
+            result.status = res.status;
+
+            if(res.status == 200){
+                return res.json();
+            }else{
+                return res.text();
+            }
+
+        }).then(function(response) {
+
+            result.body = response;
+            cb(result.status,result.body);
+
+        });
 
     }
 
-    SpikaSDK.downloadFile = function(fileID){
+    SpikaSDK.downloadFile = function(fileID,cb){
+
+        var result = {};
         
+        fetch(this.baseURL + '/file/download/' + fileID, {
+            method: 'GET',
+            mode: 'cors',
+            headers:{
+                apikey:this.apiKey,
+                'access-token':this.accessToken
+            }
+        }).then(function(res) {
+                
+            result.status = res.status;
+            
+            if(res.status == 200){
+                if(isBrowser())
+                    return res.blob();
+                else
+                    return res.buffer();
+            }else{
+                return res.text();
+            }
+
+        }).then(function(response) {
+
+            result.body = response;
+            cb(result.status,result.body);
+
+        });
+
     }
 
-    SpikaSDK.messageList = function(roomID,lastMessageID,direction){
+    SpikaSDK.messageList = function(roomID,lastMessageID,direction,cb){
         
+        var result = {};
+        
+        fetch(this.baseURL + '/message/list/' + roomID + '/' + lastMessageID + '/' + direction, {
+            method: 'GET',
+            mode: 'cors',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                apikey:this.apiKey,
+                'access-token':this.accessToken
+            }
+        }).then(function(res) {
+                
+            result.status = res.status;
+            
+            if(res.status == 200){
+                return res.json();
+            }else{
+                return res.text();
+            }
+
+        }).then(function(response) {
+
+            result.body = response;
+            cb(result.status,result.body);
+
+        });
+
     }
 
 
@@ -14264,5 +14361,5 @@ if(typeof window !== 'undefined'){
 }else{
     _spikaInit({});
 }
-},{"fetch-polyfill":36,"node-fetch":61}]},{},[71])
+},{"fetch-polyfill":36,"form-data":37,"node-fetch":62}]},{},[72])
 ;
