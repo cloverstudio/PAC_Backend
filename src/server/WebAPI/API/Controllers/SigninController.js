@@ -13,6 +13,7 @@ var Const = require( pathTop + "lib/consts");
 var Config = require( pathTop + "lib/init");
 var Utils = require( pathTop + "lib/utils");
 var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
+var checkAPIKey = require( pathTop + 'lib/authApiV3');
 
 var APIBase = require('./APIBase');
 
@@ -33,7 +34,7 @@ SigninController.prototype.init = function(app){
      * @apiName Signin
      **/
 
-    router.post('',function(request,response){
+    router.post('',checkAPIKey,function(request,response){
 
         var organization = request.body.organization;
         var username = request.body.username;
