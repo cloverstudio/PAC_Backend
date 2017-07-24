@@ -14238,13 +14238,21 @@ var _spikaInit = (function(root) { // receives global object
     SpikaSDK.uploadFile = function(file,cb){
 
         var self = this;
-        var FormData = FormData;
+
+        var FormDataPollyfil = null;
 
         if(!isBrowser()){
-            FormData = require('form-data');
+            FormDataPollyfil = require('form-data');
         }
 
-        var data = new FormData()
+        var data = null;
+
+        if(!isBrowser()){
+            data = new FormDataPollyfil()
+        } else {
+            data = new FormData()
+        }
+
         data.append('file', file)
 
         var result = {};

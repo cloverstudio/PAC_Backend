@@ -49,8 +49,8 @@ MessageListController.prototype.init = function(app){
             response.status(422).send('Bad Parameter');
             return;
         }
-
-        MessageListLogic.get(userID,roomID,lastmessageID,direction,(messages) => {
+        
+        MessageListLogic.get(userID,roomID,lastmessageID,direction,true,(messages) => {
             self.successResponse(response,Const.responsecodeSucceed,{
                 messages:messages
             });

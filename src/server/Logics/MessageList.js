@@ -27,7 +27,7 @@ var MessageLoadDirection = {
 
 var MessageList = {
     
-    get: function(userID,roomId,lastMessageId,direction,onSuccess,onError){
+    get: function(userID,roomId,lastMessageId,direction,encrypt,onSuccess,onError){
 
         var messageModel = MessageModel.get();
     
@@ -275,17 +275,29 @@ var MessageList = {
             }
             
             // encrypt message
-            var encryptedMessages = _.map(result,function(message){
 
-                if(message.type == Const.messageTypeText){
-                    message.message = EncryptionManager.encryptText(message.message)
-                }
-                
-                return message;
-                
-            });
+            if(encrypt){
 
-            onSuccess(encryptedMessages);
+                var encryptedMessages = _.map(result,function(message){
+
+                    if(message.type == Const.messageTypeText){
+                        message.message = EncryptionManager.encryptText(message.message)
+                    }
+                    
+                    return message;
+                    
+                });
+
+                onSuccess(encryptedMessages);
+
+            } else {
+
+                onSuccess(result);
+
+            }
+
+
+            
             
         });
         
