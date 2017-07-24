@@ -7,6 +7,26 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <style>
+        input.form-control{
+            width:100%
+        }
+
+        .console{
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+            background: #000;
+            color: #fff;
+            display: none;
+        }
+
+        .console pre{
+            color: #fff;
+        }
+
+    </style>
   </head>
   <body>
     <div class="container">
@@ -14,35 +34,169 @@
         <div class="row">
 
             <div class="col-md-12">
+                
+                <h3 style="margin: 20px 0px"> Spika SDK test console </h3>
 
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th width="20%">Funciton Name</th>
+                        <th></th>
+                        <th width="10%"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                            <td> 
+                                Init 
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                <label class="col-sm-2"> Base URL </label>
+                                <input type="text" class="form-control col-sm-10" id="inputBaseURL" value="https://spika.chat/api/v3" placeholder="Base URL">
+                                
+                                <label class="col-sm-2"> API Key </label>
+                                <input type="text" class="form-control  col-sm-10" id="inputInit" value="GMUwQIHielm7b1ZQNNJYMAfCC508Giof" placeholder="Input API Key">
+                                </div>
+                            </td>
+                            <td> 
+                                <button type="button" class="btn btn-primary" id="btnInit" >Run</button> 
+                            </td>
                         </tr>
                         <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
+                            <td colspan="3" id="result1" class="console">
+                                <pre>
+
+                                </pre>
+                            </td>
+                        </tr>
+                        
+                        <script type="text/javascript">
+
+                            $(function(){
+
+                                $('#btnInit').click(function(){
+
+                                    var baseURL = $('#inputBaseURL').val();
+                                    var apiKey = $('#inputInit').val();
+                                    SpikaSDK.init(baseURL,apiKey);
+
+                                    $('#result1 pre').text('OK');
+                                    $('#result1').show();
+
+                                });
+
+                            });
+
+                        </script>
+
+                        <tr>
+                            <td> 
+                                Sign In 
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <label class="col-sm-2"> Organization </label>
+                                    <input type="text" class="form-control col-sm-10" id="st2Organization" value="clover">
+                                    
+                                    <label class="col-sm-2"> User name </label>
+                                    <input type="text" class="form-control  col-sm-10" id="st2Username" value="demouser1">
+
+                                    <label class="col-sm-2"> Password </label>
+                                    <input type="password" class="form-control  col-sm-10" id="st2Password" value="password">
+
+                                </div>
+                            </td>
+                            <td> 
+                                <button type="button" class="btn btn-primary" id="btnSt2" >Run</button> 
+                            </td>
                         </tr>
                         <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
+                            <td colspan="3" id="result2" class="console">
+                                <pre>
+
+                                </pre>
+                            </td>
                         </tr>
+                        
+                        <script type="text/javascript">
+
+                            $(function(){
+
+                                $('#btnSt2').click(function(){
+
+                                    var org = $('#st2Organization').val();
+                                    var name = $('#st2Username').val();
+                                    var password = $('#st2Password').val();
+
+                                    SpikaSDK.signin(org,
+                                    name,
+                                    password,
+                                    function(statusCode,body){
+
+                                        $('#result2 pre').text('Status : ' + statusCode + "\n" + "result : " + JSON.stringify(body, null, 4));
+                                        $('#result2').show();
+
+                                    });
+
+                                });
+
+                            });
+
+                        </script>
+
+                        <tr>
+                            <td> 
+                                Sene Private Message
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <label class="col-sm-2"> User Name </label>
+                                    <input type="text" class="form-control col-sm-10" id="st3User" value="ken.yasue">
+                                    
+                                    <label class="col-sm-2"> Message </label>
+                                    <input type="text" class="form-control  col-sm-10" id="st3Message" value="Hi">
+
+                                </div>
+                            </td>
+                            <td> 
+                                <button type="button" class="btn btn-primary" id="btnSt3" >Run</button> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" id="result3" class="console">
+                                <pre>
+
+                                </pre>
+                            </td>
+                        </tr>
+                        
+                        <script type="text/javascript">
+
+                            $(function(){
+
+                                $('#btnSt3').click(function(){
+
+                                    var user = $('#st3User').val();
+                                    var text = $('#st2Username').val();
+
+                                    SpikaSDK.sendMessage(1,
+                                        user,
+                                        1,
+                                        text,
+                                        null,
+                                        function(statusCode,body){
+
+                                            $('#result3 pre').text('Status : ' + statusCode + "\n" + "result : " + JSON.stringify(body, null, 4));
+                                            $('#result3').show();
+                                    });
+
+                                });
+
+                            });
+
+                        </script>
+
                     </tbody>
                 </table>
                 
@@ -52,51 +206,10 @@
     </div>
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
   
     <script type="text/javascript" src="/js/sdk/spika.js"></script>
-
-    <script type="text/javascript">
-        //console.log(window.SpikaSDK);
-
-            var global = {
-                apikey: "GMUwQIHielm7b1ZQNNJYMAfCC508Giof",
-                organization1: {
-                    name:"clover"
-                },
-                user1:{
-                    userid:"ken.yasue2",
-                    passwordOrig:"yumiko"
-                }
-            };
-
-            SpikaSDK.init('https://spika.chat/api/v3',global.apikey);
-
-            SpikaSDK.signin(global.organization1.name,
-                global.user1.userid,
-                global.user1.passwordOrig,
-                function(statusCode,body){
-
-                    sendMessage();
-
-            });
-
-            function sendMessage(){
-
-                SpikaSDK.sendMessage(1,
-                    "ken.yasue",
-                    1,
-                    'hi',
-                    null,
-                    function(statusCode,body){
-
-                });
-
-            }
-
-    </script>
-    
   </body>
 </html>
