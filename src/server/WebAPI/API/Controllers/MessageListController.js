@@ -50,7 +50,7 @@ MessageListController.prototype.init = function(app){
             return;
         }
         
-        MessageListLogic.get(userID,roomID,lastmessageID,direction,true,(messages) => {
+        MessageListLogic.get(userID,roomID,lastmessageID,direction,false,(messages) => {
             self.successResponse(response,Const.responsecodeSucceed,{
                 messages:messages
             });
