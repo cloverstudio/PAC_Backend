@@ -60,7 +60,6 @@
     "multer": "^0.1.8",
     "node-fetch": "^1.7.1",
     "node-gcm": "^0.14.0",
-    "node-observer": "^0.3.2",
     "node-uuid": "^1.4.7",
     "nodemailer": "^1.8.0",
     "nodemailer-smtp-pool": "^2.5.2",
