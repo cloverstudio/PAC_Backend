@@ -1,31 +1,48 @@
-swagger: "2.0"
-
+swagger: '2.0'
 info:
   version: 1.0.0
   title: Spika for Business API v3
-  description: New set of API to use Spika for Business
-
+  description: New set of API to use Spika for Business. First of all, you must get an access token by calling sign in API.
 schemes:
   - https
 host: spika.chat
 basePath: /api/v3
-
+tags:
+  - name: Login
+    description: Operations about sign in
+  - name: Messages
+    description: Operations about message
+  - name: Files
+    description: Operations about file
+  - name: Groups
+    description: Operations about group
+  - name: Rooms
+    description: Operations about room
+  - name: Private Chat
+    description: Operations about private chat
+  - name: Users
+    description: Operations about user
+  - name: Stickers
+    description: Operations about sticker
+  - name: Webhooks
+    description: Operations about webhook
+  - name: Others
+    description: Others
 paths:
   /user/signin:
     post:
+      tags:
+        - Login
       summary: Signin to system.
       description: Signin to the system and get access token to call other API.
       parameters:
-        - in: header
-          name: apikey
-          description: API key which admin can create in admin console.
-          type: string
-          required: true
         - name: JSON Body
           required: true
           in: body
-          description: Parameters to send 
+          description: Parameters to send
           schema:
+            required:
+              - username
             properties:
               organization:
                 type: string
@@ -41,9 +58,9 @@ paths:
               access-token:
                 type: string
               user:
-                $ref: "#/definitions/UserLogin"
+                $ref: '#/definitions/UserLogin'
               organization:
-                $ref: "#/definitions/Organization"
+                $ref: '#/definitions/Organization'
         401:
           description: Wrong apikey
         403:
@@ -52,17 +69,65 @@ paths:
           description: Bad parmeter
         500:
           description: Server error
-
+      security: 
+        - api_key: []
+  /message/list/{roomID}/{lastmessageID}/{direction}:
+    get:
+      tags:
+        - Messages
+      summary: Get file
+      parameters:
+        # - in: header
+        #   name: apikey
+        #   description: API key which admin can create in admin console.
+        #   type: string
+        #   required: true
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomID
+          type: string
+          required: true
+          description: roomID to get message
+        - in: path
+          name: lastmessageID
+          type: string
+          required: true
+          description: use for paging
+        - in: path
+          name: direction
+          type: string
+          required: true
+          description: new to get new messages old to get old messages
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: A list of Person
+          schema:
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: "#/definitions/Message"
+      security: 
+        - api_key: []
   /message/send:
     post:
+      tags:
+        - Messages
       summary: Send message
       description: Send message to user,group and room.
       parameters:
-        - in: header
-          name: apikey
-          description: API key which admin can create in admin console.
-          type: string
-          required: true
         - in: header
           name: access-token
           description: Access token which is generated in signin.
@@ -108,8 +173,6 @@ paths:
                         type: string
                       size:
                         type: integer
-                
-                
       responses:
         200:
           description: The message sent
@@ -127,17 +190,21 @@ paths:
           description: Bad parmeter
         500:
           description: Server error
+      security: 
+        - api_key: []
   /file/upload:
     post:
+      tags:
+        - Files
       summary: Uploads a file.
       consumes:
          - multipart/form-data
       parameters:
-        - in: header
-          name: apikey
-          description: API key which admin can create in admin console.
-          type: string
-          required: true
+        # - in: header
+        #   name: apikey
+        #   description: API key which admin can create in admin console.
+        #   type: string
+        #   required: true
         - in: header
           name: access-token
           description: Access token which is generated in signin.
@@ -164,15 +231,19 @@ paths:
           description: Bad parmeter
         500:
           description: Server error
+      security: 
+        - api_key: []
   /file/download/{fileId}:
     get:
+      tags:
+       - Files
       summary: Get file
       parameters:
-        - in: header
-          name: apikey
-          description: API key which admin can create in admin console.
-          type: string
-          required: true
+        # - in: header
+        #   name: apikey
+        #   description: API key which admin can create in admin console.
+        #   type: string
+        #   required: true
         - in: header
           name: access-token
           description: Access token which is generated in signin.
@@ -194,36 +265,26 @@ paths:
           description: Bad parmeter
         500:
           description: Server error
-
-  /message/list/{roomID}/{lastmessageID}/{direction}:
+      security: 
+        - api_key: []
+  /groups:
     get:
-      summary: Get file
+      tags:
+        - Groups
+      summary: Get all groups
+      description: Get list of all groups which corresponding to user who have access token. You can filter field by adding item to query. If you want to get all details of groups, unnecessary to add query items.
       parameters:
-        - in: header
-          name: apikey
-          description: API key which admin can create in admin console.
-          type: string
-          required: true
         - in: header
           name: access-token
           description: Access token which is generated in signin.
           type: string
           required: true
-        - in: path
-          name: roomID
-          type: string
-          required: true
-          description: roomID to get message
-        - in: path
-          name: lastmessageID
-          type: string
-          required: true
-          description: use for paging
-        - in: path
-          name: direction
-          type: string
-          required: true
-          description: new to get new messages old to get old messages
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
       responses:
         401:
           description: Wrong apikey
@@ -234,13 +295,775 @@ paths:
         500:
           description: Server error
         200:
-          description: A list of Person
+          description: A list of Group
           schema:
             properties:
-              messages:
+              groups:
                 type: array
                 items:
-                  $ref: "#/definitions/Message"
+                  $ref: '#/definitions/Group'
+      security: 
+        - api_key: []
+    post:
+      tags:
+        - Groups
+      summary: Create group
+      description: Create a new group belonging the user who have access token.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Parameters of new group. 
+          schema:
+            properties:
+              group:
+                $ref: "#definitions/Group"
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Created new group
+          schema:
+            properties:
+              group:
+                $ref: '#/definitions/Group'
+      security: 
+        - api_key: []
+  /groups/{groupId}:
+    get:
+      tags:
+        - Groups
+      summary: Get group details
+      description: Get group details corresponding to group id. You can filter field by adding item to query. If you want to get all details of group, unnecessary to add query items.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: groupId
+          description: group ID to get group list
+          type: string
+          required: true
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Document of group
+          schema:
+            properties:
+              group:
+                $ref: "#/definitions/Group"
+      security: 
+        - api_key: []
+    put:
+      tags:
+        - Groups
+      summary: Update Group details
+      description: Update Group details corresponding to group id.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: groupId
+          description: Group ID to get group list.
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Update parameters.
+          schema:
+            properties:
+              group:
+                $ref: "#definitions/Group"
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Updated document of group
+      security: 
+        - api_key: []
+    delete:
+      tags:
+        - Groups
+      summary: Delete group
+      description: Delete group corresonding to group id.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: groupId
+          description: group ID to get group list
+          type: string
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Deleted group
+      security: 
+        - api_key: []
+  /groups/{groupId}/users/:
+    get:
+      tags:
+        - Groups
+      summary: Get user list of group
+      description: Get user list of group corresponding to group id. Only return user ids.
+      parameters: 
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: groupId
+          description: group ID to get group list
+          type: string
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: User list of group
+          schema:
+              properties:
+                group:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    users:
+                      $ref: '#/definitions/UserList'
+      security: 
+        - api_key: []
+    post:
+        tags:
+          - Groups
+        summary: Invite users to group
+        description: Invite users to group
+        parameters:
+          - in: header
+            name: access-token
+            description: Access token which is generated in signin.
+            type: string
+            required: true
+          - in: path
+            name: groupId
+            description: Group ID to get group list.
+            type: string
+            required: true
+          - in: body
+            name: body
+            description: User IDs to add to group. 
+            schema:
+              properties:
+                users:
+                  $ref: '#/definitions/UserList'
+        responses:
+          401:
+            description: Wrong apikey
+          403:
+            description: Wrong access token
+          422:
+            description: Bad parmeter
+          500:
+            description: Server error
+          200:
+            description: Added users to group
+            schema:
+              properties:
+                group:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    users:
+                      $ref: '#/definitions/UserList'
+        security: 
+          - api_key: []
+    delete:
+      tags:
+        - Groups
+      summary: Kick user out from group
+      description: Kick user out from group corresponding to group id. It actually update details of gorup.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: groupId
+          description: group ID to get group list
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#definitions/UserList"
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Deleted users 
+      security: 
+        - api_key: []
+  /groups/{groupId}/history/:
+    get:
+      tags:
+        - Groups
+      summary: Get history of group
+      description: Get history of group corresponding to group id. Only return user ids.
+      parameters: 
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: groupId
+          description: group ID to get group list
+          type: string
+          required: true
+        - in: query
+          name: offset
+          description: The offset number of get history
+          type: integer
+          format: int32
+        - in: query
+          name: limit
+          description: The limit number of get history
+          type: integer
+          format: int32
+        - in: query
+          name: sort
+          description: Sort fields and ASC(1) or DESC(-1). If you want to multiple fields, you can add continuously after comma.
+          type: string
+          default: "name:1,created:-1"
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: History of group
+          schema:
+            properties:
+              histories:
+                type: array
+                items:
+                  $ref: "#/definitions/History"
+      security: 
+        - api_key: []
+  /rooms:
+    get:
+      tags:
+        - Rooms
+      summary: Get list of all rooms
+      description: Get list of all rooms corresponding to user who have access token. You can filter field by adding item to query. If you want to get all details of rooms, unnecessary to add query items.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: A list of Room
+          schema:
+            properties:
+              rooms:
+                type: array
+                items:
+                  $ref: '#/definitions/Room'
+      security: 
+        - api_key: []
+    post:
+      tags:
+        - Rooms
+      summary: Create room
+      description: Create a new room belonging the user who have access token.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Parameters of the new room. 
+          schema:
+            properties:
+              room:
+                $ref: "#definitions/Room"
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Created new room
+          schema:
+            properties:
+              room:
+                $ref: '#/definitions/Room'
+      security: 
+        - api_key: []
+  /rooms/{roomId}:
+    get:
+      tags:
+        - Rooms
+      summary: Get room
+      description: Get room object corresponding to room id. You can filter field by adding item to query. If you want to get all details of room, unnecessary to add query items.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get room list
+          type: string
+          required: true
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Document of room
+          schema:
+            properties:
+              room:
+                $ref: "#/definitions/Room"
+      security: 
+        - api_key: []
+    put:
+      tags:
+        - Rooms
+      summary: Update room details
+      description: Update room details corresponding to room id.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get room
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#definitions/Room"
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Updated document of room
+      security: 
+        - api_key: []
+    delete:
+      tags:
+        - Rooms
+      summary: Delete room
+      description: Delete room corresonds to room id.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get room
+          type: string
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Deleted room
+      security: 
+        - api_key: []
+  /rooms/{roomId}/leave:
+    post:
+      tags:
+        - Rooms
+      summary: Leave room
+      description: Leave room.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get room list
+          type: string
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Leave room 
+      security: 
+        - api_key: []
+  /rooms/{roomId}/users/:
+    get:
+      tags:
+        - Rooms
+      summary: Get user list of room
+      description: Get user list of room corresponding to room id. Only return user ids.
+      parameters: 
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get room
+          type: string
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: User list of room
+          schema:
+            properties:
+              room:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  users:
+                    $ref: "#/definitions/UserList"
+      security: 
+        - api_key: []
+    post:
+        tags:
+          - Rooms
+        summary: Invite user to room
+        description: Add user to room corresponding to room id
+        parameters:
+          - in: header
+            name: access-token
+            description: Access token which is generated in signin.
+            type: string
+            required: true
+          - in: path
+            name: roomId
+            description: room ID to get room list
+            type: string
+            required: true
+          - in: body
+            name: body
+            schema:
+              properties:
+                users:
+                  $ref: "#definitions/UserList"
+        responses:
+          401:
+            description: Wrong apikey
+          403:
+            description: Wrong access token
+          422:
+            description: Bad parmeter
+          500:
+            description: Server error
+          200:
+            description: Added users to room
+            schema:
+              properties:
+                room:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    users:
+                      $ref: "#/definitions/UserList"
+        security: 
+          - api_key: []
+    delete:
+      tags:
+        - Rooms
+      summary: Kick user out from room
+      description: Delete user from room corresponding to room id. It actually update details of gorup.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get room list
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#definitions/UserList"
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Deleted users 
+      security: 
+        - api_key: []
+  /rooms/{roomId}/history/:
+    get:
+      tags:
+        - Rooms
+      summary: Get chat history of room
+      description: Get the chat history of room corresponding to group id. Only return user ids.
+      parameters: 
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: roomId
+          description: room ID to get group list
+          type: string
+          required: true
+        - in: query
+          name: offset
+          description: The offset number of get history
+          type: integer
+          format: int32
+        - in: query
+          name: limit
+          description: The limit number of get history
+          type: integer
+          format: int32
+        - in: query
+          name: sort
+          description: Sort fields and ASC(1) or DESC(-1). If you want to multiple fields, you can add continuously after comma.
+          type: string
+          default: "name:1,created:-1"
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: History of room chat
+          schema:
+            properties:
+              histories:
+                type: array
+                items:
+                  $ref: "#/definitions/History"
+      security: 
+        - api_key: []
+  /private/{targetUserId}/history/:
+    get:
+      tags:
+        - Private Chat
+      summary: Get chat history of private chat
+      description: Get the chat history of private chat corresponding to group id. Only return user ids.
+      parameters: 
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: targetUserId
+          description: Target user ID to get group list
+          type: string
+          required: true
+        - in: query
+          name: offset
+          description: The offset number of get history
+          type: integer
+          format: int32
+        - in: query
+          name: limit
+          description: The limit number of get history
+          type: integer
+          format: int32
+        - in: query
+          name: sort
+          description: Sort fields and ASC(1) or DESC(-1). If you want to multiple fields, you can add continuously after comma.
+          type: string
+          default: "name:1,created:-1"
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: History of private chat
+          schema:
+            properties:
+              histories:
+                type: array
+                items:
+                  $ref: "#/definitions/History"
+      security: 
+        - api_key: []
   /test:
     post:
       summary: Just to test API documentation
@@ -278,7 +1101,184 @@ paths:
                   type: string
                 username:
                   type: string
-  
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get list of all users
+      description: Get list of all users corresponding to user who have access token. You can filter field by adding item to query. If you want to get all details of users, unnecessary to add query items.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: A list of User
+          schema:
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+      security: 
+        - api_key: []
+    post:
+      tags:
+        - Users
+      summary: Create user
+      description: Create a new user belonging the user who have access token.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Parameters of the new user. 
+          schema:
+            properties:
+              users:
+                $ref: "#definitions/User"
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Created new user
+          schema:
+            properties:
+              users:
+                $ref: "#definitions/User"
+      security: 
+        - api_key: []
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get user
+      description: Get user object corresponding to user id. You can filter field by adding item to query. If you want to get all details of user, unnecessary to add query items.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: userId
+          description: user ID to get user list
+          type: string
+          required: true
+        - in: query
+          name: fields
+          description: Use for filtering params. Only return set fields if you set them, otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Document of user
+          schema:
+            properties:
+              user:
+                $ref: "#/definitions/User"
+      security: 
+        - api_key: []
+    put:
+      tags:
+        - Users
+      summary: Update user details
+      description: Update user details corresponding to user id.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: userId
+          description: user ID to get user
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            properties:
+              user:
+                $ref: "#definitions/User"
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Updated document of user
+      security: 
+        - api_key: []
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Delete user corresonds to user id.
+      parameters:
+        - in: header
+          name: access-token
+          description: Access token which is generated in signin.
+          type: string
+          required: true
+        - in: path
+          name: userId
+          description: user ID to get user
+          type: string
+          required: true
+      responses:
+        401:
+          description: Wrong apikey
+        403:
+          description: Wrong access token
+        422:
+          description: Bad parmeter
+        500:
+          description: Server error
+        200:
+          description: Deleted user
+      security: 
+        - api_key: []
   /test2:
     post:
       summary: Just to test API documentation
@@ -314,6 +1314,13 @@ paths:
                     type: string
               organization:
                 type: object
+securityDefinitions:
+  # basicAuth:
+  #   type: basic
+  api_key:
+    type: apiKey
+    name: apiKey
+    in: header
 definitions:
   UserLogin:
     properties:
@@ -340,29 +1347,81 @@ definitions:
         items:
           type: string
       created:
-        type: integer
+        type: number
+        format: double
   User:
     properties:
-      _id:
+      id:
         type: string
       name:
         type: string
-      avatar:
-        $ref: "#/definitions/File"
-      description:
-        type: string
-      organizationId:
-        type: string
       sortName:
+        type: string
+      description:
         type: string
       userid:
         type: string
+      password:
+        type: string
       created:
+        type: number
+        format: double
+      token:
+        type: array
+        items:
+          type: string
+      pushToken:
+        type: array
+        items:
+          type: string
+      voipPushToken:
+        type: array
+        items:
+          type: string
+      organizationId:
+        type: object
+        properties:
+          type:
+            type: string
+          index:
+            type: boolean
+            example: true
+      avatar:
+        $ref: '#/definitions/Avater'
+      groups:
+        $ref: '#/definitions/GroupList'
+      permission:
         type: integer
+        format: int32
+      muted:
+        type: array
+        items:
+          type: string
+      blocked:
+        type: array
+        items:
+          type: string
+      devices:
+        type: array
+        items:
+          type: string
+      UUID:
+        type: array
+        items:
+          type: string
+      phoneNumber:
+        type: string
+      activationCode:
+        type: string
+  UserList:
+    type: array
+    items:
+      type: string
   File:
     properties:
       size:
         type: integer
+        format: int32
       fileId:
         type: string
       mimeType:
@@ -374,7 +1433,119 @@ definitions:
       name:
         type: string
       created:
+        type: number
+        format: double
+  Group:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      sortName: 
+        type: object
+        properties:
+          type: 
+            type: string
+          index:
+            type: boolean
+            example: true
+      description: 
+        type: string
+      created: 
+        type: number
+        format: double
+      avatar: 
+        $ref: "#/definitions/Avater"
+      organizationId: 
+        type: object
+        properties:
+          type:
+            type: string
+          index:
+            type: boolean
+            example: true
+      users:
+        $ref: "#/definitions/UserList"
+      parentId:
+        type: string
+      type: 
         type: integer
+        format: int32
+      default: 
+        type: boolean 
+        description: default department when new organization is created
+  GroupList:
+    type: array
+    items:
+      type: string
+  Room:
+    properties:
+      id:
+        type: string
+      users:
+        $ref: "#/definitions/UserList"
+      owner:
+        type: object
+        properties:
+          type:
+            type: string
+          index:
+            type: boolean
+            example: true
+      name:
+        type: string
+      description:
+        type: string
+      created:
+        type: number
+        format: double
+      modified:
+        type: number
+        format: double
+      lastMessage:
+        type: string
+        description: id of last message
+      type:
+        type: number
+        format: double
+      avater:
+        $ref: '#/definitions/Avater'
+  History:
+    properties:
+      id:
+        type: string
+      userId:
+        type: object
+        properties:
+          type:
+            type: string
+          index:
+            type: boolean
+            example: true
+      chatId:
+        type: object
+        properties:
+          type:
+            type: string
+          index:
+            type: boolean
+            example: true      
+      chatType:
+        type: integer
+        format: int32
+      lastUpdate:
+        type: number
+        format: double
+      lastUpdateUnreadCount:
+        type: number
+        format: double
+      lastUpdateUser:
+        $ref: '#/definitions/User'
+      lastMessage:
+        $ref: '#/definitions/Message'
+      unreadCount:
+        type: integer
+        format: int32
   Message:
     properties:
       _id:
@@ -384,7 +1555,8 @@ definitions:
       roomID:
         type: string
       created:
-        type: integer
+        type: number
+        format: double
       user:
         $ref: "#/definitions/User"
       file:
@@ -393,3 +1565,30 @@ definitions:
             $ref: "#/definitions/File"
           thumb:
             $ref: "#/definitions/File"
+  Avater: 
+    properties:
+      picture: 
+        type: object
+        properties:
+          originalName: 
+            type: string 
+          size: 
+            type: integer
+            format: int32
+          mimeType: 
+            type: string
+          nameOnServer: 
+            type: string
+      thumbnail: 
+        type: object
+        properties:
+          originalName: 
+            type: string
+          size: 
+            type: integer
+            format: int32
+          mimeType: 
+            type: string
+          nameOnServer: 
+            type: string
+            
