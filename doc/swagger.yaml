@@ -197,7 +197,7 @@ paths:
 
   /message/list/{roomID}/{lastmessageID}/{direction}:
     get:
-      summary: Get file
+      summary: Get list of messages
       parameters:
         - in: header
           name: apikey

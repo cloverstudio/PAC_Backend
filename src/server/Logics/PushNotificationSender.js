@@ -398,7 +398,7 @@ PushNotificationSender = {
 
                         fcm.send(message, function(err, response){
                             if (err) {
-                                console.log(pushToken + " Something has gone wrong!", response);
+                                console.log(pushToken + " Something has gone wrong!", err);
                             } else {
                                 //console.log(pushToken + "Successfully sent with response: ", response);
                             }
