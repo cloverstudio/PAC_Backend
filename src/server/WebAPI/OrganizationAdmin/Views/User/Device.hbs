@@ -59,17 +59,17 @@
             <td>
 
                 {{#if UUID}}
-                     <button type="button" class="buttonRedGhoust" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../../userId}}/{{UUID}}' }">{{l10n "Delete"}}</button>
+                     <button type="button" class="buttonRedGhoust" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../userId}}/{{UUID}}' }">{{l10n "Delete"}}</button>
                 {{else}}
-                     <button type="button" class="buttonRedGhoust" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../../userId}}/web' }">{{l10n "Delete"}}</button>
+                     <button type="button" class="buttonRedGhoust" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../userId}}/web' }">{{l10n "Delete"}}</button>
                 {{/if}}
 
                 {{#if blocked}}
-                     <button type="button" class="buttonBlueGhoust" onclick='location.href="/admin/user/unblockDevice/{{../../userId}}/{{UUID}}"'>{{l10n "Unblock"}}</button>
+                     <button type="button" class="buttonBlueGhoust" onclick='location.href="/admin/user/unblockDevice/{{../userId}}/{{UUID}}"'>{{l10n "Unblock"}}</button>
                 {{else}}
 
                     {{#if UUID}}
-                        <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/user/blockDevice/{{../../../userId}}/{{UUID}}"'>{{l10n "Block"}}</button>
+                        <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/user/blockDevice/{{../userId}}/{{UUID}}"'>{{l10n "Block"}}</button>
                     {{/if}}
                      
                 {{/if}}
