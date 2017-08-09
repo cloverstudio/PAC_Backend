@@ -36,6 +36,8 @@ var NotifyUpdateMessage = {
             
             function(done){
                 
+                var result = {};
+                
                 // websocket notification
                 if(chatType == Const.chatTypeGroup){
                     
