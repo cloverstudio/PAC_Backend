@@ -79,9 +79,8 @@ var socketIOManager = {
             
         this.ioNsp.on('updatemessages', function(ary){
             
-            console.log('updatemessages',ary);
-            
             Backbone.trigger(Const.NotificationMessageUpdated,ary);
+            Backbone.trigger(Const.NotificationRefreshHistory);
 
         });
 

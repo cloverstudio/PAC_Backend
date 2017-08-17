@@ -1515,7 +1515,7 @@ DepartmentController.prototype.init = function(app){
                 
                 model.update(
                     { _id: userId },
-                    { $pull: { groups: { $in: baseUser.groups } } },
+                    { $pull: { groups: departmentId } },
                 function(err, updateUser) {
 
                     done(err, result);

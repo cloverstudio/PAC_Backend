@@ -72234,8 +72234,6 @@ var ChatView = Backbone.View.extend({
              
         });
 
-        console.log('typing off');
-        
         var param = {
             roomID: this.currentRoomId,
             userID: loginUserManager.user._id,
@@ -72252,7 +72250,7 @@ var ChatView = Backbone.View.extend({
         
         var self = this;
 
-        $( "#text-message-box" ).keypress(function(e) {
+        $("#text-message-box").keypress(function(e) {
             
             var keycode = (e.keyCode ? e.keyCode : e.which);
             var shifted = e.shiftKey;
@@ -82389,9 +82387,8 @@ var socketIOManager = {
             
         this.ioNsp.on('updatemessages', function(ary){
             
-            console.log('updatemessages',ary);
-            
             Backbone.trigger(Const.NotificationMessageUpdated,ary);
+            Backbone.trigger(Const.NotificationRefreshHistory);
 
         });
 

@@ -233,7 +233,7 @@ var UpdateHistory = {
 
                 var result = {
                     message: {
-                        _id: rawMessageObj._id,
+                        messageId: rawMessageObj._id.toString(),
                         message: rawMessageObj.message,
                         created: rawMessageObj.created,
                         type: rawMessageObj.type
@@ -313,6 +313,7 @@ var UpdateHistory = {
 
                 var result = {
                     message: {
+                        messageId: rawMessageObj._id.toString(),
                         message: rawMessageObj.message,
                         created: rawMessageObj.created,
                         type: rawMessageObj.type
@@ -409,6 +410,7 @@ var UpdateHistory = {
 
                 var result = {
                     message: {
+                        messageId: rawMessageObj._id.toString(),
                         message: rawMessageObj.message,
                         created: rawMessageObj.created,
                         type: rawMessageObj.type

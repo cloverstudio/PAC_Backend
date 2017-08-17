@@ -11,6 +11,7 @@ var Config = require("../lib/init");
 var SocketHandlerBase = require("./SocketHandlerBase");
 
 var UserModel = require("../Models/User");
+var HistoryModel = require("../Models/History");
 var MessageModel = require("../Models/Message");
 
 var NotifyUpdateMessage = require("../Logics/NotifyUpdateMessage");
@@ -50,6 +51,7 @@ DeleteMessageActionHandler.prototype.attach = function(io,socket){
         }
 
         var messageModel = MessageModel.get();
+        const historyModel = HistoryModel.get();
 
         async.waterfall([
             function(done){
@@ -70,6 +72,39 @@ DeleteMessageActionHandler.prototype.attach = function(io,socket){
                     done(err,result);
 
                 });
+
+            },
+            function(result,done){
+
+                historyModel.find({
+                    "lastMessage.messageId" : result.message._id.toString()
+                },(err,findResult) => {
+
+                    result.histories = findResult;
+                    done(err, result);
+
+                });
+
+
+            },
+            function(result,done){
+
+                result.histories.forEach((element) => {
+
+                    historyModel.update({
+                        _id: element._id
+                    },{
+                        lastMessage : null,
+                        lastUpdate: Utils.now()
+                    },(err,updateResult) => {
+
+                        console.log(err,updateResult);
+
+                    });
+
+                });
+
+                done(null,result);
 
             },
             function(result,done){
@@ -111,13 +146,7 @@ DeleteMessageActionHandler.prototype.attach = function(io,socket){
 
                 });
 
-            },
-            function(result,done){
-                done(null,result);     
-            },
-            function(result,done){
-                done(null,result);
-            }        
+            },  
         ],
         function(err,result){
 
