@@ -1,29 +1,27 @@
 /** Search group */
 
-var _ = require('lodash');
-var async = require('async');
+const _ = require('lodash');
+const async = require('async');
 
-var Const = require("../../lib/consts");
-var Config = require("../../lib/init");
-var Utils = require("../../lib/utils");
+const Config = require("../../lib/init");
+const Utils = require("../../lib/utils");
 
-var DatabaseManager = require('../../lib/DatabaseManager');
-var SocketAPIHandler = require('../../SocketAPI/SocketAPIHandler');
+const DatabaseManager = require('../../lib/DatabaseManager');
 
-var UserModel = require('../../Models/User');
-var RoomModel = require('../../Models/Room');
-var GroupModel = require('../../Models/Group');
-var HistoryModel = require('../../Models/History');
+const UserModel = require('../../Models/User');
+const RoomModel = require('../../Models/Room');
+const GroupModel = require('../../Models/Group');
+const HistoryModel = require('../../Models/History');
 
-var PermissionLogic = require('./Permission');
+const PermissionLogic = require('./Permission');
 
-var SearchGroup = {
+const SearchGroup = {
     
     search: (user, keyword, offset, limit, sort, fields, onSuccess, onError) => {
 
-        var organizationId = user.organizationId;
-        var model = GroupModel.get();
-
+        const organizationId = user.organizationId;
+        const model = GroupModel.get();
+        
         async.waterfall([
             (done) => {
                 // get departments
@@ -33,7 +31,7 @@ var SearchGroup = {
             },
             // Get groups
             (result, done) => {
-                var conditions = {
+                const conditions = {
                     $and: [
                         {organizationId: organizationId},
                         {$or : [
@@ -53,7 +51,7 @@ var SearchGroup = {
                     );
                 }
 
-                var query = model.find(conditions, fields)
+                const query = model.find(conditions, fields)
                 .skip(offset)
                 .sort(sort)
                 .limit(limit);
@@ -72,24 +70,24 @@ var SearchGroup = {
             },
             // Get user's data
             (result,done) => {
-                var userLists = _.pluck(result.list,'users');
+                const userLists = _.pluck(result.list,'users');
                 if (_.contains(userLists, undefined)) done(null, result);
                 
-                var userIds = [];
+                let userIds = [];
                 _.forEach(userLists, (userList) => {
                     if(!_.isArray(userList)) return;
                     userIds = userIds.concat(userList);
                 });
                 userIds = _.uniq(userIds);
 
-                var userModel = UserModel.get();
+                const userModel = UserModel.get();
                 userModel.find({_id: {$in:userIds}}, {name:1}, (err, foundUsers) => {
                     foundUsers = foundUsers.map((item) => {
                         return item.toObject();
                     });
                     // Replace users list to list including username
                     _.forEach(result.list, (group, index) => {
-                        var userModels = _.filter(foundUsers, (user) => {
+                        const userModels = _.filter(foundUsers, (user) => {
                             return group.users.indexOf(user._id);
                         });
                         result.list[index].users =  userModels;                        

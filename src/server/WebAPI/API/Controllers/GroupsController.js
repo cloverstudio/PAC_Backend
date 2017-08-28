@@ -21,58 +21,16 @@ GroupsController.prototype.init = function(app){
         
     var self = this;
 
-   /**
+    /**
      * @api {get} /api/v3/groups/ get group list
      **/
 
     router.get('/',checkAPIKey, (request,response) => {
-        
-        var keyword = "", 
-            offset = 0, 
-            limit = 0,
-            sort = {}, 
-            fields = {};
-        
-        if (request.query.keyword) {
-            keyword = request.query.keyword;
-        }
 
-        if (request.query.offset) {
-            if (request.query.offset < 0) 
-                return response.status(422).send('Bad Parameter');
-            offset = request.query.offset;
-        }
+        const q = self.checkQueries(request.query);
+        if (!q) return response.status(422).send("Bad Parameters");
 
-        if (request.query.limit) {
-            limit = request.query.limit;
-        }
-
-        if (request.query.sort) {
-            var sortCondtions = request.query.sort.split(",");
-            _.each(sortCondtions,(condition) => {
-                var splited = [];
-                if (_.contains(condition, ":")) {
-                    splited = condition.trim().split(":");
-                    switch (splited[1].trim()) {
-                        case 'desc':
-                            splited[1] = -1;            
-                            break;
-                        default:
-                            splited[1] = 1;
-                    }
-                    sort[splited[0]] = splited[1];
-                }
-            });
-        }
-
-        if (request.query.fields) {
-            var splitFields = request.query.fields.split(",");    
-            _.each(splitFields, (key) => {
-                fields[key.trim()] = 1;
-            });
-        }
-
-        SearchGroupLogic.search(request.user, keyword, offset, limit, sort, fields, (result, err) => {
+        SearchGroupLogic.search(request.user, q['keyword'], q['offset'], q['limit'], q['sort'], q['fields'], (result, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 groups: result.list
             });

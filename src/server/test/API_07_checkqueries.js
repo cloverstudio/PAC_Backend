@@ -6,44 +6,8 @@ describe('API', () => {
 
     var req, res;
     
-    describe('/v3/groups GET', () => {
-        
-        it('returns 401, wrong apiKey', (done) => {
-            request(app)
-                .get('/api/v3/groups/')
-                .set('apikey', global.apikey + "wrong")
-                .set('access-token', global.apiaccesstoken)
-                .expect(401, done)
-        });
-
-        it('returns 403, Wrong access token', (done) => {
-            request(app)
-                .get('/api/v3/groups/')
-                .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken + "wrong")
-                .expect(403, done) 
-        });
-
-        it('returns groups', (done) => {
-            request(app)
-                .get('/api/v3/groups/')
-                .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
-                .expect(200)
-                .end((err, res) => {
-                    if (err) throw err;
-                    res.body.should.have.property('groups');
-                    res.body.groups[0].should.have.property('id');                    
-                    res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4);                
-                    done();
-                });
-        });
-
-        /**
-         * From here, test of query parameters
-         * These tests probably should be divided from this file, but temporarily written here at Aug, 21, 2017.
-         */
-
+    describe('Test of checking query parameters', () => {
+    
         // keyword
         it('returns group inclucding "2" in name/description if keyword query is "2"', (done) =>{
             request(app)
