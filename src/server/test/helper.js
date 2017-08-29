@@ -30,7 +30,8 @@ global.user1 = {
     userid: "userid1" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1
+    organizationId : 1,
+    permission: 2
 }
 
 password = "password"  + global.getRandomStr();
@@ -40,7 +41,8 @@ global.user2 = {
     userid: "userid2" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1
+    organizationId : 1,
+    permission: 3    
 }
 
 password = "password"  + global.getRandomStr();
@@ -50,7 +52,8 @@ global.user3 = {
     userid: "userid3" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1
+    organizationId : 1,
+    permission: 1
 }
 
 password = "password"  + global.getRandomStr();
@@ -60,7 +63,8 @@ global.user4 = {
     userid: "userid4" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1
+    organizationId : 1,
+    permission: 1
 }
 
 global.group1 = {

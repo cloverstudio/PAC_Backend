@@ -13,7 +13,7 @@ describe('API', () => {
             request(app)
                 .get('/api/v3/groups?keyword=2')
                 .set('apiKey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(200)
                 .end((err, res) => {
                     if (err) throw err;
@@ -27,7 +27,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?keyword="keyword"')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -42,7 +42,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset=2')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -58,7 +58,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset= ')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -72,7 +72,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset=10')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -86,7 +86,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset=-2')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(422, done);
         });
 
@@ -95,7 +95,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?limit=2')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -111,7 +111,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?limit= ')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -125,7 +125,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?limit=10')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -140,7 +140,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset=2&limit=1')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -156,7 +156,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?sort=sortName:desc')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -174,7 +174,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?sort=sortName:dafd')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -192,7 +192,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?sort=sortName')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -210,7 +210,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?sort=sortName:desc, created:asc')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -228,7 +228,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?sort= ')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -249,7 +249,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset=1&limit=2&sort=sortName:desc')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -266,7 +266,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?fields=name, created')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -284,7 +284,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?fields= ')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;
@@ -304,7 +304,7 @@ describe('API', () => {
             request(app)
             .get('/api/v3/groups?offset=1&limit=2&sort=sortName:desc&fields=name, created')
             .set('apiKey', global.apikey)
-            .set('access-token', global.apiaccesstoken)
+            .set('access-token', global.user2.apiaccesstoken)
             .expect(200)
             .end((err, res) => {
                 if (err) throw err;

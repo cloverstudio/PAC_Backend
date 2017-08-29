@@ -10,6 +10,7 @@ var Utils = require( pathTop + "lib/utils");
 
 var checkAPIKey = require( pathTop + 'lib/authApiV3');
 var APIBase = require('./APIBase');
+var checkUserAdmin = require('../../../lib/authV3.js').checkUserAdmin;
 
 var SearchGroupLogic = require( pathTop + "Logics/v3/SearchGroup");
 
@@ -39,6 +40,10 @@ GroupsController.prototype.init = function(app){
             self.errorResponse(response, Const.httpCodeServerError);
             return;
         });
+    });
+
+    router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
+        
     });
 
     return router;

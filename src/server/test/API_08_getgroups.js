@@ -12,7 +12,7 @@ describe('API', () => {
             request(app)
                 .get('/api/v3/groups/')
                 .set('apikey', global.apikey + "wrong")
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(401, done)
         });
 
@@ -20,7 +20,7 @@ describe('API', () => {
             request(app)
                 .get('/api/v3/groups/')
                 .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken + "wrong")
+                .set('access-token', global.user2.apiaccesstoken + "wrong")
                 .expect(403, done) 
         });
 
@@ -28,7 +28,7 @@ describe('API', () => {
             request(app)
                 .get('/api/v3/groups/')
                 .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(200)
                 .end((err, res) => {
                     if (err) throw err;

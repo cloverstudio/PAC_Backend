@@ -63,7 +63,8 @@ TestController.prototype.init = function(app){
                 password: body.password,
                 organizationId : body.organizationId,
                 created: Utils.now(),
-                status: 1
+                status: 1,
+                permission: body.permission
                     
             });
             
