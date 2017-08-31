@@ -96,6 +96,7 @@
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;
+    Const.httpCodeBadParameter = 422;
     Const.httpCodeServerError = 500;
 
     Const.thumbSize = 256;
@@ -189,6 +190,10 @@
     Const.typingOn = 1;
 
     Const.APIKeyLength = 32;
+
+    // For validation of api v3
+    Const.nameMaxLength = 64;
+    Const.descriptionMaxLength = 512;
 
     // Exports ----------------------------------------------
     module["exports"] = Const;

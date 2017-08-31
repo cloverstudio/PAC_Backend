@@ -4,7 +4,7 @@ info:
   title: Spika for Business API v3
   description: >-
     New set of API to use Spika for Business. First of all, you must get an
-    access token by calling sign in API.
+    access token by calling sign in API. 
 schemes:
   - http
   - https
@@ -708,6 +708,8 @@ paths:
       tags:
         - Groups
       summary: Create group
+      consumes:
+        - multipart/form-data
       description: Create a new group belonging the user who have access token.
       parameters:
         - in: header
@@ -715,14 +717,27 @@ paths:
           description: Access token which is generated in signin.
           type: string
           required: true
-        - in: body
-          name: body
-          description: Parameters of new group.
-          schema:
-            properties:
-              group:
-                $ref: '#definitions/Group'
+        - in: formData
+          type: string
+          name: name
+          description: Name of new group
           required: true
+        - in: formData
+          type: string
+          name: sortName
+          description: SortName of new group
+        - in: formData
+          type: string
+          name: description
+          description: Descripiton of new group
+        - in: formData
+          type: string
+          name: users
+          description: User ids list of new group by string separated by comma
+        - in: formData
+          type: file
+          name: avatar
+          description: Image file of avatar of new group
       responses:
         '200':
           description: Created new group
@@ -2251,7 +2266,7 @@ definitions:
             type: boolean
             example: true
       avatar:
-        $ref: '#/definitions/Avater'
+        $ref: '#/definitions/Avatar'
       groups:
         $ref: '#/definitions/GroupList'
       permission:
@@ -2319,7 +2334,7 @@ definitions:
         type: number
         format: double
       avatar:
-        $ref: '#/definitions/Avater'
+        $ref: '#/definitions/Avatar'
       organizationId:
         type: object
         properties:
@@ -2372,8 +2387,8 @@ definitions:
       type:
         type: number
         format: double
-      avater:
-        $ref: '#/definitions/Avater'
+      avatar:
+        $ref: '#/definitions/Avatar'
   History:
     properties:
       id:
@@ -2440,7 +2455,7 @@ definitions:
       created:
         type: number
         format: double
-  Avater:
+  Avatar:
     properties:
       picture:
         type: object

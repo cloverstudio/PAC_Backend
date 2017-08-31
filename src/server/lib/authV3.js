@@ -11,7 +11,7 @@ function checkUserAdmin(request, response, next) {
     userModel.findOne({
         token: {$elemMatch: {token: token}}
     }, (err, findResult) => {
-        if (err || _.isEmpty(findResult) || findResult.permission !== 2) {
+        if (err || _.isEmpty(findResult) || findResult.permission !== Const.userPermission.organizationAdmin) {
             return response.status(403).send("Permission Error");            
         } else {
             return next();            

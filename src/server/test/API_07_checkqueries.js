@@ -18,7 +18,7 @@ describe('API', () => {
                 .end((err, res) => {
                     if (err) throw err;
                     res.body.should.have.property('groups');
-                    res.body.groups[0].name.should.equal('GROUP 2');
+                    res.body.groups[0].name.should.equal(global.group2.name);
                     done();
                 });
         });
@@ -48,8 +48,8 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(2); 
-                res.body.groups[0].name.should.equal('GROUP 3');
-                res.body.groups[1].name.should.equal('GROUP 4');
+                res.body.groups[0].name.should.equal(global.group3.name);
+                res.body.groups[1].name.should.equal(global.group4.name);
                 done();
             });
         });
@@ -101,8 +101,8 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(2); 
-                res.body.groups[0].name.should.equal('GROUP 1');
-                res.body.groups[1].name.should.equal('GROUP 2');
+                res.body.groups[0].name.should.equal(global.group1.name);
+                res.body.groups[1].name.should.equal(global.group2.name);
                 done();
             });
         });
@@ -146,7 +146,7 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(1); 
-                res.body.groups[0].name.should.equal('GROUP 3');
+                res.body.groups[0].name.should.equal(global.group3.name);
                 done();
             });
         });
@@ -162,10 +162,10 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
-                res.body.groups[0].name.should.equal('GROUP 4');
-                res.body.groups[1].name.should.equal('GROUP 3');
-                res.body.groups[2].name.should.equal('GROUP 2');
-                res.body.groups[3].name.should.equal('GROUP 1');                
+                res.body.groups[0].name.should.equal(global.group4.name);
+                res.body.groups[1].name.should.equal(global.group3.name);
+                res.body.groups[2].name.should.equal(global.group2.name);
+                res.body.groups[3].name.should.equal(global.group1.name);                
                 done();
             });
         });
@@ -180,10 +180,10 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
-                res.body.groups[0].name.should.equal('GROUP 1');
-                res.body.groups[1].name.should.equal('GROUP 2');
-                res.body.groups[2].name.should.equal('GROUP 3');
-                res.body.groups[3].name.should.equal('GROUP 4');
+                res.body.groups[0].name.should.equal(global.group1.name);
+                res.body.groups[1].name.should.equal(global.group2.name);
+                res.body.groups[2].name.should.equal(global.group3.name);
+                res.body.groups[3].name.should.equal(global.group4.name);
                 done();
             });
         });
@@ -198,10 +198,10 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
-                res.body.groups[0].name.should.equal('GROUP 1');
-                res.body.groups[1].name.should.equal('GROUP 2');
-                res.body.groups[2].name.should.equal('GROUP 3');
-                res.body.groups[3].name.should.equal('GROUP 4');
+                res.body.groups[0].name.should.equal(global.group1.name);
+                res.body.groups[1].name.should.equal(global.group2.name);
+                res.body.groups[2].name.should.equal(global.group3.name);
+                res.body.groups[3].name.should.equal(global.group4.name);
                 done();
             });
         });
@@ -216,10 +216,10 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
-                res.body.groups[0].name.should.equal('GROUP 4');
-                res.body.groups[1].name.should.equal('GROUP 3');
-                res.body.groups[2].name.should.equal('GROUP 2');
-                res.body.groups[3].name.should.equal('GROUP 1');                
+                res.body.groups[0].name.should.equal(global.group4.name);
+                res.body.groups[1].name.should.equal(global.group3.name);
+                res.body.groups[2].name.should.equal(global.group2.name);
+                res.body.groups[3].name.should.equal(global.group1.name);                
                 done();
             });
         });
@@ -234,10 +234,10 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
-                res.body.groups[0].name.should.equal('GROUP 1');
-                res.body.groups[1].name.should.equal('GROUP 2');
-                res.body.groups[2].name.should.equal('GROUP 3');
-                res.body.groups[3].name.should.equal('GROUP 4');
+                res.body.groups[0].name.should.equal(global.group1.name);
+                res.body.groups[1].name.should.equal(global.group2.name);
+                res.body.groups[2].name.should.equal(global.group3.name);
+                res.body.groups[3].name.should.equal(global.group4.name);
                 done();
             });
         });
@@ -255,8 +255,8 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(2); 
-                res.body.groups[0].name.should.equal('GROUP 3');
-                res.body.groups[1].name.should.equal('GROUP 2');
+                res.body.groups[0].name.should.equal(global.group3.name);
+                res.body.groups[1].name.should.equal(global.group2.name);
                 done();
             });
         });
@@ -274,7 +274,7 @@ describe('API', () => {
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
                 res.body.groups[0].should.have.keys('name','id','created');     
                 res.body.groups[0].should.not.have.keys(
-                    'sortName', 'description', 'organizationId', '__v', 'users', 'avatar'
+                    'sortName', 'description', 'organizationId', '__v', 'users', 'avatar', 'type'
                 );
                 done();
             });
@@ -293,7 +293,7 @@ describe('API', () => {
                 res.body.groups[0].should.have.keys(
                     'name','id', 'sortName', 'description', 
                     'created', 'organizationId', '__v', 
-                    'users', 'avatar'
+                    'users', 'type', 'avatar'
                 );                
                 done();
             });
@@ -310,15 +310,15 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(2); 
-                res.body.groups[0].name.should.equal('GROUP 3');
+                res.body.groups[0].name.should.equal(global.group3.name);
                 res.body.groups[0].should.have.keys('name','id','created');     
                 res.body.groups[0].should.not.have.keys(
-                    'sortName', 'description', 'organizationId', '__v', 'users', 'avatar'
+                    'sortName', 'description', 'organizationId', '__v', 'users', 'type','avatar'
                 );
-                res.body.groups[1].name.should.equal('GROUP 2');                                
+                res.body.groups[1].name.should.equal(global.group2.name);                                
                 res.body.groups[1].should.have.keys('name','id','created');     
                 res.body.groups[1].should.not.have.keys(
-                    'sortName', 'description', 'organizationId', '__v', 'users', 'avatar'
+                    'sortName', 'description', 'organizationId', '__v', 'users', 'type','avatar'
                 );
                 done();
             });

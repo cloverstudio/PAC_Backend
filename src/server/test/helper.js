@@ -7,12 +7,14 @@ var app = require('../mainTest');
 
 global.hashsalt = "8zgqvU6LaziThJI1uz3PevYd";
 
-global.getRandomStr = function(){
+global.getRandomStr = function(num){
 
+    if (!num) num = 5;
+    
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 5; i++ )
+    for( var i=0; i < num; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
@@ -21,6 +23,18 @@ global.getRandomStr = function(){
 
 global.organization1 = {
     name: "organization1" + global.getRandomStr(),
+    maxUserNumber: 100,
+    maxGroupNumber: 100,
+    maxRoomNumber: 100,
+    diskQuota: 10
+}
+
+global.organization2 = {
+    name: "organization2" + global.getRandomStr(),
+    maxUserNumber: 1,
+    maxGroupNumber: 1,
+    maxRoomNumber: 1,
+    diskQuota: 10
 }
 
 var password = "password"  + global.getRandomStr();
@@ -70,25 +84,29 @@ global.user4 = {
 global.group1 = {
     name: "group1",
     description: "DESCRIPTION group1",
-    users: []
+    users: [],
+    type: 1
 }
 
 global.group2 = {
     name: "group2",
     description: "DESCRIPTION group2",
-    users: []
+    users: [],
+    type: 1
 }
 
 global.group3 = {
     name: "group3",
     description: "DESCRIPTION group3",
-    users: []
+    users: [],
+    type: 1
 }
 
 global.group4 = {
     name: "group4",
     description: "DESCRIPTION group4",
-    users: []
+    users: [],
+    type: 1
 }
 
 global.encryptedText = "0301b8a755b0d074259a98114f78b6738401681b3762c87d6f25249001e903067cc7009beae2288379e456e6856bb3c4f22084811c05d10fa7869ac660aec60c04259926d75506a83284368805bdaca07563";
@@ -105,7 +123,14 @@ before(function(doneMain){
             // create org
             request(app)
                 .post('/api/v2/test/createtemporg')
-                .send(global.organization1)
+                .send({
+                    name: global.organization1.name,
+                    sortName: global.organization1.name,
+                    maxUserNumber: global.organization1.maxUserNumber,
+                    maxGroupNumber: global.organization1.maxGroupNumber,
+                    maxRoomNumber: global.organization1.maxRoomNumber,
+                    diskQuota: global.organization1.diskQuota
+                })
                 .end(function (err, res) {
 
     			if (err) {
@@ -241,11 +266,12 @@ before(function(doneMain){
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
-                .field('name', "GROUP 1")
-                .field('sortName', "")
-                .field('description', 'GROUP 1 DESCRIPTION')
+                .field('name', global.group1.name)
+                .field('sortName', global.group1.name)
+                .field('description', global.group1.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.group1.type)                                
                 .attach('file', 'src/server/test/samplefiles/user1.jpg')
                 .end(function (err, res) {
 
@@ -265,11 +291,12 @@ before(function(doneMain){
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
-                .field('name', "GROUP 2")
-                .field('sortName', "")
-                .field('description', 'GROUP 2 DESCRIPTION')
+                .field('name', global.group2.name)
+                .field('sortName', global.group2.name)
+                .field('description', global.group2.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.group2.type)                                
                 .attach('file', 'src/server/test/samplefiles/user2.jpg')
                 .end(function (err, res) {
 
@@ -289,11 +316,12 @@ before(function(doneMain){
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
-                .field('name', "GROUP 3")
-                .field('sortName', "")
-                .field('description', 'GROUP 3 DESCRIPTION')
+                .field('name', global.group3.name)
+                .field('sortName', global.group3.name)
+                .field('description', global.group3.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.group3.type)                                
                 .attach('file', 'src/server/test/samplefiles/user3.png')
                 .end(function (err, res) {
 
@@ -313,11 +341,12 @@ before(function(doneMain){
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
-                .field('name', "GROUP 4")
-                .field('sortName', "")
-                .field('description', 'GROUP 4 DESCRIPTION')
+                .field('name', global.group4.name)
+                .field('sortName', global.group4.name)
+                .field('description', global.group4.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.group4.type)                
                 .attach('file', 'src/server/test/samplefiles/user4.png')
                 .end(function (err, res) {
 
