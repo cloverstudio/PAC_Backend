@@ -1,17 +1,10 @@
 /** Create group */
-const _ = require('lodash');
 const async = require('async');
-
-const Config = require("../../lib/init");
 const Const = require("../../lib/consts");
 const Utils = require("../../lib/utils");
 const Path = require('path');
-
-const DatabaseManager = require('../../lib/DatabaseManager');
-
 const GroupModel = require('../../Models/Group');
 const OrganizationModel = require('../../Models/Organization');
-
 const UpdateOrganizationDiskUsageLogic = require('./UpdateOrganizationDiskUsage')
 
 const CreateGroup = {

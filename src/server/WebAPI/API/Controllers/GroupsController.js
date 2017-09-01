@@ -1,26 +1,20 @@
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
-
+const mongoose = require('mongoose');
+const async = require('async');
 const pathTop = "../../../";
-
 const Const = require( pathTop + "lib/consts");
-const Config = require( pathTop + "lib/init");
-const Utils = require( pathTop + "lib/utils");
-
+// const Utils = require( pathTop + "lib/utils");
 const checkAPIKey = require( pathTop + 'lib/authApiV3');
 const APIBase = require('./APIBase');
 const checkUserAdmin = require('../../../lib/authV3.js').checkUserAdmin;
-
 const formidable = require('formidable');
-const async = require('async');
-
 const GroupModel = require(pathTop + 'Models/Group');
 const UserModel = require(pathTop + 'Models/User');                
-
-
 const SearchGroupLogic = require( pathTop + "Logics/v3/SearchGroup");
 const CreateGroupLogic = require( pathTop + "Logics/v3/CreateGroup");
+const GetGroupDetailsLogic = require( pathTop + "Logics/v3/GetGroupDetails");
 
 const GroupsController = function(){};
 _.extend(GroupsController.prototype, APIBase.prototype);
@@ -106,6 +100,29 @@ GroupsController.prototype.init = function(app){
         });
     });
 
+    /**
+     * @api {get} /api/v3/groups/{groupId} get group details
+     **/
+    router.get('/:groupId',checkAPIKey, (request,response) => {
+        
+        const groupId = request.params.groupId;        
+        const q = self.checkQueries(request.query);
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(groupId))
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        if (!q) 
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        
+        GetGroupDetailsLogic.get(groupId ,q.fields, (result, err) => {
+            self.successResponse(response, Const.responsecodeSucceed, {
+                group: result
+            }); 
+        }, (err) => {
+            console.log("Critical Error", err);
+            return self.errorResponse(response, Const.httpCodeServerError);
+        });
+    });
     return router;
 }
 
@@ -150,7 +167,7 @@ GroupsController.prototype.validateDuplication = (name, organizationId, callback
         type: Const.groupType.group
     }, (err, foundGroup) => {
         if (foundGroup) {
-            callback(422);
+            callback(Const.httpCodeBadParameter);
         } else {
             callback(null);
         }
@@ -175,6 +192,5 @@ GroupsController.prototype.validateUsersPresence = (users, organizationId, callb
         callback(null);                                                            
     }); 
 }
-
 
 module["exports"] = new GroupsController();
