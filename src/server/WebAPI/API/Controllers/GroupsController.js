@@ -73,7 +73,13 @@ GroupsController.prototype.init = function(app){
             },
             // Validate presense
             (result, done) => {
-                self.validatePresenceAndMaxLength(result.fields, (err) => {
+                self.validatePresence(result.fields, (err) => {
+                    done(err, result);
+                });
+            },
+            // Validate text of max length
+            (result, done) => {
+                self.validateMaxLength(result.fields, (err) => {
                     done(err, result);
                 });
             },
@@ -141,13 +147,88 @@ GroupsController.prototype.init = function(app){
             return self.errorResponse(response, Const.httpCodeServerError);
         });
     });
-                group: result
-            }); 
-        }, (err) => {
-            console.log("Critical Error", err);
-            return self.errorResponse(response, Const.httpCodeServerError);
+
+    /**
+     * @api {put} /api/v3/groups/{groupId} edit group details
+     **/
+    router.put('/:groupId', checkAPIKey, checkUserAdmin, (request,response) => {
+        
+        const groupId = request.params.groupId;
+        let form = new formidable.IncomingForm();
+        let users = [];
+        const uploadPathError = self.checkUploadPath();          
+        
+        async.waterfall([
+            // Validate the groupId is handleable by mongoose
+            (done) => {
+                if (!mongoose.Types.ObjectId.isValid(groupId))
+                    return done(Const.httpCodeBadParameter)
+                done(null, null);
+            },
+            (result, done) => {
+                form.uploadDir = Config.uploadPath;
+                form.on('fileBegin', (name, file) => {
+                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
+                });
+                form.onPart = (part) => {
+                    if (part.filename) {
+                        if (!uploadPathError) form.handlePart(part);
+                    } else if (part.filename != "") {
+                        form.handlePart(part);
+                    }
+                }
+                form.parse(request, (err, fields, files) => {
+                    const result = { avatar: files.avatar, fields: fields }
+                    done(err, result);
+                })
+            },
+            // Validate presense and max length
+            (result, done) => {
+                self.validateMaxLength(result.fields, (err) => {
+                    done(err, result);
+                });
+            },
+            // Validate the new name is duplicated, or not.
+            (result, done) => {
+                if (uploadPathError) 
+                    return done(uploadPathError, result);
+
+                self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
+                    done(err, result);   
+                });
+            },
+            // Validate the set users exist in database, or not.
+            (result, done) => {
+                if (result.fields.users) {
+                    users = result.fields.users.split(",");                    
+                    self.validateUsersPresence(users, request.user.organizationId, (err) => {
+                        done(err, result);  
+                    });
+                } else {
+                    done(null, result);
+                }
+            }
+        ],
+        (err, result) => {
+            if (err === Const.httpCodeBadParameter)
+                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+
+            const name = result.fields.name;
+            const sortName = result.fields.sortName;
+            const description = result.fields.description;
+            const avatar = result.avatar;
+
+            GroupLogic.update(groupId ,request.user, name, sortName, description, users, avatar, (updated, err) => {
+                self.successResponse(response, Const.responsecodeSucceed, {
+                    group: updated
+                }); 
+            }, (err) => {
+                console.log("Critical Error", err);
+                return self.errorResponse(response, Const.httpCodeServerError);
+            });
         });
     });
+
     return router;
 }
 
@@ -155,11 +236,16 @@ GroupsController.prototype.init = function(app){
  * The following is the validation functions
  */
 
-GroupsController.prototype.validatePresenceAndMaxLength = (values, callback) => {
+GroupsController.prototype.validatePresence = (values, callback) => {
     let error = null;
-    if (!values.name) {
+    if (!values.name)
         error = Const.httpCodeBadParameter;
-    } else if (values.name.length > Const.nameMaxLength) {
+    callback(error);
+}
+
+GroupsController.prototype.validateMaxLength = (values, callback) => {
+    let error = null;
+    if (values.name && values.name.length > Const.nameMaxLength) {
         error = Const.httpCodeBadParameter;
     } else if (values.sortName && values.sortName.length > Const.nameMaxLength) {
         error = Const.httpCodeBadParameter;

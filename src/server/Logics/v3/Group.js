@@ -4,6 +4,7 @@ const _ = require('lodash');
 const Const = require("../../lib/consts");
 const Utils = require("../../lib/utils");
 const Path = require('path');
+const easyImg = require('easyimage');
 const GroupModel = require('../../Models/Group');
 const UserModel = require('../../Models/User');
 const OrganizationModel = require('../../Models/Organization');
@@ -15,7 +16,7 @@ const Group = {
     search: (user, keyword, offset, limit, sort, fields, onSuccess, onError) => {
         
         const organizationId = user.organizationId;
-        const model = GroupModel.get();
+        const groupModel = GroupModel.get();
         
         async.waterfall([
             (done) => {
@@ -46,7 +47,7 @@ const Group = {
                     );
                 }
 
-                const query = model.find(conditions, fields)
+                const query = groupModel.find(conditions, fields)
                 .skip(offset)
                 .sort(sort)
                 .limit(limit);
@@ -141,7 +142,6 @@ const Group = {
                 }
 
                 if (avatar) {
-                    const easyImg = require('easyimage');
                     easyImg.thumbnail({
                         src: avatar.path,
                         dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
@@ -204,17 +204,100 @@ const Group = {
     },
 
     getDetails: (groupId, fields, onSuccess, onError) => {
-        const model = GroupModel.get();
-        model.findOne({ _id: groupId }, fields, (err,foundGroup) => {
+        const groupModel = GroupModel.get();
+        groupModel.findOne({ _id: groupId }, fields, (err,foundGroup) => {
             if(err && onError) return onError(err);
             result = foundGroup.toObject();
             result.id = foundGroup._id;
             delete result._id;
             if(onSuccess) onSuccess(result);
         });
+    },
+
+    update: (groupId, baseUser, name, sortName, description, users, avatar, onSuccess, onError) => {
+
+        const groupModel = GroupModel.get();        
+
+        async.waterfall([
+            (done) => {
+                // get original data
+                let result = {};
+                groupModel.findOne({_id: groupId}, (err, original) => {
+                    result.original = original;
+                    done(err, result);
+                });
+            },
+            (result, done) => {
+                const newName = name ? name : result.original.name;
+                const newDescription = description ? description : result.original.description;
+                const newSortName = sortName ? sortName : newName.toLowerCase();                    
+                result.updateParams = {
+                    name: newName,
+                    sortName: newSortName,
+                    description: newDescription,
+                    users: users
+                };
+                if (avatar) {
+                    easyImg.thumbnail({
+                        src: avatar.path,
+                        dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
+                        width: Const.thumbSize,
+                        height: Const.thumbSize
+                    }).then(
+                        (thumbnail) => {
+                            result.updateParams.avatar = {
+                                picture: {
+                                    originalName: avatar.name,
+                                    size: avatar.size,
+                                    mimeType: avatar.type,
+                                    nameOnServer: Path.basename(avatar.path)
+                                },
+                                thumbnail: {
+                                    originalName: avatar.name,
+                                    size: thumbnail.size,
+                                    mimeType: thumbnail.type,
+                                    nameOnServer: thumbnail.name
+                                }
+                            };
+
+                            done(null, result);
+                        }, (err) => {
+                            done(err, result);
+                        }
+                    );
+                } else {
+                    done(null, result);
+                }
+            },
+            (result, done) => {
+                groupModel.update({ _id: groupId }, result.updateParams, (err, updated) => {
+                    done(err, result);
+                });
+            },
+            // Update organization disk usage
+            (result, done) => {
+                if (avatar) {
+                    let size = 0;
+                    const newSize = result.updateParams.avatar.picture.size + result.updateParams.avatar.thumbnail.size;                    
+                    if (result.original.avatar.picture.size) {
+                        const originalSize = result.original.avatar.picture.size + result.original.avatar.thumbnail.size;
+                        size = newSize - originalSize;
+                    } else {
+                        size = newSize;
+                    }
+                    UpdateOrganizationDiskUsageLogic.update(baseUser.organizationId, size, (err, updated) => {
+                        done(err, result);
+                    });
+                } else {
+                    done(null, result);
+                }
+            }
+        ],
+        (err, result) => {
+            if(err && onError) return onError(err);
+            if(onSuccess) onSuccess(result);
+        });
     }
-
 };
-
 
 module["exports"] = Group;

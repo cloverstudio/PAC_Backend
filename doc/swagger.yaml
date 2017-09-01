@@ -803,6 +803,8 @@ paths:
         - Groups
       summary: Update Group details
       description: Update Group details specified by id.
+      consumes:
+        - multipart/form-data
       parameters:
         - in: header
           name: access-token
@@ -814,14 +816,26 @@ paths:
           description: Group ID to get group list.
           type: string
           required: true
-        - in: body
-          name: body
-          description: Update parameters.
-          schema:
-            properties:
-              group:
-                $ref: '#definitions/Group'
-          required: true
+        - in: formData
+          type: string
+          name: name
+          description: Name of new group
+        - in: formData
+          type: string
+          name: sortName
+          description: SortName of new group
+        - in: formData
+          type: string
+          name: description
+          description: Descripiton of new group
+        - in: formData
+          type: string
+          name: users
+          description: User ids list of new group by string separated by comma
+        - in: formData
+          type: file
+          name: avatar
+          description: Image file of avatar of new group
       responses:
         '200':
           description: Updated document of group
