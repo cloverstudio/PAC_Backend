@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const async = require('async');
+
 const pathTop = "../../../";
 const Const = require( pathTop + "lib/consts");
 // const Utils = require( pathTop + "lib/utils");
@@ -10,11 +11,11 @@ const checkAPIKey = require( pathTop + 'lib/authApiV3');
 const APIBase = require('./APIBase');
 const checkUserAdmin = require('../../../lib/authV3.js').checkUserAdmin;
 const formidable = require('formidable');
+
 const GroupModel = require(pathTop + 'Models/Group');
-const UserModel = require(pathTop + 'Models/User');                
-const SearchGroupLogic = require( pathTop + "Logics/v3/SearchGroup");
-const CreateGroupLogic = require( pathTop + "Logics/v3/CreateGroup");
-const GetGroupDetailsLogic = require( pathTop + "Logics/v3/GetGroupDetails");
+const UserModel = require(pathTop + 'Models/User');  
+
+const GroupLogic = require( pathTop + "Logics/v3/Group");
 
 const GroupsController = function(){};
 _.extend(GroupsController.prototype, APIBase.prototype);
@@ -31,7 +32,7 @@ GroupsController.prototype.init = function(app){
         const q = self.checkQueries(request.query);
         if (!q) return response.status(Const.httpCodeBadParameter).send("Bad Parameters");
 
-        SearchGroupLogic.search(request.user, q.keyword, q.offset, q.limit, q.sort, q.fields, (result, err) => {
+        GroupLogic.search(request.user, q.keyword, q.offset, q.limit, q.sort, q.fields, (result, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 groups: result.list
             }); 
@@ -47,7 +48,6 @@ GroupsController.prototype.init = function(app){
     router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
         
         const form = new formidable.IncomingForm();
-        let error = null;
         let users = [];
 
         async.waterfall([
@@ -59,21 +59,22 @@ GroupsController.prototype.init = function(app){
             },
             // Validate presense
             (result, done) => {
-                error = self.validatePresenceAndMaxLength(result.fields);
-                done(error, result);
+                self.validatePresenceAndMaxLength(result.fields, (err) => {
+                    done(err, result);
+                });
             },
             //Validate the new name is duplicated, or not.
             (result, done) => {
-                self.validateDuplication(result.fields.name, request.user.organizationId, (error) => {
-                    done(error, result);   
+                self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
+                    done(err, result);   
                 });
             },
             // Validate the set users exist in database, or not.
             (result, done) => {       
                 if (result.fields.users) {
                     users = result.fields.users.split(",");                    
-                    self.validateUsersPresence(users, request.user.organizationId, (error) => {
-                        done(error, result);  
+                    self.validateUsersPresence(users, request.user.organizationId, (err) => {
+                        done(err, result);  
                     });
                 } else {
                     done(null, result);
@@ -89,7 +90,7 @@ GroupsController.prototype.init = function(app){
             const description = result.fields.description;
             const avatar = result.avatar;
 
-            CreateGroupLogic.create(request.user, name, sortName, description, users, avatar, (createdGroup, err) => {
+            GroupLogic.create(request.user, name, sortName, description, users, avatar, (createdGroup, err) => {
                 self.successResponse(response, Const.responsecodeSucceed, {
                     group: createdGroup
                 });
@@ -114,8 +115,15 @@ GroupsController.prototype.init = function(app){
         if (!q) 
             return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
         
-        GetGroupDetailsLogic.get(groupId ,q.fields, (result, err) => {
+        GroupLogic.getDetails(groupId ,q.fields, (group, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
+                group: group
+            }); 
+        }, (err) => {
+            console.log("Critical Error", err);
+            return self.errorResponse(response, Const.httpCodeServerError);
+        });
+    });
                 group: result
             }); 
         }, (err) => {
@@ -130,7 +138,7 @@ GroupsController.prototype.init = function(app){
  * The following is the validation functions
  */
 
-GroupsController.prototype.validatePresenceAndMaxLength = (values) => {
+GroupsController.prototype.validatePresenceAndMaxLength = (values, callback) => {
     let error = null;
     if (!values.name) {
         error = Const.httpCodeBadParameter;
@@ -141,22 +149,7 @@ GroupsController.prototype.validatePresenceAndMaxLength = (values) => {
     } else if (values.description && values.description.length > Const.descriptionMaxLength) {
         error = Const.httpCodeBadParameter;
     }
-    return error;
-}
-
-GroupsController.prototype.validateDuplication = (values) => {
-    const groupModel = GroupModel.get();  
-    groupModel.findOne({
-        name: result.fields.name,
-        organizationId: request.user.organizationId,
-        type: Const.groupType.group
-    }, (err, foundGroup) => {
-        if (foundGroup) {
-            return Const.httpCodeBadParameter;
-        } else {
-            return null;
-        }
-    });
+    callback(error);
 }
 
 GroupsController.prototype.validateDuplication = (name, organizationId, callback) => {
