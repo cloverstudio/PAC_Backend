@@ -95,7 +95,10 @@ GroupsController.prototype.init = function(app){
             // Validate the set users exist in database, or not.
             (result, done) => {       
                 if (result.fields.users) {
-                    users = result.fields.users.split(",");                    
+                    users = result.fields.users.split(",");
+                    users = _.map(users, (user) => {
+                        return user.trim();
+                    });                  
                     self.validateUsersPresence(users, request.user.organizationId, (err) => {
                         done(err, result);  
                     });
@@ -200,7 +203,10 @@ GroupsController.prototype.init = function(app){
             // Validate the set users exist in database, or not.
             (result, done) => {
                 if (result.fields.users) {
-                    users = result.fields.users.split(",");                    
+                    users = result.fields.users.split(",");   
+                    users = _.map(users, (user) => {
+                        return user.trim();
+                    });                 
                     self.validateUsersPresence(users, request.user.organizationId, (err) => {
                         done(err, result);  
                     });
@@ -271,7 +277,7 @@ GroupsController.prototype.validateDuplication = (name, organizationId, callback
 }
 
 GroupsController.prototype.validateUsersPresence = (users, organizationId, callback) => {
-    const userModel = UserModel.get();                    
+    const userModel = UserModel.get();
     const conditions = {
         $and: [
             {organizationId: organizationId},

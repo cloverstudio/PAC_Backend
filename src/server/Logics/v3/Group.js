@@ -182,6 +182,12 @@ const Group = {
                     done(err, result);
                 });
             },
+            // Add groupid to the groups field of user model which added to group
+            (result, done) => {
+                Group.addGroupToUser(users, result.createdGroup.id, (err) => {
+                    done(err, result);
+                });
+            },
             // Update organization disk usage
             (result, done) => {
                 const file = result.saveData.avatar;
@@ -269,6 +275,7 @@ const Group = {
                     done(null, result);
                 }
             },
+            // Update data
             (result, done) => {
                 groupModel.update({ _id: groupId }, result.updateParams, (err, updated) => {
                     done(err, result);
@@ -296,7 +303,26 @@ const Group = {
         (err, result) => {
             if(err && onError) return onError(err);
             if(onSuccess) onSuccess(result);
-        });
+        });    
+    },
+    addGroupToUser: (newUsers, groupId, callback) => {
+        if (newUsers) {
+            const userModel = UserModel.get();
+            _.each(newUsers, (userId, index) => {
+                userModel.findOne({_id: userId}, {groups:1}, (err, foundUser) => {
+                    if (err) return done(err, result);
+                    let groups = [];
+                    groups.push(foundUser.groups, groupId);
+                    groups = _.flatten(groups);       
+                    groups = _.compact(groups);
+                    foundUser.groups = _.uniq(groups);
+                    foundUser.save();
+                }); 
+            });
+            callback(null);                    
+        } else {
+            done(null);
+        }
     }
 };
 
