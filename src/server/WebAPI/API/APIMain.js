@@ -23,6 +23,7 @@ var APIMain ={
         router.use("/message/list", require("./Controllers/MessageListController").init(app));
 
         router.use("/groups", require("./Controllers/GroupsController").init(app));        
+        router.use("/users", require("./Controllers/UsersController").init(app));        
         
         return router;
     }
