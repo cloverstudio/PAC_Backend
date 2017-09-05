@@ -8,7 +8,7 @@ info:
 schemes:
   - http
   - https
-host: 'localhost:3000'
+host: 'spika.chat'
 basePath: /api/v3
 tags:
   - name: Sign in
@@ -828,10 +828,6 @@ paths:
           type: string
           name: description
           description: Descripiton of new group
-        - in: formData
-          type: string
-          name: users
-          description: User ids list of new group by string separated by comma
         - in: formData
           type: file
           name: avatar

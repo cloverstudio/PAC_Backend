@@ -102,22 +102,6 @@ describe('API', function () {
                 .expect(422, done)
         });
 
-        it('returns 422, if users has not existing user\'s id', (done) => {
-            const name = 'group_' + global.getRandomStr();
-            const sortName = name.toLowerCase();
-            const description = 'Description of ' + name;
-            request(app)
-                .put('/api/v3/groups/' + global.createdGroup.id)
-                .set('apikey', global.apikey)
-                .set('access-token', global.user1.apiaccesstoken)
-                .field('name', name)
-                .field('sortName', sortName)                
-                .field('description', description)
-                .field('users', global.user1._id + "," + "notExistUserId" + "," + global.user3._id)
-                .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
-        });
-
         it('Update groups works without params', (done) => {
             const name = 'group_' + global.getRandomStr();
             const description = 'Description of ' + name;

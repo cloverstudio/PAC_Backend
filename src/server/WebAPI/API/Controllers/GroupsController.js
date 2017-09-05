@@ -30,7 +30,6 @@ GroupsController.prototype.init = function(app){
      * @api {get} /api/v3/groups/ get group list
      **/
     router.get('/',checkAPIKey, (request,response) => {
-
         const q = self.checkQueries(request.query);
         if (!q) return response.status(Const.httpCodeBadParameter).send("Bad Parameters");
 
@@ -44,11 +43,11 @@ GroupsController.prototype.init = function(app){
         });
     });
 
+
     /**
      * @api {post} /api/v3/groups create a new group
      */
     router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
-        
         let form = new formidable.IncomingForm();
         let users = [];
         const uploadPathError = self.checkUploadPath();
@@ -126,12 +125,12 @@ GroupsController.prototype.init = function(app){
             }); 
         });
     });
+    
 
     /**
      * @api {get} /api/v3/groups/{groupId} get group details
      **/
     router.get('/:groupId',checkAPIKey, (request,response) => {
-        
         const groupId = request.params.groupId;        
         const q = self.checkQueries(request.query);
 
@@ -151,11 +150,11 @@ GroupsController.prototype.init = function(app){
         });
     });
 
+
     /**
      * @api {put} /api/v3/groups/{groupId} edit group details
      **/
     router.put('/:groupId', checkAPIKey, checkUserAdmin, (request,response) => {
-        
         const groupId = request.params.groupId;
         let form = new formidable.IncomingForm();
         let users = [];
@@ -199,20 +198,6 @@ GroupsController.prototype.init = function(app){
                 self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
-            },
-            // Validate the set users exist in database, or not.
-            (result, done) => {
-                if (result.fields.users) {
-                    users = result.fields.users.split(",");   
-                    users = _.map(users, (user) => {
-                        return user.trim();
-                    });                 
-                    self.validateUsersPresence(users, request.user.organizationId, (err) => {
-                        done(err, result);  
-                    });
-                } else {
-                    done(null, result);
-                }
             }
         ],
         (err, result) => {
@@ -224,15 +209,50 @@ GroupsController.prototype.init = function(app){
             const description = result.fields.description;
             const avatar = result.avatar;
 
-            GroupLogic.update(groupId ,request.user, name, sortName, description, users, avatar, (updated, err) => {
-                self.successResponse(response, Const.responsecodeSucceed, {
-                    group: updated
-                }); 
+            GroupLogic.update(groupId, request.user, name, sortName, description, avatar, (updated, err) => {
+                self.successResponse(response, Const.responsecodeSucceed); 
             }, (err) => {
                 console.log("Critical Error", err);
                 return self.errorResponse(response, Const.httpCodeServerError);
             });
         });
+    });
+
+
+    /**
+     * @api {delete} /api/v3/groups/{groupId} delete group details
+     **/
+    router.delete('/:groupId',checkAPIKey, checkUserAdmin, (request,response) => {
+        const groupId = request.params.groupId;        
+        // Check params
+        async.waterfall([
+            (done) => {
+                if (!mongoose.Types.ObjectId.isValid(groupId)) {
+                    done(Const.httpCodeBadParameter, null);
+                } else {
+                    done(null, null);
+                }
+            },
+            // get group which should be deleted
+            (result, done) => {
+                const groupModel = GroupModel.get();
+                groupModel.findOne({_id: groupId}, (err, foundGroup) => {
+                    if (!foundGroup) return done(Const.httpCodeBadParameter, null);
+                    done(err, { group: foundGroup })
+                });
+            },
+        ],
+        (err, result) => {
+            if (err === Const.httpCodeBadParameter)
+                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            
+            GroupLogic.delete(result.group, request.user, (group, err) => {
+                self.successResponse(response, Const.responsecodeSucceed); 
+            }, (err) => {
+                console.log("Critical Error", err);
+                return self.errorResponse(response, Const.httpCodeServerError);
+            });
+        })
     });
 
     return router;

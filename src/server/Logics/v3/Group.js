@@ -7,17 +7,15 @@ const Path = require('path');
 const easyImg = require('easyimage');
 const GroupModel = require('../../Models/Group');
 const UserModel = require('../../Models/User');
+const HistoryModel = require('../../Models/History');
 const OrganizationModel = require('../../Models/Organization');
 const UpdateOrganizationDiskUsageLogic = require('./UpdateOrganizationDiskUsage')
 const PermissionLogic = require('./Permission');
 
 const Group = {
-
     search: (user, keyword, offset, limit, sort, fields, onSuccess, onError) => {
-        
         const organizationId = user.organizationId;
         const groupModel = GroupModel.get();
-        
         async.waterfall([
             (done) => {
                 // get departments
@@ -100,20 +98,15 @@ const Group = {
             if(onSuccess) onSuccess(result);
         });  
     },
-    
     create: (baseUser, name, sortName, description, users, avatar, onSuccess, onError) => {
-        
         const groupModel = GroupModel.get();
         const organizationId = baseUser.organizationId;
-
         async.waterfall([
             // Get latest organization data
             (done) => {
-                let result = {};
                 const organizationModel = OrganizationModel.get();                
                 organizationModel.findOne({_id: organizationId}, (err, organization) => {
-                    result.organization = organization;
-                    done(err, result);
+                    done(err, { organization: organization });
                 });
             },
             // Check number of groups in organization   
@@ -208,7 +201,6 @@ const Group = {
             if(onSuccess) onSuccess(result.createdGroup);
         });  
     },
-
     getDetails: (groupId, fields, onSuccess, onError) => {
         const groupModel = GroupModel.get();
         groupModel.findOne({ _id: groupId }, fields, (err,foundGroup) => {
@@ -219,18 +211,13 @@ const Group = {
             if(onSuccess) onSuccess(result);
         });
     },
-
-    update: (groupId, baseUser, name, sortName, description, users, avatar, onSuccess, onError) => {
-
+    update: (groupId, baseUser, name, sortName, description, avatar, onSuccess, onError) => {
         const groupModel = GroupModel.get();        
-
         async.waterfall([
             (done) => {
                 // get original data
-                let result = {};
                 groupModel.findOne({_id: groupId}, (err, original) => {
-                    result.original = original;
-                    done(err, result);
+                    done(err, {original: original});
                 });
             },
             (result, done) => {
@@ -241,7 +228,6 @@ const Group = {
                     name: newName,
                     sortName: newSortName,
                     description: newDescription,
-                    users: users
                 };
                 if (avatar) {
                     easyImg.thumbnail({
@@ -304,6 +290,49 @@ const Group = {
             if(err && onError) return onError(err);
             if(onSuccess) onSuccess(result);
         });    
+    },
+    delete: (group, user, onSuccess, onError) =>  {
+        const groupModel = GroupModel.get();
+        async.waterfall([
+            (done) => {
+                groupModel.remove({_id: group.id}, (err, deleted) => {
+                    done(err, { group: group });
+                });
+            },
+            // Update organization disk usage
+            (result, done) => {
+                const pictureSize = result.group.avatar.picture.size;
+                const thumbnailSize = result.group.avatar.thumbnail.size;
+                if (pictureSize) {
+                    let size = - (pictureSize + thumbnailSize);
+                    UpdateOrganizationDiskUsageLogic.update(user.organizationId, size, (err, updated) => {
+                        done(err, result);
+                    });
+                } else {
+                    done(null, result);
+                }
+            },
+            // remove group from user's groups
+            (result, done) => {
+                const userModel = UserModel.get();
+                _.each(group.users, (user) => {
+                    userModel.update({_id: user, groups: group.id}, {$pull: {groups: group.id}}, (err, updated) => {
+                        done(err, result);
+                    });
+                });
+            },
+            // remove history
+            (result, done) => {
+                const historyModel = HistoryModel.get();                
+                historyModel.remove({chatId: group.id}, (err, deleted) => {
+                    done(err, result);
+                });
+            }
+        ],
+        (err, result) => {
+            if(err && onError) return onError(err);
+            if(onSuccess) onSuccess(result);
+        });
     },
     addGroupToUser: (newUsers, groupId, callback) => {
         if (newUsers) {
