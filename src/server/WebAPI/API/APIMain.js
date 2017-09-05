@@ -21,6 +21,8 @@ var APIMain ={
         router.use("/file/upload", require("./Controllers/FileUploadController").init(app));
         router.use("/file/download", require("./Controllers/FileDownloadController").init(app));
         router.use("/message/list", require("./Controllers/MessageListController").init(app));
+
+        router.use("/groups", require("./Controllers/GroupsController").init(app));        
         
         return router;
     }

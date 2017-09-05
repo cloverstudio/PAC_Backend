@@ -13,7 +13,7 @@ describe('API', function () {
             request(app)
                 .post('/api/v3/message/send')
                 .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .send({
                     targetType:1, // private message
                     target: global.user1.userid,
@@ -42,7 +42,7 @@ describe('API', function () {
             request(app)
                 .post('/api/v3/file/upload')
                 .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .attach('file', './src/server/test/samplefiles/max.jpg')
                 .expect(200) 
                 .end(function (err, res) {
@@ -60,7 +60,7 @@ describe('API', function () {
                 request(app)
                     .post('/api/v3/message/send')
                     .set('apikey', global.apikey)
-                    .set('access-token', global.apiaccesstoken)
+                    .set('access-token', global.user2.apiaccesstoken)
                     .send({
                         targetType:1, // private message
                         target: global.user1.userid,
@@ -104,7 +104,7 @@ describe('API', function () {
             request(app)
                 .post('/api/v3/message/send')
                 .set('apikey', "sss")
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(401) 
                 .end(function (err, res) {
 
