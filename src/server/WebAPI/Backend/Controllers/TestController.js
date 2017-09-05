@@ -63,7 +63,8 @@ TestController.prototype.init = function(app){
                 password: body.password,
                 organizationId : body.organizationId,
                 created: Utils.now(),
-                status: 1
+                status: 1,
+                permission: body.permission
                     
             });
             
@@ -136,8 +137,8 @@ TestController.prototype.init = function(app){
                         description: fields.description,
                         created: Utils.now(),
                         organizationId: fields.organizationId,
-                        users: fields.users.split(',')
-
+                        users: fields.users.split(','),
+                        type: fields.type
                     };
 
                     if (file) {
@@ -228,7 +229,12 @@ TestController.prototype.init = function(app){
             var org = new model({
                 name: body.name,
                 organizationId:body.name,
+                sortName: body.name,
                 created: Utils.now(),
+                maxUserNumber: body.maxUserNumber,
+                maxGroupNumber: body.maxGroupNumber,
+                maxRoomNumber: body.maxRoomNumber,
+                diskQuota: body.diskQuota,
                 status: 1
             });
             

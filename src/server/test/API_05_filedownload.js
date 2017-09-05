@@ -13,7 +13,7 @@ describe('API', function () {
             request(app)
                 .get('/api/v3/file/download/' + global.APIFile1)
                 .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(200) 
                 .end(function (err, res) {
 
@@ -32,7 +32,7 @@ describe('API', function () {
             request(app)
                 .get('/api/v3/file/download/' + global.APIFile1)
                 .set('apikey', "sss")
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(401) 
                 .end(function (err, res) {
 

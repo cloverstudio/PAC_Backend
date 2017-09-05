@@ -16,7 +16,7 @@ describe('API', function () {
             request(app)
                 .get('/api/v3/message/list/' + roomID + '/0/old')
                 .set('apikey', global.apikey)
-                .set('access-token', global.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(200) 
                 .end(function (err, res) {
 
