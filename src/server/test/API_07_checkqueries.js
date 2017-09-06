@@ -47,9 +47,12 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(2); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(5); 
                 res.body.groups[0].name.should.equal(global.group3.name);
                 res.body.groups[1].name.should.equal(global.group4.name);
+                res.body.groups[2].name.should.equal(global.department1.name);
+                res.body.groups[3].name.should.equal(global.department2.name);
+                res.body.groups[4].name.should.equal(global.department3.name);                
                 done();
             });
         });
@@ -63,7 +66,7 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4);                 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7);                 
                 done();
             });
         });
@@ -116,7 +119,7 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 done();
             });
         });
@@ -130,7 +133,7 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 done();
             });
         });
@@ -161,11 +164,14 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 res.body.groups[0].name.should.equal(global.group4.name);
                 res.body.groups[1].name.should.equal(global.group3.name);
                 res.body.groups[2].name.should.equal(global.group2.name);
-                res.body.groups[3].name.should.equal(global.group1.name);                
+                res.body.groups[3].name.should.equal(global.group1.name); 
+                res.body.groups[4].name.should.equal(global.department3.name);
+                res.body.groups[5].name.should.equal(global.department2.name);
+                res.body.groups[6].name.should.equal(global.department1.name);               
                 done();
             });
         });
@@ -179,11 +185,14 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
-                res.body.groups[0].name.should.equal(global.group1.name);
-                res.body.groups[1].name.should.equal(global.group2.name);
-                res.body.groups[2].name.should.equal(global.group3.name);
-                res.body.groups[3].name.should.equal(global.group4.name);
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
+                res.body.groups[0].name.should.equal(global.department1.name);                
+                res.body.groups[1].name.should.equal(global.department2.name);
+                res.body.groups[2].name.should.equal(global.department3.name); 
+                res.body.groups[3].name.should.equal(global.group1.name);
+                res.body.groups[4].name.should.equal(global.group2.name);
+                res.body.groups[5].name.should.equal(global.group3.name);
+                res.body.groups[6].name.should.equal(global.group4.name);               
                 done();
             });
         });
@@ -197,11 +206,14 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 res.body.groups[0].name.should.equal(global.group1.name);
                 res.body.groups[1].name.should.equal(global.group2.name);
                 res.body.groups[2].name.should.equal(global.group3.name);
-                res.body.groups[3].name.should.equal(global.group4.name);
+                res.body.groups[3].name.should.equal(global.group4.name); 
+                res.body.groups[4].name.should.equal(global.department1.name);                
+                res.body.groups[5].name.should.equal(global.department2.name);
+                res.body.groups[6].name.should.equal(global.department3.name); 
                 done();
             });
         });
@@ -215,11 +227,14 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 res.body.groups[0].name.should.equal(global.group4.name);
                 res.body.groups[1].name.should.equal(global.group3.name);
                 res.body.groups[2].name.should.equal(global.group2.name);
-                res.body.groups[3].name.should.equal(global.group1.name);                
+                res.body.groups[3].name.should.equal(global.group1.name); 
+                res.body.groups[4].name.should.equal(global.department3.name);
+                res.body.groups[5].name.should.equal(global.department2.name);
+                res.body.groups[6].name.should.equal(global.department1.name);                
                 done();
             });
         });
@@ -233,11 +248,14 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 res.body.groups[0].name.should.equal(global.group1.name);
                 res.body.groups[1].name.should.equal(global.group2.name);
                 res.body.groups[2].name.should.equal(global.group3.name);
                 res.body.groups[3].name.should.equal(global.group4.name);
+                res.body.groups[4].name.should.equal(global.department1.name);
+                res.body.groups[5].name.should.equal(global.department2.name);
+                res.body.groups[6].name.should.equal(global.department3.name); 
                 done();
             });
         });
@@ -271,7 +289,7 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 res.body.groups[0].should.have.keys('name','id','created');     
                 res.body.groups[0].should.not.have.keys(
                     'sortName', 'description', 'organizationId', '__v', 'users', 'avatar', 'type'
@@ -289,7 +307,7 @@ describe('API', () => {
             .end((err, res) => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
-                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4); 
+                res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7); 
                 res.body.groups[0].should.have.keys(
                     'name','id', 'sortName', 'description', 
                     'created', 'organizationId', '__v', 

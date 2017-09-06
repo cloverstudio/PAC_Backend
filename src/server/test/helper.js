@@ -109,6 +109,27 @@ global.group4 = {
     type: 1
 }
 
+global.department1 = {
+    name: "department1",
+    description: "DESCRIPTIPN department1",
+    users: [],
+    type: 2
+}
+
+global.department2 = {
+    name: "department2",
+    description: "DESCRIPTIPN department2",
+    users: [],
+    type: 2
+}
+
+global.department3 = {
+    name: "department3",
+    description: "DESCRIPTIPN department3",
+    users: [],
+    type: 2
+}
+
 global.encryptedText = "0301b8a755b0d074259a98114f78b6738401681b3762c87d6f25249001e903067cc7009beae2288379e456e6856bb3c4f22084811c05d10fa7869ac660aec60c04259926d75506a83284368805bdaca07563";
 
 before(function(doneMain){
@@ -358,6 +379,63 @@ before(function(doneMain){
 
                 done(null, result);
             
+            });  
+            
+        },
+        function(result, done) {
+            
+            // create group
+            request(app)
+                .post('/api/v2/test/createtempgroup')
+                .field('name', global.department1.name)
+                .field('sortName', global.department1.name)
+                .field('description', global.department1.description)
+                .field('organizationId', global.organization1._id)
+                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.department1.type)                
+                .end(function (err, res) {
+                    if (err) throw err;
+                    global.department1._id = res.body.data.group._id;
+                    done(null, result);
+                });  
+        },
+        function(result, done) {
+            
+            // create group
+            request(app)
+                .post('/api/v2/test/createtempgroup')
+                .field('name', global.department2.name)
+                .field('sortName', global.department2.name)
+                .field('description', global.department2.description)
+                .field('organizationId', global.organization1._id)
+                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.department2.type)
+                .field('parentId', global.department1._id)
+                .attach('file', 'src/server/test/samplefiles/user4.png')
+                .end(function (err, res) {
+                if (err) throw err;
+                global.department2._id = res.body.data.group._id;
+                done(null, result);
+            });  
+            
+        },
+        function(result, done) {
+            
+            // create group
+            request(app)
+                .post('/api/v2/test/createtempgroup')
+                .field('name', global.department3.name)
+                .field('sortName', global.department3.name)
+                .field('description', global.department3.description)
+                .field('organizationId', global.organization1._id)
+                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('type', global.department3.type)                
+                .field('parentId', global.department1._id)                
+                .attach('file', 'src/server/test/samplefiles/user4.png')
+                .end(function (err, res) {
+                if (err) throw err;
+                global.department3._id = res.body.data.group._id;
+                done(null, result);
             });  
             
         }
