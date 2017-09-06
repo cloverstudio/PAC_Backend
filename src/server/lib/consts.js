@@ -192,8 +192,24 @@
     Const.APIKeyLength = 32;
 
     // For validation of api v3
+    Const.inputInfoMinLength = 6;
     Const.nameMaxLength = 64;
     Const.descriptionMaxLength = 512;
+
+    Const.errorMessage = {
+        nameNotExist: "Name is empty. Please input name.",
+        useridNotExist: "userid is empty. Please input userid.",
+        passwordNotExist: "password is empty. Please input password.",
+        useridTooShort: "userid is too short. Please input more than 6 characters.",
+        passwordTooShort: "password is too short. Please input more than 6 characters.",
+        nameTooLarge: "name is too large. Please input shorter than 64 characters.",
+        useridTooLarge: "userid is too large. Please input shorter than 64 characters.",
+        sortNameTooLarge: "sortName is too large. Please input shorter than 64 characters.",      
+        passwordTooLarge: "password is too large. Please input shorter than 64 characters.",
+        descriptionTooLarge: "description is too large. Please input shorter than 512 characters.",
+        groupDuplicated: "You already have the same name group. Change the name." ,
+        userDuplicated: "You already have the same name user. Change the name."   
+    }
 
     // Exports ----------------------------------------------
     module["exports"] = Const;

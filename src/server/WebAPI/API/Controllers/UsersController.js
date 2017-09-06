@@ -54,43 +54,22 @@ UsersController.prototype.init = function(app){
             },
             // Validate presense
             (result, done) => {
-                self.validatePresence(result.fields, (err) => {
+                self.validation(result.fields, (err) => {
                     done(err, result);
                 });
             },
-            // Validate text of max length
-            (result, done) => {
-                self.validateMaxLength(result.fields, (err) => {
-                    done(err, result);
-                });
-            },
-            //Validate the new name is duplicated, or not.
+            //Validate the new userid is duplicated, or not.
             (result, done) => {
                 if (uploadPathError) 
                     return done(uploadPathError, result);
-                
-                self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
+                self.validateDuplication(result.fields.userid, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
-            },
-            // Validate the set users exist in database, or not.
-            (result, done) => {       
-                if (result.fields.users) {
-                    users = result.fields.users.split(",");
-                    users = _.map(users, (user) => {
-                        return user.trim();
-                    });                  
-                    self.validateUsersPresence(users, request.user.organizationId, (err) => {
-                        done(err, result);  
-                    });
-                } else {
-                    done(null, result);
-                }
             }
         ],
         (err, result) => {
-            if (err === Const.httpCodeBadParameter)
-                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
 
             const name = result.fields.name;
             const sortName = result.fields.sortName;
@@ -244,62 +223,53 @@ UsersController.prototype.init = function(app){
  * The following is the validation functions
  */
 
-UsersController.prototype.validatePresence = (values, callback) => {
-    let error = null;
+UsersController.prototype.validation = (values, callback) => {
+    let error = {};
     if (!values.name) {
-        error = Const.httpCodeBadParameter;
-    } else if (!values.userId) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.nameNotExist;
+    } else if (!values.userid) {
+        error.message = Const.errorMessage.useridNotExist;
     } else if (!values.password) {
-        error = Const.httpCodeBadParameter;
-    }
-    callback(error);
-}
-
-UsersController.prototype.validateMaxLength = (values, callback) => {
-    let error = null;
-    if (values.name && values.name.length > Const.nameMaxLength) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.passwordNotExist;
+    } else if (values.name && values.name.length > Const.nameMaxLength) {
+        error.message = Const.errorMessage.nameTooLarge;
     } else if (values.sortName && values.sortName.length > Const.nameMaxLength) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.sortNameTooLarge;
     } else if (values.description && values.description.length > Const.descriptionMaxLength) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.descriptionTooLarge;
+    } else if (values.userid.length < Const.inputInfoMinLength) {
+        error.message = Const.errorMessage.useridTooShort;        
+    } else if (values.userid.length > Const.nameMaxLength) {
+        error.message = Const.errorMessage.useridTooLarge;                        
+    } else if (values.password.length < Const.inputInfoMinLength) {
+        error.message = Const.errorMessage.passwordTooShort;                
+    } else if (values.password.length > Const.nameMaxLength) {
+        error.message = Const.errorMessage.passwordTooLarge;                
+    }
+
+    if (error.message) {
+        error.code = Const.httpCodeBadParameter;
+    } else {
+        error = null;
     }
     callback(error);
 }
 
-UsersController.prototype.validateDuplication = (name, organizationId, callback) => {
-    const groupModel = GroupModel.get();  
-    groupModel.findOne({
-        name: name,
+UsersController.prototype.validateDuplication = (userid, organizationId, callback) => {
+    const userModel = UserModel.get();
+    userModel.findOne({
+        userid: userid,
         organizationId: organizationId,
-        type: Const.groupType.group
-    }, (err, foundGroup) => {
-        if (foundGroup) {
-            callback(Const.httpCodeBadParameter);
+    }, (err, foundUser) => {
+        if (foundUser) {
+            callback({ 
+                code: Const.httpCodeBadParameter, 
+                message: Const.errorMessage.userDuplicated
+            });
         } else {
             callback(null);
         }
     });
-}
-
-UsersController.prototype.validateUsersPresence = (users, organizationId, callback) => {
-    const userModel = UserModel.get();
-    const conditions = {
-        $and: [
-            {organizationId: organizationId},
-            { _id: { $in: users } }
-        ]
-    }
-    userModel.find(conditions,{_id:1}, (err, foundUsers) => {
-        if (err) return callback(Const.httpCodeBadParameter);
-        _.each(foundUsers, (user) => {
-            if(!_.includes(users, user._id.toString())) {
-                return callback(Const.httpCodeBadParameter);                                
-            }
-        });
-        callback(null);                                                            
-    }); 
 }
 
 module["exports"] = new UsersController();
