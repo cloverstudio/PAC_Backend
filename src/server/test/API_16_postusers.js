@@ -255,78 +255,121 @@ describe('API', () => {
                 });
         });
 
-        // it('Create users works without avatar file', (done) => {
-        //     const name = 'user_' + global.getRandomStr();
-        //     const description = 'Description of ' + name;
-        //     request(app)
-        //         .post('/api/v3/users/')
-        //         .set('apikey', global.apikey)
-        //         .set('access-token', global.user1.apiaccesstoken)
-        //         .field('name', name)
-        //         .field('userid', name)
-        //         .field('password', name)              
-        //         .field('sortName', "")                
-        //         .field('description', description)
-        //         .field('status', true)
-        //         .field('groups', global.group1._id + "," + global.group2._id)
-        //         .field('departments', "")
-        //         .field('permission', 1)
-        //         .field('password', name)
-        //         // .attach('avatar', 'src/server/test/samplefiles/max.jpg')                
-        //         .expect(200)
-        //         .end((err, res) => {
-        //             if (err) throw err;
-        //             res.body.should.have.property('user');                                        
-        //             res.body.group.name.should.equal(name);
-        //             res.body.group.userid.should.equal(name);
-        //             res.body.group.password.should.equal(name);                    
-        //             res.body.group.sortName.should.equal(name.toLowerCase());
-        //             res.body.group.description.should.equal(description);
-        //             res.body.group.status.should.equal(true);
-        //             res.body.group.groups.should.be.instanceof(Array).and.have.lengthOf(2);
-        //             res.body.group.users[0].should.equal(global.group1._id);
-        //             res.body.group.users[1].should.equal(global.group2._id);
-        //             res.body.group.should.not.have.property('avatar');
-        //             res.body.group.should.not.have.property('_id');
-        //             res.body.group.should.have.property('id'); 
-        //             done();
-        //         });
-        // });
+        it('return 422, if groupid in groups is not correct', (done) => {
+            const name = 'user_' + global.getRandomStr();
+            const description = 'Description of ' + name;
+            request(app)
+                .post('/api/v3/users/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .field('name', name)
+                .field('userid', name)
+                .field('password', name)              
+                .field('sortName', "")                
+                .field('description', description)
+                .field('status', "true")
+                .field('groups', global.group1._id + "," + "test")
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.includeGroupsNotExist);
+                    done();
+                });
+        });
 
-        // it('Create users works with avatar file', (done) => {
-        //     const name = 'user_' + global.getRandomStr();
-        //     const description = 'Description of ' + name;
-        //     request(app)
-        //         .post('/api/v3/users/')
-        //         .set('apikey', global.apikey)
-        //         .set('access-token', global.user1.apiaccesstoken)
-        //         .field('name', name)
-        //         .field('sortName', name.toLowerCase())                
-        //         .field('description', description)
-        //         .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id)
-        //         .attach('avatar', 'src/server/test/samplefiles/max.jpg')
-        //         .expect(200)
-        //         .end((err, res) => {
-        //             if (err) throw err;
-        //             res.body.should.have.property('group');                    
-        //             res.body.group.should.not.have.property('_id');
-        //             res.body.group.should.have.property('id');                     
-        //             res.body.group.should.have.property('name');
-        //             res.body.group.name.should.equal(name);
-        //             res.body.group.should.have.property('sortName');
-        //             res.body.group.sortName.should.equal(name.toLowerCase());
-        //             res.body.group.should.have.property('description');
-        //             res.body.group.description.should.equal(description);
-        //             res.body.group.users.should.be.instanceof(Array).and.have.lengthOf(3);
-        //             res.body.group.users[0].should.equal(global.user1._id);
-        //             res.body.group.users[1].should.equal(global.user2._id);
-        //             res.body.group.users[2].should.equal(global.user3._id);   
-        //             res.body.group.should.have.property('avatar');
-        //             res.body.group.avatar.should.have.property('picture');                    
-        //             res.body.group.avatar.should.have.property('thumbnail');
-        //             global.createdGroup = res.body.group;
-        //             done();
-        //         });
-        // });
+        it('return 422, if groups including not exist group.', (done) => {
+            const name = 'user_' + global.getRandomStr();
+            const description = 'Description of ' + name;
+            request(app)
+                .post('/api/v3/users/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .field('name', name)
+                .field('userid', name)
+                .field('password', name)              
+                .field('sortName', "")                
+                .field('description', description)
+                .field('status', "true")
+                .field('groups', global.group1._id + "," + global.user1._id)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.includeGroupsNotExist);
+                    done();
+                });
+        });
+
+        it('Create users works without avatar file', (done) => {
+            const name = 'user_' + global.getRandomStr();
+            const description = 'Description of ' + name;
+            request(app)
+                .post('/api/v3/users/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .field('name', name)
+                .field('userid', name)
+                .field('password', name)              
+                .field('sortName', "")                
+                .field('description', description)
+                .field('status', 1)
+                .field('groups', global.group1._id + "," + global.group2._id + "," + global.department2._id)
+                .field('permission', 1)
+                .field('password', name)
+                // .attach('avatar', 'src/server/test/samplefiles/max.jpg')                
+                .expect(200)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.body.should.have.property('user');
+                    res.body.user.name.should.equal(name);
+                    res.body.user.userid.should.equal(name);
+                    res.body.user.sortName.should.equal(name.toLowerCase());
+                    res.body.user.description.should.equal(description);
+                    res.body.user.status.should.equal(1);
+                    res.body.user.groups.should.be.instanceof(Array).and.have.lengthOf(3);
+                    res.body.user.groups[0].should.equal(global.group1._id);
+                    res.body.user.groups[1].should.equal(global.group2._id);
+                    res.body.user.groups[2].should.equal(global.department2._id);                                        
+                    res.body.user.should.not.have.property('_id');
+                    res.body.user.should.have.property('id'); 
+                    done();
+                });
+        });
+
+        it('Create users works with avatar file', (done) => {
+            const name = 'user_' + global.getRandomStr();
+            const description = 'Description of ' + name;
+            request(app)
+                .post('/api/v3/users/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .field('name', name)
+                .field('userid', name)
+                .field('password', name)              
+                .field('sortName', "")                
+                .field('description', description)
+                .field('status', 1)
+                .field('groups', global.group1._id + "," + global.group2._id + "," + global.department2._id)
+                .field('permission', 1)
+                .field('password', name)
+                .attach('avatar', 'src/server/test/samplefiles/max.jpg')                
+                .expect(200)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.body.should.have.property('user');
+                    res.body.user.name.should.equal(name);
+                    res.body.user.userid.should.equal(name);
+                    res.body.user.sortName.should.equal(name.toLowerCase());
+                    res.body.user.description.should.equal(description);
+                    res.body.user.status.should.equal(1);
+                    res.body.user.groups.should.be.instanceof(Array).and.have.lengthOf(3);
+                    res.body.user.groups[0].should.equal(global.group1._id);
+                    res.body.user.groups[1].should.equal(global.group2._id);
+                    res.body.user.groups[2].should.equal(global.department2._id);                    
+                    res.body.user.should.have.property('avatar');                     
+                    res.body.user.should.not.have.property('_id');
+                    res.body.user.should.have.property('id'); 
+                    done();
+                });
+        });
     });
 });

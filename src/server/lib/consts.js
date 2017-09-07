@@ -207,8 +207,11 @@
         sortNameTooLarge: "sortName is too large. Please input shorter than 64 characters.",      
         passwordTooLarge: "password is too large. Please input shorter than 64 characters.",
         descriptionTooLarge: "description is too large. Please input shorter than 512 characters.",
-        groupDuplicated: "You already have the same name group. Change the name." ,
-        userDuplicated: "You already have the same name user. Change the name."   
+        groupDuplicated: "You already have the same name group. Please change the name." ,
+        userDuplicated: "You already have the same name user. Please change the name.",
+        includeUsersNotExist: "Wrong users",
+        includeGroupsNotExist: "Wrong groups",
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization."
     }
 
     // Exports ----------------------------------------------
