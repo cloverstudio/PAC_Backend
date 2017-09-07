@@ -197,6 +197,7 @@
     Const.descriptionMaxLength = 512;
 
     Const.errorMessage = {
+        queryParamsNotCorrect: "Query parameters are not correct.",
         nameNotExist: "Name is empty. Please input name.",
         useridNotExist: "userid is empty. Please input userid.",
         passwordNotExist: "password is empty. Please input password.",
@@ -209,7 +210,10 @@
         descriptionTooLarge: "description is too large. Please input shorter than 512 characters.",
         groupDuplicated: "You already have the same name group. Please change the name." ,
         userDuplicated: "You already have the same name user. Please change the name.",
+        groupidIsWrong: "groupid is wrong. Please input the correct id",        
+        useridIsWrong: "userid is wrong. Please input the correct id",
         includeUsersNotExist: "Wrong users",
+        includeUsersNotExistInOrganiation: "Some userid in users doesn't exist in your organization.",        
         includeGroupsNotExist: "Wrong groups",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization."
     }

@@ -52,7 +52,12 @@ describe('API', () => {
                 .field('sortName', name)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.nameNotExist);
+                    done();
+                }); 
         });
 
         it('returns 422, if name has larger than the max length', (done) => {
@@ -67,7 +72,12 @@ describe('API', () => {
                 .field('sortName', name)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.nameTooLarge);
+                    done();
+                }); 
         });
 
         it('returns 422, if sortName has larger than the max length', (done) => {
@@ -82,7 +92,12 @@ describe('API', () => {
                 .field('sortName', sortName)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.sortNameTooLarge);
+                    done();
+                });
         });
 
         it('returns 422, if description has larger than the max length', (done) => {
@@ -97,7 +112,12 @@ describe('API', () => {
                 .field('sortName', sortName)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.descriptionTooLarge);
+                    done();
+                });
         });
 
         it('returns 422, if a new group name is already used', (done) => {
@@ -109,11 +129,36 @@ describe('API', () => {
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
-                .field('sortName', sortName)                
+                .field('sortName', sortName)     
                 .field('description', description)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.groupDuplicated);
+                    done();
+                });
+        });
+
+        it('return 422, if userid in users is not correct', (done) => {
+            const name = 'user_' + global.getRandomStr();
+            const description = 'Description of ' + name;
+            request(app)
+                .post('/api/v3/groups/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .field('name', name)
+                .field('sortName', name)                
+                .field('description', description)
+                .field('users', global.user1._id + "," + "wrong")
+                .attach('file', 'src/server/test/samplefiles/max.jpg')
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.includeUsersNotExist);
+                    done();
+                });
         });
 
         it('returns 422, if users has not existing user\'s id', (done) => {
@@ -129,7 +174,12 @@ describe('API', () => {
                 .field('description', description)
                 .field('users', global.user1._id + "," + "notExistUserId" + "," + global.user3._id)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.includeUsersNotExist);
+                    done();
+                });
         });
 
         it('Create groups works with only name', (done) => {

@@ -30,10 +30,12 @@ GroupsController.prototype.init = function(app){
      * @api {get} /api/v3/groups/ get group list
      **/
     router.get('/',checkAPIKey, (request,response) => {
-        const q = self.checkQueries(request.query);
-        if (!q) return response.status(Const.httpCodeBadParameter).send("Bad Parameters");
+        const query = self.checkQueries(request.query);
+        if (!query) 
+            return response.status(Const.httpCodeBadParameter)
+                        .send(Const.errorMessage.queryParamsNotCorrect);
 
-        GroupLogic.search(request.user, q.keyword, q.offset, q.limit, q.sort, q.fields, (result, err) => {
+        GroupLogic.search(request.user, query, (result, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 groups: result.list
             }); 
@@ -49,7 +51,6 @@ GroupsController.prototype.init = function(app){
      */
     router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
         let form = new formidable.IncomingForm();
-        let users = [];
         const uploadPathError = self.checkUploadPath();
 
         async.waterfall([
@@ -70,13 +71,13 @@ GroupsController.prototype.init = function(app){
                     done(err, result);
                 })
             },
-            // Validate presense
+            // Validate presence
             (result, done) => {
                 self.validatePresence(result.fields, (err) => {
                     done(err, result);
                 });
             },
-            // Validate text of max length
+            // Validate length
             (result, done) => {
                 self.validateMaxLength(result.fields, (err) => {
                     done(err, result);
@@ -86,19 +87,28 @@ GroupsController.prototype.init = function(app){
             (result, done) => {
                 if (uploadPathError) 
                     return done(uploadPathError, result);
-                
                 self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
             },
+            // Validate the userid in users is correct format.
+            (result, done) => {
+                if (result.fields.users) {
+                    const users = result.fields.users.split(",");
+                    result.fields.users = _.map(users, (user) => {
+                        return user.trim();
+                    });
+                    self.validateUserIdIsCorrect(result.fields.users, (err) => {
+                        done(err, result);  
+                    });
+                } else {
+                    done(null, result);
+                } 
+            },
             // Validate the set users exist in database, or not.
             (result, done) => {       
-                if (result.fields.users) {
-                    users = result.fields.users.split(",");
-                    users = _.map(users, (user) => {
-                        return user.trim();
-                    });                  
-                    self.validateUsersPresence(users, request.user.organizationId, (err) => {
+                if (result.fields.users) {              
+                    self.validateUsersPresence(result.fields.users, request.user.organizationId, (err) => {
                         done(err, result);  
                     });
                 } else {
@@ -107,15 +117,10 @@ GroupsController.prototype.init = function(app){
             }
         ],
         (err, result) => {
-            if (err === Const.httpCodeBadParameter)
-                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
 
-            const name = result.fields.name;
-            const sortName = result.fields.sortName;
-            const description = result.fields.description;
-            const avatar = result.avatar;
-
-            GroupLogic.create(request.user, name, sortName, description, users, avatar, (createdGroup, err) => {
+            GroupLogic.create(request.user, result.fields, result.avatar, (createdGroup, err) => {
                 self.successResponse(response, Const.responsecodeSucceed, {
                     group: createdGroup
                 });
@@ -132,15 +137,15 @@ GroupsController.prototype.init = function(app){
      **/
     router.get('/:groupId',checkAPIKey, (request,response) => {
         const groupId = request.params.groupId;        
-        const q = self.checkQueries(request.query);
+        const query = self.checkQueries(request.query);
 
         // Check params
         if (!mongoose.Types.ObjectId.isValid(groupId))
-            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
-        if (!q) 
-            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+        if (!query) 
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
         
-        GroupLogic.getDetails(groupId ,q.fields, (group, err) => {
+        GroupLogic.getDetails(groupId ,query.fields, (group, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 group: group
             }); 
@@ -157,14 +162,16 @@ GroupsController.prototype.init = function(app){
     router.put('/:groupId', checkAPIKey, checkUserAdmin, (request,response) => {
         const groupId = request.params.groupId;
         let form = new formidable.IncomingForm();
-        let users = [];
         const uploadPathError = self.checkUploadPath();          
         
         async.waterfall([
             // Validate the groupId is handleable by mongoose
             (done) => {
                 if (!mongoose.Types.ObjectId.isValid(groupId))
-                    return done(Const.httpCodeBadParameter)
+                    return done({
+                        code: Const.httpCodeBadParameter,
+                        message: Const.errorMessage.groupidIsWrong
+                    }, null);
                 done(null, null);
             },
             (result, done) => {
@@ -180,7 +187,7 @@ GroupsController.prototype.init = function(app){
                     }
                 }
                 form.parse(request, (err, fields, files) => {
-                    const result = { avatar: files.avatar, fields: fields }
+                    result = { avatar: files.avatar, fields: fields }
                     done(err, result);
                 })
             },
@@ -194,22 +201,40 @@ GroupsController.prototype.init = function(app){
             (result, done) => {
                 if (uploadPathError) 
                     return done(uploadPathError, result);
-
                 self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
+            },
+            // Validate the userid in users is correct format.
+            (result, done) => {
+                if (result.fields.users) {
+                    const users = result.fields.users.split(",");
+                    result.fields.users = _.map(users, (user) => {
+                        return user.trim();
+                    });
+                    self.validateUserIdIsCorrect(result.fields.users, (err) => {
+                        done(err, result);  
+                    });
+                } else {
+                    done(null, result);
+                } 
+            },
+            // Validate the set users exist in database, or not.
+            (result, done) => {       
+                if (result.fields.users) {              
+                    self.validateUsersPresence(result.fields.users, request.user.organizationId, (err) => {
+                        done(err, result);  
+                    });
+                } else {
+                    done(null, result);
+                }
             }
         ],
         (err, result) => {
-            if (err === Const.httpCodeBadParameter)
-                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
 
-            const name = result.fields.name;
-            const sortName = result.fields.sortName;
-            const description = result.fields.description;
-            const avatar = result.avatar;
-
-            GroupLogic.update(groupId, request.user, name, sortName, description, avatar, (updated, err) => {
+            GroupLogic.update(groupId, request.user, result.fields, result.avatar, (updated, err) => {
                 self.successResponse(response, Const.responsecodeSucceed); 
             }, (err) => {
                 console.log("Critical Error", err);
@@ -228,7 +253,10 @@ GroupsController.prototype.init = function(app){
         async.waterfall([
             (done) => {
                 if (!mongoose.Types.ObjectId.isValid(groupId)) {
-                    done(Const.httpCodeBadParameter, null);
+                    done({
+                        code: Const.httpCodeBadParameter,
+                        message: Const.errorMessage.groupidIsWrong
+                    }, null);
                 } else {
                     done(null, null);
                 }
@@ -237,14 +265,23 @@ GroupsController.prototype.init = function(app){
             (result, done) => {
                 const groupModel = GroupModel.get();
                 groupModel.findOne({_id: groupId}, (err, foundGroup) => {
-                    if (!foundGroup) return done(Const.httpCodeBadParameter, null);
-                    done(err, { group: foundGroup })
+                    if (!foundGroup) {
+                        return done({
+                            code: Const.httpCodeBadParameter,
+                            message: Const.errorMessage.groupidIsWrong
+                        }, null);
+                    }
+                    if (err) {
+                        const e = { code: err.status, message: err.text };
+                        return done(e, result);
+                    }
+                    done(null, { group: foundGroup })
                 });
             },
         ],
         (err, result) => {
-            if (err === Const.httpCodeBadParameter)
-                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
             
             GroupLogic.delete(result.group, request.user, (group, err) => {
                 self.successResponse(response, Const.responsecodeSucceed); 
@@ -263,20 +300,33 @@ GroupsController.prototype.init = function(app){
  */
 
 GroupsController.prototype.validatePresence = (values, callback) => {
-    let error = null;
-    if (!values.name)
-        error = Const.httpCodeBadParameter;
+    let error = {};
+    if (!values.name) {
+        error.message = Const.errorMessage.nameNotExist;
+    }
+
+    if (error.message) {
+        error.code = Const.httpCodeBadParameter;
+    } else {
+        error = null;
+    }
     callback(error);
 }
 
 GroupsController.prototype.validateMaxLength = (values, callback) => {
-    let error = null;
+    let error = {};
     if (values.name && values.name.length > Const.nameMaxLength) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.nameTooLarge;
     } else if (values.sortName && values.sortName.length > Const.nameMaxLength) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.sortNameTooLarge;
     } else if (values.description && values.description.length > Const.descriptionMaxLength) {
-        error = Const.httpCodeBadParameter;
+        error.message = Const.errorMessage.descriptionTooLarge;
+    }
+
+    if (error.message) {
+        error.code = Const.httpCodeBadParameter;
+    } else {
+        error = null;
     }
     callback(error);
 }
@@ -289,11 +339,27 @@ GroupsController.prototype.validateDuplication = (name, organizationId, callback
         type: Const.groupType.group
     }, (err, foundGroup) => {
         if (foundGroup) {
-            callback(Const.httpCodeBadParameter);
+            callback({
+                code: Const.httpCodeBadParameter,
+                message: Const.errorMessage.groupDuplicated
+            });
         } else {
             callback(null);
         }
     });
+}
+
+GroupsController.prototype.validateUserIdIsCorrect = (users, callback) => {
+    let err = null;
+    _.each(users, (userid) => {
+        if (!mongoose.Types.ObjectId.isValid(userid)) {
+            err = {
+                code: Const.httpCodeBadParameter,
+                message: Const.errorMessage.includeUsersNotExist
+            };
+        }
+    });
+    callback(err);   
 }
 
 GroupsController.prototype.validateUsersPresence = (users, organizationId, callback) => {
@@ -305,10 +371,24 @@ GroupsController.prototype.validateUsersPresence = (users, organizationId, callb
         ]
     }
     userModel.find(conditions,{_id:1}, (err, foundUsers) => {
-        if (err) return callback(Const.httpCodeBadParameter);
+        if (err) {
+            return callback({
+                code: Const.httpCodeBadParameter,
+                message: err.message
+            });
+        }
+        if (users.length!==foundUsers.length) {
+            return callback({
+                code: Const.httpCodeBadParameter,
+                message: Const.errorMessage.includeUsersNotExist
+            }); 
+        }
         _.each(foundUsers, (user) => {
             if(!_.includes(users, user._id.toString())) {
-                return callback(Const.httpCodeBadParameter);                                
+                return callback({
+                    code: Const.httpCodeBadParameter,
+                    message: Const.errorMessage.includeUsersNotExistInOrganiation
+                });   
             }
         });
         callback(null);                                                            

@@ -13,7 +13,7 @@ const UpdateOrganizationDiskUsageLogic = require('./UpdateOrganizationDiskUsage'
 const PermissionLogic = require('./Permission');
 
 const Group = {
-    search: (user, keyword, offset, limit, sort, fields, onSuccess, onError) => {
+    search: (user, params, onSuccess, onError) => {
         const organizationId = user.organizationId;
         const groupModel = GroupModel.get();
         async.waterfall([
@@ -34,29 +34,29 @@ const Group = {
                         ]}
                     ]
                 }
-                if(!_.isEmpty(keyword)){
+                if(!_.isEmpty(params.keyword)){
                     conditions['$and'].push(
                         { "$or" : 
                             [
-                                { name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
-                                { description: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") }
+                                { name: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") },
+                                { description: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") }
                             ]
                         }
                     );
                 }
 
-                const query = groupModel.find(conditions, fields)
-                .skip(offset)
-                .sort(sort)
-                .limit(limit);
+                const query = groupModel.find(conditions, params.fields)
+                .skip(params.offset)
+                .sort(params.sort)
+                .limit(params.limit);
 
                 query.exec((err,data) => {
                     data = data.map((item) => {
                         return item.toObject();
                     });
                     _.each(data, (group, index) => {
-                        data[index]["id"] = group["_id"];
-                        delete data[index]["_id"];
+                        data[index].id = group._id;
+                        delete data[index]._id;
                     })
                     result.list = data;
                     done(err,result);
@@ -98,7 +98,7 @@ const Group = {
             if(onSuccess) onSuccess(result);
         });  
     },
-    create: (baseUser, name, sortName, description, users, avatar, onSuccess, onError) => {
+    create: (baseUser, params, avatar, onSuccess, onError) => {
         const groupModel = GroupModel.get();
         const organizationId = baseUser.organizationId;
         async.waterfall([
@@ -123,14 +123,14 @@ const Group = {
             // save a new group data
             (result, done) => {
                 
-                const sort = sortName ? sortName : name.toLowerCase();
+                const sort = params.sortName ? params.sortName : params.name.toLowerCase();
                 result.saveData = {
-                    name: name,
+                    name: params.name,
                     sortName: sort,
-                    description: description,
+                    description: params.description,
                     created: Utils.now(),
                     organizationId: organizationId,
-                    users: users,
+                    users: params.users,
                     type: Const.groupType.group
                 }
 
@@ -177,7 +177,7 @@ const Group = {
             },
             // Add groupid to the groups field of user model which added to group
             (result, done) => {
-                Group.addGroupToUser(users, result.createdGroup.id, (err) => {
+                Group.addGroupToUser(params.users, result.createdGroup.id, (err) => {
                     done(err, result);
                 });
             },
@@ -211,7 +211,7 @@ const Group = {
             if(onSuccess) onSuccess(result);
         });
     },
-    update: (groupId, baseUser, name, sortName, description, avatar, onSuccess, onError) => {
+    update: (groupId, baseUser, params, avatar, onSuccess, onError) => {
         const groupModel = GroupModel.get();        
         async.waterfall([
             (done) => {
@@ -221,9 +221,9 @@ const Group = {
                 });
             },
             (result, done) => {
-                const newName = name ? name : result.original.name;
-                const newDescription = description ? description : result.original.description;
-                const newSortName = sortName ? sortName : newName.toLowerCase();                    
+                const newName = params.name ? params.name : result.original.name;
+                const newDescription = params.description ? params.description : result.original.description;
+                const newSortName = params.sortName ? params.sortName : newName.toLowerCase();                    
                 result.updateParams = {
                     name: newName,
                     sortName: newSortName,
@@ -237,7 +237,7 @@ const Group = {
                         height: Const.thumbSize
                     }).then(
                         (thumbnail) => {
-                            result.updateParams.avatar = {
+                            result.updateavatar = {
                                 picture: {
                                     originalName: avatar.name,
                                     size: avatar.size,
@@ -271,7 +271,7 @@ const Group = {
             (result, done) => {
                 if (avatar) {
                     let size = 0;
-                    const newSize = result.updateParams.avatar.picture.size + result.updateParams.avatar.thumbnail.size;                    
+                    const newSize = result.updateavatar.picture.size + result.updateavatar.thumbnail.size;                    
                     if (result.original.avatar.picture.size) {
                         const originalSize = result.original.avatar.picture.size + result.original.avatar.thumbnail.size;
                         size = newSize - originalSize;
@@ -350,7 +350,7 @@ const Group = {
             });
             callback(null);                    
         } else {
-            done(null);
+            callback(null);
         }
     }
 };

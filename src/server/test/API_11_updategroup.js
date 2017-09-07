@@ -38,7 +38,12 @@ describe('API', function () {
                 .put('/api/v3/groups/' + 'wrongId')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.groupidIsWrong);
+                    done();
+                });
         });
 
         it('returns 422, if name has larger than the max length', (done) => {
@@ -53,7 +58,12 @@ describe('API', function () {
                 .field('sortName', name)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/user1.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.nameTooLarge);
+                    done();
+                });
         });
 
         it('returns 422, if sortName has larger than the max length', (done) => {
@@ -68,7 +78,12 @@ describe('API', function () {
                 .field('sortName', sortName)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.sortNameTooLarge);
+                    done();
+                });
         });
 
         it('returns 422, if description has larger than the max length', (done) => {
@@ -83,7 +98,11 @@ describe('API', function () {
                 .field('sortName', sortName)                
                 .field('description', description)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.descriptionTooLarge);
+                    done();
+                });
         });
 
         it('returns 422, if a new group name is already used', (done) => {
@@ -99,7 +118,11 @@ describe('API', function () {
                 .field('description', description)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id)
                 .attach('file', 'src/server/test/samplefiles/max.jpg')
-                .expect(422, done)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.groupDuplicated);
+                    done();
+                });
         });
 
         it('Update groups works without params', (done) => {
