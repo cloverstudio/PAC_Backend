@@ -227,31 +227,41 @@ UsersController.prototype.init = function(app){
     /**
      * @api {delete} /api/v3/Users/{userid} delete group details
      **/
-    router.delete('/:userid',checkAPIKey, checkUserAdmin, (request,response) => {
-        const userid = request.params.userid;        
+    router.delete('/:id',checkAPIKey, checkUserAdmin, (request,response) => {
+        const userid = request.params.id;        
         // Check params
         async.waterfall([
             (done) => {
                 if (!mongoose.Types.ObjectId.isValid(userid)) {
-                    done(Const.httpCodeBadParameter, null);
-                } else {
-                    done(null, null);
+                    return done({
+                        code: Const.httpCodeBadParameter,
+                        message: Const.errorMessage.useridIsWrong
+                    }, null);
                 }
+                done(null, null);
             },
-            // get group which should be deleted
+            // get user which should be deleted
             (result, done) => {
-                const groupModel = GroupModel.get();
-                groupModel.findOne({_id: userid}, (err, foundGroup) => {
-                    if (!foundGroup) return done(Const.httpCodeBadParameter, null);
-                    done(err, { group: foundGroup })
+                const userModel = UserModel.get();
+                userModel.findOne({_id: userid}, (err, foundUser) => {
+                    if (!foundUser) {
+                        return done({
+                            code: Const.httpCodeBadParameter,
+                            message: Const.errorMessage.useridIsWrong
+                        }, null);
+                    }
+                    if (err) {
+                        return done({ code: err.status, message: err.text }, null);
+                    }
+                    done(null, { deleteUser: foundUser })
                 });
             },
         ],
         (err, result) => {
-            if (err === Const.httpCodeBadParameter)
-                return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
             
-            UserLogic.delete(result.group, request.user, (group, err) => {
+            UserLogic.delete(result.deleteUser, request.user, (group, err) => {
                 self.successResponse(response, Const.responsecodeSucceed); 
             }, (err) => {
                 console.log("Critical Error", err);

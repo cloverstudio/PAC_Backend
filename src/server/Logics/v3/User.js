@@ -180,41 +180,41 @@ const User = {
             if(onSuccess) onSuccess(result);
         });    
     },
-    delete: (User, user, onSuccess, onError) =>  {
-        const UserModel = UserModel.get();
+    delete: (deleteUser, baseUser, onSuccess, onError) =>  {
         async.waterfall([
             (done) => {
-                UserModel.remove({_id: User.id}, (err, deleted) => {
-                    done(err, { User: User });
+                const userModel = UserModel.get();                
+                userModel.remove({_id: deleteUser.id}, (err, deleted) => {
+                    done(err, null);
                 });
             },
             // Update organization disk usage
             (result, done) => {
-                const pictureSize = result.User.avatar.picture.size;
-                const thumbnailSize = result.User.avatar.thumbnail.size;
+                const pictureSize = deleteUser.avatar.picture.size;
+                const thumbnailSize = deleteUser.avatar.thumbnail.size;
                 if (pictureSize) {
                     let size = - (pictureSize + thumbnailSize);
-                    UpdateOrganizationDiskUsageLogic.update(user.organizationId, size, (err, updated) => {
-                        done(err, result);
+                    UpdateOrganizationDiskUsageLogic.update(baseUser.organizationId, size, (err, updated) => {
+                        done(err, null);
                     });
                 } else {
-                    done(null, result);
+                    done(null, null);
                 }
             },
-            // remove User from user's Users
+            // remove user from group's users
             (result, done) => {
-                const userModel = UserModel.get();
-                _.each(User.users, (user) => {
-                    userModel.update({_id: user, Users: User.id}, {$pull: {Users: User.id}}, (err, updated) => {
-                        done(err, result);
+                const groupModel = GroupModel.get();
+                _.each(deleteUser.groups, (groupid) => {
+                    groupModel.update({_id: groupid, users: deleteUser.id}, {$pull: {users: deleteUser.id}}, (err, updated) => {
+                        done(err, null);
                     });
                 });
             },
             // remove history
             (result, done) => {
                 const historyModel = HistoryModel.get();                
-                historyModel.remove({chatId: User.id}, (err, deleted) => {
-                    done(err, result);
+                historyModel.remove({chatId: deleteUser.id}, (err, deleted) => {
+                    done(err, null);
                 });
             }
         ],
