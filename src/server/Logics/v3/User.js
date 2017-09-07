@@ -14,7 +14,7 @@ const PermissionLogic = require('./Permission');
 const NewUserLogic = require('./NewUser');
 
 const User = {
-    create: (baseUser, fields, avatar, onSuccess, onError) => {
+    create: (baseUser, params, avatar, onSuccess, onError) => {
         const userModel = UserModel.get();
         const groupModel = GroupModel.get();
         const organizationId = baseUser.organizationId;
@@ -52,15 +52,15 @@ const User = {
             },
             (result, done) => {
                 NewUserLogic.create(
-                    fields.name, 
-                    fields.sortName, 
-                    fields.description,
-                    fields.userid, 
-                    fields.password, 
-                    fields.status, 
+                    params.name, 
+                    params.sortName, 
+                    params.description,
+                    params.userid, 
+                    params.password, 
+                    params.status, 
                     organizationId, 
                     baseUser.permission,
-                    _.isEmpty(fields.groups) ? [] : fields.groups, avatar,
+                    _.isEmpty(params.groups) ? [] : params.groups, avatar,
                     (err, created) => {
                         result.created = created.user.toObject();
                         result.created.id = created.user._id;
@@ -76,6 +76,171 @@ const User = {
             }
             if(onSuccess) onSuccess(result.created);
         });  
+    },
+    getDetails: (userid, params, onSuccess, onError) => {
+        const userModel = UserModel.get();
+        userModel.findOne({ _id: userid }, params, (err,foundUser) => {
+            if(err && onError) return onError(err);
+            result = foundUser.toObject();
+            result.id = foundUser._id;
+            delete result._id;
+            if(onSuccess) onSuccess(result);
+        });
+    },
+    update: (userid, baseUser, params, avatar, onSuccess, onError) => {
+        const userModel = UserModel.get();        
+        async.waterfall([
+            (done) => {
+                // get original data
+                userModel.findOne({_id: userid}, (err, original) => {
+                    done(err, {original: original});
+                });
+            },
+            (result, done) => {
+                result.updateParams = {
+                    name: params.name ? params.name : result.original.name,
+                    sortName: params.description ? params.description : result.original.description,
+                    description: params.description ? params.description : result.original.description,
+                    userid: params.userid ? params.userid : result.original.userid,
+                    status: params.status ? params.status : result.original.status,
+                };
+                if (params.status == 0) {
+                    result.updateParams.token = [];
+                    result.updateParams.pushToken = [];
+                }
+                if (!_.isEmpty(params.password))
+                    result.updateParams.password = Utils.getHash(params.password);
+                if (params.permission) {
+                    result.updateParams.permission = params.permission;
+                } else {
+                    if (!result.original.permission) {
+                        result.updateParams.permission = Const.userPermission.subAdmin;
+                    }
+                }
+                
+                if (avatar) {
+                    easyImg.thumbnail({
+                        src: avatar.path,
+                        dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
+                        width: Const.thumbSize,
+                        height: Const.thumbSize
+                    }).then(
+                        (thumbnail) => {
+                            result.updateParams.avatar = {
+                                picture: {
+                                    originalName: avatar.name,
+                                    size: avatar.size,
+                                    mimeType: avatar.type,
+                                    nameOnServer: Path.basename(avatar.path)
+                                },
+                                thumbnail: {
+                                    originalName: avatar.name,
+                                    size: thumbnail.size,
+                                    mimeType: thumbnail.type,
+                                    nameOnServer: thumbnail.name
+                                }
+                            };
+
+                            done(null, result);
+                        }, (err) => {
+                            done(err, result);
+                        }
+                    );
+                } else {
+                    done(null, result);
+                }
+            },
+            // Update data
+            (result, done) => {
+                userModel.update({ _id: userid }, result.updateParams, (err, updated) => {
+                    done(err, result);
+                });
+            },
+            // Update organization disk usage
+            (result, done) => {
+                if (avatar) {
+                    let size = 0;
+                    const newSize = result.updateParams.avatar.picture.size + result.updateParams.avatar.thumbnail.size;                    
+                    if (result.original.avatar.picture.size) {
+                        const originalSize = result.original.avatar.picture.size + result.original.avatar.thumbnail.size;
+                        size = newSize - originalSize;
+                    } else {
+                        size = newSize;
+                    }
+                    UpdateOrganizationDiskUsageLogic.update(baseUser.organizationId, size, (err, updated) => {
+                        done(err, result);
+                    });
+                } else {
+                    done(null, result);
+                }
+            }
+        ],
+        (err, result) => {
+            if(err && onError) return onError(err);
+            if(onSuccess) onSuccess(result);
+        });    
+    },
+    delete: (User, user, onSuccess, onError) =>  {
+        const UserModel = UserModel.get();
+        async.waterfall([
+            (done) => {
+                UserModel.remove({_id: User.id}, (err, deleted) => {
+                    done(err, { User: User });
+                });
+            },
+            // Update organization disk usage
+            (result, done) => {
+                const pictureSize = result.User.avatar.picture.size;
+                const thumbnailSize = result.User.avatar.thumbnail.size;
+                if (pictureSize) {
+                    let size = - (pictureSize + thumbnailSize);
+                    UpdateOrganizationDiskUsageLogic.update(user.organizationId, size, (err, updated) => {
+                        done(err, result);
+                    });
+                } else {
+                    done(null, result);
+                }
+            },
+            // remove User from user's Users
+            (result, done) => {
+                const userModel = UserModel.get();
+                _.each(User.users, (user) => {
+                    userModel.update({_id: user, Users: User.id}, {$pull: {Users: User.id}}, (err, updated) => {
+                        done(err, result);
+                    });
+                });
+            },
+            // remove history
+            (result, done) => {
+                const historyModel = HistoryModel.get();                
+                historyModel.remove({chatId: User.id}, (err, deleted) => {
+                    done(err, result);
+                });
+            }
+        ],
+        (err, result) => {
+            if(err && onError) return onError(err);
+            if(onSuccess) onSuccess(result);
+        });
+    },
+    addUserToUser: (newUsers, userid, callback) => {
+        if (newUsers) {
+            const userModel = UserModel.get();
+            _.each(newUsers, (userid, index) => {
+                userModel.findOne({_id: userid}, {Users:1}, (err, foundUser) => {
+                    if (err) return done(err, result);
+                    let Users = [];
+                    Users.push(foundUser.Users, userid);
+                    Users = _.flatten(Users);       
+                    Users = _.compact(Users);
+                    foundUser.Users = _.uniq(Users);
+                    foundUser.save();
+                }); 
+            });
+            callback(null);                    
+        } else {
+            done(null);
+        }
     }
 };
 

@@ -167,11 +167,12 @@ GroupsController.prototype.init = function(app){
         async.waterfall([
             // Validate the groupId is handleable by mongoose
             (done) => {
-                if (!mongoose.Types.ObjectId.isValid(groupId))
+                if (!mongoose.Types.ObjectId.isValid(groupId)) {
                     return done({
                         code: Const.httpCodeBadParameter,
                         message: Const.errorMessage.groupidIsWrong
                     }, null);
+                }
                 done(null, null);
             },
             (result, done) => {
