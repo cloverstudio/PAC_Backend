@@ -255,6 +255,83 @@ GroupsController.prototype.init = function(app){
         })
     });
 
+
+
+    /**
+     * @api {get} /groups/{groupId}/users/ Get user list of group
+     **/
+    router.get('/:groupId/users',checkAPIKey, (request,response) => {
+        const userModel = UserModel.get();
+        const groupId = request.params.groupId;        
+        const q = self.checkQueries(request.query);
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(groupId))
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                GroupLogic.getDetails(groupId ,null, (group, err) => {
+
+                    result.groupDetail = group;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                // split if paging exists
+                let offset = 0;
+                let limit = result.groupDetail.users.length;
+
+                if(q.offset) offset = parseInt(q.offset);
+                if(q.limit) limit = parseInt(q.limit);
+
+                const userIdList = result.groupDetail.users.slice(offset,offset + limit);
+                result.userIdList = userIdList;
+
+                done(null,result)
+            },
+            (result,done) => {
+
+                // get users
+                userModel.find({_id:{$in:result.userIdList}},
+                UserModel.defaultResponseFields,
+
+                (err,findResult) => {
+                    
+                    result.users = Utils.ApiV3StyleId(findResult);
+
+                    done(err,result);
+
+                });
+
+            }
+        ],
+        (err,result) => {
+
+            if(err){
+                self.errorResponse(response, Const.httpCodeServerError);
+                return;
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                users: result.users 
+            }); 
+
+        });
+
+    });
+
+
+
     return router;
 }
 

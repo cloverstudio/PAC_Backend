@@ -43,6 +43,7 @@ var Config = require("./init");
     Utils.prototype.stripPrivateData = stripPrivateData;
     Utils.prototype.getRandomNumber = getRandomNumber;
     Utils.prototype.sendSMS = sendSMS;
+    Utils.prototype.ApiV3StyleId = ApiV3StyleId;
     
     // Implementation ---------------------------------------
     
@@ -360,6 +361,20 @@ var Config = require("./init");
 
     }
 
+    function ApiV3StyleId(ary){
+        
+        return ary.map((obj) => {
+
+            if(obj.toObject)
+                obj = obj.toObject();
+
+            obj.id = obj._id;
+            delete(obj._id);
+
+            return obj;
+
+        });
+    }
     // Exports ----------------------------------------------
     module["exports"] = new Utils();
 
