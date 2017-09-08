@@ -222,25 +222,6 @@ const User = {
             if(err && onError) return onError(err);
             if(onSuccess) onSuccess(result);
         });
-    },
-    addUserToUser: (newUsers, userid, callback) => {
-        if (newUsers) {
-            const userModel = UserModel.get();
-            _.each(newUsers, (userid, index) => {
-                userModel.findOne({_id: userid}, {Users:1}, (err, foundUser) => {
-                    if (err) return done(err, result);
-                    let Users = [];
-                    Users.push(foundUser.Users, userid);
-                    Users = _.flatten(Users);       
-                    Users = _.compact(Users);
-                    foundUser.Users = _.uniq(Users);
-                    foundUser.save();
-                }); 
-            });
-            callback(null);                    
-        } else {
-            done(null);
-        }
     }
 };
 
