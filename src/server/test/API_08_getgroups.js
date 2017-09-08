@@ -35,7 +35,7 @@ describe('API', () => {
                     res.body.should.have.property('groups');
                     res.body.groups[0].should.have.property('id');   
                     res.body.groups[0].should.not.have.property('_id');                                        
-                    res.body.groups.should.be.instanceof(Array).and.have.lengthOf(4);                
+                    res.body.groups.should.be.instanceof(Array).and.have.lengthOf(7);                
                     done();
                 });
         });

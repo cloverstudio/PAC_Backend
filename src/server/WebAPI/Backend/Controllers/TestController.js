@@ -141,6 +141,9 @@ TestController.prototype.init = function(app){
                         type: fields.type
                     };
 
+                    if (fields.type==Const.groupType.department)
+                        data.parentId = fields.parentId;
+
                     if (file) {
 
                         easyImg.thumbnail({

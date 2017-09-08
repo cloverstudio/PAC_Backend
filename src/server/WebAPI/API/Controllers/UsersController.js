@@ -17,37 +17,17 @@ const formidable = require('formidable');
 const GroupModel = require(pathTop + 'Models/Group');
 const UserModel = require(pathTop + 'Models/User');  
 
-const GroupLogic = require( pathTop + "Logics/v3/Group");
+const UserLogic = require( pathTop + "Logics/v3/User");
 
-const GroupsController = function(){};
-_.extend(GroupsController.prototype, APIBase.prototype);
+const UsersController = function(){};
+_.extend(UsersController.prototype, APIBase.prototype);
 
-GroupsController.prototype.init = function(app){
+UsersController.prototype.init = function(app){
         
     var self = this;
 
     /**
-     * @api {get} /api/v3/groups/ get group list
-     **/
-    router.get('/',checkAPIKey, (request,response) => {
-        const query = self.checkQueries(request.query);
-        if (!query) 
-            return response.status(Const.httpCodeBadParameter)
-                        .send(Const.errorMessage.queryParamsNotCorrect);
-
-        GroupLogic.search(request.user, query, (result, err) => {
-            self.successResponse(response, Const.responsecodeSucceed, {
-                groups: result.list
-            }); 
-        }, (err) => {
-            console.log("Critical Error", err);
-            return self.errorResponse(response, Const.httpCodeServerError);
-        });
-    });
-
-
-    /**
-     * @api {post} /api/v3/groups create a new group
+     * @api {post} /api/v3/users create a new user
      */
     router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
         let form = new formidable.IncomingForm();
@@ -83,32 +63,32 @@ GroupsController.prototype.init = function(app){
                     done(err, result);
                 });
             },
-            //Validate the new name is duplicated, or not.
+            //Validate the new userid is duplicated, or not.
             (result, done) => {
                 if (uploadPathError) 
                     return done(uploadPathError, result);
-                self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
+                self.validateDuplication(result.fields.userid, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
             },
-            // Validate the userid in users is correct format.
+            // Validate the userid in groups is correct format.
             (result, done) => {
-                if (result.fields.users) {
-                    const users = result.fields.users.split(",");
-                    result.fields.users = _.map(users, (user) => {
-                        return user.trim();
+                if (result.fields.groups) {
+                    const groups = result.fields.groups.split(",");
+                    result.fields.groups = _.map(groups, (group) => {
+                        return group.trim();
                     });
-                    self.validateUserIdIsCorrect(result.fields.users, (err) => {
+                    self.validateuseridIsCorrect(result.fields.groups, (err) => {
                         done(err, result);  
                     });
                 } else {
                     done(null, result);
                 } 
             },
-            // Validate the set users exist in database, or not.
+            // Validate the set groups exist in database, or not.
             (result, done) => {       
-                if (result.fields.users) {              
-                    self.validateUsersPresence(result.fields.users, request.user.organizationId, (err) => {
+                if (result.fields.groups) {
+                    self.validateGroupsPresence(result.fields.groups, request.user.organizationId, (err) => {
                         done(err, result);  
                     });
                 } else {
@@ -119,10 +99,9 @@ GroupsController.prototype.init = function(app){
         (err, result) => {
             if (!_.isEmpty(err))
                 return response.status(err.code).send(err.message);
-
-            GroupLogic.create(request.user, result.fields, result.avatar, (createdGroup, err) => {
+            UserLogic.create(request.user, result.fields, result.avatar, (created, err) => {
                 self.successResponse(response, Const.responsecodeSucceed, {
-                    group: createdGroup
+                    user: created
                 });
             }, (err) => {
                 console.log("Critical Error", err);
@@ -133,21 +112,21 @@ GroupsController.prototype.init = function(app){
     
 
     /**
-     * @api {get} /api/v3/groups/{groupId} get group details
+     * @api {get} /api/v3/users/{userid} get user details
      **/
-    router.get('/:groupId',checkAPIKey, (request,response) => {
-        const groupId = request.params.groupId;        
+    router.get('/:userid',checkAPIKey, (request,response) => {
+        const userid = request.params.userid;        
         const query = self.checkQueries(request.query);
 
         // Check params
-        if (!mongoose.Types.ObjectId.isValid(groupId))
-            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+        if (!mongoose.Types.ObjectId.isValid(userid))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.useridIsWrong);
         if (!query) 
             return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
         
-        GroupLogic.getDetails(groupId ,query.fields, (group, err) => {
+        UserLogic.getDetails(userid ,query.fields, (user, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
-                group: group
+                user: user
             }); 
         }, (err) => {
             console.log("Critical Error", err);
@@ -157,20 +136,20 @@ GroupsController.prototype.init = function(app){
 
 
     /**
-     * @api {put} /api/v3/groups/{groupId} edit group details
+     * @api {put} /api/v3/Users/{userid} edit user details
      **/
-    router.put('/:groupId', checkAPIKey, checkUserAdmin, (request,response) => {
-        const groupId = request.params.groupId;
+    router.put('/:id', checkAPIKey, checkUserAdmin, (request,response) => {
+        const userid = request.params.id;
         let form = new formidable.IncomingForm();
         const uploadPathError = self.checkUploadPath();          
-        
+
         async.waterfall([
-            // Validate the groupId is handleable by mongoose
+            // Validate the userid is handleable by mongoose
             (done) => {
-                if (!mongoose.Types.ObjectId.isValid(groupId)) {
+                if (!mongoose.Types.ObjectId.isValid(userid)) {
                     return done({
                         code: Const.httpCodeBadParameter,
-                        message: Const.errorMessage.groupidIsWrong
+                        message: Const.errorMessage.useridIsWrong
                     }, null);
                 }
                 done(null, null);
@@ -188,7 +167,7 @@ GroupsController.prototype.init = function(app){
                     }
                 }
                 form.parse(request, (err, fields, files) => {
-                    result = { avatar: files.avatar, fields: fields }
+                    const result = { avatar: files.avatar, fields: fields }
                     done(err, result);
                 })
             },
@@ -198,32 +177,32 @@ GroupsController.prototype.init = function(app){
                     done(err, result);
                 });
             },
-            // Validate the new name is duplicated, or not.
+            //Validate the new userid is duplicated, or not.
             (result, done) => {
                 if (uploadPathError) 
                     return done(uploadPathError, result);
-                self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
+                self.validateDuplication(result.fields.userid, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
             },
-            // Validate the userid in users is correct format.
+            // Validate the userid in groups is correct format.
             (result, done) => {
-                if (result.fields.users) {
-                    const users = result.fields.users.split(",");
-                    result.fields.users = _.map(users, (user) => {
-                        return user.trim();
+                if (result.fields.groups) {
+                    const groups = result.fields.groups.split(",");
+                    result.fields.groups = _.map(groups, (group) => {
+                        return group.trim();
                     });
-                    self.validateUserIdIsCorrect(result.fields.users, (err) => {
+                    self.validateuseridIsCorrect(result.fields.groups, (err) => {
                         done(err, result);  
                     });
                 } else {
                     done(null, result);
                 } 
             },
-            // Validate the set users exist in database, or not.
+            // Validate the set groups exist in database, or not.
             (result, done) => {       
-                if (result.fields.users) {              
-                    self.validateUsersPresence(result.fields.users, request.user.organizationId, (err) => {
+                if (result.fields.groups) {
+                    self.validateGroupsPresence(result.fields.groups, request.user.organizationId, (err) => {
                         done(err, result);  
                     });
                 } else {
@@ -235,7 +214,7 @@ GroupsController.prototype.init = function(app){
             if (!_.isEmpty(err))
                 return response.status(err.code).send(err.message);
 
-            GroupLogic.update(groupId, request.user, result.fields, result.avatar, (updated, err) => {
+            UserLogic.update(userid, request.user, result.fields, result.avatar, (updated, err) => {
                 self.successResponse(response, Const.responsecodeSucceed); 
             }, (err) => {
                 console.log("Critical Error", err);
@@ -246,37 +225,35 @@ GroupsController.prototype.init = function(app){
 
 
     /**
-     * @api {delete} /api/v3/groups/{groupId} delete group details
+     * @api {delete} /api/v3/Users/{userid} delete group details
      **/
-    router.delete('/:groupId',checkAPIKey, checkUserAdmin, (request,response) => {
-        const groupId = request.params.groupId;        
+    router.delete('/:id',checkAPIKey, checkUserAdmin, (request,response) => {
+        const userid = request.params.id;        
         // Check params
         async.waterfall([
             (done) => {
-                if (!mongoose.Types.ObjectId.isValid(groupId)) {
-                    done({
+                if (!mongoose.Types.ObjectId.isValid(userid)) {
+                    return done({
                         code: Const.httpCodeBadParameter,
-                        message: Const.errorMessage.groupidIsWrong
+                        message: Const.errorMessage.useridIsWrong
                     }, null);
-                } else {
-                    done(null, null);
                 }
+                done(null, null);
             },
-            // get group which should be deleted
+            // get user which should be deleted
             (result, done) => {
-                const groupModel = GroupModel.get();
-                groupModel.findOne({_id: groupId}, (err, foundGroup) => {
-                    if (!foundGroup) {
+                const userModel = UserModel.get();
+                userModel.findOne({_id: userid}, (err, foundUser) => {
+                    if (!foundUser) {
                         return done({
                             code: Const.httpCodeBadParameter,
-                            message: Const.errorMessage.groupidIsWrong
+                            message: Const.errorMessage.useridIsWrong
                         }, null);
                     }
                     if (err) {
-                        const e = { code: err.status, message: err.text };
-                        return done(e, result);
+                        return done({ code: err.status, message: err.text }, null);
                     }
-                    done(null, { group: foundGroup })
+                    done(null, { deleteUser: foundUser })
                 });
             },
         ],
@@ -284,7 +261,7 @@ GroupsController.prototype.init = function(app){
             if (!_.isEmpty(err))
                 return response.status(err.code).send(err.message);
             
-            GroupLogic.delete(result.group, request.user, (group, err) => {
+            UserLogic.delete(result.deleteUser, request.user, (group, err) => {
                 self.successResponse(response, Const.responsecodeSucceed); 
             }, (err) => {
                 console.log("Critical Error", err);
@@ -293,83 +270,6 @@ GroupsController.prototype.init = function(app){
         })
     });
 
-
-
-    /**
-     * @api {get} /groups/{groupId}/users/ Get user list of group
-     **/
-    router.get('/:groupId/users',checkAPIKey, (request,response) => {
-        const userModel = UserModel.get();
-        const groupId = request.params.groupId;        
-        const q = self.checkQueries(request.query);
-
-        // Check params
-        if (!mongoose.Types.ObjectId.isValid(groupId))
-            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
-        
-        async.waterfall([
-            (done) => {
-
-                const result = {};
-
-                GroupLogic.getDetails(groupId ,null, (group, err) => {
-
-                    result.groupDetail = group;
-                    done(null,result);
-
-                }, (err) => {
-                    console.log("Critical Error", err);
-                    done(err,result)
-                });
-
-            },
-            (result,done) => {
-
-                // split if paging exists
-                let offset = 0;
-                let limit = result.groupDetail.users.length;
-
-                if(q.offset) offset = parseInt(q.offset);
-                if(q.limit) limit = parseInt(q.limit);
-
-                const userIdList = result.groupDetail.users.slice(offset,offset + limit);
-                result.userIdList = userIdList;
-
-                done(null,result)
-            },
-            (result,done) => {
-
-                // get users
-                userModel.find({_id:{$in:result.userIdList}},
-                UserModel.defaultResponseFields,
-
-                (err,findResult) => {
-                    
-                    result.users = Utils.ApiV3StyleId(findResult);
-
-                    done(err,result);
-
-                });
-
-            }
-        ],
-        (err,result) => {
-
-            if(err){
-                self.errorResponse(response, Const.httpCodeServerError);
-                return;
-            }
-
-            self.successResponse(response, Const.responsecodeSucceed, {
-                users: result.users 
-            }); 
-
-        });
-
-    });
-
-
-
     return router;
 }
 
@@ -377,10 +277,14 @@ GroupsController.prototype.init = function(app){
  * The following is the validation functions
  */
 
-GroupsController.prototype.validatePresence = (values, callback) => {
+UsersController.prototype.validatePresence = (values, callback) => {
     let error = {};
     if (!values.name) {
         error.message = Const.errorMessage.nameNotExist;
+    } else if (!values.userid) {
+        error.message = Const.errorMessage.useridNotExist;
+    } else if (!values.password) {
+        error.message = Const.errorMessage.passwordNotExist;
     }
 
     if (error.message) {
@@ -391,7 +295,7 @@ GroupsController.prototype.validatePresence = (values, callback) => {
     callback(error);
 }
 
-GroupsController.prototype.validateMaxLength = (values, callback) => {
+UsersController.prototype.validateMaxLength = (values, callback) => {
     let error = {};
     if (values.name && values.name.length > Const.nameMaxLength) {
         error.message = Const.errorMessage.nameTooLarge;
@@ -399,6 +303,14 @@ GroupsController.prototype.validateMaxLength = (values, callback) => {
         error.message = Const.errorMessage.sortNameTooLarge;
     } else if (values.description && values.description.length > Const.descriptionMaxLength) {
         error.message = Const.errorMessage.descriptionTooLarge;
+    } else if (values.userid && values.userid.length < Const.inputInfoMinLength) {
+        error.message = Const.errorMessage.useridTooShort;        
+    } else if (values.userid && values.userid.length > Const.nameMaxLength) {
+        error.message = Const.errorMessage.useridTooLarge;                        
+    } else if (values.password && values.password.length < Const.inputInfoMinLength) {
+        error.message = Const.errorMessage.passwordTooShort;                
+    } else if (values.password && values.password.length > Const.nameMaxLength) {
+        error.message = Const.errorMessage.passwordTooLarge;                
     }
 
     if (error.message) {
@@ -409,17 +321,17 @@ GroupsController.prototype.validateMaxLength = (values, callback) => {
     callback(error);
 }
 
-GroupsController.prototype.validateDuplication = (name, organizationId, callback) => {
-    const groupModel = GroupModel.get();  
-    groupModel.findOne({
-        name: name,
+
+UsersController.prototype.validateDuplication = (userid, organizationId, callback) => {
+    const userModel = UserModel.get();
+    userModel.findOne({
+        userid: userid,
         organizationId: organizationId,
-        type: Const.groupType.group
-    }, (err, foundGroup) => {
-        if (foundGroup) {
-            callback({
-                code: Const.httpCodeBadParameter,
-                message: Const.errorMessage.groupDuplicated
+    }, (err, foundUser) => {
+        if (foundUser) {
+            callback({ 
+                code: Const.httpCodeBadParameter, 
+                message: Const.errorMessage.userDuplicated
             });
         } else {
             callback(null);
@@ -427,50 +339,50 @@ GroupsController.prototype.validateDuplication = (name, organizationId, callback
     });
 }
 
-GroupsController.prototype.validateUserIdIsCorrect = (users, callback) => {
+UsersController.prototype.validateuseridIsCorrect = (groups, callback) => {
     let err = null;
-    _.each(users, (userid) => {
+    _.each(groups, (userid) => {
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             err = {
                 code: Const.httpCodeBadParameter,
-                message: Const.errorMessage.includeUsersNotExist
+                message: Const.errorMessage.includeGroupsNotExist
             };
         }
     });
     callback(err);   
 }
 
-GroupsController.prototype.validateUsersPresence = (users, organizationId, callback) => {
-    const userModel = UserModel.get();
+UsersController.prototype.validateGroupsPresence = (groups, organizationId, callback) => {
+    const groupModel = GroupModel.get();
     const conditions = {
         $and: [
             {organizationId: organizationId},
-            { _id: { $in: users } }
+            { _id: { $in: groups } }
         ]
     }
-    userModel.find(conditions,{_id:1}, (err, foundUsers) => {
+    groupModel.find(conditions,{_id:1}, (err, foundGroups) => {    
         if (err) {
             return callback({
                 code: Const.httpCodeBadParameter,
                 message: err.message
             });
         }
-        if (users.length!==foundUsers.length) {
+        if (groups.length!==foundGroups.length) {
             return callback({
                 code: Const.httpCodeBadParameter,
-                message: Const.errorMessage.includeUsersNotExist
+                message: Const.errorMessage.includeGroupsNotExist
             }); 
         }
-        _.each(foundUsers, (user) => {
-            if(!_.includes(users, user._id.toString())) {
+        _.each(foundGroups, (group) => {
+            if(!_.includes(groups, group._id.toString())) {
                 return callback({
                     code: Const.httpCodeBadParameter,
-                    message: Const.errorMessage.includeUsersNotExistInOrganiation
-                });   
+                    message: Const.errorMessage.includeGroupsNotExistInOrganiation
+                });                   
             }
         });
         callback(null);                                                            
     }); 
 }
 
-module["exports"] = new GroupsController();
+module["exports"] = new UsersController();

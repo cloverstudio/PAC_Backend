@@ -1541,6 +1541,8 @@ paths:
       tags:
         - Users
       summary: Create user
+      consumes:
+        - multipart/form-data
       description: Create a new user belonging the user who have access token.
       parameters:
         - in: header
@@ -1548,20 +1550,55 @@ paths:
           description: Access token which is generated in signin.
           type: string
           required: true
-        - in: body
-          name: body
-          description: Parameters of the new user.
-          schema:
-            properties:
-              users:
-                $ref: '#definitions/User'
+        - in: formData
+          type: string
+          name: name
+          description: Name of new user
           required: true
+        - in: formData
+          type: string
+          name: userid
+          description: Id of new user. User id must contain only alphabet and number, and more than 6 characters.
+          required: true
+        - in: formData
+          type: string
+          name: password
+          description: Password of new user
+          required: true
+        - in: formData
+          type: string
+          name: sortName
+          description: SortName of new user
+        - in: formData
+          type: string
+          name: description
+          description: Descripiton of new user
+        - in: formData
+          type: number
+          format: int32
+          name: status
+          description: Status of new user
+          default: 1
+        - in: formData
+          type: string
+          name: groups
+          description: Group of new user by string separated by comma. It should include the belonging department. If you save a user without department, the user will not see other users in web client and app.
+        - in: formData
+          type: number
+          format: int32
+          name: Permission
+          description: Permission of new user. Web-Client is 1, sub Admin is 2.
+          default: 1
+        - in: formData
+          type: file
+          name: avatar
+          description: Image file of avatar of new group
       responses:
         '200':
           description: Created new user
           schema:
             properties:
-              users:
+              user:
                 $ref: '#definitions/User'
         '401':
           description: Wrong apikey
@@ -1573,7 +1610,7 @@ paths:
           description: Server error
       security:
         - api_key: []
-  '/users/{userId}':
+  '/users/{id}':
     get:
       tags:
         - Users
@@ -1589,7 +1626,7 @@ paths:
           type: string
           required: true
         - in: path
-          name: userId
+          name: id
           description: user ID to get user list
           type: string
           required: true
@@ -1623,6 +1660,8 @@ paths:
         - Users
       summary: Update user details
       description: Update user details specified by id.
+      consumes:
+        - multipart/form-data
       parameters:
         - in: header
           name: access-token
@@ -1630,17 +1669,50 @@ paths:
           type: string
           required: true
         - in: path
-          name: userId
+          name: id
           description: user ID to get user
           type: string
           required: true
-        - in: body
-          name: body
-          schema:
-            properties:
-              user:
-                $ref: '#definitions/User'
-          required: true
+        - in: formData
+          type: string
+          name: name
+          description: Name of new user
+        - in: formData
+          type: string
+          name: userid
+          description: Id of new user. User id must contain only alphabet and number, and more than 6 characters.
+        - in: formData
+          type: string
+          name: password
+          description: Password of new user
+        - in: formData
+          type: string
+          name: sortName
+          description: SortName of new user
+        - in: formData
+          type: string
+          name: description
+          description: Descripiton of new user
+        - in: formData
+          type: number
+          format: int32
+          name: status
+          description: Status of new user
+          default: 1
+        - in: formData
+          type: string
+          name: groups
+          description: Group of new user by string separated by comma. It should include the belonging department. If you save a user without department, the user will not see other users in web client and app.
+        - in: formData
+          type: number
+          format: int32
+          name: Permission
+          description: Permission of new user. Web-Client is 1, sub Admin is 2.
+          default: 1
+        - in: formData
+          type: file
+          name: avatar
+          description: Image file of avatar of new group
       responses:
         '200':
           description: Updated document of user
@@ -1666,7 +1738,7 @@ paths:
           type: string
           required: true
         - in: path
-          name: userId
+          name: id
           description: user ID to get user
           type: string
           required: true
