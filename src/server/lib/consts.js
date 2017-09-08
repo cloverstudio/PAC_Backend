@@ -213,9 +213,10 @@
         groupidIsWrong: "groupid is wrong. Please input the correct id",        
         useridIsWrong: "userid is wrong. Please input the correct id",
         includeUsersNotExist: "Wrong users",
-        includeUsersNotExistInOrganiation: "Some userid in users doesn't exist in your organization.",        
+        includeUsersNotExistInOrganiation: "Some userid in users doesn't exist.",        
         includeGroupsNotExist: "Wrong groups",
-        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization."
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist.",
+        responsecodeMaxRoomNumber: "You've already had the max number of rooms"
     }
 
     // Exports ----------------------------------------------

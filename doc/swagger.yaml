@@ -1122,20 +1122,30 @@ paths:
         - Rooms
       summary: Create room
       description: Create a new room belonging the user who have access token.
+      consumes:
+        - multipart/form-data
       parameters:
         - in: header
           name: access-token
           description: Access token which is generated in signin.
           type: string
           required: true
-        - in: body
-          name: body
-          description: Parameters of the new room.
-          schema:
-            properties:
-              room:
-                $ref: '#definitions/Room'
-          required: true
+        - in: formData
+          type: string
+          name: name
+          description: Name of new room, if you don't set a name, it will be [username]\'s New Room.
+        - in: formData
+          type: string
+          name: description
+          description: Descripiton of new room
+        - in: formData
+          type: string
+          name: users
+          description: User id list of new room by string separated by comma. The user who create room will be belong to this room even if you don't set any users.
+        - in: formData
+          type: file
+          name: avatar
+          description: Image file of avatar of new room
       responses:
         '200':
           description: Created new room
@@ -1610,7 +1620,7 @@ paths:
           description: Server error
       security:
         - api_key: []
-  '/users/{id}':
+  /users/{id}:
     get:
       tags:
         - Users
@@ -1745,53 +1755,6 @@ paths:
       responses:
         '200':
           description: Deleted user
-        '401':
-          description: Wrong apikey
-        '403':
-          description: Wrong access token
-        '422':
-          description: Bad parmeter
-        '500':
-          description: Server error
-      security:
-        - api_key: []
-  /users/status:
-    post:
-      tags:
-        - Users
-      summary: Get list of online status specified by user ids.
-      description: Get list of online status specified by user ids.
-      parameters:
-        - in: header
-          name: access-token
-          description: Access token which is generated in signin.
-          type: string
-          required: true
-        - in: body
-          name: body
-          description: user IDs to get list of online status
-          required: true
-          schema:
-            properties:
-              userIds:
-                type: array
-                items:
-                  type: string
-      responses:
-        '200':
-          description: The online status of user
-          schema:
-            properties:
-              statusList:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    userId:
-                      type: string
-                    onlineStatus:
-                      type: boolean
-                      default: true
         '401':
           description: Wrong apikey
         '403':

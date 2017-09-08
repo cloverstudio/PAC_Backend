@@ -24,7 +24,7 @@ var APIMain ={
 
         router.use("/groups", require("./Controllers/GroupsController").init(app));        
         router.use("/users", require("./Controllers/UsersController").init(app));        
-        
+        router.use("/rooms", require("./Controllers/RoomsController").init(app));                
         return router;
     }
 }
