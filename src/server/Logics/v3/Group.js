@@ -11,6 +11,7 @@ const HistoryModel = require('../../Models/History');
 const OrganizationModel = require('../../Models/Organization');
 const UpdateOrganizationDiskUsageLogic = require('./UpdateOrganizationDiskUsage')
 const PermissionLogic = require('./Permission');
+const AvatarLogic = require('./Avatar');
 
 const Group = {
     search: (user, params, onSuccess, onError) => {
@@ -51,14 +52,7 @@ const Group = {
                 .limit(params.limit);
 
                 query.exec((err,data) => {
-                    data = data.map((item) => {
-                        return item.toObject();
-                    });
-                    _.each(data, (group, index) => {
-                        data[index].id = group._id;
-                        delete data[index]._id;
-                    })
-                    result.list = data;
+                    result.list = Utils.ApiV3StyleId(data);
                     done(err,result);
                 });
             },
@@ -133,34 +127,12 @@ const Group = {
                     users: params.users,
                     type: Const.groupType.group
                 }
-
                 if (avatar) {
-                    easyImg.thumbnail({
-                        src: avatar.path,
-                        dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
-                        width: Const.thumbSize,
-                        height: Const.thumbSize
-                    }).then(
-                        (thumbnail) => {
-                            result.saveData.avatar = {
-                                picture: {
-                                    originalName: avatar.name,
-                                    size: avatar.size,
-                                    mimeType: avatar.type,
-                                    nameOnServer: Path.basename(avatar.path)
-                                },
-                                thumbnail: {
-                                    originalName: avatar.name,
-                                    size: thumbnail.size,
-                                    mimeType: thumbnail.type,
-                                    nameOnServer: thumbnail.name
-                                }
-                            };
-                            done(null, result);
-                        }, (err) => {
-                            done(err, result);
-                        }
-                    );
+                    AvatarLogic.createAvatarData(avatar, (err, avatarData) => {
+                        if (avatarData)
+                            result.saveData.avatar = avatarData;
+                        done(err, result);
+                    });
                 } else {
                     done(null, result);
                 }
@@ -230,33 +202,11 @@ const Group = {
                     description: newDescription,
                 };
                 if (avatar) {
-                    easyImg.thumbnail({
-                        src: avatar.path,
-                        dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
-                        width: Const.thumbSize,
-                        height: Const.thumbSize
-                    }).then(
-                        (thumbnail) => {
-                            result.updateavatar = {
-                                picture: {
-                                    originalName: avatar.name,
-                                    size: avatar.size,
-                                    mimeType: avatar.type,
-                                    nameOnServer: Path.basename(avatar.path)
-                                },
-                                thumbnail: {
-                                    originalName: avatar.name,
-                                    size: thumbnail.size,
-                                    mimeType: thumbnail.type,
-                                    nameOnServer: thumbnail.name
-                                }
-                            };
-
-                            done(null, result);
-                        }, (err) => {
-                            done(err, result);
-                        }
-                    );
+                    AvatarLogic.createAvatarData(avatar, (err, avatarData) => {
+                        if (avatarData)
+                            result.updateParams.avatar = avatarData;
+                        done(err, result);
+                    });
                 } else {
                     done(null, result);
                 }
@@ -271,7 +221,7 @@ const Group = {
             (result, done) => {
                 if (avatar) {
                     let size = 0;
-                    const newSize = result.updateavatar.picture.size + result.updateavatar.thumbnail.size;                    
+                    const newSize = result.updateParams.avatar.picture.size + result.updateParams.avatar.thumbnail.size;                    
                     if (result.original.avatar.picture.size) {
                         const originalSize = result.original.avatar.picture.size + result.original.avatar.thumbnail.size;
                         size = newSize - originalSize;
