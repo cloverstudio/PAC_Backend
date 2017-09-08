@@ -215,7 +215,8 @@
         includeUsersNotExist: "Wrong users",
         includeUsersNotExistInOrganiation: "Some userid in users doesn't exist in your organization.",        
         includeGroupsNotExist: "Wrong groups",
-        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization."
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
+        wrongUserIds: "users parameter is wrong."
     }
 
     // Exports ----------------------------------------------
