@@ -48,6 +48,7 @@ describe('API', () => {
                 if (err) throw err;
                 res.body.should.have.property('groups');
                 res.body.groups.should.be.instanceof(Array).and.have.lengthOf(5); 
+
                 res.body.groups[0].name.should.equal(global.group3.name);
                 res.body.groups[1].name.should.equal(global.group4.name);
                 res.body.groups[2].name.should.equal(global.department1.name);
