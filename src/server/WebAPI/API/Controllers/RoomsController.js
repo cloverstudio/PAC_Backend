@@ -39,7 +39,7 @@ RoomsController.prototype.init = function(app){
         RoomLogic.search(request.user, query, (result, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 rooms: result.list
-            }); 
+            });
         }, (err) => {
             console.log("Critical Error", err);
             return self.errorResponse(response, Const.httpCodeServerError);
@@ -70,7 +70,7 @@ RoomsController.prototype.init = function(app){
                 form.parse(request, (err, fields, files) => {
                     const result = { avatar: files.avatar, fields: fields }
                     done(err, result);
-                })
+                });
             },
             // Validate length
             (result, done) => {
@@ -122,7 +122,7 @@ RoomsController.prototype.init = function(app){
     /**
      * @api {get} /api/v3/rooms/{roomId} get room details
      **/
-    router.get('/:roomId',checkAPIKey, (request,response) => {
+    router.get('/:roomId', checkAPIKey, (request,response) => {
         const roomId = request.params.roomId;        
         const query = self.checkQueries(request.query);
 
@@ -132,7 +132,7 @@ RoomsController.prototype.init = function(app){
         if (!query) 
             return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
         
-        RoomLogic.getDetails(roomId ,query.fields, (room, err) => {
+        RoomLogic.getDetails(roomId , query.fields, (room, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 room: room
             }); 

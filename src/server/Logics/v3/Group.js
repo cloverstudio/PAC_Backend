@@ -26,7 +26,7 @@ const Group = {
             },
             // Get groups
             (result, done) => {
-                const conditions = {
+                let conditions = {
                     $and: [
                         {organizationId: organizationId},
                         {$or : [

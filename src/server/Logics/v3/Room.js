@@ -21,11 +21,11 @@ const Room = {
         async.waterfall([
             // Get Rooms
             (done) => {
-                const conditions = { users: user.id.toString()};
+                let conditions = { users: user.id.toString()};
                 if(!_.isEmpty(params.keyword)){
                     conditions.$or = [
-                        { name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
-                        { description: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },                        
+                        { name: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") },
+                        { description: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") },                        
                     ]
                 }
 
@@ -196,9 +196,9 @@ const Room = {
         });  
     },
     getDetails: (RoomId, fields, onSuccess, onError) => {
-        const RoomModel = RoomModel.get();
-        RoomModel.findOne({ _id: RoomId }, fields, (err,foundRoom) => {
-            if(err && onError) return onError(err);
+        const roomModel = RoomModel.get();
+        roomModel.findOne({ _id: RoomId }, fields, (err,foundRoom) => {
+            if(err && onError) return onError({code: err.status, message: err.text });
             result = foundRoom.toObject();
             result.id = foundRoom._id;
             delete result._id;
