@@ -119,6 +119,7 @@ describe('API', () => {
                     res.body.room.should.have.property('id');                     
                     res.body.room.should.have.property('name');
                     res.body.room.name.should.equal('user1\'s New Room');
+                    global.room1 = res.body.room;
                     done();
                 });
         });
@@ -135,13 +136,14 @@ describe('API', () => {
                     res.body.room.should.not.have.property('_id');
                     res.body.room.should.have.property('id');                     
                     res.body.room.should.have.property('name');
-                    res.body.room.name.should.equal('user2\'s New Room');
+                    res.body.room.name.should.equal('user2\'s New Room');                    
+                    global.room2 = res.body.room;
                     done();
                 });
         });
 
         it('Create rooms works without avatar file', (done) => {
-            const name = 'room_' + global.getRandomStr();
+            const name = 'room3_' + global.getRandomStr();
             const description = 'Description of ' + name;
             request(app)
                 .post('/api/v3/rooms/')
@@ -149,7 +151,7 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('description', description)
-                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id)
+                .field('users', global.user2._id + "," + global.user3._id)
                 .expect(200)
                 .end((err, res) => {
                     if (err) throw err;
@@ -161,16 +163,17 @@ describe('API', () => {
                     res.body.room.should.have.property('description');
                     res.body.room.description.should.equal(description);
                     res.body.room.users.should.be.instanceof(Array).and.have.lengthOf(3);
-                    res.body.room.users[0].should.equal(global.user1._id);
-                    res.body.room.users[1].should.equal(global.user2._id);
-                    res.body.room.users[2].should.equal(global.user3._id);   
+                    res.body.room.users[0].should.equal(global.user2._id);
+                    res.body.room.users[1].should.equal(global.user3._id);
+                    res.body.room.users[2].should.equal(global.user1._id); 
                     res.body.room.should.not.have.property('avatar');
+                    global.room3 = res.body.room;
                     done();
                 });
         });
 
         it('Create rooms works with avatar file', (done) => {
-            const name = 'room_' + global.getRandomStr();
+            const name = 'room4_' + global.getRandomStr();
             const description = 'Description of ' + name;
             request(app)
                 .post('/api/v3/rooms/')
@@ -178,7 +181,7 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('description', description)
-                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id)
+                .field('users', global.user2._id + "," + global.user3._id)
                 .attach('avatar', 'src/server/test/samplefiles/max.jpg')
                 .expect(200)
                 .end((err, res) => {
@@ -191,13 +194,13 @@ describe('API', () => {
                     res.body.room.should.have.property('description');
                     res.body.room.description.should.equal(description);
                     res.body.room.users.should.be.instanceof(Array).and.have.lengthOf(3);
-                    res.body.room.users[0].should.equal(global.user1._id);
-                    res.body.room.users[1].should.equal(global.user2._id);
-                    res.body.room.users[2].should.equal(global.user3._id);   
+                    res.body.room.users[0].should.equal(global.user2._id);
+                    res.body.room.users[1].should.equal(global.user3._id);   
+                    res.body.room.users[2].should.equal(global.user1._id);                    
                     res.body.room.should.have.property('avatar');
                     res.body.room.avatar.should.have.property('picture');                    
                     res.body.room.avatar.should.have.property('thumbnail');
-                    global.createdroom = res.body.user;
+                    global.room4  = res.body.room;
                     done();
                 });
         });

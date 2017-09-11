@@ -36,7 +36,9 @@ const Room = {
 
                 query.exec((err,data) => {
                     if (err) return done(err, null);
-                    result.list = Utils.ApiV3StyleId(data);
+                    result = {
+                        list: Utils.ApiV3StyleId(data)
+                    }
                     done(err,result);
                 });
             },
@@ -95,12 +97,13 @@ const Room = {
                 const organizationModel = OrganizationModel.get();
                 organizationModel.findOne({ _id: organizationId }, { maxRoomNumber: 1 }, (err, findResult) => {
                     if (err) {
-                        return done({ code: httpCodeServerError, message: err.text }, result);
+                        return done({ code: Const.httpCodeServerError, message: err.text }, result);
                     } 
                     result.maxRoomNumber = findResult.maxRoomNumber;
                     done(err, result);
                 });
             },
+            // Check the number of room in organization
             (result, done) => {
                 const userIds = _.pluck(result.usersInOrg, "_id");
                 roomModel.count({owner: {$in: userIds}}, (err, numberOfRooms) => {
@@ -119,10 +122,17 @@ const Room = {
                     }
                 });
             },
-            // save a new Room data
+            // Create a new Room data
             (result, done) => {
+                if (params.users) {
+                    params.users.push(baseUser.id.toString());   
+                } else {
+                    params.users = [ baseUser.id.toString() ];
+                }
+
                 if (_.isEmpty(params.name))
                     params.name = Utils.shorten(baseUser.name + "'s New Room");
+
                 result.saveData = {
                     name: params.name,
                     description: params.description,
@@ -130,6 +140,7 @@ const Room = {
                     owner : baseUser._id,
                     users: params.users
                 }
+
                 if (avatar) {
                     AvatarLogic.createRoomAvatarData(avatar, (err, avatarData) => {
                         if (avatarData)
@@ -165,6 +176,7 @@ const Room = {
                     });
                 }
             },
+            // Join to room
             (result, done) => {
                 const users = params.users;
                 if (users) {
