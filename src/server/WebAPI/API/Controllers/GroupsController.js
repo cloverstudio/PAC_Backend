@@ -18,6 +18,7 @@ const GroupModel = require(pathTop + 'Models/Group');
 const UserModel = require(pathTop + 'Models/User');  
 
 const GroupLogic = require( pathTop + "Logics/v3/Group");
+const MessageListLogic = require( pathTop + "Logics/v3/MessageList");
 
 const GroupsController = function(){};
 _.extend(GroupsController.prototype, APIBase.prototype);
@@ -548,6 +549,85 @@ GroupsController.prototype.init = function(app){
         });
 
     });
+
+
+    /**
+     * @api {get} /groups/{groupId}/messages/ Get list of messages sent to group
+     **/
+    router.get('/:groupId/messages',checkAPIKey, (request,response) => {
+        
+        const userModel = UserModel.get();
+        const groupId = request.params.groupId;        
+        const q = self.checkQueries(request.query);
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(groupId))
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                GroupLogic.getDetails(groupId ,null, (group, err) => {
+
+                    if(!group){
+                        done({
+                            code: Const.errorMessage.groupidIsWrong
+                        },null);
+
+                        return;
+                    }
+
+                    result.groupDetail = group;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                // find messsages
+                MessageListLogic.get(request.user._id
+                        ,Const.chatTypeGroup + "-" + result.groupDetail.id
+                        ,q
+                        ,(messages) => {
+
+                    result.messages = messages;
+                    done(null,result);
+
+                },(err) => {
+                    done(err,result);
+                });
+
+            },
+            (result,done) => {
+
+                done(null,result);
+            }
+        ],
+        (err,result) => {
+            
+            if(err){
+
+                if(err.code && err.code == Const.errorMessage.groupidIsWrong)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+
+                self.errorResponse(response, Const.httpCodeServerError);
+                return;
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                messages: result.messages
+            }); 
+
+        });
+
+    });
+
 
     return router;
 }

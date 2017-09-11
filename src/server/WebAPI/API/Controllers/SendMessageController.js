@@ -104,6 +104,7 @@ SendMessageController.prototype.init = function(app){
         },
         (result,done) => {
 
+
             SendMessageLogic.send(
                 
                 {

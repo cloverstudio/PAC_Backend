@@ -186,6 +186,13 @@
 
     Const.pagingLimit = 50;
 
+    Const.MessageLoadDirection = {
+        appendNoLimit:'allto',
+        append:'new',
+        prepend:'old'
+    };
+
+    
     Const.typingOff = 0;
     Const.typingOn = 1;
 
