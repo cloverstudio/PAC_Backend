@@ -197,8 +197,8 @@
     Const.descriptionMaxLength = 512;
 
     Const.errorMessage = {
-        queryParamsNotCorrect: "Query parameters are not correct.",
-        nameNotExist: "Name is empty. Please input name.",
+        queryParamsNotCorrect: "query parameters are not correct.",
+        nameNotExist: "name is empty. Please input name.",
         useridNotExist: "userid is empty. Please input userid.",
         passwordNotExist: "password is empty. Please input password.",
         useridTooShort: "userid is too short. Please input more than 6 characters.",
@@ -213,6 +213,7 @@
         groupidIsWrong: "groupId is wrong. Please input the correct id",        
         useridIsWrong: "userid is wrong. Please input the correct id",
         roomidIsWrong: "roomId is wrong. Please input the correct id",        
+        fileIsWrong: "file only can be set by jpeg, gif and png.",        
         includeUsersNotExist: "Wrong users",
         includeUsersNotExistInOrganiation: "Some userid in users doesn't exist.",        
         includeGroupsNotExist: "Wrong groups",

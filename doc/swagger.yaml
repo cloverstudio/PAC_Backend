@@ -1170,8 +1170,7 @@ paths:
       summary: Get room
       description: >-
         Get room object specified by room id. You can filter field by adding
-        item to query. If you want to get all details of room, unnecessary to
-        add query items.
+        item to query. If you want to get all details of room, unnecessary to add query items.
       parameters:
         - in: header
           name: access-token
@@ -1213,6 +1212,8 @@ paths:
         - Rooms
       summary: Update room details
       description: Update room details specified by id
+      consumes:
+        - multipart/form-data
       parameters:
         - in: header
           name: access-token
@@ -1224,11 +1225,18 @@ paths:
           description: room ID to get room
           type: string
           required: true
-        - in: body
-          name: body
-          schema:
-            $ref: '#definitions/Room'
-          required: true
+        - in: formData
+          type: string
+          name: name
+          description: Name of new room, if you don't set a name, it will be [username]\'s New Room.
+        - in: formData
+          type: string
+          name: description
+          description: Descripiton of new room
+        - in: formData
+          type: file
+          name: avatar
+          description: Image file of avatar of new room
       responses:
         '200':
           description: Updated document of room

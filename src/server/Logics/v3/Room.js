@@ -186,6 +186,18 @@ const Room = {
                     });
                 }
                 done(null, result);
+            },
+            // Update organization disk usage
+            (result, done) => {
+                const file = result.saveData.avatar;
+                if (file) {
+                    const size = file.picture.size + file.thumbnail.size;
+                    UpdateOrganizationDiskUsageLogic.update(organizationId, size, (err, updated) => {
+                        done(err, result);
+                    });
+                } else {
+                    done(null, result);
+                }
             }
         ], (err,result) => {
             if(err){
@@ -195,9 +207,9 @@ const Room = {
             if(onSuccess) onSuccess(result.createdRoom);
         });  
     },
-    getDetails: (RoomId, fields, onSuccess, onError) => {
+    getDetails: (roomId, fields, onSuccess, onError) => {
         const roomModel = RoomModel.get();
-        roomModel.findOne({ _id: RoomId }, fields, (err,foundRoom) => {
+        roomModel.findOne({ _id: roomId }, fields, (err,foundRoom) => {
             if(err && onError) return onError({code: err.status, message: err.text });
             result = foundRoom.toObject();
             result.id = foundRoom._id;
@@ -205,59 +217,41 @@ const Room = {
             if(onSuccess) onSuccess(result);
         });
     },
-    update: (RoomId, baseUser, params, avatar, onSuccess, onError) => {
-        const RoomModel = RoomModel.get();        
+    update: (roomId, baseUser, params, avatar, onSuccess, onError) => {
+        const roomModel = RoomModel.get();        
         async.waterfall([
+            // Validate the roomId is correct, or not
             (done) => {
-                // get original data
-                RoomModel.findOne({_id: RoomId}, (err, original) => {
-                    done(err, {original: original});
+                roomModel.findOne({_id: roomId}, (err, found) => {
+                    if (!found) {
+                        return done({
+                            code: Const.httpCodeBadParameter, 
+                            message: Const.roomidIsWrong 
+                        }, null);
+                    }
+                    done(err, {original: found});
                 });
             },
             (result, done) => {
                 const newName = params.name ? params.name : result.original.name;
                 const newDescription = params.description ? params.description : result.original.description;
-                const newSortName = params.sortName ? params.sortName : newName.toLowerCase();                    
                 result.updateParams = {
                     name: newName,
-                    sortName: newSortName,
-                    description: newDescription,
+                    description: newDescription
                 };
                 if (avatar) {
-                    easyImg.thumbnail({
-                        src: avatar.path,
-                        dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
-                        width: Const.thumbSize,
-                        height: Const.thumbSize
-                    }).then(
-                        (thumbnail) => {
-                            result.updateavatar = {
-                                picture: {
-                                    originalName: avatar.name,
-                                    size: avatar.size,
-                                    mimeType: avatar.type,
-                                    nameOnServer: Path.basename(avatar.path)
-                                },
-                                thumbnail: {
-                                    originalName: avatar.name,
-                                    size: thumbnail.size,
-                                    mimeType: thumbnail.type,
-                                    nameOnServer: thumbnail.name
-                                }
-                            };
-
-                            done(null, result);
-                        }, (err) => {
-                            done(err, result);
-                        }
-                    );
+                    AvatarLogic.createAvatarData(avatar, (err, avatarData) => {
+                        if (avatarData)
+                            result.updateParams.avatar = avatarData;
+                        done(err, result);
+                    });
                 } else {
                     done(null, result);
                 }
             },
             // Update data
             (result, done) => {
-                RoomModel.update({ _id: RoomId }, result.updateParams, (err, updated) => {
+                roomModel.update({ _id: roomId }, result.updateParams, (err, updated) => {
                     done(err, result);
                 });
             },
@@ -265,7 +259,7 @@ const Room = {
             (result, done) => {
                 if (avatar) {
                     let size = 0;
-                    const newSize = result.updateavatar.picture.size + result.updateavatar.thumbnail.size;                    
+                    const newSize = result.updateParams.avatar.picture.size + result.updateParams.avatar.thumbnail.size;                    
                     if (result.original.avatar.picture.size) {
                         const originalSize = result.original.avatar.picture.size + result.original.avatar.thumbnail.size;
                         size = newSize - originalSize;
@@ -328,14 +322,14 @@ const Room = {
             if(onSuccess) onSuccess(result);
         });
     },
-    addRoomToUser: (newUsers, RoomId, callback) => {
+    addRoomToUser: (newUsers, roomId, callback) => {
         if (newUsers) {
             const userModel = UserModel.get();
             _.each(newUsers, (userId, index) => {
                 userModel.findOne({_id: userId}, {Rooms:1}, (err, foundUser) => {
                     if (err) return done(err, result);
                     let Rooms = [];
-                    Rooms.push(foundUser.Rooms, RoomId);
+                    Rooms.push(foundUser.Rooms, roomId);
                     Rooms = _.flatten(Rooms);       
                     Rooms = _.compact(Rooms);
                     foundUser.Rooms = _.uniq(Rooms);

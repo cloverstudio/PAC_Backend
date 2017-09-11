@@ -185,34 +185,15 @@ RoomsController.prototype.init = function(app){
                     done(err, result);
                 });
             },
-            // Validate the new name is duplicated, or not.
+            // Validate files
             (result, done) => {
-                if (uploadPathError) 
-                    return done(uploadPathError, result);
-                self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
-                    done(err, result);   
-                });
-            },
-            // Validate the userid in users is correct format.
-            (result, done) => {
-                if (result.fields.users) {
-                    const users = result.fields.users.split(",");
-                    result.fields.users = _.map(users, (user) => {
-                        return user.trim();
-                    });
-                    self.validateUserIdIsCorrect(result.fields.users, (err) => {
-                        done(err, result);  
-                    });
-                } else {
-                    done(null, result);
-                } 
-            },
-            // Validate the set users exist in database, or not.
-            (result, done) => {       
-                if (result.fields.users) {              
-                    self.validateUsersPresence(result.fields.users, request.user.organizationId, (err) => {
-                        done(err, result);  
-                    });
+                if (result.file) {
+                    if(file.type.indexOf("jpeg") == -1 && file.type.indexOf("gif") == -1 && file.type.indexOf("png") == -1){
+                        return done({
+                            code: Const.responsecodeUpdateRoomWrongFile,
+                            message: Const.errorMessage.wrongFile 
+                        }, null);
+                    } 
                 } else {
                     done(null, result);
                 }
