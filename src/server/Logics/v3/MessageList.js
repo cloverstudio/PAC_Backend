@@ -3,63 +3,44 @@
 var _ = require('lodash');
 var async = require('async');
 
-var Const = require("../lib/consts");
-var Config = require("../lib/init");
-var Utils = require("../lib/utils");
+var Const = require("../../lib/consts");
+var Config = require("../../lib/init");
+var Utils = require("../../lib/utils");
 
 
-var DatabaseManager = require('../lib/DatabaseManager');
-var EncryptionManager = require('../lib/EncryptionManager');
+var DatabaseManager = require('../../lib/DatabaseManager');
+var EncryptionManager = require('../../lib/EncryptionManager');
 
-var MessageModel = require('../Models/Message');
-var FavoriteModel = require('../Models/Favorite');
+var MessageModel = require('../../Models/Message');
+var FavoriteModel = require('../../Models/Favorite');
 
-var PolulateMessageLogic = require('../Logics/PolulateMessage');
-var UpdateHistory = require('../Logics/UpdateHistory');
+var PolulateMessageLogic = require('../../Logics/PolulateMessage');
+var UpdateHistory = require('../../Logics/UpdateHistory');
 
-var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
+var SocketAPIHandler = require('../../SocketAPI/SocketAPIHandler');
 
 var MessageList = {
     
-    get: function(userID,roomId,lastMessageId,direction,encrypt,onSuccess,onError){
+    get: function(userID,roomId,params,onSuccess,onError){
 
         var messageModel = MessageModel.get();
 
         async.waterfall([function(done){
             
-            if(direction == Const.MessageLoadDirection.prepend){
+            const conditions = {
+                roomID: roomId
+            };
 
-                MessageModel.findOldMessages(roomId,lastMessageId,Const.pagingLimit,function (err,data) {
-                    
-                    done(err,data);
-
-                });
+            const query = messageModel.find(conditions, params.fields)
+                .skip(params.offset)
+                .sort(params.sort)
+                .limit(params.limit);
                 
-            }
+            query.exec(conditions,(err,messages) => {
 
-            else if(direction == Const.MessageLoadDirection.append){
+                done(err,messages);
 
-                var limit = Const.pagingLimit;
-                if(lastMessageId != 0)
-                    limit = 0;
-
-                MessageModel.findNewMessages(roomId,lastMessageId,limit,function (err,data) {
-                    
-                    done(err,data);
-
-                });
-
-            }
-
-            else if(direction == Const.MessageLoadDirection.appendNoLimit){
-
-                MessageModel.findAllMessages(roomId,lastMessageId,function (err,data) {
-                    
-                    done(err,data);
-
-                });
-
-            }
+            });
 
         },
         function(messages,done){
@@ -268,30 +249,7 @@ var MessageList = {
                 return;
             }
             
-            // encrypt message
-
-            if(encrypt){
-
-                var encryptedMessages = _.map(result,function(message){
-
-                    if(message.type == Const.messageTypeText){
-                        message.message = EncryptionManager.encryptText(message.message)
-                    }
-                    
-                    return message;
-                    
-                });
-
-                onSuccess(encryptedMessages);
-
-            } else {
-
-                onSuccess(result);
-
-            }
-
-
-            
+            onSuccess(result);
             
         });
         

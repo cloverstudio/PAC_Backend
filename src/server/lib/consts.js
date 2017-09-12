@@ -186,6 +186,13 @@
 
     Const.pagingLimit = 50;
 
+    Const.MessageLoadDirection = {
+        appendNoLimit:'allto',
+        append:'new',
+        prepend:'old'
+    };
+
+    
     Const.typingOff = 0;
     Const.typingOn = 1;
 
@@ -219,11 +226,12 @@
         includeUsersNotExist: "Wrong users",
         includeUsersNotExistInOrganiation: "Some userid in users doesn't exist.",        
         includeGroupsNotExist: "Wrong groups",
+        responsecodeMaxRoomNumber: "You've already had the max number of rooms",
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
+        wrongUserIds: "users parameter is wrong.",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist.",
         responsecodeMaxRoomNumber: "You've already had the max number of rooms",
         ownerCannotLeaveRoom: "The room owner can\'t leave room.",
-        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
-        wrongUserIds: "users parameter is wrong.",
         cannotDeleteRoom: "you can't delete this room because you are not the owner"
     }
 

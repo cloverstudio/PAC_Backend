@@ -36,7 +36,37 @@ describe('API', function () {
             
         });
 
+
+        it('send text messsage to group works', function (done) {
+
+            console.log('send group id',global.group1._id);
+
+            request(app)
+                .post('/api/v3/message/send')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .send({
+                    targetType:2, // group message
+                    target: global.group1._id,
+                    messageType: 1, // text message
+                    message: "hi group"
+                })
+                .expect(200) 
+                .end(function (err, res) {
+
+                if (err) {
+                    throw err;
+                }
+
+                res.body.should.have.property('message');
+                res.body.message.should.have.property('_id');
+                
+                done();
             
+            });   
+            
+        });
+        
         it('send file messsage works', function (done) {
 
             request(app)

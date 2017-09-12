@@ -8,7 +8,6 @@ describe('API', function () {
     
     describe('/v3/message/list POST', function () {
         
-
         it('getting message list works', function (done) {
 
             var roomID = "1-" + global.user1._id + "-" + global.user2._id;
