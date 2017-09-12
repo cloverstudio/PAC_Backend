@@ -217,8 +217,10 @@
         includeUsersNotExist: "Wrong users",
         includeUsersNotExistInOrganiation: "Some userid in users doesn't exist.",        
         includeGroupsNotExist: "Wrong groups",
-        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist.",
         responsecodeMaxRoomNumber: "You've already had the max number of rooms"
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
+        wrongUserIds: "users parameter is wrong."
+
     }
 
     // Exports ----------------------------------------------
