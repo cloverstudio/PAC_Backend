@@ -294,7 +294,6 @@ GroupsController.prototype.init = function(app){
     });
 
 
-
     /**
      * @api {get} /groups/{groupId}/users/ Get user list of group
      **/
@@ -313,6 +312,14 @@ GroupsController.prototype.init = function(app){
                 const result = {};
 
                 GroupLogic.getDetails(groupId ,null, (group, err) => {
+
+                    if(!group){
+                        done({
+                            code: Const.errorMessage.groupidIsWrong
+                        },null);
+
+                        return;
+                    }
 
                     result.groupDetail = group;
                     done(null,result);
@@ -335,7 +342,8 @@ GroupsController.prototype.init = function(app){
                 const userIdList = result.groupDetail.users.slice(offset,offset + limit);
                 result.userIdList = userIdList;
 
-                done(null,result)
+                done(null,result);
+
             },
             (result,done) => {
 
@@ -356,6 +364,10 @@ GroupsController.prototype.init = function(app){
         (err,result) => {
 
             if(err){
+
+                if(err.code && err.code == Const.errorMessage.groupidIsWrong)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+
                 self.errorResponse(response, Const.httpCodeServerError);
                 return;
             }
@@ -368,7 +380,174 @@ GroupsController.prototype.init = function(app){
 
     });
 
+    /**
+     * @api {post} /groups/{groupId}/users/ Invite users to group
+     **/
+    router.post('/:groupId/users',checkAPIKey, checkUserAdmin,(request,response) => {
 
+        const groupId = request.params.groupId;  
+        const userIds = request.body.users;
+        const groupModel = GroupModel.get();
+
+        // Check params 
+        if (!mongoose.Types.ObjectId.isValid(groupId))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+
+        if (!userIds || !Array.isArray(userIds))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.wrongUserIds);
+
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                GroupLogic.getDetails(groupId ,null, (group, err) => {
+
+                    if(!group){
+                        done({
+                            code: Const.errorMessage.groupidIsWrong
+                        },null);
+
+                        return;
+                    }
+
+                    result.groupDetail = group;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                const newUsers = result.groupDetail.users.concat(userIds);
+                result.newUsers = newUsers;
+
+                done(null,result);
+
+            },
+            (result,done) => {
+
+                groupModel.update({ _id: groupId }, {
+                    users:result.newUsers
+                }, (err, updated) => {
+
+                    if(!err)
+                        result.groupDetail.users = result.newUsers;
+
+                    done(err, result);
+
+                });
+
+            }
+        ],
+        (err,result) => {
+
+            if(err){
+
+                if(err.code && err.code == Const.errorMessage.groupidIsWrong)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+
+                self.errorResponse(response, Const.httpCodeServerError);
+                return;
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                group:result.groupDetail
+            }); 
+
+        });
+
+    });
+
+    /**
+     * @api {delete} /groups/{groupId}/users/ Kick user out from group
+     **/
+    router.delete('/:groupId/users',checkAPIKey, checkUserAdmin,(request,response) => {
+
+        const groupId = request.params.groupId;  
+        const userIds = request.body.users;
+        const groupModel = GroupModel.get();
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(groupId))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+
+        if (!userIds || !Array.isArray(userIds))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.wrongUserIds);
+
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                GroupLogic.getDetails(groupId ,null, (group, err) => {
+
+                    if(!group){
+                        done({
+                            code: Const.errorMessage.groupidIsWrong
+                        },null);
+                        return;
+                    }
+
+                    result.groupDetail = group;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                const newUsers = result.groupDetail.users.filter((userId) => {
+
+                    return userIds.indexOf(userId) == -1;
+
+                });
+
+                result.newUsers = newUsers;
+
+                done(null,result);
+
+            },
+            (result,done) => {
+
+                groupModel.update({ _id: groupId }, {
+                    users:result.newUsers
+                }, (err, updated) => {
+
+                    if(!err)
+                        result.groupDetail.users = result.newUsers;
+
+                    done(err, result);
+
+                });
+
+            }
+        ],
+        (err,result) => {
+
+            if(err){
+
+                if(err.code && err.code == Const.errorMessage.groupidIsWrong)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
+
+                self.errorResponse(response, Const.httpCodeServerError);
+                return;
+
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                group:result.groupDetail
+            }); 
+
+        });
+
+    });
 
     return router;
 }

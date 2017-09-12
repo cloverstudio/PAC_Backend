@@ -109,6 +109,13 @@ global.group4 = {
     type: 1
 }
 
+global.group4 = {
+    name: "group4",
+    description: "DESCRIPTION group4",
+    users: [],
+    type: 1
+}
+
 global.department1 = {
     name: "department1",
     description: "DESCRIPTIPN department1",
@@ -301,7 +308,7 @@ before(function(doneMain){
                 }
                 
                 global.group1._id = res.body.data.group._id;
-
+                
                 done(null, result);
             
             });  
@@ -376,6 +383,9 @@ before(function(doneMain){
                 }
                 
                 global.group4._id = res.body.data.group._id;
+
+                global.createdGroup2 = global.group4;
+                global.createdGroup2.id = global.group4._id;
 
                 done(null, result);
             

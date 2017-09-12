@@ -221,7 +221,9 @@
         includeGroupsNotExist: "Wrong groups",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist.",
         responsecodeMaxRoomNumber: "You've already had the max number of rooms",
-        ownerCannotLeaveRoom: "The room owner can\'t leave room."
+        ownerCannotLeaveRoom: "The room owner can\'t leave room.",
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
+        wrongUserIds: "users parameter is wrong."
     }
 
     // Exports ----------------------------------------------
