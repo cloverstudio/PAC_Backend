@@ -74,7 +74,7 @@ describe('API', function () {
                 .expect(200, done)
         });
 
-        it('Create rooms works by non-admin user', (done) => {
+        it('Update rooms works by non-admin user', (done) => {
             request(app)
                 .post('/api/v3/rooms/')
                 .set('apikey', global.apikey)
