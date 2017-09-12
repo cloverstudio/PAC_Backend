@@ -1,58 +1,44 @@
-/** Create group */
+/** Create Room */
 const async = require('async');
 const _ = require('lodash');
 const Const = require("../../lib/consts");
 const Utils = require("../../lib/utils");
 const Path = require('path');
 const easyImg = require('easyimage');
-const GroupModel = require('../../Models/Group');
+const RoomModel = require('../../Models/Room');
 const UserModel = require('../../Models/User');
 const HistoryModel = require('../../Models/History');
 const OrganizationModel = require('../../Models/Organization');
 const UpdateOrganizationDiskUsageLogic = require('./UpdateOrganizationDiskUsage')
 const PermissionLogic = require('./Permission');
 const AvatarLogic = require('./Avatar');
+const UpdateHistoryLogic = require('./UpdateHistory');
+const SocketAPIHandler = require('../../SocketAPI/SocketAPIHandler');
 
-const Group = {
+const Room = {
     search: (user, params, onSuccess, onError) => {
-        const organizationId = user.organizationId;
-        const groupModel = GroupModel.get();
+        const roomModel = RoomModel.get();
         async.waterfall([
+            // Get Rooms
             (done) => {
-                // get departments
-                PermissionLogic.getDepartments(user._id.toString(), (departments) => {
-                    done(null, { departmentIds: departments });
-                });
-            },
-            // Get groups
-            (result, done) => {
-                let conditions = {
-                    $and: [
-                        {organizationId: organizationId},
-                        {$or : [
-                            { users: user._id.toString() },
-                            { _id: { $in: result.departmentIds } }
-                        ]}
+                let conditions = { users: user.id.toString()};
+                if(!_.isEmpty(params.keyword)){
+                    conditions.$or = [
+                        { name: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") },
+                        { description: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") },                        
                     ]
                 }
-                if(!_.isEmpty(params.keyword)){
-                    conditions['$and'].push(
-                        { "$or" : 
-                            [
-                                { name: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") },
-                                { description: new RegExp('^.*' + Utils.escapeRegExp(params.keyword) + '.*$', "i") }
-                            ]
-                        }
-                    );
-                }
 
-                const query = groupModel.find(conditions, params.fields)
+                const query = roomModel.find(conditions, params.fields)
                 .skip(params.offset)
                 .sort(params.sort)
                 .limit(params.limit);
 
                 query.exec((err,data) => {
-                    result.list = Utils.ApiV3StyleId(data);
+                    if (err) return done(err, null);
+                    result = {
+                        list: Utils.ApiV3StyleId(data)
+                    }
                     done(err,result);
                 });
             },
@@ -74,9 +60,9 @@ const Group = {
                         return item.toObject();
                     });
                     // Replace users list to list including username
-                    _.forEach(result.list, (group, index) => {
+                    _.forEach(result.list, (Room, index) => {
                         const userModels = _.filter(foundUsers, (user) => {
-                            return group.users.indexOf(user._id);
+                            return Room.users.indexOf(user._id);
                         });
                         result.list[index].users =  userModels;                        
                     });
@@ -93,44 +79,72 @@ const Group = {
         });  
     },
     create: (baseUser, params, avatar, onSuccess, onError) => {
-        const groupModel = GroupModel.get();
+        const roomModel = RoomModel.get();
+        const userModel = UserModel.get();        
         const organizationId = baseUser.organizationId;
         async.waterfall([
-            // Get latest organization data
+            // Get all users by organizationId      
             (done) => {
-                const organizationModel = OrganizationModel.get();                
-                organizationModel.findOne({_id: organizationId}, (err, organization) => {
-                    done(err, { organization: organization });
+                userModel.find({organizationId: organizationId}, {_id:1}, (err, findResult) => {
+                    if (err) {
+                        return done({code: Const.httpCodeServerError, message: err.text}, result);
+                    }
+                    done(err, {usersInOrg: findResult});
                 });
             },
-            // Check number of groups in organization   
+            // Get max room number from organization       
             (result, done) => {
-                groupModel.count({ organizationId: organizationId}, (err, numberOfGroup) => {
-                    if (numberOfGroup >= result.organization.maxGroupNumber) { 
-                        err = 'You can\'t add more groups to this organization. Maximum number of groups/departments in this organization is ' + 
-                        result.organization.maxGroupNumber + '.';
-                    }
-                    result = {}; // because won't use organizatioin data any more
+                const organizationModel = OrganizationModel.get();
+                organizationModel.findOne({ _id: organizationId }, { maxRoomNumber: 1 }, (err, findResult) => {
+                    if (err) {
+                        return done({ code: Const.httpCodeServerError, message: err.text }, result);
+                    } 
+                    result.maxRoomNumber = findResult.maxRoomNumber;
                     done(err, result);
                 });
             },
-            // save a new group data
+            // Check the number of room in organization
             (result, done) => {
-                
-                const sort = params.sortName ? params.sortName : params.name.toLowerCase();
+                const userIds = _.pluck(result.usersInOrg, "_id");
+                roomModel.count({owner: {$in: userIds}}, (err, numberOfRooms) => {
+                    if (err) {
+                        const error = {code: Const.httpCodeServerError, message: err.text};
+                        return done(error, result);
+                    }
+                    if (numberOfRooms >= result.maxRoomNumber) {
+                        const error = { 
+                            code: Const.httpCodeBadParameter, 
+                            message: Const.errorMessage.responsecodeMaxRoomNumber
+                        };
+                        done(error, result);
+                    } else {
+                        done(err, result);
+                    }
+                });
+            },
+            // Create a new Room data
+            (result, done) => {
+                if (params.users) {
+                    params.users.push(baseUser.id.toString());   
+                } else {
+                    params.users = [ baseUser.id.toString() ];
+                }
+
+                if (_.isEmpty(params.name))
+                    params.name = Utils.shorten(baseUser.name + "'s New Room");
+
                 result.saveData = {
                     name: params.name,
-                    sortName: sort,
                     description: params.description,
                     created: Utils.now(),
-                    organizationId: organizationId,
-                    users: params.users,
-                    type: Const.groupType.group
+                    owner : baseUser._id,
+                    users: params.users
                 }
+
                 if (avatar) {
-                    AvatarLogic.createAvatarData(avatar, (err, avatarData) => {
+                    AvatarLogic.createRoomAvatarData(avatar, (err, avatarData) => {
                         if (avatarData)
-                            result.saveData.avatar = avatarData;
+                            result.saveData.avatar = avatarData;                            
                         done(err, result);
                     });
                 } else {
@@ -139,19 +153,39 @@ const Group = {
             },
             // Save Data
             (result, done) => {
-                const newGroup = new groupModel(result.saveData);
-                newGroup.save((err, saved) => {
-                    result.createdGroup = saved.toObject();
-                    result.createdGroup.id = saved._id;
-                    delete result.createdGroup._id;
+                const newRoom = new roomModel(result.saveData);
+                newRoom.save((err, saved) => {
+                    result.createdRoom = saved.toObject();
+                    result.createdRoom.id = saved._id;
+                    delete result.createdRoom._id;
                     done(err, result);
                 });
             },
-            // Add groupid to the groups field of user model which added to group
+            // Send socket to notice room creating
             (result, done) => {
-                Group.addGroupToUser(params.users, result.createdGroup.id, (err) => {
-                    done(err, result);
-                });
+                if (result.createdRoom) {
+                    UpdateHistoryLogic.newRoom(result.createdRoom);
+                    done(null, result);
+
+                    _.forEach(result.createdRoom.users, (userId) => {
+                        if (userId) {
+                            SocketAPIHandler.emitToUser(userId, 'new_room', {
+                                conversation: result.createdRoom
+                            });
+                        }
+                    });
+                }
+            },
+            // Join to room
+            (result, done) => {
+                const users = params.users;
+                if (users) {
+                    users.push(baseUser._id);
+                    users.forEach((userId) => {
+                        SocketAPIHandler.joinTo(userId, Const.chatTypeRoom, result.createdRoom.id.toString());
+                    });
+                }
+                done(null, result);
             },
             // Update organization disk usage
             (result, done) => {
@@ -170,36 +204,40 @@ const Group = {
                 if(onError) onError(err);
                 return;
             }
-            if(onSuccess) onSuccess(result.createdGroup);
+            if(onSuccess) onSuccess(result.createdRoom);
         });  
     },
-    getDetails: (groupId, fields, onSuccess, onError) => {
-        const groupModel = GroupModel.get();
-        groupModel.findOne({ _id: groupId }, fields, (err,foundGroup) => {
-            if(err && onError) return onError(err);
-            result = foundGroup.toObject();
-            result.id = foundGroup._id;
+    getDetails: (roomId, fields, onSuccess, onError) => {
+        const roomModel = RoomModel.get();
+        roomModel.findOne({ _id: roomId }, fields, (err,foundRoom) => {
+            if(err && onError) return onError({code: err.status, message: err.text });
+            result = foundRoom.toObject();
+            result.id = foundRoom._id;
             delete result._id;
             if(onSuccess) onSuccess(result);
         });
     },
-    update: (groupId, baseUser, params, avatar, onSuccess, onError) => {
-        const groupModel = GroupModel.get();        
+    update: (roomId, baseUser, params, avatar, onSuccess, onError) => {
+        const roomModel = RoomModel.get();        
         async.waterfall([
+            // Validate the roomId is correct, or not
             (done) => {
-                // get original data
-                groupModel.findOne({_id: groupId}, (err, original) => {
-                    done(err, {original: original});
+                roomModel.findOne({_id: roomId}, (err, found) => {
+                    if (!found) {
+                        return done({
+                            code: Const.httpCodeBadParameter, 
+                            message: Const.roomidIsWrong 
+                        }, null);
+                    }
+                    done(err, {original: found});
                 });
             },
             (result, done) => {
                 const newName = params.name ? params.name : result.original.name;
                 const newDescription = params.description ? params.description : result.original.description;
-                const newSortName = params.sortName ? params.sortName : newName.toLowerCase();                    
                 result.updateParams = {
                     name: newName,
-                    sortName: newSortName,
-                    description: newDescription,
+                    description: newDescription
                 };
                 if (avatar) {
                     AvatarLogic.createAvatarData(avatar, (err, avatarData) => {
@@ -213,7 +251,7 @@ const Group = {
             },
             // Update data
             (result, done) => {
-                groupModel.update({ _id: groupId }, result.updateParams, (err, updated) => {
+                roomModel.update({ _id: roomId }, result.updateParams, (err, updated) => {
                     done(err, result);
                 });
             },
@@ -241,18 +279,18 @@ const Group = {
             if(onSuccess) onSuccess(result);
         });    
     },
-    delete: (group, user, onSuccess, onError) =>  {
-        const groupModel = GroupModel.get();
+    delete: (Room, user, onSuccess, onError) =>  {
+        const RoomModel = RoomModel.get();
         async.waterfall([
             (done) => {
-                groupModel.remove({_id: group.id}, (err, deleted) => {
-                    done(err, { group: group });
+                RoomModel.remove({_id: Room.id}, (err, deleted) => {
+                    done(err, { Room: Room });
                 });
             },
             // Update organization disk usage
             (result, done) => {
-                const pictureSize = result.group.avatar.picture.size;
-                const thumbnailSize = result.group.avatar.thumbnail.size;
+                const pictureSize = result.Room.avatar.picture.size;
+                const thumbnailSize = result.Room.avatar.thumbnail.size;
                 if (pictureSize) {
                     let size = - (pictureSize + thumbnailSize);
                     UpdateOrganizationDiskUsageLogic.update(user.organizationId, size, (err, updated) => {
@@ -262,11 +300,11 @@ const Group = {
                     done(null, result);
                 }
             },
-            // remove group from user's groups
+            // remove Room from user's Rooms
             (result, done) => {
                 const userModel = UserModel.get();
-                _.each(group.users, (user) => {
-                    userModel.update({_id: user, groups: group.id}, {$pull: {groups: group.id}}, (err, updated) => {
+                _.each(Room.users, (user) => {
+                    userModel.update({_id: user, Rooms: Room.id}, {$pull: {Rooms: Room.id}}, (err, updated) => {
                         done(err, result);
                     });
                 });
@@ -274,7 +312,7 @@ const Group = {
             // remove history
             (result, done) => {
                 const historyModel = HistoryModel.get();                
-                historyModel.remove({chatId: group.id}, (err, deleted) => {
+                historyModel.remove({chatId: Room.id}, (err, deleted) => {
                     done(err, result);
                 });
             }
@@ -284,17 +322,17 @@ const Group = {
             if(onSuccess) onSuccess(result);
         });
     },
-    addGroupToUser: (newUsers, groupId, callback) => {
+    addRoomToUser: (newUsers, roomId, callback) => {
         if (newUsers) {
             const userModel = UserModel.get();
             _.each(newUsers, (userId, index) => {
-                userModel.findOne({_id: userId}, {groups:1}, (err, foundUser) => {
+                userModel.findOne({_id: userId}, {Rooms:1}, (err, foundUser) => {
                     if (err) return done(err, result);
-                    let groups = [];
-                    groups.push(foundUser.groups, groupId);
-                    groups = _.flatten(groups);       
-                    groups = _.compact(groups);
-                    foundUser.groups = _.uniq(groups);
+                    let Rooms = [];
+                    Rooms.push(foundUser.Rooms, roomId);
+                    Rooms = _.flatten(Rooms);       
+                    Rooms = _.compact(Rooms);
+                    foundUser.Rooms = _.uniq(Rooms);
                     foundUser.save();
                 }); 
             });
@@ -305,4 +343,4 @@ const Group = {
     }
 };
 
-module["exports"] = Group;
+module["exports"] = Room;

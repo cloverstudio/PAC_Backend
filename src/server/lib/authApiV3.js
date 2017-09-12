@@ -73,10 +73,9 @@ function checkAPIKey(request, response, next) {
     },
     (result,done) => {
         
-        var originalUrl = request.originalUrl;
-
-        if(/test/.test(originalUrl)
-            || /signin/.test(originalUrl)){
+        const checkurl = request.originalUrl.replace(/\?.*/, "");
+        if(/test/.test(checkurl)
+            || /signin/.test(checkurl)){
 
             done('skip',result);
             return;
