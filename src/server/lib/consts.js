@@ -208,6 +208,8 @@
         nameNotExist: "name is empty. Please input name.",
         useridNotExist: "userid is empty. Please input userid.",
         passwordNotExist: "password is empty. Please input password.",
+        roomNotExist: "room is not existed",
+        userNotExistInRoom: "user does not exist in room",
         useridTooShort: "userid is too short. Please input more than 6 characters.",
         passwordTooShort: "password is too short. Please input more than 6 characters.",
         nameTooLarge: "name is too large. Please input shorter than 64 characters.",
@@ -227,7 +229,10 @@
         responsecodeMaxRoomNumber: "You've already had the max number of rooms",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
         wrongUserIds: "users parameter is wrong.",
-
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist.",
+        responsecodeMaxRoomNumber: "You've already had the max number of rooms",
+        ownerCannotLeaveRoom: "The room owner can\'t leave room.",
+        cannotDeleteRoom: "you can't delete this room because you are not the owner"
     }
 
     // Exports ----------------------------------------------
