@@ -1,44 +1,49 @@
-const should = require('should');
-const request = require('supertest');
-const app = require('../mainTest');
+var should = require('should');
+var request = require('supertest');
+var app = require('../mainTest');
 const Const = require('../lib/consts');
 
 describe('API', function () {
 
     var req, res;
 
-    describe('/v3/rooms/leave POST', function () {
+    describe('/v3/rooms/{roomId} DELETE', function () {
     
         it('returns 401, wrong apiKey', (done) => {
             request(app)
-                .post('/api/v3/rooms/leave')
+                .delete('/api/v3/rooms/' + global.room3.id)
                 .set('apikey', global.apikey + "wrong")
                 .set('access-token', global.user1.apiaccesstoken)
-                .send({
-                    roomId: global.room2.id
-                })
                 .expect(401, done)
         });
 
         it('returns 403, Wrong access token', (done) => {
             request(app)
-                .post('/api/v3/rooms/leave')
+                .delete('/api/v3/rooms/' + global.room3.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken + "wrong")
-                .send({
-                    roomId: global.room2.id
-                })
                 .expect(403, done) 
+        });
+
+        it('return 403, user2 is not the owner', (done) => {
+            request(app)
+                .delete('/api/v3/rooms/' + global.room3.id)
+                .set('apikey', global.apikey)
+                .set('access-token', global.user2.apiaccesstoken)
+                .expect(403)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.cannotDeleteRoom);
+                    done();
+                });
         });
 
         it('returns 422, if room id is wrong', (done) => {
             request(app)
-                .post('/api/v3/rooms/leave')
+                .delete('/api/v3/rooms/' + 'wrongId')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
-                .send({
-                    roomId: 'wrongId'
-                })
+                .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
                     res.error.text.should.equal(Const.errorMessage.roomidIsWrong);
@@ -48,12 +53,9 @@ describe('API', function () {
 
         it('returns 422, rooms is not existed', (done) => {
             request(app)
-                .post('/api/v3/rooms/leave')
+                .delete('/api/v3/rooms/' + "59a2db892061174208544201")
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
-                .send({
-                    roomId: "59a2db892061174208544201"
-                })
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
@@ -62,59 +64,46 @@ describe('API', function () {
                 });
         });
 
-        it('return 403, the owner try to leave room', (done) => {
+        it('confirm room exist', (done) => {
             request(app)
-                .post('/api/v3/rooms/leave')
+                .get('/api/v3/rooms/')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
-                .send({
-                    roomId: global.room4.id
-                })
-                .expect(403)
-                .end((err, res) => {
-                    if (err) throw err;
-                    res.error.text.should.equal(Const.errorMessage.ownerCannotLeaveRoom);
-                    done();
-                });
-        });
-
-        it('return 422, if user does not exist in the room', (done) => {
-            request(app)
-                .post('/api/v3/rooms/leave')
-                .set('apikey', global.apikey)
-                .set('access-token', global.user1.apiaccesstoken)
-                .send({
-                    roomId: global.room2.id
-                })
-                .expect(422)
-                .end((err, res) => {
-                    if (err) throw err;
-                    res.error.text.should.equal(Const.errorMessage.userNotExistInRoom);
-                    done();
-                });
-        });
-
-        it('non-owner leave room', (done) => {
-            request(app)
-                .post('/api/v3/rooms/leave')
-                .set('apikey', global.apikey)
-                .set('access-token', global.user2.apiaccesstoken)
-                .send({
-                    roomId: global.room3.id
-                })
-                .expect(200, done)
-        });
-
-        it('confirm leaving room', (done) => {
-            request(app)
-                .get('/api/v3/rooms/' + global.room3.id)
-                .set('apikey', global.apikey)
-                .set('access-token', global.user2.apiaccesstoken)
                 .expect(200)
                 .end((err, res) => {
                     if (err) throw err;
-                    res.body.should.have.property('room');
-                    res.body.room.users.should.not.containEql(global.user2._id);
+                    res.body.should.have.property('rooms');
+                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);
+                    done();
+                });
+        });
+
+        it('delete room without avatar', (done) => {
+            request(app)
+                .delete('/api/v3/rooms/' + global.room3.id)
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .expect(200, done)
+        });
+
+        it('delete room with avatar', (done) => {
+            request(app)
+                .delete('/api/v3/rooms/' + global.room4.id)
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .expect(200, done)
+        });
+
+        it('confirm deleting room', (done) => {
+            request(app)
+                .get('/api/v3/rooms/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .expect(200)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.body.should.have.property('rooms');
+                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(1);
                     done();
                 });
         });

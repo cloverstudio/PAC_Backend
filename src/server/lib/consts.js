@@ -223,7 +223,8 @@
         responsecodeMaxRoomNumber: "You've already had the max number of rooms",
         ownerCannotLeaveRoom: "The room owner can\'t leave room.",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
-        wrongUserIds: "users parameter is wrong."
+        wrongUserIds: "users parameter is wrong.",
+        cannotDeleteRoom: "you can't delete this room because you are not the owner"
     }
 
     // Exports ----------------------------------------------

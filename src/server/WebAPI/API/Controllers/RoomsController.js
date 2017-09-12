@@ -216,7 +216,7 @@ RoomsController.prototype.init = function(app){
     /**
      * @api {delete} /api/v3/rooms/{roomId} delete room details
      **/
-    router.delete('/:roomId',checkAPIKey, checkUserAdmin, (request,response) => {
+    router.delete('/:roomId',checkAPIKey, (request,response) => {
         const roomId = request.params.roomId;        
         // Check params
         async.waterfall([
@@ -234,25 +234,32 @@ RoomsController.prototype.init = function(app){
             (result, done) => {
                 const roomModel = RoomModel.get();
                 roomModel.findOne({_id: roomId}, (err, foundRoom) => {
-                    if (!foundRoom) {
+                    if (err || !foundRoom) {
                         return done({
                             code: Const.httpCodeBadParameter,
-                            message: Const.errorMessage.roomidIsWrong
+                            message: Const.errorMessage.roomNotExist
                         }, null);
                     }
-                    if (err) {
-                        const e = { code: err.status, message: err.text };
-                        return done(e, result);
-                    }
-                    done(null, { room: foundRoom })
+                    done(null, foundRoom)
                 });
             },
+            // Validate that loginUser is not owner ot the room
+            (room, done) => {
+                if (request.user._id != room.owner.toString()) {
+                    return done({
+                        code: Const.httpCodeForbidden,
+                        message: Const.errorMessage.cannotDeleteRoom
+                    }, null);
+                } else {
+                    done(null, room);
+                }
+            }
         ],
-        (err, result) => {
+        (err, room) => {
             if (!_.isEmpty(err))
                 return response.status(err.code).send(err.message);
             
-            RoomLogic.delete(result.room, request.user, (room, err) => {
+            RoomLogic.delete(room, request.user, (room, err) => {
                 self.successResponse(response, Const.responsecodeSucceed); 
             }, (err) => {
                 console.log("Critical Error", err);
@@ -370,7 +377,7 @@ RoomsController.prototype.init = function(app){
             (room, done) => {
                 if (request.user._id == room.owner.toString()) {
                     return done({
-                        code: Const.httpCodeBadParameter,
+                        code: Const.httpCodeForbidden,
                         message: Const.errorMessage.ownerCannotLeaveRoom
                     }, null);
                 } else {

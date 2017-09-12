@@ -280,17 +280,17 @@ const Room = {
         });    
     },
     delete: (room, user, onSuccess, onError) =>  {
-        const RoomModel = RoomModel.get();
+        const roomModel = RoomModel.get();
         async.waterfall([
             (done) => {
-                RoomModel.remove({_id: Room.id}, (err, deleted) => {
-                    done(err, { Room: Room });
+                roomModel.remove({_id: room.id}, (err, deleted) => {
+                    done(err, null);
                 });
             },
             // Update organization disk usage
             (result, done) => {
-                const pictureSize = result.Room.avatar.picture.size;
-                const thumbnailSize = result.Room.avatar.thumbnail.size;
+                const pictureSize = room.avatar.picture.size;
+                const thumbnailSize = room.avatar.thumbnail.size;
                 if (pictureSize) {
                     let size = - (pictureSize + thumbnailSize);
                     UpdateOrganizationDiskUsageLogic.update(user.organizationId, size, (err, updated) => {
@@ -300,21 +300,29 @@ const Room = {
                     done(null, result);
                 }
             },
-            // remove Room from user's Rooms
+            // remove room from user's rooms
             (result, done) => {
-                const userModel = UserModel.get();
-                _.each(Room.users, (user) => {
-                    userModel.update({_id: user, Rooms: Room.id}, {$pull: {Rooms: Room.id}}, (err, updated) => {
-                        done(err, result);
-                    });
+                roomModel.remove({ _id : room.id }, (err,removed) => {
+                    if(err) return done(err, null);
+                    done(null, result);                    
                 });
             },
             // remove history
             (result, done) => {
                 const historyModel = HistoryModel.get();                
-                historyModel.remove({chatId: Room.id}, (err, deleted) => {
+                historyModel.remove({chatId: room.id}, (err, deleted) => {
                     done(err, result);
                 });
+            },
+            // Send socket
+            (result, done) => {
+                // send socket
+                _.forEach(room.users, (userId) => {
+                    if(userId) {
+                        SocketAPIHandler.emitToUser(userId, 'delete_room', {conversation:room.toObject()});
+                    }
+                });
+                done(null, result);
             }
         ],
         (err, result) => {
@@ -335,8 +343,7 @@ const Room = {
             (room, done) => {
                 const historyModel = HistoryModel.get();
                 historyModel.remove({ chatId: room.id.toString(), userId: loginUser._id }, (err, removed) => {
-                    if (err)
-                        return done({code: err.status, message: err.text}, null);
+                    if (err) return done(err, null);
                     done(null, room);
                 });                
             },
