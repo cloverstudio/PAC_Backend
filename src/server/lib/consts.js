@@ -197,10 +197,12 @@
     Const.descriptionMaxLength = 512;
 
     Const.errorMessage = {
-        queryParamsNotCorrect: "Query parameters are not correct.",
-        nameNotExist: "Name is empty. Please input name.",
+        queryParamsNotCorrect: "query parameters are not correct.",
+        nameNotExist: "name is empty. Please input name.",
         useridNotExist: "userid is empty. Please input userid.",
         passwordNotExist: "password is empty. Please input password.",
+        roomNotExist: "room is not existed",
+        userNotExistInRoom: "user does not exist in room",
         useridTooShort: "userid is too short. Please input more than 6 characters.",
         passwordTooShort: "password is too short. Please input more than 6 characters.",
         nameTooLarge: "name is too large. Please input shorter than 64 characters.",
@@ -210,13 +212,19 @@
         descriptionTooLarge: "description is too large. Please input shorter than 512 characters.",
         groupDuplicated: "You already have the same name group. Please change the name." ,
         userDuplicated: "You already have the same name user. Please change the name.",
-        groupidIsWrong: "groupid is wrong. Please input the correct id",        
+        groupidIsWrong: "groupId is wrong. Please input the correct id",        
         useridIsWrong: "userid is wrong. Please input the correct id",
+        roomidIsWrong: "roomId is wrong. Please input the correct id",        
+        fileIsWrong: "file only can be set by jpeg, gif and png.",        
         includeUsersNotExist: "Wrong users",
-        includeUsersNotExistInOrganiation: "Some userid in users doesn't exist in your organization.",        
+        includeUsersNotExistInOrganiation: "Some userid in users doesn't exist.",        
         includeGroupsNotExist: "Wrong groups",
+        includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist.",
+        responsecodeMaxRoomNumber: "You've already had the max number of rooms",
+        ownerCannotLeaveRoom: "The room owner can\'t leave room.",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
-        wrongUserIds: "users parameter is wrong."
+        wrongUserIds: "users parameter is wrong.",
+        cannotDeleteRoom: "you can't delete this room because you are not the owner"
     }
 
     // Exports ----------------------------------------------

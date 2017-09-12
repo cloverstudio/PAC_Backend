@@ -12,6 +12,7 @@ const OrganizationModel = require('../../Models/Organization');
 const UpdateOrganizationDiskUsageLogic = require('./UpdateOrganizationDiskUsage')
 const PermissionLogic = require('./Permission');
 const NewUserLogic = require('./NewUser');
+const AvatarLogic = require('./Avatar');
 
 const User = {
     create: (baseUser, params, avatar, onSuccess, onError) => {
@@ -119,33 +120,11 @@ const User = {
                 }
                 
                 if (avatar) {
-                    easyImg.thumbnail({
-                        src: avatar.path,
-                        dst: Path.dirname(avatar.path) + "/" + Utils.getRandomString(),
-                        width: Const.thumbSize,
-                        height: Const.thumbSize
-                    }).then(
-                        (thumbnail) => {
-                            result.updateParams.avatar = {
-                                picture: {
-                                    originalName: avatar.name,
-                                    size: avatar.size,
-                                    mimeType: avatar.type,
-                                    nameOnServer: Path.basename(avatar.path)
-                                },
-                                thumbnail: {
-                                    originalName: avatar.name,
-                                    size: thumbnail.size,
-                                    mimeType: thumbnail.type,
-                                    nameOnServer: thumbnail.name
-                                }
-                            };
-
-                            done(null, result);
-                        }, (err) => {
-                            done(err, result);
-                        }
-                    );
+                    AvatarLogic.createAvatarData(avatar, (err, avatarData) => {
+                        if (avatarData)
+                            result.updateParams.avatar = avatarData;
+                        done(err, result);
+                    });
                 } else {
                     done(null, result);
                 }
@@ -222,25 +201,6 @@ const User = {
             if(err && onError) return onError(err);
             if(onSuccess) onSuccess(result);
         });
-    },
-    addUserToUser: (newUsers, userid, callback) => {
-        if (newUsers) {
-            const userModel = UserModel.get();
-            _.each(newUsers, (userid, index) => {
-                userModel.findOne({_id: userid}, {Users:1}, (err, foundUser) => {
-                    if (err) return done(err, result);
-                    let Users = [];
-                    Users.push(foundUser.Users, userid);
-                    Users = _.flatten(Users);       
-                    Users = _.compact(Users);
-                    foundUser.Users = _.uniq(Users);
-                    foundUser.save();
-                }); 
-            });
-            callback(null);                    
-        } else {
-            done(null);
-        }
     }
 };
 
