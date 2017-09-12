@@ -57,7 +57,8 @@ describe('API', () => {
                     res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);             
                     res.body.rooms[0].id.should.equal(global.room2.id);
                     res.body.rooms[1].id.should.equal(global.room3.id);
-                    res.body.rooms[2].id.should.equal(global.room4.id);                     done();
+                    res.body.rooms[2].id.should.equal(global.room4.id);
+                    done();
                 });
         });
     });

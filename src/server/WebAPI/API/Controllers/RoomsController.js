@@ -336,6 +336,75 @@ RoomsController.prototype.init = function(app){
 
     });
 
+    /**
+     * @api {post} /rooms/{roomId}/leave Get user
+     **/
+    router.post('/leave', checkAPIKey, (request, response) => {
+        const roomId = request.body.roomId;
+        const roomModel = RoomModel.get();
+        
+        async.waterfall([
+            (done) => {
+                if (!mongoose.Types.ObjectId.isValid(roomId)) {
+                    done({
+                        code: Const.httpCodeBadParameter,
+                        message: Const.errorMessage.roomidIsWrong
+                    }, null);
+                } else {
+                    done(null, null);
+                }
+            },
+            (result, done) => {
+                roomModel.findOne({_id: roomId}, (err, room) => {
+                    if (err || !room) {
+                        return done({
+                            code: Const.httpCodeBadParameter,
+                            message: Const.errorMessage.roomNotExist
+                        });
+                    } else {
+                        done(err, room);                        
+                    }
+                });
+            },
+            // Validate that loginUser is not owner ot the room
+            (room, done) => {
+                if (request.user._id == room.owner.toString()) {
+                    return done({
+                        code: Const.httpCodeBadParameter,
+                        message: Const.errorMessage.ownerCannotLeaveRoom
+                    }, null);
+                } else {
+                    done(null, room);
+                }
+            },
+            // Validate user exists in room, or not
+            (room, done) => {
+                const found = _.find(room.users, (userId) => {
+                    return userId == request.user._id;
+                });
+                if (found) {
+                    done(null, room);
+                } else {
+                    done({
+                        code: Const.httpCodeBadParameter, 
+                        message: Const.errorMessage.userNotExistInRoom
+                    }, null);
+                }
+            }
+        ], 
+        (err, room) => {
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
+        
+            RoomLogic.leave(request.user, room, (room) => {
+                self.successResponse(response, Const.responsecodeSucceed); 
+            }, (err) => {
+                console.log("Critical Error", err);
+                return self.errorResponse(response, Const.httpCodeServerError);
+            });
+        });
+    });
+
     return router;
 }
 

@@ -279,7 +279,7 @@ const Room = {
             if(onSuccess) onSuccess(result);
         });    
     },
-    delete: (Room, user, onSuccess, onError) =>  {
+    delete: (room, user, onSuccess, onError) =>  {
         const RoomModel = RoomModel.get();
         async.waterfall([
             (done) => {
@@ -322,24 +322,40 @@ const Room = {
             if(onSuccess) onSuccess(result);
         });
     },
-    addRoomToUser: (newUsers, roomId, callback) => {
-        if (newUsers) {
-            const userModel = UserModel.get();
-            _.each(newUsers, (userId, index) => {
-                userModel.findOne({_id: userId}, {Rooms:1}, (err, foundUser) => {
-                    if (err) return done(err, result);
-                    let Rooms = [];
-                    Rooms.push(foundUser.Rooms, roomId);
-                    Rooms = _.flatten(Rooms);       
-                    Rooms = _.compact(Rooms);
-                    foundUser.Rooms = _.uniq(Rooms);
-                    foundUser.save();
-                }); 
-            });
-            callback(null);                    
-        } else {
-            callback(null);
-        }
+    leave: (loginUser, room, onSuccess, onError) => {
+        async.waterfall([
+            // Remove login user from usrs list of room
+            (done) => {
+                _.remove(room.users, (userId) => {
+                    return userId == loginUser._id;
+                });
+                done(null, room);
+            },
+            // Remove history
+            (room, done) => {
+                const historyModel = HistoryModel.get();
+                historyModel.remove({ chatId: room.id.toString(), userId: loginUser._id }, (err, removed) => {
+                    if (err)
+                        return done({code: err.status, message: err.text}, null);
+                    done(null, room);
+                });                
+            },
+            // Remove room
+            (room, done) => {
+                const roomModel = RoomModel.get(); 
+                roomModel.update({_id: room.id}, {modified: Utils.now(), users: room.users}, (err, updated) => {
+                    if (err) 
+                        return done({code: err.status, message: err.text}, null);                        
+                    done(null, room);         
+                });
+            }
+        ],
+        (err, result) => {
+            if(err && onError) return onError(err);
+            SocketAPIHandler.leaveFrom(loginUser._id, Const.chatTypeRoom, room.id);            
+            if(onSuccess) onSuccess(result);
+        });
+
     }
 };
 
