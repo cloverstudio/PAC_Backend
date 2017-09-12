@@ -17,6 +17,7 @@ const formidable = require('formidable');
 const RoomModel = require(pathTop + 'Models/Room');
 const UserModel = require(pathTop + 'Models/User');
 const OrganizationModel = require(pathTop + 'Models/Organization');
+const MessageListLogic = require( pathTop + "Logics/v3/MessageList");
 
 const RoomLogic = require( pathTop + "Logics/v3/Room");
 
@@ -262,11 +263,11 @@ RoomsController.prototype.init = function(app){
     });
 
 
-
     /**
      * @api {get} /rooms/{roomId}/users/ Get user list of room
      **/
     router.get('/:roomId/users',checkAPIKey, (request,response) => {
+
         const userModel = UserModel.get();
         const roomId = request.params.roomId;        
         const q = self.checkQueries(request.query);
@@ -281,6 +282,14 @@ RoomsController.prototype.init = function(app){
                 const result = {};
 
                 RoomLogic.getDetails(roomId ,null, (room, err) => {
+
+                    if(!room){
+                        done({
+                            code: Const.httpCodeBadParameter
+                        },null);
+
+                        return;
+                    }
 
                     result.roomDetail = room;
                     done(null,result);
@@ -322,8 +331,12 @@ RoomsController.prototype.init = function(app){
             }
         ],
         (err,result) => {
-
+    
             if(err){
+
+                if(err.code && err.code == Const.httpCodeBadParameter)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.roomidIsWrong);
+
                 self.errorResponse(response, Const.httpCodeServerError);
                 return;
             }
@@ -333,6 +346,266 @@ RoomsController.prototype.init = function(app){
             }); 
 
         });
+        
+    });
+
+    /**
+     * @api {post} /rooms/{roomId}/users/ Invite user to room
+     **/
+    router.post('/:roomId/users',checkAPIKey, (request,response) => {
+
+        const userModel = UserModel.get();
+        const roomId = request.params.roomId;        
+        const userIds = request.body.users;
+        const q = self.checkQueries(request.query);
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(roomId))
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        
+        if (!userIds || !Array.isArray(userIds))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.wrongUserIds);
+
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                RoomLogic.getDetails(roomId ,null, (room, err) => {
+
+                    if(!room){
+                        done({
+                            code: Const.httpCodeBadParameter
+                        },null);
+
+                        return;
+                    }
+
+                    result.roomDetail = room;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                const newUsers = _.uniq(result.roomDetail.users.concat(userIds));
+                result.newUsers = newUsers;
+
+                done(null,result);
+
+
+            },
+            (result,done) => {
+
+                const roomModel = RoomModel.get();
+
+                roomModel.update({ _id: roomId }, {
+                    users:result.newUsers
+                }, (err, updated) => {
+
+                    if(!err)
+                        result.roomDetail.users = result.newUsers;
+
+                    done(err, result);
+
+                });
+
+            }
+        ],
+        (err,result) => {
+    
+            if(err){
+
+                if(err.code && err.code == Const.httpCodeBadParameter)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.roomidIsWrong);
+
+                self.errorResponse(response, Const.httpCodeServerError);
+                return;
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                room: result.roomDetail
+            }); 
+
+        });
+
+    });
+    
+    /**
+     * @api {delete} /rooms/{roomId}/users/ Kick user out from room
+     **/
+    router.delete('/:roomId/users',checkAPIKey, (request,response) => {
+
+        const userModel = UserModel.get();
+        const roomId = request.params.roomId;        
+        const userIds = request.body.users;
+        const q = self.checkQueries(request.query);
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(roomId))
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        
+        if (!userIds || !Array.isArray(userIds))
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.wrongUserIds);
+        
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                RoomLogic.getDetails(roomId ,null, (room, err) => {
+
+                    if(!room){
+                        done({
+                            code: Const.httpCodeBadParameter
+                        },null);
+
+                        return;
+                    }
+
+                    result.roomDetail = room;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                const newUsers = result.roomDetail.users.filter((userId) => {
+
+                    return userIds.indexOf(userId) == -1;
+
+                });
+
+                result.newUsers = newUsers;
+
+                done(null,result);
+
+
+            },
+            (result,done) => {
+                
+                const roomModel = RoomModel.get();
+
+                roomModel.update({ _id: roomId }, {
+                    users:result.newUsers
+                }, (err, updated) => {
+
+                    if(!err)
+                        result.roomDetail.users = result.newUsers;
+
+                    done(err, result);
+
+                });
+
+            }
+        ],
+        (err,result) => {
+    
+            if(err){
+
+                if(err.code && err.code == Const.httpCodeBadParameter)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.roomidIsWrong);
+
+                self.errorResponse(response, Const.httpCodeServerError);
+                return;
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                room: result.roomDetail
+            }); 
+
+        });
+        
+
+    });
+    
+    /**
+     * @api {get} /rooms/{roomId}/messages/ Get list of messages sent to room
+     **/
+    router.get('/:roomId/messages',checkAPIKey, (request,response) => {
+
+        const userModel = UserModel.get();
+        const roomId = request.params.roomId;        
+        const q = self.checkQueries(request.query);
+
+        // Check params
+        if (!mongoose.Types.ObjectId.isValid(roomId))
+            return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+        
+        async.waterfall([
+            (done) => {
+
+                const result = {};
+
+                RoomLogic.getDetails(roomId ,null, (room, err) => {
+
+                    if(!room){
+                        done({
+                            code: Const.httpCodeBadParameter
+                        },null);
+
+                        return;
+                    }
+
+                    result.roomDetail = room;
+                    done(null,result);
+
+                }, (err) => {
+                    console.log("Critical Error", err);
+                    done(err,result)
+                });
+
+            },
+            (result,done) => {
+
+                // find messsages
+                MessageListLogic.get(request.user._id
+                    ,Const.chatTypeRoom + "-" + result.roomDetail.id
+                    ,q
+                    ,(messages) => {
+
+                    result.messages = messages;
+                    done(null,result);
+
+            },(err) => {
+                done(err,result);
+            });
+
+
+            },
+            (result,done) => {
+                
+                done(null,result);
+
+            }
+        ],
+        (err,result) => {
+    
+            if(err){
+
+                if(err.code && err.code == Const.httpCodeBadParameter)
+                    return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.roomidIsWrong);
+
+                self.errorResponse(response, Const.httpCodeServerError);
+
+                return;
+
+            }
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                messages: result.messages
+            }); 
+
+        });
+        
 
     });
 

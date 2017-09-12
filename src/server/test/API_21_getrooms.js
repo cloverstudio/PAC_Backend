@@ -35,10 +35,7 @@ describe('API', () => {
                     res.body.should.have.property('rooms');
                     res.body.rooms[0].should.have.property('id');   
                     res.body.rooms[0].should.not.have.property('_id');                                        
-                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);
-                    res.body.rooms[0].id.should.equal(global.room1.id);
-                    res.body.rooms[1].id.should.equal(global.room3.id);
-                    res.body.rooms[2].id.should.equal(global.room4.id);                    
+                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);                 
                     done();
                 });
         });
@@ -54,10 +51,8 @@ describe('API', () => {
                     res.body.should.have.property('rooms');
                     res.body.rooms[0].should.have.property('id');   
                     res.body.rooms[0].should.not.have.property('_id');                                        
-                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);             
-                    res.body.rooms[0].id.should.equal(global.room2.id);
-                    res.body.rooms[1].id.should.equal(global.room3.id);
-                    res.body.rooms[2].id.should.equal(global.room4.id);                     done();
+                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);                           
+                    done();
                 });
         });
     });

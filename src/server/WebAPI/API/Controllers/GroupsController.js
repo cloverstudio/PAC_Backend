@@ -423,7 +423,7 @@ GroupsController.prototype.init = function(app){
             },
             (result,done) => {
 
-                const newUsers = result.groupDetail.users.concat(userIds);
+                const newUsers = _.uniq(result.groupDetail.users.concat(userIds));
                 result.newUsers = newUsers;
 
                 done(null,result);
