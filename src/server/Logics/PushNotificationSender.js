@@ -129,10 +129,7 @@ PushNotificationSender = {
                         production: false
                     };
                     
-                    var apnConnection = new apn.Connection(options);
-                    
-                    var device = new apn.Device(pushToken);
-                    
+                    var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
 
                     note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
@@ -142,7 +139,7 @@ PushNotificationSender = {
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
                     
-                    apnConnection.pushNotification(note, device);
+                    apnProvider.send(note, pushToken);
                     
                     donePushOne(null);
                     
@@ -182,10 +179,7 @@ PushNotificationSender = {
                         production: true
                     };
                     
-                    var apnConnection = new apn.Connection(options);
-                    
-                    var device = new apn.Device(pushToken);
-                    
+                    var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
 
                     note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
@@ -194,8 +188,8 @@ PushNotificationSender = {
                     note.alert = payload.message.messageiOS;
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
-
-                    apnConnection.pushNotification(note, device);
+                    
+                    apnProvider.send(note, pushToken);
                     
                     donePushOne(null);
 
@@ -236,10 +230,7 @@ PushNotificationSender = {
                         production: true
                     };
                     
-                    var apnConnection = new apn.Connection(options);
-                    
-                    var device = new apn.Device(pushToken);
-                    
+                    var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
 
                     note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
@@ -248,8 +239,8 @@ PushNotificationSender = {
                     note.alert = payload.message.messageiOS;
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
-
-                    apnConnection.pushNotification(note, device);
+                    
+                    apnProvider.send(note, pushToken);
                     
                     donePushOne(null);
 
