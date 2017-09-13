@@ -12,7 +12,7 @@ checkUserAdmin = (request, response, next) => {
         token: {$elemMatch: {token: token}}
     }, (err, findResult) => {
         if (err || _.isEmpty(findResult) || findResult.permission !== Const.userPermission.organizationAdmin) {
-            return response.status(403).send("Permission Error");            
+            return response.status(403).send("Permission Error: You are not Admin");   
         } else {
             return next();            
         }

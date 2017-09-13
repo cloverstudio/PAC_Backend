@@ -19,7 +19,7 @@ function checkAPIKey(request, response, next) {
 
     if(!apikey){
         
-        response.status(401).send('Wront API Key');
+        response.status(401).send('Wrong API Key');
         
         return;
     }
@@ -34,7 +34,7 @@ function checkAPIKey(request, response, next) {
             
             if(_.isEmpty(findResult)){
 
-                response.status(401).send('Wront API Key');
+                response.status(401).send('Wrong API Key');
                 return;
 
             }
@@ -60,7 +60,7 @@ function checkAPIKey(request, response, next) {
         },(err,findResult) => {
 
             if(_.isEmpty(findResult)){
-                response.status(401).send('Wront API Key');
+                response.status(401).send('Wrong API Key');
                 return;
             }
 
@@ -87,7 +87,7 @@ function checkAPIKey(request, response, next) {
         },function(err,findResult){
             
             if(_.isEmpty(findResult)){
-                response.status(403).send('Wront Access Token');
+                response.status(403).send('Wrong Access Token');
                 return;
             }
 
@@ -100,7 +100,7 @@ function checkAPIKey(request, response, next) {
             var diff = Utils.now() - tokenGenerated;
 
             if(diff > Const.tokenValidInteval){
-                response.status(403).send('Wront Access Token');
+                response.status(403).send('Wrong Access Token');
                 return;
             }
             
@@ -114,7 +114,7 @@ function checkAPIKey(request, response, next) {
     (result,done) => {
 
         if(result.user.organizationId != result.organization._id.toString()){
-            response.status(403).send('Wront Access Token');
+            response.status(403).send('Wrong Access Token');
             return;
         }
 
