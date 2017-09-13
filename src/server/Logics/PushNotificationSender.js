@@ -139,7 +139,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.dev.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn result",result);
+                        console.log("apn dev result",result);
                     }); 
                     
                     donePushOne(null);
@@ -189,7 +189,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.adhoc.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn result",result);
+                        console.log("apn adhoc result",result);
                     }); 
 
                     donePushOne(null);
@@ -239,7 +239,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.store.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn result",result);
+                        console.log("apn store result",result);
                     }); 
 
                     donePushOne(null);
@@ -254,13 +254,13 @@ PushNotificationSender = {
                     }
 
                     if(pushToken.length != 64){
-                            donePushOne(null);
-                            return; 
+                        donePushOne(null);
+                        return; 
                     }
 
                     if(!Config.apnsCertificates.voip){
-                            donePushOne(null);
-                            return; 
+                        donePushOne(null);
+                        return; 
                     }
 
                     if(!Config.apnsCertificates.voip.cert ||
@@ -321,7 +321,7 @@ PushNotificationSender = {
                     });
 
                     apnConnection.on('timeout', function () {
-                    //
+                        console.log("voip push timeout");
                     });
 
                     apnConnection.on('disconnected', function(openSockets) {
