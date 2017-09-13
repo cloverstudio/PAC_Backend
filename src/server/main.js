@@ -109,7 +109,7 @@ function startServer(){
             })
 
             server.setTimeout(120000, function(param){
-                console.log(' request timeout',param);
+                console.log(' request timeout');
             });
 
             server.listen(Conf.port, function(){
