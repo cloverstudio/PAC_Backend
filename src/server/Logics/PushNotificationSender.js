@@ -108,7 +108,7 @@ PushNotificationSender = {
                     }
                     
 
-                    // send apns store
+                    // send apns adhoc
                     var options = {
                         production: false
                     };
@@ -158,12 +158,12 @@ PushNotificationSender = {
                             return; 
                     }
 
-                    // send apns store
+                    // send apns adhoc
                     var options = {
                         production: true
                     };
 
-                    if(Config.apnsCertificates.store.token){
+                    if(Config.apnsCertificates.adhoc.token){
 
                         options.token = Config.apnsCertificates.adhoc.token;
 
