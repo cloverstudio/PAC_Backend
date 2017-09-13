@@ -146,7 +146,7 @@ RoomsController.prototype.init = function(app){
     /**
      * @api {put} /api/v3/rooms/{roomId} edit room details
      **/
-    router.put('/:roomId', checkAPIKey, checkUserAdmin, (request,response) => {
+    router.put('/:roomId', checkAPIKey, (request,response) => {
         const roomId = request.params.roomId;
         let form = new formidable.IncomingForm();
         const uploadPathError = self.checkUploadPath();          
