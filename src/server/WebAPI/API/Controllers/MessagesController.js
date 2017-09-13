@@ -32,7 +32,7 @@ MessagesController.prototype.init = function(app){
      **/
     router.put('/:messageId', checkAPIKey, (request,response) => {
         const messageId = request.params.messageId;
-        const newMessage = request.body.message;
+        const newMessageText = request.body.message;
         
         async.waterfall([
             (done) => {
@@ -66,22 +66,22 @@ MessagesController.prototype.init = function(app){
                         message: Const.errorMessage.cannotUpdateMessage
                     }, null);
                 } else {
-                    done(null, null);
+                    done(null, oldMessage);
                 }
             },
             // Validate presence of parameters
-            (reuslt, done) => {
-                const values = {messageId: messageId, message: newMessage};
+            (oldMessage, done) => {
+                const values = {messageId: messageId, message: newMessageText};
                 self.validatePresence(values, (err) => {
-                    done(err, null);
+                    done(err, oldMessage);
                 });
             }
         ],
-        (err, result) => {
+        (err, oldMessage) => {
             if (!_.isEmpty(err))
                 return response.status(err.code).send(err.message);
             
-            MessageLogic.update(messageId, newMessage, (updatedRoom) => {
+            MessageLogic.update(oldMessage, newMessageText, (updatedRoom) => {
                 self.successResponse(response, Const.responsecodeSucceed);
             }, (err) => {
                 console.log("Critical Error", err);

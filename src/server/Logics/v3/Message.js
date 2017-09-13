@@ -7,13 +7,33 @@ const Path = require('path');
 const easyImg = require('easyimage');
 const MessageModel = require('../../Models/Message');
 const HistoryModel = require("../../Models/History");
-const NotifyUpdateMessage = require("./NotifyUpdateMessage");
+const NotifyUpdateMessageLogic = require("./NotifyUpdateMessage");
 const SocketAPIHandler = require('../../SocketAPI/SocketAPIHandler');
 
 const Message = {
-    update: (messageId, newMessage, onSuccess, onError) => {
+    update: (oldMessage, newMessage, onSuccess, onError) => {
         const messageModel = MessageModel.get(); 
-        messageModel.update({ _id: messageId }, {message: newMessage}, (err, updated) => {
+        async.waterfall([
+            (done) => {
+                messageModel.update({ _id: oldMessage._id }, {message: newMessage}, (err, updated) => {
+                    if (err) return done({code: err.status, message: err.text}, null);
+                    done(null, null);
+                });
+            },
+            // Populate Message
+            (result, done) => {
+                MessageModel.populateMessages(oldMessage, (err, messages) => {
+                    if (err) return done({ code: err.status, message: err.text}, null);
+                    if (messages.length > 0) {
+                        let obj = messages[0];
+                        obj.message = newMessage;
+                        NotifyUpdateMessageLogic.notify(obj);                        
+                    }
+                    done(null, null);
+                });
+            }
+        ],
+        (err, result) => {
             if(err && onError) return onError(err);
             if(onSuccess) onSuccess(null);
         });
@@ -59,7 +79,7 @@ const Message = {
                         obj.message = '';
                         obj.file = null;
                         obj.location = null;
-                        NotifyUpdateMessage.notify(obj);                        
+                        NotifyUpdateMessageLogic.notify(obj);                        
                     }
                     done(null, null);
                 });
