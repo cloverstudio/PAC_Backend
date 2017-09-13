@@ -105,10 +105,10 @@ function startServer(){
             });
 
             server.on('connection', function(socket) {
-                socket.setTimeout(0);
+                socket.setTimeout(120000);
             })
 
-            server.setTimeout(0, function(param){
+            server.setTimeout(120000, function(param){
                 console.log('timeout');
             });
 
