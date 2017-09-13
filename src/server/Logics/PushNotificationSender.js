@@ -107,129 +107,26 @@ PushNotificationSender = {
                             return; 
                     }
                     
-                    if(!Config.apnsCertificates.dev.cert ||
-                        !Config.apnsCertificates.dev.key){
-                        
-                        donePushOne(null); 
-                        return;
-                    }
-
-                    if (!fs.existsSync(Config.apnsCertificates.dev.cert) ||
-                            !fs.existsSync(Config.apnsCertificates.dev.key)) {
-
-                        donePushOne(null); 
-                        return;
-                        
-                    }
-
-                    
-                    var options = {
-                        cert: Config.apnsCertificates.dev.cert,
-                        key: Config.apnsCertificates.dev.key,
-                        production: false
-                    };
-                    
-                    var apnProvider = new apn.Provider(options);
-                    var note = new apn.Notification();
-
-                    note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
-                    note.badge = unreadCount;
-                    note.sound = "ping.aiff";
-                    note.alert = payload.message.messageiOS;
-                    note.category = Const.apnCategoryMessage;
-                    note.payload = payload;
-                    
-                    apnProvider.send(note, pushToken);
-                    
-                    donePushOne(null);
-                    
-                },
-
-                function(donePushOne){
-
-                    if(isVoip){
-                        donePushOne(null);
-                        return;
-                    }
-
-                    if(pushToken.length != 64){
-                            donePushOne(null);
-                            return; 
-                    }
-
-                    if(!Config.apnsCertificates.adhoc.cert ||
-                        !Config.apnsCertificates.adhoc.key){
-                        
-                        donePushOne(null); 
-                        return;
-                    }
-                    
-                    if (!fs.existsSync(Config.apnsCertificates.adhoc.cert) ||
-                            !fs.existsSync(Config.apnsCertificates.adhoc.key)) {
-
-                        donePushOne(null); 
-                        return;
-                        
-                    }
-
-                    // send apns adhoc
-                    var options = {
-                        cert: Config.apnsCertificates.adhoc.cert,
-                        key: Config.apnsCertificates.adhoc.key,
-                        production: true
-                    };
-                    
-                    var apnProvider = new apn.Provider(options);
-                    var note = new apn.Notification();
-
-                    note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
-                    note.badge = unreadCount;
-                    note.sound = "ping.aiff";
-                    note.alert = payload.message.messageiOS;
-                    note.category = Const.apnCategoryMessage;
-                    note.payload = payload;
-                    
-                    apnProvider.send(note, pushToken);
-                    
-                    donePushOne(null);
-
-                },
-
-                function(donePushOne){
-
-                    if(isVoip){
-                        donePushOne(null);
-                        return;
-                    }
-
-                    if(pushToken.length != 64){
-                            donePushOne(null);
-                            return; 
-                    }
-
-                    if(!Config.apnsCertificates.store.cert ||
-                        !Config.apnsCertificates.store.key){
-                        
-                        donePushOne(null); 
-                        return;
-                    }
-                    
-                    if (!fs.existsSync(Config.apnsCertificates.store.cert) ||
-                            !fs.existsSync(Config.apnsCertificates.store.key)) {
-
-                        donePushOne(null); 
-                        return;
-                        
-                    }
-
 
                     // send apns store
                     var options = {
-                        cert: Config.apnsCertificates.store.cert,
-                        key: Config.apnsCertificates.store.key,
-                        production: true
+                        production: false
                     };
                     
+                    if(Config.apnsCertificates.dev.token){
+
+                        options.token = Config.apnsCertificates.dev.token;
+
+                    } else if(Config.apnsCertificates.dev.cert
+                        && Config.apnsCertificates.dev.key) {
+
+                        options.cert = Config.apnsCertificates.dev.cert;
+                        options.key = Config.apnsCertificates.dev.key;
+
+                    } else {
+                        return donePushOne(null);
+                    }
+
                     var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
 
@@ -239,9 +136,112 @@ PushNotificationSender = {
                     note.alert = payload.message.messageiOS;
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
+                    note.topic = Config.apnsCertificates.dev.appbundleid;
+
+                    apnProvider.send(note, pushToken).then( (result) => {
+                        console.log("apn result",result);
+                    }); 
                     
-                    apnProvider.send(note, pushToken);
+                    donePushOne(null);
                     
+                },
+
+                function(donePushOne){
+
+                    if(isVoip){
+                        donePushOne(null);
+                        return;
+                    }
+
+                    if(pushToken.length != 64){
+                            donePushOne(null);
+                            return; 
+                    }
+
+                    // send apns store
+                    var options = {
+                        production: true
+                    };
+
+                    if(Config.apnsCertificates.store.token){
+
+                        options.token = Config.apnsCertificates.adhoc.token;
+
+                    } else if(Config.apnsCertificates.adhoc.cert
+                        && Config.apnsCertificates.adhoc.key) {
+
+                        options.cert = Config.apnsCertificates.adhoc.cert;
+                        options.key = Config.apnsCertificates.adhoc.key;
+
+                    } else {
+                        return donePushOne(null);
+                    }
+
+                    var apnProvider = new apn.Provider(options);
+                    var note = new apn.Notification();
+
+                    note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
+                    note.badge = unreadCount;
+                    note.sound = "ping.aiff";
+                    note.alert = payload.message.messageiOS;
+                    note.category = Const.apnCategoryMessage;
+                    note.payload = payload;
+                    note.topic = Config.apnsCertificates.adhoc.appbundleid;
+
+                    apnProvider.send(note, pushToken).then( (result) => {
+                        console.log("apn result",result);
+                    }); 
+
+                    donePushOne(null);
+
+                },
+
+                function(donePushOne){
+
+                    if(isVoip){
+                        donePushOne(null);
+                        return;
+                    }
+
+                    if(pushToken.length != 64){
+                            donePushOne(null);
+                            return; 
+                    }
+
+                    // send apns store
+                    var options = {
+                        production: true
+                    };
+                    
+                    if(Config.apnsCertificates.store.token){
+
+                        options.token = Config.apnsCertificates.store.token;
+
+                    } else if(Config.apnsCertificates.store.cert
+                        && Config.apnsCertificates.store.key) {
+
+                        options.cert = Config.apnsCertificates.store.cert;
+                        options.key = Config.apnsCertificates.store.key;
+
+                    } else {
+                        return donePushOne(null);
+                    }
+
+                    var apnProvider = new apn.Provider(options);
+                    var note = new apn.Notification();
+
+                    note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
+                    note.badge = unreadCount;
+                    note.sound = "ping.aiff";
+                    note.alert = payload.message.messageiOS;
+                    note.category = Const.apnCategoryMessage;
+                    note.payload = payload;
+                    note.topic = Config.apnsCertificates.store.appbundleid;
+
+                    apnProvider.send(note, pushToken).then( (result) => {
+                        console.log("apn result",result);
+                    }); 
+
                     donePushOne(null);
 
                 },
