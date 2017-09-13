@@ -90,8 +90,56 @@ MessagesController.prototype.init = function(app){
         });
     });
 
-    router.post('/', (request,response) => {
+    router.delete('/:messageId', checkAPIKey, (request,response) => {
+        const messageId = request.params.messageId;
 
+        async.waterfall([
+            (done) => {
+                if (!mongoose.Types.ObjectId.isValid(messageId)) {
+                    done({
+                        code: Const.httpCodeBadParameter,
+                        message: Const.errorMessage.messageidIsWrong
+                    }, null);
+                } else {
+                    done(null, null);
+                }
+            },
+            // get room which should be deleted
+            (result, done) => {
+                const messageModel = MessageModel.get();
+                messageModel.findOne({_id: messageId}, (err, found) => {
+                    if (!found) {
+                        return done({
+                            code: Const.httpCodeBadParameter, 
+                            message: Const.errorMessage.messageNotExist 
+                        }, null);
+                    }
+                    done(err, found);
+                });
+            },
+            // Validate sender
+            (oldMessage, done) => {
+                if (oldMessage.user.toString() != request.user._id) {
+                    done({
+                        code: Const.httpCodeForbidden,
+                        message: Const.errorMessage.cannotDeleteMessage
+                    }, null);
+                } else {
+                    done(null, oldMessage);
+                }
+            }
+        ],
+        (err, oldMessage) => {
+            if (!_.isEmpty(err))
+                return response.status(err.code).send(err.message);
+        
+            MessageLogic.delete(oldMessage, (updatedRoom) => {
+                self.successResponse(response, Const.responsecodeSucceed);
+            }, (err) => {
+                console.log("Critical Error", err);
+                return self.errorResponse(response, Const.httpCodeServerError);
+            });
+        })
     });
 
     return router;
