@@ -243,7 +243,7 @@ RoomsController.prototype.init = function(app){
                     done(null, foundRoom)
                 });
             },
-            // Validate that loginUser is not owner ot the room
+            // Validate that loginUser is not owner of the room
             (room, done) => {
                 if (request.user._id != room.owner.toString()) {
                     return done({

@@ -318,38 +318,6 @@ paths:
       security:
         - api_key: []
   '/messages/{messageId}':
-    get:
-      tags:
-        - Messages2
-      summary: Get message details
-      parameters:
-        - in: header
-          name: access-token
-          description: Access token which is generated in signin.
-          type: string
-          required: true
-        - in: path
-          name: messageId
-          type: string
-          required: true
-          description: message id to get message
-      responses:
-        '200':
-          description: Docuement of Message
-          schema:
-            properties:
-              message:
-                $ref: '#/definitions/Message'
-        '401':
-          description: Wrong apikey
-        '403':
-          description: Wrong access token
-        '422':
-          description: Bad parmeter
-        '500':
-          description: Server error
-      security:
-        - api_key: []
     put:
       tags:
         - Messages2
@@ -361,14 +329,20 @@ paths:
           description: Access token which is generated in signin.
           type: string
           required: true
-        - name: body
+        - in: path
+          type: string
+          name: messageId
+          description: Message id to update message
           required: true
+        - name: body
           in: body
           description: Parameters to send
+          required: true
           schema:
             properties:
               message:
-                $ref: '#/definitions/Message'
+                type: string
+                description: required if messageType is 1
       responses:
         '200':
           description: Edited message
@@ -1284,7 +1258,7 @@ paths:
       tags:
         - Rooms
       summary: Leave room
-      description: Leave room.
+      description: Leave room. If you are the owner of room, the room and it's chat history will be deleted.
       parameters:
         - in: header
           name: access-token
