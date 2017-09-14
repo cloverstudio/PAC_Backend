@@ -73308,110 +73308,127 @@ var DetailInfoView = Backbone.View.extend({
 
             obj.loginUser = loginUserManager.getUser();
             
-            var html = detailTemplate(obj)
-            
-            $('#chat-detail').html(html);
+            if(obj.user){
+                
+                UserDetailClient.send(obj.user._id,function(response){
 
-            if($("[name='checkbox-notify']").bootstrapSwitch){
-
-                $("[name='checkbox-notify']").bootstrapSwitch({
-                    onText: Utils.l10n("Mute"),
-                    offText: Utils.l10n("Notify"),
-                    state: true,
-                    onSwitchChange:function(event,state){
-                        
-                        self.updateMute(state);
-                        
-                    }
+                    obj.user = response.user;
+                    render();
+                    
                 });
-            
+
+            } else {
+                render();
             }
-
-            if($("[name='checkbox-block']").bootstrapSwitch){
-
-                $("[name='checkbox-block']").bootstrapSwitch({
-                    onText: Utils.l10n("Block"),
-                    offText: Utils.l10n("Unblock"),
-                    state: true,
-                    onSwitchChange:function(event,state){
-                        
-                        self.updateBlock(state);
-                        
-                    }
-                });
             
-            }
+            function render(){
 
-            $('#btn-groupdetail').on('click',function(){
+                var html = detailTemplate(obj)
                 
-                var GroupDetailDialog = require('../Modals/GroupDetail/GroupDetail');
-                GroupDetailDialog.show(loginUserManager.currentGroup);
-                
-            });
-
-            $('#btn-leaveroom').on('click',function(){
-                
-                ConfirmDialog.show(Utils.l10n('Confirm'),
-                                    Utils.l10n('Please press OK to proceed.'),
-                                    function(){
-
-                    LeaveRoomClient.send(loginUserManager.currentRoom._id,function(response){
-                        
-                        Backbone.trigger(Const.NotificationRemoveRoom,self.currentChatData.room);
-                        
-                    },function(errCode){
-
-                        var message = "";
-                        
-                        if(Const.ErrorCodes[errCode])
-                            message = Utils.l10n(Const.ErrorCodes[errCode]);
-                        else
-                            message = Utils.l10n("No internet connection, please try again later.");
-                        
-                        var Alert = require('../Modals/AlertDialog/AlertDialog');
-                        Alert.show(Utils.l10n('API Error'),message);
-                        
+                $('#chat-detail').html(html);
+    
+                if($("[name='checkbox-notify']").bootstrapSwitch){
+    
+                    $("[name='checkbox-notify']").bootstrapSwitch({
+                        onText: Utils.l10n("Mute"),
+                        offText: Utils.l10n("Notify"),
+                        state: true,
+                        onSwitchChange:function(event,state){
+                            
+                            self.updateMute(state);
+                            
+                        }
                     });
-
+                
+                }
+    
+                if($("[name='checkbox-block']").bootstrapSwitch){
+    
+                    $("[name='checkbox-block']").bootstrapSwitch({
+                        onText: Utils.l10n("Block"),
+                        offText: Utils.l10n("Unblock"),
+                        state: true,
+                        onSwitchChange:function(event,state){
+                            
+                            self.updateBlock(state);
+                            
+                        }
+                    });
+                
+                }
+    
+                $('#btn-groupdetail').on('click',function(){
+                    
+                    var GroupDetailDialog = require('../Modals/GroupDetail/GroupDetail');
+                    GroupDetailDialog.show(loginUserManager.currentGroup);
+                    
                 });
-
-            });
-
-            $('#btn-editroom').on('click',function(){
-                
-                var updateRoomDialog = require('../Modals/UpdateRoom/UpdateRoom');
-                updateRoomDialog.show(loginUserManager.currentRoom);
-                
-            });
-
-            $('#btn-roomdetail').on('click',function(){
-                
-                var RoomDetailDialog = require('../Modals/RoomDetail/RoomDetail');
-                RoomDetailDialog.show(loginUserManager.currentRoom);
-                
-            });
-
-            $('#btn-audiocall').on('click',function(){
-                
-                Backbone.trigger(Const.NotificationStartCalling,{
-                    type: Const.callTypeOutgoing,
-                    mediaType:Const.callMediaTypeAudio,
-                    target:self.currentChatData.user
+    
+                $('#btn-leaveroom').on('click',function(){
+                    
+                    ConfirmDialog.show(Utils.l10n('Confirm'),
+                                        Utils.l10n('Please press OK to proceed.'),
+                                        function(){
+    
+                        LeaveRoomClient.send(loginUserManager.currentRoom._id,function(response){
+                            
+                            Backbone.trigger(Const.NotificationRemoveRoom,self.currentChatData.room);
+                            
+                        },function(errCode){
+    
+                            var message = "";
+                            
+                            if(Const.ErrorCodes[errCode])
+                                message = Utils.l10n(Const.ErrorCodes[errCode]);
+                            else
+                                message = Utils.l10n("No internet connection, please try again later.");
+                            
+                            var Alert = require('../Modals/AlertDialog/AlertDialog');
+                            Alert.show(Utils.l10n('API Error'),message);
+                            
+                        });
+    
+                    });
+    
+                });
+    
+                $('#btn-editroom').on('click',function(){
+                    
+                    var updateRoomDialog = require('../Modals/UpdateRoom/UpdateRoom');
+                    updateRoomDialog.show(loginUserManager.currentRoom);
+                    
+                });
+    
+                $('#btn-roomdetail').on('click',function(){
+                    
+                    var RoomDetailDialog = require('../Modals/RoomDetail/RoomDetail');
+                    RoomDetailDialog.show(loginUserManager.currentRoom);
+                    
+                });
+    
+                $('#btn-audiocall').on('click',function(){
+                    
+                    Backbone.trigger(Const.NotificationStartCalling,{
+                        type: Const.callTypeOutgoing,
+                        mediaType:Const.callMediaTypeAudio,
+                        target:self.currentChatData.user
+                    });
+                    
+                });
+    
+                $('#btn-videocall').on('click',function(){
+                    
+                     Backbone.trigger(Const.NotificationStartCalling,{
+                         type: Const.callTypeOutgoing,
+                         mediaType:Const.callMediaTypeVideo,
+                         target:self.currentChatData.user
+                     });
+                     
                 });
                 
-            });
+                self.loadMuteBlockSwitch();
 
-            $('#btn-videocall').on('click',function(){
-                
-                 Backbone.trigger(Const.NotificationStartCalling,{
-                     type: Const.callTypeOutgoing,
-                     mediaType:Const.callMediaTypeVideo,
-                     target:self.currentChatData.user
-                 });
-                 
-            });
-            
-            self.loadMuteBlockSwitch();
+            }
 
         });
     
@@ -74042,6 +74059,8 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.onlineStatus : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n        </div>\n        \n        <span class=\"chat-name\">\n                "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1), depth0))
+    + "@"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.organization : stack1)) != null ? stack1.organizationId : stack1), depth0))
     + "\n        </span><br />\n        \n        <span class=\"chat-description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.description : stack1), depth0))
     + "</span><br />\n        \n        <div class=\"clearfix\"></div>\n    </div>\n        \n    <ul class=\"menu\">\n        \n        <li>\n            <a href=\"javascript:void(0)\" class=\"disabled\">\n                "

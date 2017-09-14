@@ -135,6 +135,26 @@ UserDetailController.prototype.init = function(app){
         },
         function(result,done){
             
+            const organizationModel = OrganizationModel.get();
+
+            // get online status
+            organizationModel.findOne({
+                _id:result.user.organizationId
+            },{
+                organizationId:true,
+                name:true,
+                _id:true
+            },(err,organization) => {
+
+                result.user.organization = organization;
+                done(err,result);
+                
+            });
+            
+        },
+        function(result,done){
+            
+
             // get online status
             GetOnlineStatusLogic.get([userId],function(err,onlineStatusResult){
 
