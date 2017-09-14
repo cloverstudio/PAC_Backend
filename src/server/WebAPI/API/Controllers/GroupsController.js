@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const async = require('async');
-const path = require('path');
 
 const pathTop = "../../../";
 const Const = require( pathTop + "lib/consts");
@@ -12,7 +11,6 @@ const Utils = require( pathTop + "lib/utils");
 const checkAPIKey = require( pathTop + 'lib/authApiV3');
 const APIBase = require('./APIBase');
 const checkUserAdmin = require('../../../lib/authV3.js').checkUserAdmin;
-const formidable = require('formidable');
 
 const GroupModel = require(pathTop + 'Models/Group');
 const UserModel = require(pathTop + 'Models/User');  
@@ -51,26 +49,12 @@ GroupsController.prototype.init = function(app){
      * @api {post} /api/v3/groups create a new group
      */
     router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
-        let form = new formidable.IncomingForm();
-        const uploadPathError = self.checkUploadPath();
 
         async.waterfall([
             (done) => {
-                form.uploadDir = Config.uploadPath;
-                form.on('fileBegin', (name, file) => {
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
-                });
-                form.onPart = (part) => {
-                    if (part.filename) {
-                        if (!uploadPathError) form.handlePart(part);
-                    } else if (part.filename != "") {
-                        form.handlePart(part);
-                    }
-                }
-                form.parse(request, (err, fields, files) => {
-                    const result = { avatar: files.avatar, fields: fields }
+                self.parseFormData(request, (err, result) => {
                     done(err, result);
-                })
+                });
             },
             // Validate presence
             (result, done) => {
@@ -86,8 +70,6 @@ GroupsController.prototype.init = function(app){
             },
             //Validate the new name is duplicated, or not.
             (result, done) => {
-                if (uploadPathError) 
-                    return done(uploadPathError, result);
                 self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
@@ -162,8 +144,6 @@ GroupsController.prototype.init = function(app){
      **/
     router.put('/:groupId', checkAPIKey, checkUserAdmin, (request,response) => {
         const groupId = request.params.groupId;
-        let form = new formidable.IncomingForm();
-        const uploadPathError = self.checkUploadPath();          
         
         async.waterfall([
             // Validate the groupId is handleable by mongoose
@@ -177,21 +157,9 @@ GroupsController.prototype.init = function(app){
                 done(null, null);
             },
             (result, done) => {
-                form.uploadDir = Config.uploadPath;
-                form.on('fileBegin', (name, file) => {
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
-                });
-                form.onPart = (part) => {
-                    if (part.filename) {
-                        if (!uploadPathError) form.handlePart(part);
-                    } else if (part.filename != "") {
-                        form.handlePart(part);
-                    }
-                }
-                form.parse(request, (err, fields, files) => {
-                    result = { avatar: files.avatar, fields: fields }
+                self.parseFormData(request, (err, result) => {
                     done(err, result);
-                })
+                });
             },
             // Validate presense and max length
             (result, done) => {
@@ -201,8 +169,6 @@ GroupsController.prototype.init = function(app){
             },
             // Validate the new name is duplicated, or not.
             (result, done) => {
-                if (uploadPathError) 
-                    return done(uploadPathError, result);
                 self.validateDuplication(result.fields.name, request.user.organizationId, (err) => {
                     done(err, result);   
                 });

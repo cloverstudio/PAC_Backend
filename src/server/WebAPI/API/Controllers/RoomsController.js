@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const async = require('async');
-const path = require('path');
 
 const pathTop = "../../../";
 const Const = require( pathTop + "lib/consts");
@@ -52,24 +51,10 @@ RoomsController.prototype.init = function(app){
      * @api {post} /api/v3/rooms create a new room
      */
     router.post('/', checkAPIKey, (request, response) => {
-        let form = new formidable.IncomingForm();
-        const uploadPathError = self.checkUploadPath();
 
         async.waterfall([
             (done) => {
-                form.uploadDir = Config.uploadPath;
-                form.on('fileBegin', (name, file) => {
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
-                });
-                form.onPart = (part) => {
-                    if (part.filename) {
-                        if (!uploadPathError) form.handlePart(part);
-                    } else if (part.filename != "") {
-                        form.handlePart(part);
-                    }
-                }
-                form.parse(request, (err, fields, files) => {
-                    const result = { avatar: files.avatar, fields: fields }
+                self.parseFormData(request, (err, result) => {
                     done(err, result);
                 });
             },
@@ -87,7 +72,7 @@ RoomsController.prototype.init = function(app){
                         return user.trim();
                     });
                     self.validateUserIdIsCorrect(result.fields.users, (err) => {
-                        done(err, result);  
+                        done(err, result);
                     });
                 } else {
                     done(null, result);
@@ -149,8 +134,6 @@ RoomsController.prototype.init = function(app){
      **/
     router.put('/:roomId', checkAPIKey, (request,response) => {
         const roomId = request.params.roomId;
-        let form = new formidable.IncomingForm();
-        const uploadPathError = self.checkUploadPath();          
         
         async.waterfall([
             // Validate the roomId is handleable by mongoose
@@ -164,21 +147,9 @@ RoomsController.prototype.init = function(app){
                 done(null, null);
             },
             (result, done) => {
-                form.uploadDir = Config.uploadPath;
-                form.on('fileBegin', (name, file) => {
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
-                });
-                form.onPart = (part) => {
-                    if (part.filename) {
-                        if (!uploadPathError) form.handlePart(part);
-                    } else if (part.filename != "") {
-                        form.handlePart(part);
-                    }
-                }
-                form.parse(request, (err, fields, files) => {
-                    result = { avatar: files.avatar, fields: fields }
+                self.parseFormData(request, (err, result) => {
                     done(err, result);
-                })
+                });
             },
             // Validate presense and max length
             (result, done) => {
