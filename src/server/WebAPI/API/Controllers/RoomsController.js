@@ -147,7 +147,7 @@ RoomsController.prototype.init = function(app){
     /**
      * @api {put} /api/v3/rooms/{roomId} edit room details
      **/
-    router.put('/:roomId', checkAPIKey, checkUserAdmin, (request,response) => {
+    router.put('/:roomId', checkAPIKey, (request,response) => {
         const roomId = request.params.roomId;
         let form = new formidable.IncomingForm();
         const uploadPathError = self.checkUploadPath();          
@@ -244,7 +244,7 @@ RoomsController.prototype.init = function(app){
                     done(null, foundRoom)
                 });
             },
-            // Validate that loginUser is not owner ot the room
+            // Validate that loginUser is not owner of the room
             (room, done) => {
                 if (request.user._id != room.owner.toString()) {
                     return done({

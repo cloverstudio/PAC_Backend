@@ -22,10 +22,12 @@ var APIMain ={
         router.use("/file/download", require("./Controllers/FileDownloadController").init(app));
         router.use("/message/list", require("./Controllers/MessageListController").init(app));
 
+        router.use("/messages", require("./Controllers/MessagesController").init(app));        
         router.use("/groups", require("./Controllers/GroupsController").init(app));        
         router.use("/users", require("./Controllers/UsersController").init(app));        
         router.use("/rooms", require("./Controllers/RoomsController").init(app));                
         return router;
+
     }
 }
 
