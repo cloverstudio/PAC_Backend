@@ -11,7 +11,7 @@ describe('API', function () {
         it('should be test', function (done) {
 
             request(app)
-                .post('/api/v3/user/signin')
+                .post('/api/v3/signin')
                 .set('apikey', global.apikey)
                 .send({
                     organization:global.organization1.name,
@@ -30,7 +30,7 @@ describe('API', function () {
                 });
             
             request(app)
-                .post('/api/v3/user/signin')
+                .post('/api/v3/signin')
                 .set('apikey', global.apikey)
                 .send({
                     organization:global.organization1.name,
@@ -49,7 +49,7 @@ describe('API', function () {
                 });
             
             request(app)
-                .post('/api/v3/user/signin')
+                .post('/api/v3/signin')
                 .set('apikey', global.apikey)
                 .send({
                     organization:global.organization1.name,

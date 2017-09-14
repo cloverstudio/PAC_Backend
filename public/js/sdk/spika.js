@@ -13596,9 +13596,6 @@ module.exports = FetchError;
  */
 function FetchError(message, type, systemError) {
 
-	// hide custom error implementation details from end-users
-	Error.captureStackTrace(this, this.constructor);
-
 	this.name = this.constructor.name;
 	this.message = message;
 	this.type = type;
@@ -13608,6 +13605,8 @@ function FetchError(message, type, systemError) {
 		this.code = this.errno = systemError.code;
 	}
 
+	// hide custom error implementation details from end-users
+	Error.captureStackTrace(this, this.constructor);
 }
 
 require('util').inherits(FetchError, Error);
@@ -13650,7 +13649,7 @@ function Headers(headers) {
 		} else if (typeof headers[prop] === 'number' && !isNaN(headers[prop])) {
 			this.set(prop, headers[prop].toString());
 
-		} else if (headers[prop] instanceof Array) {
+		} else if (Array.isArray(headers[prop])) {
 			headers[prop].forEach(function(item) {
 				self.append(prop, item.toString());
 			});
@@ -14161,7 +14160,7 @@ var _spikaInit = (function(root) { // receives global object
 
         var result = {};
 
-        fetch(this.baseURL + '/user/signin', 
+        fetch(this.baseURL + '/signin', 
                 {   method: 'POST', 
                     body: JSON.stringify(postData),
                     mode: 'cors',
@@ -14205,7 +14204,7 @@ var _spikaInit = (function(root) { // receives global object
 
         var result = {};
 
-        fetch(this.baseURL + '/message/send', 
+        fetch(this.baseURL + '/message', 
                 {   method: 'POST', 
                     body: JSON.stringify(postData),
                     mode: 'cors',
