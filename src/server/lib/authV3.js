@@ -4,7 +4,7 @@ const _ = require('lodash');
 const Const = require("./consts");
 const DatabaseManager = require('./DatabaseManager');
 
-function checkUserAdmin(request, response, next) {
+checkUserAdmin = (request, response, next) => {
     const userModel = require('../Models/User').get();    
     const token = request.headers['access-token'];
 
@@ -12,7 +12,7 @@ function checkUserAdmin(request, response, next) {
         token: {$elemMatch: {token: token}}
     }, (err, findResult) => {
         if (err || _.isEmpty(findResult) || findResult.permission !== Const.userPermission.organizationAdmin) {
-            return response.status(403).send("Permission Error");            
+            return response.status(403).send("Permission Error: You are not Admin");   
         } else {
             return next();            
         }
