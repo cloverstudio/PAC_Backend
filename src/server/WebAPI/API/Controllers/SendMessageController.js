@@ -31,7 +31,7 @@ SendMessageController.prototype.init = function(app){
     var self = this;
 
    /**
-     * @api {post} /api/v3/message/send send messsage
+     * @api {post} /api/v3/send send messsage
      **/
 
     router.post('',checkAPIKey,function(request,response){
