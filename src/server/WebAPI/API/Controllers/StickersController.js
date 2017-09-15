@@ -1,16 +1,12 @@
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const async = require('async');
 
 const pathTop = "../../../";
 const Const = require( pathTop + "lib/consts");
 const Config = require( pathTop + "lib/init");
-const Utils = require( pathTop + "lib/utils");
 const checkAPIKey = require( pathTop + 'lib/authApiV3');
 const APIBase = require('./APIBase');
-const checkUserAdmin = require('../../../lib/authV3.js').checkUserAdmin;
 
 const StickerModel = require(pathTop + 'Models/Sticker');
 const StickerLogic = require( pathTop + "Logics/v3/Sticker");
@@ -20,7 +16,7 @@ const StickersController = function(){};
 _.extend(StickersController.prototype, APIBase.prototype);
 
 StickersController.prototype.init = function(app){
-        
+
     var self = this;
 
     /**
@@ -32,10 +28,10 @@ StickersController.prototype.init = function(app){
             return response.status(Const.httpCodeBadParameter)
                         .send(Const.errorMessage.queryParamsNotCorrect);
 
-        StickerLogic.getList(request.user, query, (stickers, err) => {
+        StickerLogic.get(request.user, query, (stickers) => {
             self.successResponse(response, Const.responsecodeSucceed, {
                 stickers: stickers
-            }); 
+            });
         }, (err) => {
             console.log("Critical Error", err);
             return self.errorResponse(response, Const.httpCodeServerError);
@@ -46,19 +42,11 @@ StickersController.prototype.init = function(app){
      * @api {get} /api/v3/stickers/{stickerId} get sticker details
      **/
     router.get('/:stickerId', checkAPIKey, (request,response) => {
-        const stickerId = request.params.stickerId;        
-        const query = self.checkQueries(request.query);
-
-        // Check params
-        if (!mongoose.Types.ObjectId.isValid(stickerId))
-            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.stickeridIsWrong);
-        if (!query) 
-            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
+        const stickerId = request.params.stickerId;
+        const filePath = Config.uploadPath + "/" + stickerId;
         
-        StickerLogic.getDetails(StickerId ,query.fields, (Sticker, err) => {
-            self.successResponse(response, Const.responsecodeSucceed, {
-                Sticker: Sticker
-            }); 
+        StickerLogic.getDetails(stickerId, filePath, (path) => {
+            response.sendFile(path);
         }, (err) => {
             console.log("Critical Error", err);
             return self.errorResponse(response, Const.httpCodeServerError);

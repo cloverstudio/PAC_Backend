@@ -40,6 +40,7 @@ tags:
   - name: Socket API
     description: Socket API
 paths:
+  
   /signin:
     post:
       tags:
@@ -1884,7 +1885,21 @@ paths:
               stickers:
                 type: array
                 items:
-                  $ref: '#/definitions/Sticker'
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    list:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          fullPic:
+                            type: string
+                          smallPic:
+                            type: string
+                    mainTitlePic:
+                      type: string
         '401':
           description: Wrong apikey
         '403':
@@ -1895,13 +1910,15 @@ paths:
           description: Server error
       security:
         - api_key: []
-  '/stickers/{fileId}':
+  '/stickers/{stickerId}':
     get:
       tags:
         - Stickers
       summary: Uploads a file.
       consumes:
         - multipart/form-data
+      produces:
+        - application/octet-stream
       parameters:
         - in: header
           name: access-token
@@ -1909,17 +1926,13 @@ paths:
           type: string
           required: true
         - in: path
-          name: fileId
+          name: stickerId
           type: string
           required: true
           description: Id to get sticker
       responses:
         '200':
-          description: The sticker
-          schema:
-            properties:
-              sticker:
-                $ref: '#/definitions/Sticker'
+          description: The sticker image
         '401':
           description: Wrong apikey
         '403':

@@ -3,14 +3,15 @@ const async = require('async');
 const _ = require('lodash');
 const Const = require("../../lib/consts");
 const Utils = require("../../lib/utils");
+const Config = require("../../lib/init");
 const Path = require('path');
+const fs = require('fs');
 const easyImg = require('easyimage');
 const StickerModel = require('../../Models/Sticker');
 const OrganizationModel = require('../../Models/Organization');
-const PermissionLogic = require('./Permission');
 
 const Sticker = {
-    getList: (baseUser, params, onSuccess, onError) => {
+    get: (baseUser, params, onSuccess, onError) => {
         const stickerModel = StickerModel.get();
         const organizationModel = OrganizationModel.get();
         const organizationId = baseUser.organizationId;
@@ -42,7 +43,7 @@ const Sticker = {
             },
             // Change array structure to be more general
             (stickers, done) => {
-                const basePath = '/api/v3/sticker/';
+                const basePath = '/api/v3/stickers/';
                 const newStickers = _.map(stickers, (sticker) => {
                     let titleThumb = "";
                     const newlist = _.map(sticker.pictures, (picture) => {
@@ -66,6 +67,22 @@ const Sticker = {
             if (err && onError) return onError(err);
             if (onSuccess) onSuccess(stickers);
         });
+    },
+    getDetails: (fileId, filePath, onSuccess, onError) => {
+        async.waterfall([
+            (done) => {
+                fs.exists(filePath, (exists) => {
+                    if(!exists){
+                        filePath = Config.publicPath + "/images/nosticker.png";
+                    }
+                    done(null, filePath);
+                });
+            }
+        ],
+        (err, filePath) => {
+            if (err && onError) return onError(err);
+            if (onSuccess) onSuccess(filePath);
+        })
     }
 };
 
