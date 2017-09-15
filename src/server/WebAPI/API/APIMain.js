@@ -17,7 +17,7 @@ var APIMain ={
         
         router.use("/test", require("./Controllers/TestController").init(app));
         router.use("/signin", require("./Controllers/SigninController").init(app));
-        router.use("/send", require("./Controllers/SendMessageController").init(app));
+        // router.use("/send", require("./Controllers/SendMessageController").init(app));
         router.use("/file/upload", require("./Controllers/FileUploadController").init(app));
         router.use("/file/download", require("./Controllers/FileDownloadController").init(app));
         router.use("/message/list", require("./Controllers/MessageListController").init(app));

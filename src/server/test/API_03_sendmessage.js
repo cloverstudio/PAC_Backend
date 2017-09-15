@@ -6,12 +6,12 @@ describe('API', function () {
 
     var req, res;
 
-    describe('/v3/send POST', function () {
+    describe('/v3/messages POST', function () {
     
         it('send text messsage works', function (done) {
 
             request(app)
-                .post('/api/v3/send')
+                .post('/api/v3/messages')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .send({
@@ -42,7 +42,7 @@ describe('API', function () {
             console.log('send group id',global.group1._id);
 
             request(app)
-                .post('/api/v3/send')
+                .post('/api/v3/messages')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .send({
@@ -88,7 +88,7 @@ describe('API', function () {
                 var thumb = res.body.thumbnail;
 
                 request(app)
-                    .post('/api/v3/send')
+                    .post('/api/v3/messages')
                     .set('apikey', global.apikey)
                     .set('access-token', global.user2.apiaccesstoken)
                     .send({
@@ -132,7 +132,7 @@ describe('API', function () {
         it('wrong apikey', function (done) {
 
             request(app)
-                .post('/api/v3/send')
+                .post('/api/v3/messages')
                 .set('apikey', "sss")
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(401) 
@@ -151,7 +151,7 @@ describe('API', function () {
         it('wrong access token', function (done) {
 
             request(app)
-                .post('/api/v3/send')
+                .post('/api/v3/messages')
                 .set('apikey', global.apikey)
                 .set('access-token', "sssss")
                 .expect(403) 

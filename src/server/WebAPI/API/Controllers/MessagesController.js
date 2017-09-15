@@ -16,8 +16,11 @@ const DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 const checkAPIKey = require( pathTop + 'lib/authApiV3');
 const APIBase = require('./APIBase');
 
+const UserModel = require(pathTop + 'Models/User');
 const MessageModel = require(pathTop + 'Models/Message');
 const MessageLogic = require( pathTop + "Logics/v3/Message");
+const SendMessageLogic = require( pathTop + "Logics/v3/SendMessage");
+const EncryptionManager = require(pathTop + 'lib/EncryptionManager');
 
 const MessagesController = function(){}
 
@@ -26,6 +29,120 @@ _.extend(MessagesController.prototype,APIBase.prototype);
 MessagesController.prototype.init = function(app){
 
     const self = this;
+
+    /**
+     * @api {post} /api/v3/messages send messsage
+     **/
+    router.post('/',checkAPIKey, (request,response) => {
+
+        var targetType = request.body.targetType;
+        var target = request.body.target;
+        var messageType = request.body.messageType;
+        var message = request.body.message;
+        var file = request.body.file;
+
+        var userModel = UserModel.get();
+
+        if(!targetType){
+            response.status(Const.httpCodeBadParameter).send('Bad Parameter');
+            return;
+        }
+        
+        if(!target){
+            response.status(Const.httpCodeBadParameter).send('Bad Parameter');
+            return;
+        }
+
+        if(!messageType){
+            response.status(Const.httpCodeBadParameter).send('Bad Parameter');
+            return;
+        }
+
+        if(messageType == Const.messageTypeText && !message){
+            response.status(Const.httpCodeBadParameter).send('Bad Parameter');
+            return;
+        }
+
+        if(messageType == Const.messageTypeFile && !file){
+            response.status(Const.httpCodeBadParameter).send('Bad Parameter');
+            return;
+        }
+
+        var roomId = targetType + "-" + target;
+
+        async.waterfall([(done) => {
+
+            var result = {};
+            if(targetType != Const.chatTypePrivate){
+                done(null,result);
+                return;
+            }
+            // find user
+            userModel.findOne({
+                userid:target,
+                organizationId:request.user.organizationId
+            }, (err,findResult) => {
+                
+                if(!findResult){
+                    done({
+                        status: Const.httpCodeBadParameter,
+                        message: "Bad Parameter"
+                    },null);
+                    
+                    return;
+                }
+                
+                roomId = Utils.chatIdByUser(findResult,request.user);
+
+                done(null,result);
+
+            });
+            
+        }],
+        (err, result) => {
+            if(err){    
+                if(err.status && err.message)
+                    response.status(err.status).send(err.message);
+                else
+                    response.status(500).send("Server Error");
+                return;
+            }
+
+            const params = {
+                userID: request.user._id,
+                roomID: roomId,
+                message: message,
+                plainTextMessage: true,
+                type: messageType,
+                file:file
+            };
+            SendMessageLogic.send(params, (err) => {
+                    console.log("Critical Error", err);
+                    return self.errorResponse(response, Const.httpCodeServerError);
+                },(message) => {  
+                    const messageData = {
+                        "_id": message._id,
+                        "message": message.message,
+                        "roomID": message.roomID,
+                        "created": message.created
+                    };
+                    const userData = {
+                        "_id": request.user._id,
+                        "name": request.user.name,
+                        "avatar": request.user.avatar,
+                        "description": request.user.description,
+                        "organizationId": request.user.organizationId,
+                        "sortName": request.user.sortName,
+                        "userid": request.user.userid,
+                        "created": request.user.created
+                    };
+                    self.successResponse(response, Const.responsecodeSucceed, 
+                        { "message": messageData, "user": userData }
+                    );
+                }
+            );
+        });
+    });
 
    /**
      * @api {put} /api/v3/messages/:messageId just test

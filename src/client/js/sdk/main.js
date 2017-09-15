@@ -87,7 +87,7 @@ var _spikaInit = (function(root) { // receives global object
 
         var result = {};
 
-        fetch(this.baseURL + '/send', 
+        fetch(this.baseURL + '/messages', 
                 {   method: 'POST', 
                     body: JSON.stringify(postData),
                     mode: 'cors',
