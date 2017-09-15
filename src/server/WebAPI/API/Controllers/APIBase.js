@@ -10,6 +10,9 @@ var Config = require( pathTop + "lib/init");
 var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 var Utils = require( pathTop + 'lib/utils');
 
+const formidable = require('formidable');
+const path = require('path');
+
 var APIBase = function(){
     
 }
@@ -69,6 +72,26 @@ APIBase.prototype.checkQueries = (query) => {
         });
     }
     return { keyword: keyword, offset: offset, limit: limit, sort: sort, fields: fields };
+}
+
+APIBase.prototype.parseFormData = (request, callback) => {
+    let form = new formidable.IncomingForm();
+    const uploadPathError = APIBase.prototype.checkUploadPath();    
+    form.uploadDir = Config.uploadPath;
+    form.on('fileBegin', (name, file) => {
+        file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
+    });
+    form.onPart = (part) => {
+        if (part.filename) {
+            if (!uploadPathError) form.handlePart(part);
+        } else if (part.filename != "") {
+            form.handlePart(part);
+        }
+    }
+    form.parse(request, (err, fields, files) => {
+        const result = { avatar: files.avatar, fields: fields }
+        callback(err, result);
+    });
 }
 
 module["exports"] = APIBase;

@@ -11,12 +11,8 @@ schemes:
 host: 'spika.chat'
 basePath: /api/v3
 tags:
-  - name: Sign in
-    description: Operations about sign in
-  - name: Messages1
-    description: Operations about message
   - name: Sign in/out
-    description: Operations about sign in/out
+    description: Operations about sign in/out 
   - name: Messages2
     description: Operations about message
   - name: Favorites
@@ -44,152 +40,7 @@ tags:
   - name: Socket API
     description: Socket API
 paths:
-  /user/signin:
-    post:
-      tags:
-        - Sign in
-      summary: Sign in to system.
-      description: Sign in to the system and get access token to call other API.
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          required: true
-          in: body
-          description: Parameters to send
-          schema:
-            required:
-              - username
-            properties:
-              organization:
-                type: string
-              username:
-                type: string
-              password:
-                type: string
-      responses:
-        '200':
-          description: Access tokan and User and Organization
-          schema:
-            properties:
-              access-token:
-                type: string
-              user:
-                $ref: '#/definitions/UserLogin'
-              organization:
-                $ref: '#/definitions/Organization'
-        '401':
-          description: Wrong apikey
-        '403':
-          description: Wrong username or password
-        '422':
-          description: Bad parmeter
-        '500':
-          description: Server error
-      security:
-        - api_key: []
-  '/message/list/{roomID}/{lastmessageID}/{direction}':
-    get:
-      tags:
-        - Messages1
-      summary: Get message list
-      parameters:
-        - in: header
-          name: access-token
-          description: Access token which is generated in signin.
-          type: string
-          required: true
-        - in: path
-          name: roomID
-          type: string
-          required: true
-          description: roomID to get message
-        - in: path
-          name: lastmessageID
-          type: string
-          required: true
-          description: use for paging
-        - in: path
-          name: direction
-          type: string
-          required: true
-          description: new to get new messages old to get old messages
-      responses:
-        '200':
-          description: A list of Person
-          schema:
-            properties:
-              messages:
-                type: array
-                items:
-                  $ref: '#/definitions/Message'
-        '401':
-          description: Wrong apikey
-        '403':
-          description: Wrong access token
-        '422':
-          description: Bad parmeter
-        '500':
-          description: Server error
-      security:
-        - api_key: []
-  /message/send:
-    post:
-      tags:
-        - Messages1
-      summary: Send message
-      description: 'Send message to user,group and room.'
-      parameters:
-        - in: header
-          name: access-token
-          description: Access token which is generated in signin.
-          type: string
-          required: true
-        - name: body
-          required: true
-          in: body
-          description: Parameters to send
-          schema:
-            properties:
-              targetType:
-                type: string
-                description: 1.private 2.group 3.room
-              target:
-                type: string
-              messageType:
-                type: string
-                description: 1.text 2.file 3.location 4.contact 5.sticker
-              message:
-                type: string
-                description: required if messageType is 1
-              file:
-                description: required if messageType is 2
-                properties:
-                  file:
-                    $ref: '#/definitions/File'
-                  thumb:
-                    $ref: '#/definitions/File'
-      responses:
-        '200':
-          description: The message sent
-          schema:
-            properties:
-              message:
-                $ref: '#/definitions/Message'
-              user:
-                $ref: '#/definitions/User'
-        '401':
-          description: Wrong apikey
-        '403':
-          description: Wrong access token
-        '422':
-          description: Bad parmeter
-        '500':
-          description: Server error
-      security:
-        - api_key: []
+  
   /signin:
     post:
       tags:
@@ -2002,6 +1853,30 @@ paths:
           description: Access token which is generated in signin.
           type: string
           required: true
+        - in: query
+          name: offset
+          description: The offset number of get stickers
+          type: integer
+          format: int32
+        - in: query
+          name: limit
+          description: The limit number of get stickers
+          type: integer
+          format: int32
+        - in: query
+          name: sort
+          description: >-
+            Sort by fields set by string like [field name]:asc, [field
+            name]:desc
+          type: string
+        - in: query
+          name: fields
+          description: >-
+            Use for filtering params. Only return set fields if you set them,
+            otherwise all fields will be returned.
+          type: array
+          items:
+            type: string
       responses:
         '200':
           description: The Stickers list
@@ -2010,7 +1885,21 @@ paths:
               stickers:
                 type: array
                 items:
-                  $ref: '#/definitions/Sticker'
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    list:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          fullPic:
+                            type: string
+                          smallPic:
+                            type: string
+                    mainTitlePic:
+                      type: string
         '401':
           description: Wrong apikey
         '403':
@@ -2021,13 +1910,15 @@ paths:
           description: Server error
       security:
         - api_key: []
-  '/stickers/{fileId}':
+  '/stickers/{stickerId}':
     get:
       tags:
         - Stickers
       summary: Uploads a file.
       consumes:
         - multipart/form-data
+      produces:
+        - application/octet-stream
       parameters:
         - in: header
           name: access-token
@@ -2035,17 +1926,13 @@ paths:
           type: string
           required: true
         - in: path
-          name: fileId
+          name: stickerId
           type: string
           required: true
           description: Id to get sticker
       responses:
         '200':
-          description: The sticker
-          schema:
-            properties:
-              sticker:
-                $ref: '#/definitions/Sticker'
+          description: The sticker image
         '401':
           description: Wrong apikey
         '403':

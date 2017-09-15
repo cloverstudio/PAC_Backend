@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const async = require('async');
-const path = require('path');
 
 const pathTop = "../../../";
 const Const = require( pathTop + "lib/consts");
@@ -30,26 +29,12 @@ UsersController.prototype.init = function(app){
      * @api {post} /api/v3/users create a new user
      */
     router.post('/', checkAPIKey, checkUserAdmin, (request, response) => {
-        let form = new formidable.IncomingForm();
-        const uploadPathError = self.checkUploadPath();
 
         async.waterfall([
             (done) => {
-                form.uploadDir = Config.uploadPath;
-                form.on('fileBegin', (name, file) => {
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
-                });
-                form.onPart = (part) => {
-                    if (part.filename) {
-                        if (!uploadPathError) form.handlePart(part);
-                    } else if (part.filename != "") {
-                        form.handlePart(part);
-                    }
-                }
-                form.parse(request, (err, fields, files) => {
-                    const result = { avatar: files.avatar, fields: fields }
+                self.parseFormData(request, (err, result) => {
                     done(err, result);
-                })
+                });
             },
             // Validate presence
             (result, done) => {
@@ -65,8 +50,6 @@ UsersController.prototype.init = function(app){
             },
             //Validate the new userid is duplicated, or not.
             (result, done) => {
-                if (uploadPathError) 
-                    return done(uploadPathError, result);
                 self.validateDuplication(result.fields.userid, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
@@ -140,8 +123,6 @@ UsersController.prototype.init = function(app){
      **/
     router.put('/:id', checkAPIKey, checkUserAdmin, (request,response) => {
         const userid = request.params.id;
-        let form = new formidable.IncomingForm();
-        const uploadPathError = self.checkUploadPath();          
 
         async.waterfall([
             // Validate the userid is handleable by mongoose
@@ -155,21 +136,9 @@ UsersController.prototype.init = function(app){
                 done(null, null);
             },
             (result, done) => {
-                form.uploadDir = Config.uploadPath;
-                form.on('fileBegin', (name, file) => {
-                    file.path = path.dirname(file.path) + "/" + Utils.getRandomString();
-                });
-                form.onPart = (part) => {
-                    if (part.filename) {
-                        if (!uploadPathError) form.handlePart(part);
-                    } else if (part.filename != "") {
-                        form.handlePart(part);
-                    }
-                }
-                form.parse(request, (err, fields, files) => {
-                    const result = { avatar: files.avatar, fields: fields }
+                self.parseFormData(request, (err, result) => {
                     done(err, result);
-                })
+                });
             },
             // Validate presense and max length
             (result, done) => {
@@ -179,8 +148,6 @@ UsersController.prototype.init = function(app){
             },
             //Validate the new userid is duplicated, or not.
             (result, done) => {
-                if (uploadPathError) 
-                    return done(uploadPathError, result);
                 self.validateDuplication(result.fields.userid, request.user.organizationId, (err) => {
                     done(err, result);   
                 });
