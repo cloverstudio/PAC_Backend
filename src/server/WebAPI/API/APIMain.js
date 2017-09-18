@@ -28,6 +28,9 @@ var APIMain ={
         router.use("/rooms", require("./Controllers/RoomsController").init(app));                
         router.use("/stickers", require("./Controllers/StickersController").init(app));                
         
+        router.use("/users", require("./Controllers/UsersController").init(app));
+        router.use("/private", require("./Controllers/PrivateMessageController").init(app));   
+
         return router;
 
     }
