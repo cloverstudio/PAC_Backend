@@ -1,0 +1,40 @@
+
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li><a href="/admin/webhook/list">{{l10n "Webhook Management"}}</a></li>
+    <li class="active">{{l10n "Add New"}}</li>
+</ol>
+
+<h1 style="max-width:50%">{{l10n "Add New Webhook"}}</h1>
+
+<hr>
+
+{{> alertMessage }}
+
+<form method="post" action="/admin/webhook/add">
+
+  <div class="form-group">
+    <label for="input1">{{l10n "Webhook URL"}}</label>
+    <input type="text" name="url" class="form-control" id="input1" placeholder="{{l10n "URL"}}" value="{{formValues.url}}" />
+  </div>
+
+  <div class="form-group">
+    <label for="input1">{{l10n "Key"}}</label>
+    <input type="text" name="key" class="form-control" id="input1" placeholder="{{l10n "Key"}}" value="{{formValues.key}}" />
+  </div>
+
+  <button type="submit" class="btnSend pull-right">
+      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
+      {{l10n "Save"}}
+  </button>
+
+</form>
+
+<script type="text/javascript">
+     
+  $(document).ready(function() {
+
+
+  });
+
+</script>

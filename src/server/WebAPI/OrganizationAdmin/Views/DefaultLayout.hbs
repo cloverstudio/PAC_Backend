@@ -120,6 +120,9 @@
                     <a href="/admin/apikey/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-key fa-stack-1x"></i></span>{{l10n "API Keys"}}</a>
                 </li>
 
+                <li {{{printIfEqual page 'webhook-list' 'class="active1"'}}}>
+                    <a href="/admin/webhook/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-exchange fa-stack-1x"></i></span>{{l10n "Webhooks"}}</a>
+                </li>
 
                 <li>
                     <a href="/admin/settings"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cog fa-stack-1x"></i></span>{{l10n "Settings"}}</a>

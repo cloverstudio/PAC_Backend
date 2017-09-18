@@ -1,0 +1,97 @@
+<ol class="breadcrumb">
+    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li class="active">{{l10n "Webhooks"}}</li>
+</ol>
+
+<h1 style="max-width:50%; display: inline-block;">{{l10n "Webhooks"}}</h1>
+
+<hr />
+
+{{> alertMessage }}
+
+<table class="table table-hover">
+    
+    <thead>
+        <tr>
+            <th>
+                {{l10n "State"}}<br />
+            </th>
+            <th>
+                {{l10n "API Key"}}<br />
+            </th>
+            <th width="25%">{{l10n "Created At"}}</th>
+            <th width="5%">
+                
+            </th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        
+        {{#each list}}
+
+            <tr {{#if state}} class="enabled" {{else}} class="disabled" {{/if}}>
+                <td>
+                    {{#if state}}
+                        <strong>Enabled</strong>
+                    {{else}}
+                        <strong>Disabled</strong>
+                    {{/if}}
+                </td>
+                <td>
+                    <strong>{{l10n "Request URL"}}</strong><br />
+                    {{url}}<br /><br />
+                    <strong>{{l10n "Request header"}}</strong><br />
+                    spika-key: {{key}}
+                </td>
+                <td width="25%">
+                    {{formatDateTime created}}
+                </td>
+                <th width="15%" style="text-align: right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{l10n "Action"}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{#if state}}
+                              <li><a href="/admin/webhook/disable/{{_id}}" onclick="return confirm('{{l10n "Are you sure to disable this key ?"}}')">{{l10n "Disable"}}</a></li>
+                            {{else}}
+                               <li><a href="/admin/webhook/enable/{{_id}}" onclick="return confirm('{{l10n "Are you sure to enable this key ?"}}')">{{l10n "Enable"}}</a></li>   
+                            {{/if}}
+
+                            <li><a href="/admin/webhook/delete/{{_id}}" onclick="return confirm('{{l10n "Are you sure to delete this key ?"}}')">{{l10n "Delete"}}</a></li>
+                        </ul>
+                    </div>
+
+                </th>
+            </tr>
+
+        {{/each}}
+
+        <tr>
+            <td colspan="4" style="text-align: right">
+                <button type="button" class="btnAddNew" onclick="location.href='/admin/webhook/add'">{{l10n "Add New"}}</button>
+            </td>
+        </tr>
+
+    </tbody>
+    
+</table>
+
+<form id="newapiform" action="/admin/webhook/add" method="post">
+</form>
+
+<script type="text/javascript">
+    
+    function getNewAPI(){
+
+        $('#newapiform').submit();
+
+    }
+
+    $(document).ready(function() {
+
+
+    });
+
+</script>
