@@ -24,9 +24,9 @@ StickersController.prototype.init = function(app){
      **/
     router.get('/', checkAPIKey, (request,response) => {
         const query = self.checkQueries(request.query);
-        if (!query) 
+        if (!query)
             return response.status(Const.httpCodeBadParameter)
-                        .send(Const.errorMessage.queryParamsNotCorrect);
+                        .send(Const.errorMessage.offsetIsMinus);
 
         StickerLogic.get(request.user, query, (stickers) => {
             self.successResponse(response, Const.responsecodeSucceed, {

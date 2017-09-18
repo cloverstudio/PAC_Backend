@@ -4,16 +4,16 @@ info:
   title: Spika for Business API v3
   description: >-
     New set of API to use Spika for Business. First of all, you must get an
-    access token by calling sign in API. 
+    access token by calling sign in API.
 schemes:
   - http
   - https
-host: 'spika.chat'
+host: 'spikca.chat'
 basePath: /api/v3
 tags:
   - name: Sign in/out
     description: Operations about sign in/out 
-  - name: Messages2
+  - name: Messages
     description: Operations about message
   - name: Favorites
     description: Operations about favorites
@@ -40,7 +40,6 @@ tags:
   - name: Socket API
     description: Socket API
 paths:
-  
   /signin:
     post:
       tags:
@@ -119,9 +118,9 @@ paths:
   /messages:
     post:
       tags:
-        - Messages2
+        - Messages
       summary: Send message
-      description: 'Send message to user,group and room.'
+      description: 'Send message to user, group and room.'
       parameters:
         - in: header
           name: access-token
@@ -131,16 +130,21 @@ paths:
         - name: body
           required: true
           in: body
-          description: Parameters to send
+          description: Parameters to send.
           schema:
             properties:
               targetType:
-                type: string
+                type: number
+                format: int32
+                example: 1
                 description: 1.private 2.group 3.room
               target:
                 type: string
+                description: userid of user, not id of data
               messageType:
-                type: string
+                type: number
+                format: int32
+                example: 1
                 description: 1.text 2.file 3.location 4.contact 5.sticker
               message:
                 type: string
@@ -171,7 +175,7 @@ paths:
   '/messages/{messageId}':
     put:
       tags:
-        - Messages2
+        - Messages
       summary: Edit mesasge details
       description: 'Edit message of user, group and room.'
       parameters:
@@ -215,7 +219,7 @@ paths:
         - api_key: []
     delete:
       tags:
-        - Messages2
+        - Messages
       summary: Delete group
       description: Delete group corresonding to group id.
       parameters:
@@ -245,7 +249,7 @@ paths:
   /messages/forward:
     post:
       tags:
-        - Messages2
+        - Messages
       summary: Forward a message
       description: 'Forward a message to user,group and room.'
       parameters:

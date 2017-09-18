@@ -34,7 +34,7 @@ RoomsController.prototype.init = function(app){
         const query = self.checkQueries(request.query);
         if (!query) 
             return response.status(Const.httpCodeBadParameter)
-                        .send(Const.errorMessage.queryParamsNotCorrect);
+                        .send(Const.errorMessage.offsetIsMinus);
 
         RoomLogic.search(request.user, query, (result, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
@@ -116,7 +116,7 @@ RoomsController.prototype.init = function(app){
         if (!mongoose.Types.ObjectId.isValid(roomId))
             return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.roomidIsWrong);
         if (!query) 
-            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.offsetIsMinus);
         
         RoomLogic.getDetails(roomId , query.fields, (room, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {

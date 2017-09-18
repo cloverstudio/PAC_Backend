@@ -204,14 +204,15 @@
     Const.descriptionMaxLength = 512;
 
     Const.errorMessage = {
-        queryParamsNotCorrect: "query parameters are not correct.",
-        nameNotExist: "name does not exist. Please input name.",
-        useridNotExist: "userid is empty. Please input userid.",
-        passwordNotExist: "password is empty. Please input password.",
+        offsetIsMinus: "offset parameter can not be minus.",
+        nameIsEmpty: "name is empty. Please input name.",
+        userIdIsEmpty: "userid is empty. Please input userid.",
+        passwordIsEmpty: "password is empty. Please input password.",
+        messageIsEmpty: "message is empty.",        
         roomNotExist: "room is not existed.",
+        userNotExistInOrganization: "user does not exist in organization.",        
         userNotExistInRoom: "user does not exist in room.",
         messageNotExist: "message data does not exist.",
-        messageIsEmpty: "message is empty.",        
         useridTooShort: "userid is too short. Please input more than 6 characters.",
         passwordTooShort: "password is too short. Please input more than 6 characters.",
         nameTooLarge: "name is too large. Please input shorter than 64 characters.",

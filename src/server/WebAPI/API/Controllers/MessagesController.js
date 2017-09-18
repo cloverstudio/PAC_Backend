@@ -86,7 +86,7 @@ MessagesController.prototype.init = function(app){
                 if(!findResult){
                     done({
                         status: Const.httpCodeBadParameter,
-                        message: "Bad Parameter"
+                        message: Const.errorMessage.userNotExistInOrganization
                     },null);
                     
                     return;

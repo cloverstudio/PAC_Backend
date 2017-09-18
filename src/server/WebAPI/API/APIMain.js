@@ -17,12 +17,10 @@ var APIMain ={
         
         router.use("/test", require("./Controllers/TestController").init(app));
         router.use("/signin", require("./Controllers/SigninController").init(app));
-        // router.use("/send", require("./Controllers/SendMessageController").init(app));
-        router.use("/file/upload", require("./Controllers/FileUploadController").init(app));
-        router.use("/file/download", require("./Controllers/FileDownloadController").init(app));
         router.use("/message/list", require("./Controllers/MessageListController").init(app));
-
-        router.use("/messages", require("./Controllers/MessagesController").init(app));        
+        router.use("/messages", require("./Controllers/MessagesController").init(app));
+        router.use("/file/upload", require("./Controllers/FileUploadController").init(app));
+        router.use("/file/download", require("./Controllers/FileDownloadController").init(app));       
         router.use("/groups", require("./Controllers/GroupsController").init(app));        
         router.use("/users", require("./Controllers/UsersController").init(app));        
         router.use("/rooms", require("./Controllers/RoomsController").init(app));                

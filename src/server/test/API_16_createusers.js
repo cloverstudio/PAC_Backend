@@ -54,7 +54,7 @@ describe('API', () => {
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
-                    res.error.text.should.equal(Const.errorMessage.nameNotExist);
+                    res.error.text.should.equal(Const.errorMessage.nameIsEmpty);
                     done();
                 });        
         });
@@ -72,7 +72,7 @@ describe('API', () => {
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
-                    res.error.text.should.equal(Const.errorMessage.useridNotExist);
+                    res.error.text.should.equal(Const.errorMessage.userIdIsEmpty);
                     done();
                 }); 
         });
@@ -90,7 +90,7 @@ describe('API', () => {
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
-                    res.error.text.should.equal(Const.errorMessage.passwordNotExist);
+                    res.error.text.should.equal(Const.errorMessage.passwordIsEmpty);
                     done();
                 });
         });

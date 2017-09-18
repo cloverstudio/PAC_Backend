@@ -55,7 +55,7 @@ describe('API', () => {
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
-                    res.error.text.should.equal(Const.errorMessage.nameNotExist);
+                    res.error.text.should.equal(Const.errorMessage.nameIsEmpty);
                     done();
                 }); 
         });
