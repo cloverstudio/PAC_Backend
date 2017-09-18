@@ -63,7 +63,6 @@ UserAvatarController.prototype.init = function(app){
 
     });
 
-
    /**
      * @api {get} /api/v2/avatar/group/:fileID GroupAvatar
      * @apiName Group Avatar

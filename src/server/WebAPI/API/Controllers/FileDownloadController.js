@@ -70,13 +70,10 @@ FileDownloadController.prototype.init = function(app){
                         
                         done("file not found",result);
 
-                        
-                        
                     } else {
                         
                         result.filePath = filePath;
                         done(null,result);
-                        
                         
                     }
                     

@@ -36,7 +36,7 @@ FileUploadController.prototype.init = function(app){
      **/
 
     router.post('',checkAPIKey,function(request,response){
-
+        
         var form = new formidable.IncomingForm();
         form.maxFieldsSize = 2 * 1024 * 1024;
 
