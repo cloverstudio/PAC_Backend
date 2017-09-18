@@ -41,7 +41,7 @@ describe('API', function () {
         it('send text messsage to user works', function (done) {
 
             request(app)
-                .post('/api/v3/send')
+                .post('/api/v3/messages')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .send({
@@ -67,6 +67,7 @@ describe('API', function () {
         });
 
         it('Get messages of the private chat works', (done) => {
+
             request(app)
                 .get('/api/v3/private/' + global.user2._id + "/messages")
                 .set('apikey', global.apikey)

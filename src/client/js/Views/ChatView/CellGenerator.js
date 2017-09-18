@@ -9,8 +9,6 @@ var Config = require('../../lib/init');
 var encryptionManager = require('../../lib/EncryptionManager');
 var loginUserManager = require('../../lib/loginUserManager');
 
-console.log('VCardParser',VCardParser);
-
 function CellGenerator(){
     
     // loading templates

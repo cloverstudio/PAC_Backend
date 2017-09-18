@@ -83,7 +83,6 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
                 } 
             },(err,updateResult) => {
 
-                console.log(err,updateResult);
 
             });
 

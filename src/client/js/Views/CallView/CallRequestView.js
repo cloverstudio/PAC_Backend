@@ -147,8 +147,6 @@ var CallRequestView = Backbone.View.extend({
         
         Backbone.on(Const.NotificationCallRequest, function(params){
             
-            console.log('call request',params);
-
             if(self.isCalling){
             
                 socketIOManager.emit('call_reject',{
@@ -445,8 +443,6 @@ var CallRequestView = Backbone.View.extend({
     },
 
     destroy: function(){
-        
-        console.log('call reqyest destroy');
         
         Backbone.off(Const.NotificationCallClose);
         Backbone.off(Const.NotificationCallRequest);

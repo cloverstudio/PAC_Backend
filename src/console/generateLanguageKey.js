@@ -127,7 +127,6 @@ async.waterfall([
 ],function(){
 
 	var jsonString = JSON.stringify(keys);
-	console.log(jsonString);
 	
 });
 

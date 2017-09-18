@@ -21,8 +21,6 @@ FileUploadClient.prototype.send = function(file,progress,success,err){
     var data = new FormData();
     
     data.append('file', file);
-
-    console.log('headers',headers);
     
     $.ajax({
         type : "POST",

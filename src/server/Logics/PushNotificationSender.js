@@ -25,8 +25,6 @@ PushNotificationSender = {
         var tokensFiltered = [];
         var userModel = UserModel.get();
 
-        console.log('before',tokenAndBadgeCount.length);
-
         async.eachSeries(tokenAndBadgeCount,(tokenAndBadge,doneEach) => {
 
             var pushToken = tokenAndBadge.token;
@@ -76,8 +74,6 @@ PushNotificationSender = {
             });
 
         },(err) => {
-
-            console.log('after',tokensFiltered.length);
 
             self.send(tokensFiltered,payload,isVoip);
 
@@ -139,7 +135,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.dev.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn dev result",result);
+
                     }); 
                     
                     donePushOne(null);
@@ -189,7 +185,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.adhoc.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn adhoc result",result);
+
                     }); 
 
                     donePushOne(null);
@@ -239,7 +235,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.store.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn store result",result);
+
                     }); 
 
                     donePushOne(null);
@@ -296,7 +292,7 @@ PushNotificationSender = {
                     note.payload = payload;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-                        console.log("apn voip result",result);
+ 
                     }); 
 
                     donePushOne(null);

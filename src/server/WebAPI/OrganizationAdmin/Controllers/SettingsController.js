@@ -185,7 +185,8 @@ SettingsController.prototype.resetAllToken = function(organizationId){
     },{
       multi: true  
     },function(err,updateResult){
-        console.log(updateResult);
+
+        
     });
 
 }

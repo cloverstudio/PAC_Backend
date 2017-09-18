@@ -55,8 +55,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
         
         var userId = param.userId;
         
-        console.log('call_request',param);
-
         async.waterfall([
             
             // get user socket ids
@@ -236,8 +234,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
 
                 _.forEach(result.socketIds,function(socketInfo){
                     
-                    console.log('call request send to ',socketInfo.socketId);
-
                     SocketAPIHandler.emitToSocket(socketInfo.socketId,"call_request",{
                         user: result.userFrom,
                         mediaType: param.mediaType
@@ -276,7 +272,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
             return;
         }
 
-        console.log('call_cancel',param);
 
         var userId = param.userId;
         
@@ -410,8 +405,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
             }else{
                 
                 _.forEach(result.socketIds,function(socketInfo){
-                    
-                    console.log('call cancel sent to ',socketInfo);
 
                     SocketAPIHandler.emitToSocket(socketInfo.socketId,"call_cancel",{
                     });
@@ -448,8 +441,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
             return;
         }
         
-        console.log('call_reject',param);
-
         var userId = param.userId;
 
         async.waterfall([
@@ -549,9 +540,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
             return;
         }
 
-
-        console.log('call_received',param);
-
         // this userId is caller here
         var userId = param.userId;
 
@@ -624,8 +612,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
             socket.emit('socketerror', {code:Const.responsecodeCallingInvalidParamInvalidUserId});
             return;
         }
-
-        console.log('call_answer',param);
 
         var userId = param.userId;
 
@@ -721,8 +707,6 @@ CallingActionsHandler.prototype.attach = function(io,socket){
             socket.emit('socketerror', {code:Const.responsecodeCallingInvalidParamInvalidUserId});
             return;
         }
-
-        console.log('call_close',param);
 
         var userId = param.userId;
         

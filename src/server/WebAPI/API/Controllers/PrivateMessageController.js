@@ -30,7 +30,7 @@ PrivateMessageController.prototype.init = function(app){
      * @api {get} /private/{targetUserId}/messages/ Get list of messages sent to private chat
      **/
     router.get('/:targetUserId/messages', checkAPIKey, (request,response) => {
-  
+        
         const q = self.checkQueries(request.query);
         const targetUserId = request.params.targetUserId;  
 

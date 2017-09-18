@@ -82,8 +82,6 @@ var ChatView = Backbone.View.extend({
 
                 // prevent sending massive openMessage in same time to server
                 _.delay(function() {
-
-                    console.log("send openmessage");
                     
                     socketIOManager.emit('openMessage',{
                         messageID: message._id,
@@ -97,8 +95,6 @@ var ChatView = Backbone.View.extend({
         });
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
-            
-            console.log('messages.length',messages.length);
             
             if(messages.length > 0 && messages[0].roomID == self.currentRoomId) {
                 self.updateMessage(messages);

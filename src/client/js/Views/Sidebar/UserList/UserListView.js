@@ -166,8 +166,6 @@ var UserListView = Backbone.View.extend({
     
     renderAppend: function(list){
 
-        console.log('render');
-
         var self = this;
         
         var html = templateContents({
@@ -177,13 +175,9 @@ var UserListView = Backbone.View.extend({
         $("#sidebar-userlist .listview").append(html);
         
         $('#sidebar-userlist .chat-target').unbind().on('click',function(){
-            
-            console.log('click');
 
             var userId = $(this).attr('id');
             
-            console.log('userId',userId);
-
             self.startChat(userId);
              
         });

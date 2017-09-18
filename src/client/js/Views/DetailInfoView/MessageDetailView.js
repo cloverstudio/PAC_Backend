@@ -68,8 +68,6 @@ var MessageDetailView = Backbone.View.extend({
 
             self.seenByUsers = _.map(seenBy,function(obj){
 
-                console.log(obj);
-
                 var avatarFileId = "";
 
                 // get AvatarURL

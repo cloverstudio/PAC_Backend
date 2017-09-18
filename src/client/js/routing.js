@@ -44,7 +44,6 @@ var Routing = function(){
     appRouter.on('route:logout', function(action) {
 
         if(mainView){
-            console.log('start to destroy');
             mainView.destroy();
         }
 

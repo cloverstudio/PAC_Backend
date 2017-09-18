@@ -39,7 +39,6 @@ describe('API', function () {
 
         it('send text messsage to group works', function (done) {
 
-            console.log('send group id',global.group1._id);
 
             request(app)
                 .post('/api/v3/messages')

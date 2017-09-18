@@ -319,8 +319,6 @@ var UpdateHistory = {
                         type: rawMessageObj.type
                     }
                 };
-                
-                console.log('roomId',roomId);
 
                 // get room
                 roomModel.findOne({_id:roomId},function(err,findRoomResult){

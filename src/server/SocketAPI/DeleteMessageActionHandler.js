@@ -98,8 +98,6 @@ DeleteMessageActionHandler.prototype.attach = function(io,socket){
                         lastUpdate: Utils.now()
                     },(err,updateResult) => {
 
-                        console.log(err,updateResult);
-
                     });
 
                 });
