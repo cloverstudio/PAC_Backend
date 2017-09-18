@@ -285,10 +285,7 @@ PushNotificationSender = {
                         
                     }
 
-                    var apnConnection = new apn.Connection(options);
-                    
-                    var device = new apn.Device(pushToken);
-                    
+                    var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
 
                     note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
@@ -298,41 +295,13 @@ PushNotificationSender = {
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
 
-                    apnConnection.pushNotification(note, device);
-                    
-                    apnConnection.on('connected', function(openSockets) {
-                        console.log("apn","connected")
-                    });
-
-                    apnConnection.on('error', function(error) {
-                        console.log("apn error",error);
-                    });
-
-                    apnConnection.on('transmitted', function(notification, device) {
-                         console.log("apn transmitted",pushToken);
-                    });
-
-                    apnConnection.on('transmissionError', function(errCode, notification, device) {
-                        console.log("apn transmissionError" + errCode,pushToken);
-                    });
-
-                    apnConnection.on('drain', function () {
-                    //
-                    });
-
-                    apnConnection.on('timeout', function () {
-                        console.log("voip push timeout");
-                    });
-
-                    apnConnection.on('disconnected', function(openSockets) {
-                    //
-                    });
-
-                    apnConnection.on('socketError', console.error);
+                    apnProvider.send(note, pushToken).then( (result) => {
+                        console.log("apn voip result",result);
+                    }); 
 
                     donePushOne(null);
 
-                    },
+                },
 
                 function(donePushOne){
 
