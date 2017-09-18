@@ -34,7 +34,7 @@ describe('API', function () {
 
         it('returns group', (done) => {
             request(app)
-                .get('/api/v3/groups/' + global.group1._id)
+                .get('/api/v3/groups/' + global.group2._id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(200)
@@ -43,7 +43,7 @@ describe('API', function () {
                     res.body.should.have.property('group');
                     res.body.group.should.have.property('id');   
                     res.body.group.should.not.have.property('_id'); 
-                    res.body.group.id.should.equal(global.group1._id);
+                    res.body.group.id.should.equal(global.group2._id);
                     done();
                 });
         });

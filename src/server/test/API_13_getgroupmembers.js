@@ -41,7 +41,7 @@ describe('API', () => {
                 .end((err, res) => {
                     if (err) throw err;
                     res.body.should.have.property('users');                                        
-                    res.body.users.should.be.instanceof(Array).and.have.lengthOf(4);                
+                    res.body.users.should.be.instanceof(Array).and.have.lengthOf(2);                
                     done();
                 });
         });

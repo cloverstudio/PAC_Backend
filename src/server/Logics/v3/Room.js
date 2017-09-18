@@ -45,26 +45,18 @@ const Room = {
             // Get user's data
             (result,done) => {
                 const userLists = _.pluck(result.list,'users');
+                // Skip when select fields is set except users
                 if (_.contains(userLists, undefined)) done(null, result);
-                
-                let userIds = [];
-                _.forEach(userLists, (userList) => {
-                    if(!_.isArray(userList)) return;
-                    userIds = userIds.concat(userList);
-                });
-                userIds = _.uniq(userIds);
-
+                const flattenUserIds = _.flatten(userLists);
+                const uniqUserIds = _.uniq(flattenUserIds);
                 const userModel = UserModel.get();
-                userModel.find({_id: {$in:userIds}}, {name:1}, (err, foundUsers) => {
-                    foundUsers = foundUsers.map((item) => {
-                        return item.toObject();
-                    });
+                userModel.find({_id: { $in:uniqUserIds } }, { name:1 }, (err, foundUsers) => {
                     // Replace users list to list including username
-                    _.forEach(result.list, (Room, index) => {
-                        const userModels = _.filter(foundUsers, (user) => {
-                            return Room.users.indexOf(user._id);
+                    _.forEach(result.list, (group, index) => {
+                        const matched = _.filter(foundUsers, (user) => {
+                            return _.includes(group.users, user._id.toString());
                         });
-                        result.list[index].users =  userModels;                        
+                        result.list[index].users = Utils.ApiV3StyleId(matched);
                     });
                     done(err,result);
                 });

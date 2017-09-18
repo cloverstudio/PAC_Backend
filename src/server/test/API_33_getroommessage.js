@@ -42,7 +42,7 @@ describe('API', function () {
         it('send text messsage to room works', function (done) {
 
             request(app)
-                .post('/api/v3/send')
+                .post('/api/v3/messages')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .send({

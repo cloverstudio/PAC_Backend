@@ -51,7 +51,9 @@ describe('API', () => {
                     res.body.should.have.property('rooms');
                     res.body.rooms[0].should.have.property('id');   
                     res.body.rooms[0].should.not.have.property('_id');                                        
-                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);                           
+                    res.body.rooms.should.be.instanceof(Array).and.have.lengthOf(3);
+                    res.body.rooms[1].users.should.be.instanceof(Array).and.have.lengthOf(4);
+                    res.body.rooms[2].users.should.be.instanceof(Array).and.have.lengthOf(3);
                     done();
                 });
         });

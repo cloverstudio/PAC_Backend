@@ -32,7 +32,7 @@ GroupsController.prototype.init = function(app){
         const query = self.checkQueries(request.query);
         if (!query) 
             return response.status(Const.httpCodeBadParameter)
-                        .send(Const.errorMessage.queryParamsNotCorrect);
+                        .send(Const.errorMessage.offsetIsMinus);
 
         GroupLogic.search(request.user, query, (result, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
@@ -126,7 +126,7 @@ GroupsController.prototype.init = function(app){
         if (!mongoose.Types.ObjectId.isValid(groupId))
             return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.groupidIsWrong);
         if (!query) 
-            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.offsetIsMinus);
         
         GroupLogic.getDetails(groupId ,query.fields, (group, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
@@ -605,7 +605,7 @@ GroupsController.prototype.init = function(app){
 GroupsController.prototype.validatePresence = (values, callback) => {
     let error = {};
     if (!values.name) {
-        error.message = Const.errorMessage.nameNotExist;
+        error.message = Const.errorMessage.nameIsEmpty;
     }
 
     if (error.message) {

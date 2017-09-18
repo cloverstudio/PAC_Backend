@@ -105,7 +105,7 @@ UsersController.prototype.init = function(app){
         if (!mongoose.Types.ObjectId.isValid(userid))
             return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.useridIsWrong);
         if (!query) 
-            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.queryParamsNotCorrect);
+            return response.status(Const.httpCodeBadParameter).send(Const.errorMessage.offsetIsMinus);
         
         UserLogic.getDetails(userid ,query.fields, (user, err) => {
             self.successResponse(response, Const.responsecodeSucceed, {
@@ -247,11 +247,11 @@ UsersController.prototype.init = function(app){
 UsersController.prototype.validatePresence = (values, callback) => {
     let error = {};
     if (!values.name) {
-        error.message = Const.errorMessage.nameNotExist;
+        error.message = Const.errorMessage.nameIsEmpty;
     } else if (!values.userid) {
-        error.message = Const.errorMessage.useridNotExist;
+        error.message = Const.errorMessage.userIdIsEmpty;
     } else if (!values.password) {
-        error.message = Const.errorMessage.passwordNotExist;
+        error.message = Const.errorMessage.passwordIsEmpty;
     }
 
     if (error.message) {
