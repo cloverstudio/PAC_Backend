@@ -147,7 +147,7 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('description', description)
-                .field('users', global.user2._id + "," + global.user3._id)
+                .field('users', global.user2._id + "," + global.user3._id + "," + global.user4._id)
                 .expect(200)
                 .end((err, res) => {
                     if (err) throw err;
@@ -158,10 +158,11 @@ describe('API', () => {
                     res.body.room.name.should.equal(name);
                     res.body.room.should.have.property('description');
                     res.body.room.description.should.equal(description);
-                    res.body.room.users.should.be.instanceof(Array).and.have.lengthOf(3);
+                    res.body.room.users.should.be.instanceof(Array).and.have.lengthOf(4);
                     res.body.room.users[0].should.equal(global.user2._id);
                     res.body.room.users[1].should.equal(global.user3._id);
-                    res.body.room.users[2].should.equal(global.user1._id); 
+                    res.body.room.users[2].should.equal(global.user4._id);
+                    res.body.room.users[3].should.equal(global.user1._id);                     
                     res.body.room.should.not.have.property('avatar');
                     global.room3 = res.body.room;
                     done();

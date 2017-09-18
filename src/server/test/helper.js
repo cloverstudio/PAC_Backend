@@ -298,7 +298,7 @@ before(function(doneMain){
                 .field('sortName', global.group1.name)
                 .field('description', global.group1.description)
                 .field('organizationId', global.organization1._id)
-                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('users', global.user1._id + "," + global.user2._id)
                 .field('type', global.group1.type)                                
                 .attach('file', 'src/server/test/samplefiles/user1.jpg')
                 .end(function (err, res) {
@@ -323,7 +323,7 @@ before(function(doneMain){
                 .field('sortName', global.group2.name)
                 .field('description', global.group2.description)
                 .field('organizationId', global.organization1._id)
-                .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
+                .field('users', global.user2._id + "," + global.user3._id + "," + global.user4._id)
                 .field('type', global.group2.type)                                
                 .attach('file', 'src/server/test/samplefiles/user2.jpg')
                 .end(function (err, res) {
