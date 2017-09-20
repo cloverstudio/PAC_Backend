@@ -104,8 +104,9 @@ module.exports = function (io, config) {
         // support for logging full webrtc traces to stdout
         // useful for large-scale error monitoring
         client.on('trace', function (data) {
-            [data.type, data.session, data.prefix, data.peer, data.time, data.value]
-            ));
+            //console.log('trace', JSON.stringify(
+            //    [data.type, data.session, data.prefix, data.peer, data.time, data.value]
+            //));
         });
 
 

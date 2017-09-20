@@ -26,6 +26,8 @@ describe('API', function () {
                 res.body.should.have.property('messages');
                 res.body.messages.should.be.instanceof(Array).and.have.lengthOf(2);
 
+                console.log("list",res.body.messages);
+
                 done();
             
             });   
