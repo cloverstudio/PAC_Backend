@@ -105,7 +105,6 @@ module.exports = function (io, config) {
         // useful for large-scale error monitoring
         client.on('trace', function (data) {
             [data.type, data.session, data.prefix, data.peer, data.time, data.value]
-            ));
         });
 
 

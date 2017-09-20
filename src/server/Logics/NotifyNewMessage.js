@@ -431,17 +431,20 @@ var NotifyNewMessage = {
                         id:obj._id.toString(),
                         message:obj.message,
                         messageiOS: name + ":" + message,
-                        type: obj.type
+                        type: obj.type,
+                        created: obj.created
                     },
                     from: {
                         id:obj.userID,
                         name:name,
-                        thumb:avatarURL
+                        thumb:avatarURL,
+                        created: obj.user.created,
+                        avatar: obj.user.avatar.toObject()
                     }
                 };
                 
                 if(obj.file){
-                    payload.file = obj.file.file;
+                    payload.file = obj.file;
                 }
                 
                 if(obj.location){
@@ -458,7 +461,8 @@ var NotifyNewMessage = {
                     payload.group = {
                         id:obj.group._id.toString(),
                         name:obj.group.name,
-                        thumb:avatarURL
+                        thumb:avatarURL,
+                        created: obj.group.created
                     }
 
                     payload.message.messageiOS = obj.group.name + " - " + payload.message.messageiOS;
@@ -474,7 +478,9 @@ var NotifyNewMessage = {
                     payload.room = {
                         id:obj.room._id.toString(),
                         name:obj.room.name,
-                        thumb:avatarURL
+                        thumb:avatarURL,
+                        created: obj.room.created,
+                        owner: obj.room.owner
                     }
 
                     payload.message.messageiOS = obj.room.name + " - " + payload.message.messageiOS;
