@@ -538,6 +538,7 @@ var NotifyNewMessage = {
                 },(err,webhooks) => {
 
                     if(!webhooks || webhooks.length == 0){
+                        console.log('no webhook found')
                         return;
                     }
 
@@ -617,6 +618,9 @@ var NotifyNewMessage = {
                     }
 
                     webhooks.forEach((webhook) => {
+
+                        console.log('send webhook',webhook.url);
+                        console.log('send webhook',requestbody);
 
                         request.post({
                             url: webhook.url,
