@@ -16,11 +16,11 @@ var PolulateMessageLogic = require('./PolulateMessage');
 var TotalUnreadCount = require('./TotalUnreadCount');
 var PushNotificationSender = require('./PushNotificationSender');
 
-var HookModel = require('../Models/Hook');
 var UserModel = require('../Models/User');
 var RoomModel = require('../Models/Room');
 var GroupModel = require('../Models/Group');
 var HistoryModel = require('../Models/History');
+var WebhookModel = require('../Models/Webhook');
 
 var NotifyNewMessage = {
     
@@ -51,6 +51,10 @@ var NotifyNewMessage = {
                     },function(err,findResult){
                         
                         result.group = findResult;
+
+                        if(findResult)
+                            result.organizationId = findResult.organizationId;
+
                         obj.group = findResult;
                         done(err,result);
                         
@@ -67,6 +71,10 @@ var NotifyNewMessage = {
                     },function(err,findResult){
                         
                         result.room = findResult;
+
+                        if(findResult)
+                            result.organizationId = findResult.organizationId;
+
                         obj.room = findResult;
                         done(err,result);
                         
@@ -78,6 +86,30 @@ var NotifyNewMessage = {
                     
                 }
                 
+            },
+            function(result,done){
+
+                if(chatType == Const.chatTypeRoom){
+
+                    var model = UserModel.get();
+                    
+                    model.findOne({
+                        
+                        _id : result.room.owner
+                        
+                    },function(err,findResult){
+                        
+                        if(findResult)
+                            result.organizationId = findResult.organizationId;
+
+                        done(err,result);
+                        
+                    });
+
+                }else{
+                    done(null,result);
+                }
+
             },
             function(result,done){
                 
@@ -142,7 +174,7 @@ var NotifyNewMessage = {
                     
                     var toUser = null;
                     var fromUser = null;
-
+                    
                     if(user1 == obj.userID){
                         toUser = user2;
                         fromUser = user1;
@@ -162,11 +194,12 @@ var NotifyNewMessage = {
                     },function(err,findUserResult){
                         
                         result.users = findUserResult;
-
+                        
                         if(!findUserResult)
                             return;
 
                         var toUserObj = result.users[0].toObject();
+                        result.organizationId = toUserObj.organizationId;
 
                         if(result.sender && _.isArray(toUserObj.muted)){
                             
@@ -494,36 +527,113 @@ var NotifyNewMessage = {
             },
             function(result,done){
                 
-                var room = result.room;
-                var message = result.message;
-                
-                if(room){
-                    
-                    var hookModel = HookModel.get();
+                done(null,result);
 
-                    hookModel.find({
-                        targetId: room._id,
-                        hookType:Const.hookTypeOutgoing
-                    },function(err,findResult){
-                        
-                        if(!findResult){
-                            done(null,result);
-                            return;
+                // send webhook in parallel
+                const webHookModel = WebhookModel.get();
+
+                webHookModel.find({
+                    organizationId:result.organizationId,
+                    state:1
+                },(err,webhooks) => {
+
+                    if(!webhooks || webhooks.length == 0){
+                        return;
+                    }
+
+                    // generate model to send to webhook
+                    const requestbody = {
+                        message: { 
+                            id: obj._id.toString(),
+                            userID:  obj.userID,
+                            roomID: obj.roomID,
+                            type: obj.type,
+                            created: obj.created,
+                            message: obj.message
+                        },
+                        sender: 
+                        { 
+                            id: obj.user._id.toString(),
+                            name: obj.user.name,
+                            userid: obj.user.userid,
+                            organizationId: obj.user.organizationId 
                         }
-                        
-                        result.hookTarget = findResult;
-                        
-                        done(err,result)
-                        
-                    });
+                    };
 
-                }else{
-                    
-                    done(null,result);
-                }
+                    if(obj.file && obj.file.file){
 
-                // send outgoing webhook
-                
+                        const file = obj.file.file;
+
+                        requestbody.file = {
+                            file:{
+                                id:file.id.toString(),
+                                mimeType:file.mimeType,
+                                name:file.name,
+                                size:file.size
+                            }
+                        };
+                    }
+
+                    if(obj.file && obj.file.thumb){
+
+                        const file = obj.file.thumb;
+
+                        requestbody.file.thumb = {
+
+                            id:file.id.toString(),
+                            mimeType:file.mimeType,
+                            name:file.name,
+                            size:file.size
+
+                        };
+
+                    }
+
+                    if(chatType == Const.chatTypeGroup){
+
+                        requestbody.group = {
+                            id:result.group.id,
+                            name:result.group.name,
+                            organizationId:result.group.organizationId
+                        };
+                        
+                    }else if(chatType == Const.chatTypeRoom){
+                        
+                        requestbody.room = {
+                            id:result.room.id,
+                            name:result.room.name
+                        };
+                        
+                    }else{
+
+                        const receiver = result.users[0];
+
+                        requestbody.receiver = { 
+                            id: receiver._id.toString(),
+                            name: receiver.name,
+                            userid: receiver.userid,
+                            organizationId: receiver.organizationId 
+                        }
+                    }
+
+                    webhooks.forEach((webhook) => {
+
+                        request.post({
+                            url: webhook.url,
+                            json: true,  
+                            body: requestbody,
+                            headers: {
+                                'User-Agent': 'spikawebhook',
+                                'spika-key': webhook.key
+                            },
+                            timeout:10
+                        },(err) => {
+
+                        });
+
+                    })
+
+                });
                 
             },
             function(result,done){

@@ -30,6 +30,7 @@ describe('API', function () {
                 res.body.should.have.property('message');
                 res.body.message.should.have.property('_id');
                 global.createdMessage = res.body.message;
+                
                 done();
             
             });   

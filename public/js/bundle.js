@@ -70942,8 +70942,6 @@ var CallRequestView = Backbone.View.extend({
         
         Backbone.on(Const.NotificationCallRequest, function(params){
             
-            console.log('call request',params);
-
             if(self.isCalling){
             
                 socketIOManager.emit('call_reject',{
@@ -71240,8 +71238,6 @@ var CallRequestView = Backbone.View.extend({
     },
 
     destroy: function(){
-        
-        console.log('call reqyest destroy');
         
         Backbone.off(Const.NotificationCallClose);
         Backbone.off(Const.NotificationCallRequest);
@@ -71637,8 +71633,6 @@ var Config = require('../../lib/init');
 var encryptionManager = require('../../lib/EncryptionManager');
 var loginUserManager = require('../../lib/loginUserManager');
 
-console.log('VCardParser',VCardParser);
-
 function CellGenerator(){
     
     // loading templates
@@ -71902,8 +71896,6 @@ var ChatView = Backbone.View.extend({
 
                 // prevent sending massive openMessage in same time to server
                 _.delay(function() {
-
-                    console.log("send openmessage");
                     
                     socketIOManager.emit('openMessage',{
                         messageID: message._id,
@@ -71917,8 +71909,6 @@ var ChatView = Backbone.View.extend({
         });
 
         Backbone.on(Const.NotificationMessageUpdated, function(messages){
-            
-            console.log('messages.length',messages.length);
             
             if(messages.length > 0 && messages[0].roomID == self.currentRoomId) {
                 self.updateMessage(messages);
@@ -73765,8 +73755,6 @@ var MessageDetailView = Backbone.View.extend({
             var seenBy = data.seenBy;
 
             self.seenByUsers = _.map(seenBy,function(obj){
-
-                console.log(obj);
 
                 var avatarFileId = "";
 
@@ -77152,9 +77140,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Edit profile",{"name":"l10n","hash":{},"data":data}))
     + "\n            </a></li>\n            \n            <li><a href=\"javascript:void(0)\" id=\"btn-changepassword\">\n                <img src=\"/images/UI/change_password.png\" /> "
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Change password",{"name":"l10n","hash":{},"data":data}))
-    + "\n            </a></li>\n\n            \n            <li><a href=\"javascript:void(0)\" id=\"btn-webhook\">\n                <img src=\"/images/UI/arrows.png\" /> "
-    + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"WebHook",{"name":"l10n","hash":{},"data":data}))
-    + "</a>\n            </li>\n            \n            <li class=\"red-bg\"><a href=\"javascript:void(0)\" id=\"btn-logout\">\n                <img src=\"/images/UI/log_out.png\" /> "
+    + "\n            </a></li>\n            \n            <li class=\"red-bg\"><a href=\"javascript:void(0)\" id=\"btn-logout\">\n                <img src=\"/images/UI/log_out.png\" /> "
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Log out",{"name":"l10n","hash":{},"data":data}))
     + "\n            </a></li>\n                \n        </ul>\n        \n        <div id=\"submenu\">\n\n        </div>\n        \n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -78521,8 +78507,6 @@ var UserListView = Backbone.View.extend({
     
     renderAppend: function(list){
 
-        console.log('render');
-
         var self = this;
         
         var html = templateContents({
@@ -78532,13 +78516,9 @@ var UserListView = Backbone.View.extend({
         $("#sidebar-userlist .listview").append(html);
         
         $('#sidebar-userlist .chat-target').unbind().on('click',function(){
-            
-            console.log('click');
 
             var userId = $(this).attr('id');
             
-            console.log('userId',userId);
-
             self.startChat(userId);
              
         });
@@ -80020,8 +80000,6 @@ FileUploadClient.prototype.send = function(file,progress,success,err){
     var data = new FormData();
     
     data.append('file', file);
-
-    console.log('headers',headers);
     
     $.ajax({
         type : "POST",
@@ -81238,10 +81216,7 @@ var NotificationManager = {
 	},
     handleNewMessage: function(obj){
 
-        console.log("message",obj);
-
         if(obj.muted){
-            console.log("muted");
             return;
         }
 
@@ -83812,7 +83787,6 @@ var Routing = function(){
     appRouter.on('route:logout', function(action) {
 
         if(mainView){
-            console.log('start to destroy');
             mainView.destroy();
         }
 

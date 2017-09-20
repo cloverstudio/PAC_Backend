@@ -45,6 +45,15 @@ WebhookController.prototype.init = function(app){
             templateParams.errorMessage = self.l10n('Failed to generate new Webhook.');
         }
 
+        if (request.query.resultEdit == 'success') {
+            templateParams.successMessage = self.l10n('Webhook is updated.');
+        }
+
+        if (request.query.resultEdit == 'fail') {
+            templateParams.errorMessage = self.l10n('Failed to update Webhook.');
+        }
+
+
         if (request.query.resultDelete == 'success') {
             templateParams.successMessage = self.l10n('The webhook is deleted.');
         }
@@ -101,6 +110,8 @@ WebhookController.prototype.init = function(app){
         var baseUser = request.session.user;
 
         var templateParams = {
+            page : menuItemName,
+            openMenu : menuItemName
         };
         
         async.waterfall([
@@ -134,11 +145,15 @@ WebhookController.prototype.init = function(app){
 
         var model = WebhookModel.get();
 
+        var templateParams = {
+            page : menuItemName,
+            openMenu : menuItemName
+        };
+        
         // validation
         var webhookURL = request.body.url;
         var key = request.body.key;
         if(!validator.isURL(webhookURL)){
-            var templateParams = {};
             templateParams.errorMessage = self.l10n('Please input valid url');
             return self.render(request, response, '/Webhook/Add', templateParams);
         }
@@ -180,7 +195,141 @@ WebhookController.prototype.init = function(app){
         });
 
     });
+    
+    router.get('/edit/:_id', checkUserAdmin, function(request,response) {
 
+        var _id = request.params._id;
+        
+        var templateParams = {
+            page : menuItemName,
+            openMenu : menuItemName
+        };
+        
+        if(_.isEmpty(_id)){
+            
+            response.redirect('/admin/webhook/list');  
+            return;
+            
+        }
+        
+        var model = WebhookModel.get();
+        
+        async.waterfall([
+            
+            function(done) {
+                
+                var result = {};
+                
+                model.findOne({ _id: _id },function(err,findResult){
+                    
+                    if(!findResult){
+                        response.redirect('/admin/webhook/list');  
+                        return;
+                    }
+                    
+                    result.obj = findResult;
+                    done(err,result)
+                    
+                });
+
+            }
+        ],
+        function(err,result){
+
+            if(err)
+                templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
+    
+            templateParams.formValues = result.obj;
+
+            self.render(request, response, '/Webhook/Edit', templateParams);
+            
+        });
+        
+    });
+
+
+    router.post('/edit/:_id', checkUserAdmin, function(request, response) {
+
+        var model = WebhookModel.get();
+
+        var templateParams = {
+            page : menuItemName,
+            openMenu : menuItemName
+        };
+
+        var _id = request.params._id;
+        
+        if(_.isEmpty(_id)){
+            response.redirect('/admin/webhook/list');  
+            return;
+        }
+        
+        // validation
+        var webhookURL = request.body.url;
+        var key = request.body.key;
+        if(!validator.isURL(webhookURL)){
+            templateParams.errorMessage = self.l10n('Please input valid url');
+            return self.render(request, response, '/Webhook/Add', templateParams);
+        }
+        
+
+        async.waterfall([
+            
+            function(done) {
+                
+                var result = {};
+                
+                model.findOne({ _id: _id },function(err,findResult){
+                    
+                    if(!findResult){
+                        response.redirect('/admin/webhook/list');  
+                        return;
+                    }
+                    
+                    result.obj = findResult;
+                    done(err,result)
+                    
+                });
+
+            },
+            (result,done) =>{
+    
+                // save API key
+                var webhook = new model({
+                    organizationId: request.session.user.organizationId,
+                    key: key,
+                    url: webhookURL,
+                    state: 1,
+                    created: Utils.now()
+                });
+                
+                model.update({
+                    _id: _id
+                },{
+                    key: key,
+                    url: webhookURL
+                },(err,updateResult) => {
+
+                    done(err, result);
+
+                })
+
+            }
+
+        ],
+        function(err,result){
+
+            if (err) {
+                response.redirect('/admin/webhook/list?resultEdit=fail'); 
+            } else {
+                response.redirect('/admin/webhook/list?resultEdit=success'); 
+            }
+            
+        });
+
+    });
+
+    
     router.get('/delete/:_id', checkUserAdmin, function(request, response) {
 
         var _id = request.params._id;
