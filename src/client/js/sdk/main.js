@@ -73,6 +73,49 @@ var _spikaInit = (function(root) { // receives global object
             });
     }
 
+    SpikaSDK.signinAsGuest = function(organization,username,displayname,cb){
+        
+        var self = this;
+
+        var postData = {
+            organization:organization,
+            username:username,
+            displayname:displayname
+        };
+
+        var result = {};
+
+        fetch(this.baseURL + '/signin/guest', 
+                {   method: 'POST', 
+                    body: JSON.stringify(postData),
+                    mode: 'cors',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        apikey:this.apiKey
+                    }
+                })
+            .then(function(res) {
+                
+                result.status = res.status;
+
+                if(res.status == 200){
+                    return res.json();
+                }else{
+                    return res.text();
+                }
+
+            }).then(function(response) {
+
+                result.body = response;
+
+                self.accessToken = response['access-token'];
+                cb(result.status,result.body);
+
+            });
+    }
+
+
     SpikaSDK.sendMessage = function(targetType,target,messageType,message,file,cb){
 
         var self = this;
