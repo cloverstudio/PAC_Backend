@@ -72117,6 +72117,7 @@ var ChatView = Backbone.View.extend({
                 });
                 self.messagePool.push(message);
             }
+
             _.sortBy(self.messagePool,function(o){
                 return o.created;
             });
@@ -72206,10 +72207,11 @@ var ChatView = Backbone.View.extend({
                 return o._id == $(cellElm).attr('id');
             });
 
-            Backbone.trigger(Const.NotificationSelectMessage,{
-                message: message
-            });
-    
+            if(message._id != message.localID)
+                Backbone.trigger(Const.NotificationSelectMessage,{
+                    message: message
+                });
+        
         });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
@@ -72321,7 +72323,7 @@ var ChatView = Backbone.View.extend({
         var filteredMessage = encryptionManager.encryptText(message);
 
         var message = {
-            _id: "temp",
+            _id: tempID,
             localID: tempID,
             userID: loginUserManager.user._id,
             message: filteredMessage,
@@ -82380,7 +82382,7 @@ var socketIOManager = {
 
             if(loginUserManager.user._id != obj.userID)
                 NotificationManager.handleNewMessage(obj);
-
+            
         });
             
         this.ioNsp.on('updatemessages', function(ary){
