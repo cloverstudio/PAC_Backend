@@ -191,6 +191,8 @@ SigninController.prototype.init = function(app){
 
     router.post('/guest',checkAPIKey,function(request,response){
 
+        console.log('guest login',request.body);
+        
         var organization = request.body.organization;
         var username = request.body.username;
         var displayname = request.body.displayname;
