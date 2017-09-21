@@ -115,15 +115,24 @@ UserController.prototype.init = function(app){
 
                                 // if user doesn't have departments 
                                 if (_.isEmpty(_.intersection(user.groups, departmentIds))) {
-                                
+                                    
+                                    let count = 0;
+
                                     _.forEach(user.groups, function(groupId, index) { 
                                         
-                                        if (index > 4) return;
+                                        if (count > 4) return;
+
+                                        const group = _.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) });
+
+                                        if(!group)
+                                            return;
+
+                                        count++;
 
                                         if (!groupNames)
-                                            groupNames = _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
+                                            groupNames = group.name;
                                         else
-                                            groupNames += ", " + _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
+                                            groupNames += ", " + group.name;
 
                                     });
 
@@ -136,17 +145,26 @@ UserController.prototype.init = function(app){
 
                             } else {
 
+                                let count = 0;
+
                                 _.forEach(user.groups, function(groupId, index) { 
                                     
-                                    if (index > 4) return;
+                                    if (count > 4) return;
 
+                                    const group = _.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) });
+
+                                    if(!group)
+                                        return;
+
+                                    count++;
+                                    
                                     if (!groupNames)
-                                        groupNames = _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
+                                        groupNames = group.name;
                                     else
-                                        groupNames += ", " + _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
+                                        groupNames += ", " + group.name;
 
                                 });
-
+                                
                                 user.groupNames = groupNames;
                                 user.showEditDelete = (user.permission != Const.userPermission.organizationAdmin || organizationAdmin);
 
