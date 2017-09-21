@@ -116,6 +116,7 @@ MessagesController.prototype.init = function(app){
                 type: messageType,
                 file:file
             };
+            
             SendMessageLogic.send(params, (err) => {
                     console.log("Critical Error", err);
                     return self.errorResponse(response, Const.httpCodeServerError);

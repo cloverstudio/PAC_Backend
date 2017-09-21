@@ -62,6 +62,9 @@ var MessageDetailView = Backbone.View.extend({
         self.currentMessage = obj;
         self.seenByUsers = [];
 
+        if(!obj._id)
+            return;
+            
         MessageSeenByClient.send(obj._id,function(data){
             
             var seenBy = data.seenBy;

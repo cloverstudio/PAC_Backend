@@ -75,9 +75,9 @@ var ChatView = Backbone.View.extend({
         this.initialTBContainerHeight = $( "#text-message-box-container" ).height();
 
         Backbone.on(Const.NotificationNewMessage, function(message){
-            
-            if(message.roomID == self.currentRoomId){
 
+            if(message.roomID == self.currentRoomId){
+            
                 self.renderMessages([message],RenderDirection.append);
 
                 // prevent sending massive openMessage in same time to server
@@ -293,9 +293,11 @@ var ChatView = Backbone.View.extend({
 
             // merge message arry
             var isExist = _.find(self.messagePool,{'_id':message._id});
-            if(!isExist)
+
+
+            if(!isExist){
                 self.messagePool.push(message);
-            else{
+            }else{
                 self.messagePool = _.filter(self.messagePool,function(o){
                     return o._id != message._id
                 });
@@ -322,7 +324,7 @@ var ChatView = Backbone.View.extend({
             // check id existed
             var idCell = $('[id="' + message._id + '"]')
 
-            if(localIdCell.length > 0 ){
+            if(message.localID && localIdCell.length > 0 ){
 
                 // swap temporary message
                 $(cellHtml).insertAfter(localIdCell);
