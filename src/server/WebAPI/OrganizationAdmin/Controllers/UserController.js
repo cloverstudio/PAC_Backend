@@ -88,90 +88,57 @@ UserController.prototype.init = function(app){
             function(done) {
                 
                 var result = {};
-                                
+
+                // get all groups by organization id
+                modelGroup.find({ organizationId: organizationId }, { name: true, type: true }, function(err, findGroups) {
+                    
+                    if (organizationAdmin && !_.isEmpty(showUsersWithoutDepartments)) {
+                        var departments = _.filter(findGroups, { type: Const.groupType.department });
+                        var departmentIds = _.map(departments, '_id').toString().split(",");
+
+                        criteria.groups = { $nin: departmentIds };
+                    };
+                    
+                    result.groups = findGroups;
+                    done(null, result);
+                    
+                });
+                
+            },
+            function(result, done) {
+                                                
                 model.find(criteria).
                     limit(Const.pagingRows).
                     skip( (page - 1 ) * Const.pagingRows).
                     sort({ created: "asc" }).
                 exec(function(err, findUsers) {
                     
-                    var users = [];
-                    var groupNames = "";
-
-                    var groupIds = _.flattenDeep(_.map(findUsers, 'groups'));
-
-                    modelGroup.find({ _id: { $in: groupIds } }, { name: true, type: true }, function(err, findGroups) {
-
-                        var departments = _.filter(findGroups, { type: Const.groupType.department });
-                        var departmentIds = _.map(departments, '_id').toString().split(",");
-
-                        _.forEach(findUsers, function(user) { 
+                    findUsers = findUsers.map((user) => {
+                        
+                        _.forEach(user.groups, function(groupId, index) { 
                             
-                            user = user.toObject();
-                            groupNames = "";                                                
+                            if (index > 4) return;
 
-                            // if checkbox "show users withpout departments" is checked
-                            if (!_.isEmpty(showUsersWithoutDepartments)) {
-
-                                // if user doesn't have departments 
-                                if (_.isEmpty(_.intersection(user.groups, departmentIds))) {
-                                
-                                    _.forEach(user.groups, function(groupId, index) { 
-                                        
-                                        if (index > 4) return;
-
-                                        if (!groupNames)
-                                            groupNames = _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
-                                        else
-                                            groupNames += ", " + _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
-
-                                    });
-
-                                    user.groupNames = groupNames;
-                                    user.showEditDelete = (user.permission != Const.userPermission.organizationAdmin || organizationAdmin);
-                                    
-                                    users.push(user);
-
-                                }
-
-                            } else {
-
-                                _.forEach(user.groups, function(groupId, index) { 
-                                    
-                                    if (index > 4) return;
-
-                                    if (!groupNames)
-                                        groupNames = _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
-                                    else
-                                        groupNames += ", " + _.result(_.find(findGroups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
-
-                                });
-
-                                user.groupNames = groupNames;
-                                user.showEditDelete = (user.permission != Const.userPermission.organizationAdmin || organizationAdmin);
-
-                                users.push(user);
-
-                            }
+                            if (!user.groupNames)
+                                user.groupNames = _.result(_.find(result.groups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
+                            else
+                                user.groupNames += ", " + _.result(_.find(result.groups, { _id: DatabaseManager.toObjectId(groupId) }), "name");
 
                         });
+
+                        user.showEditDelete = (user.permission != Const.userPermission.organizationAdmin || organizationAdmin);
                         
-                        result.list = users;
-                        result.departmentIds = departmentIds;
-
-                        done(err, result);
-
+                        return user;
                     });
+                    
+                    result.list = findUsers;
+                    done(err, result);
                     
                 });
             
             },
             function(result, done) {
                 
-                if (organizationAdmin && !_.isEmpty(showUsersWithoutDepartments)) {
-                    criteria.groups = { $nin: result.departmentIds };
-                }
-
                 // get count
                 model.count(criteria, function(err, countResult) {
                 
