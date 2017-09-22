@@ -71889,9 +71889,9 @@ var ChatView = Backbone.View.extend({
         this.initialTBContainerHeight = $( "#text-message-box-container" ).height();
 
         Backbone.on(Const.NotificationNewMessage, function(message){
-            
-            if(message.roomID == self.currentRoomId){
 
+            if(message.roomID == self.currentRoomId){
+            
                 self.renderMessages([message],RenderDirection.append);
 
                 // prevent sending massive openMessage in same time to server
@@ -72107,14 +72107,17 @@ var ChatView = Backbone.View.extend({
 
             // merge message arry
             var isExist = _.find(self.messagePool,{'_id':message._id});
-            if(!isExist)
+
+
+            if(!isExist){
                 self.messagePool.push(message);
-            else{
+            }else{
                 self.messagePool = _.filter(self.messagePool,function(o){
                     return o._id != message._id
                 });
                 self.messagePool.push(message);
             }
+
             _.sortBy(self.messagePool,function(o){
                 return o.created;
             });
@@ -72136,7 +72139,7 @@ var ChatView = Backbone.View.extend({
             // check id existed
             var idCell = $('[id="' + message._id + '"]')
 
-            if(localIdCell.length > 0 ){
+            if(message.localID && localIdCell.length > 0 ){
 
                 // swap temporary message
                 $(cellHtml).insertAfter(localIdCell);
@@ -72204,10 +72207,11 @@ var ChatView = Backbone.View.extend({
                 return o._id == $(cellElm).attr('id');
             });
 
-            Backbone.trigger(Const.NotificationSelectMessage,{
-                message: message
-            });
-    
+            if(message._id != message.localID)
+                Backbone.trigger(Const.NotificationSelectMessage,{
+                    message: message
+                });
+        
         });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
@@ -72319,7 +72323,7 @@ var ChatView = Backbone.View.extend({
         var filteredMessage = encryptionManager.encryptText(message);
 
         var message = {
-            _id: "temp",
+            _id: tempID,
             localID: tempID,
             userID: loginUserManager.user._id,
             message: filteredMessage,
@@ -73750,6 +73754,9 @@ var MessageDetailView = Backbone.View.extend({
         self.currentMessage = obj;
         self.seenByUsers = [];
 
+        if(!obj._id)
+            return;
+            
         MessageSeenByClient.send(obj._id,function(data){
             
             var seenBy = data.seenBy;
@@ -82375,7 +82382,7 @@ var socketIOManager = {
 
             if(loginUserManager.user._id != obj.userID)
                 NotificationManager.handleNewMessage(obj);
-
+            
         });
             
         this.ioNsp.on('updatemessages', function(ary){
@@ -83378,11 +83385,11 @@ var sha1 = require('sha1');
     function videofy(inputText){
 
         var Youtube = {},
-            embed = '<iframe width="560" height="315" src="//www.youtube.com/embed/$1"  frameborder="0" allowfullscreen></iframe>';
+            embed = '<iframe width="560" height="315" src="//www.youtube.com/embed/$1"  frameborder="0" allowfullscreen></iframe><br />';
     
         // modified from http://stackoverflow.com/questions/7168987/
-        var	regularUrl = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com)\/(?:watch\?v=)(.+)/g;
-        var	shortUrl = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be)\/(.+)/g;
+        var	regularUrl = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com)\/(?:watch\?v=)([_\-a-zA-Z0-9]+)/g;
+        var	shortUrl = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be)\/([_\-a-zA-Z0-9]+)/g;
         var	embedUrl = /(?:https?:\/\/)?(?:www\.)youtube.com\/embed\/([\w\-_]+)/;
         
         if (inputText.match(embedUrl)) {

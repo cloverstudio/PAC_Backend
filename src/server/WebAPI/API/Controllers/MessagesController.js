@@ -84,6 +84,10 @@ MessagesController.prototype.init = function(app){
             }, (err,findResult) => {
                 
                 if(!findResult){
+
+                    console.log("to",target);
+                    console.log("from",request.user);
+
                     done({
                         status: Const.httpCodeBadParameter,
                         message: Const.errorMessage.userNotExistInOrganization
@@ -116,6 +120,7 @@ MessagesController.prototype.init = function(app){
                 type: messageType,
                 file:file
             };
+            
             SendMessageLogic.send(params, (err) => {
                     console.log("Critical Error", err);
                     return self.errorResponse(response, Const.httpCodeServerError);

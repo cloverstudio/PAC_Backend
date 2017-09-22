@@ -74,7 +74,7 @@ var socketIOManager = {
 
             if(loginUserManager.user._id != obj.userID)
                 NotificationManager.handleNewMessage(obj);
-
+            
         });
             
         this.ioNsp.on('updatemessages', function(ary){

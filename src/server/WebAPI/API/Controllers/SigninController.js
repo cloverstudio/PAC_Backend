@@ -188,6 +188,174 @@ SigninController.prototype.init = function(app){
         
     });
 
+
+    router.post('/guest',checkAPIKey,function(request,response){
+
+        console.log('guest login',request.body);
+        
+        var organization = request.body.organization;
+        var username = request.body.username;
+        var displayname = request.body.displayname;
+
+        var userModel = UserModel.get();
+        var organizationModel = OrganizationModel.get();
+
+        if(!organization){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+        
+        if(!username){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+
+        if(!displayname){
+            response.status(422).send('Bad Parameter');
+            return;
+        }
+
+        async.waterfall([(done) => {
+
+            var result = {};
+
+            // find organization
+            organizationModel.findOne({organizationId:organization},function(err,findResult){
+                
+                if(!findResult){
+                    done({
+                        status: 403,
+                        message: "organization"
+                    },null)
+                    return;
+                }
+                
+                result.organization = findResult.toObject();
+
+                done(err,result);
+                                
+            });
+
+        },
+        (result,done) => {
+
+            // find user
+            userModel.findOne({
+                organizationId:result.organization._id,
+                userid:username,
+                isGuest: 1
+            },function(err,findResult){
+                
+                result.user = findResult;
+
+                done(err,result);
+
+            });
+
+        },
+        (result,done) => {
+
+            if(result.user)
+                return done(null,result);
+            
+            // create user if doesn't exist
+            var user = new userModel({
+                name: displayname,
+                userid: username,
+                password: "",
+                isGuest: 1,
+                organizationId : result.organization._id.toString(),
+                created: Utils.now(),
+                status: 1
+            });
+            
+            user.save(function(err,saveResult){
+                
+                result.user = saveResult;
+                done(err,result);
+                
+            });
+        },
+        (result,done) => {
+
+            // create new access token
+            var newToken = Utils.getRandomString(Const.tokenLength);
+            var now = Utils.now();
+            
+            var tokenObj = {
+                token : newToken,
+                generateAt : now
+            };
+            
+            var tokenAry = result.user.token;
+            
+            if(!_.isArray(tokenAry)){
+                tokenAry = [];
+            }
+            
+            tokenAry.push(tokenObj);
+            
+            // cleanup expired tokens
+            var cleanedTokenAry = _.filter(tokenAry,function(row){
+                return row.generateAt + Const.tokenValidInteval > now;
+            });
+            
+            // update user
+            userModel.update(
+                {_id:result.user._id},{
+                token: cleanedTokenAry
+            },function(err,updateResult){
+                
+                result.newAccessToken = newToken;
+                result.user.token = newToken;
+                result.user.tokenGeneratedAt = now;
+                
+                done(err,result);
+                
+            });
+
+        }
+        ],
+        (err,result) => {
+
+            if(err){    
+
+                if(err.status && err.message)
+                    response.status(err.status).send(err.message);
+                else
+                    response.status(500).send("Server Error");
+
+                return;
+            }
+
+            self.successResponse(response,Const.responsecodeSucceed,
+            {
+                "access-token": result.newAccessToken,
+                "user": {
+                    "_id": result.user._id,
+                    "name": result.user.name,
+                    "avatar": result.user.avatar,
+                    "description": result.user.description,
+                    "organizationId": result.user.organizationId,
+                    "sortName": result.user.sortName,
+                    "userid": result.user.userid,
+                    "blocked":result.user.blocked,
+                    "muted": result.user.muted,
+                    "created": result.user.created
+                },
+                "organization": {
+                    "_id": result.organization._id,
+                    "name": result.organization.name,
+                    "created": result.organization.created
+                }
+            }
+            
+            );
+
+        });
+        
+    });
+        
     return router;
 }
 

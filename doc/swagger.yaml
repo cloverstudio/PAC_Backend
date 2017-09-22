@@ -86,6 +86,55 @@ paths:
           description: Server error
       security:
         - api_key: []
+  
+  /signin/guest:
+    post:
+      tags:
+        - Sign in/out
+      summary: Sign in to the system as guest
+      description: Sign in to the system as guest and get access token to call other API.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          required: true
+          in: body
+          description: Parameters to send
+          schema:
+            required:
+              - organization
+              - userid
+              - name
+            properties:
+              organization:
+                type: string
+              userid:
+                type: string
+              name:
+                type: string
+      responses:
+        '200':
+          description: Access tokan and User and Organization
+          schema:
+            properties:
+              access-token:
+                type: string
+              user:
+                $ref: '#/definitions/UserLogin'
+              organization:
+                $ref: '#/definitions/Organization'
+        '401':
+          description: Wrong apikey
+        '403':
+          description: Wrong username or password
+        '422':
+          description: Bad parmeter
+        '500':
+          description: Server error
+      security:
+        - api_key: []
   /signout:
     post:
       tags:
