@@ -358,6 +358,7 @@ describe('API', () => {
                     res.body.should.have.property('user');
                     res.body.user.name.should.equal(name);
                     res.body.user.userid.should.equal(name);
+                    res.body.user.should.not.have.property('password');
                     res.body.user.sortName.should.equal(name.toLowerCase());
                     res.body.user.description.should.equal(description);
                     res.body.user.status.should.equal(1);
