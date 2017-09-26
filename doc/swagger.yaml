@@ -8,7 +8,7 @@ info:
 schemes:
   - http
   - https
-host: 'spikca.chat'
+host: 'spika.chat'
 basePath: /api/v3
 tags:
   - name: Sign in/out

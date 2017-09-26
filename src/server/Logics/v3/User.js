@@ -75,7 +75,10 @@ const User = {
                 if(onError) onError(err);
                 return;
             }
-            if(onSuccess) onSuccess(result.created);
+            if(onSuccess) {
+                delete result.created.password;
+                onSuccess(result.created);
+            }
         });  
     },
     getDetails: (userid, params, onSuccess, onError) => {
