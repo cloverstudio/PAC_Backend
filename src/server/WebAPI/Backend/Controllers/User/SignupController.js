@@ -326,7 +326,31 @@ SignupController.prototype.init = function (app) {
         {
             code: 1,
             time: 1454417582385,
-            data: {}
+            data: {
+                "user": {
+                    "_id": "588b4f191f8eae1954e9a37c",
+                    "organizationId": "test",
+                    "created": 1485524761592,
+                    "phoneNumber": "+385989057351",
+                    "userid": "+385989057351",
+                    "activationCode": "815443",
+                    "status": 1,
+                    "__v": 1,
+                    "UUID": [],
+                    "devices": [],
+                    "blocked": [],
+                    "muted": [],
+                    "groups": [],
+                    "voipPushToken": [],
+                    "pushToken": [],
+                    "token": [
+                        {
+                            "generateAt": 1485524904386,
+                            "token": "*****"
+                        }
+                    ]
+                }
+            }
         }
 
     */
@@ -338,7 +362,7 @@ SignupController.prototype.init = function (app) {
         var groupModel = GroupModel.get();
 
         var form = new formidable.IncomingForm();
-        
+
         async.waterfall([
             parseForm,
             validate,
@@ -530,6 +554,7 @@ SignupController.prototype.init = function (app) {
                 if (err)
                     return done(err);
 
+                result.user = saveResult.toObject();
                 done(null, result);
 
             });
@@ -565,7 +590,7 @@ SignupController.prototype.init = function (app) {
                 }
             }
             else {
-                self.successResponse(response, Const.responsecodeSucceed, {});
+                self.successResponse(response, Const.responsecodeSucceed, { user: result.user });
             }
 
         };
