@@ -2,17 +2,21 @@
 
 var _ = require('lodash');
 var async = require('async');
+var request = require('request');
 
 var Const = require("../lib/consts");
 var Config = require("../lib/init");
 var Utils = require("../lib/utils");
-
 
 var DatabaseManager = require('../lib/DatabaseManager');
 var EncryptionManager = require('../lib/EncryptionManager');
 
 var MessageModel = require('../Models/Message');
 var FavoriteModel = require('../Models/Favorite');
+var WebhookModel = require('../Models/Webhook');
+var UserModel = require('../Models/User');
+var RoomModel = require('../Models/Room');
+var GroupModel = require('../Models/Group');
 
 var PolulateMessageLogic = require('../Logics/PolulateMessage');
 var UpdateHistory = require('../Logics/UpdateHistory');
@@ -24,6 +28,7 @@ var MessageList = {
     get: function(userID,roomId,lastMessageId,direction,encrypt,onSuccess,onError){
 
         var messageModel = MessageModel.get();
+        const userModel = UserModel.get();
 
         async.waterfall([function(done){
             
@@ -154,7 +159,7 @@ var MessageList = {
                         var roomID = messagesToNotify[0].roomID;
                         var chatType = roomID.split("-")[0];
                         var roomIDSplitted = roomID.split("-");
-
+                        
                         // websocket notification
                         if(chatType == Const.chatTypeGroup){
                             
@@ -241,7 +246,9 @@ var MessageList = {
                         
                 });
                 
-                done(null,messagesFav);
+                done(null,{
+                    messages:messagesFav
+                });
                 
             });
             
@@ -257,8 +264,190 @@ var MessageList = {
             
         },function(result,done){
             
-            done(null,result);
+            // need organizationId
+            var chatType = roomId.split("-")[0];
+            var targetId = roomId.split("-")[1];
+
+            if(chatType == Const.chatTypeGroup){
+                
+                const groupModel = GroupModel.get();
+                groupModel.findOne({
+                    _id:targetId
+                },(err,findResult) => {
+
+                    if(findResult){
+
+                        result.organizationId = findResult.organizationId;
+                        result.group = findResult.toObject();;
+                        
+                    }
+
+                    done(null,result);
+
+                });
+
+            } else if(chatType == Const.chatTypeRoom) {
+                
+                const roomModel = RoomModel.get();
+                roomModel.findOne({
+                    _id:targetId
+                },(err,findResult) => {
+                    
+                    if(findResult){
+
+                        result.room = findResult.toObject();
+
+                        userModel.findOne({
+                            _id:findResult.owner
+                        },(err,userFindResult) => {
+    
+                            if(userFindResult)
+                                result.organizationId = userFindResult.organizationId;
+    
+                            done(null,result);
+    
+                        });
+
+                    }else{
+                        done(null,result);
+                    }
+
+                });
+
+            } else if(chatType == Const.chatTypePrivate){
+                
+                var splitAry = roomId.split("-");
+                
+                if(splitAry.length < 2)
+                    return;
+                
+                var user1 = splitAry[1];
+                var user2 = splitAry[2];
+                
+                var toUser = null;
+                var fromUser = null;
+
+                if(user1 == userID){
+                    toUser = user2;
+                    fromUser = user1;
+                }else{
+                    toUser = user1;
+                    fromUser = user2;
+                }
+
+                userModel.findOne({
+                    _id:toUser
+                },(err,userFindResult) => {
+
+                    if(userFindResult){
+                        result.organizationId = userFindResult.organizationId;
+                        result.toUser = userFindResult.toObject();
+                    }
+
+                    done(null,result);
+
+                });
+
+            }
             
+        },
+        function(result,done){
+
+            userModel.findOne({
+                _id:userID
+            },(err,userFindResult) => {
+
+                if(userFindResult){
+                    result.fromUser = userFindResult.toObject();
+                }
+
+                done(null,result);
+
+            });
+
+        },
+        function(result,done){
+
+            done(null,result);
+
+            // send webhook if there is no message for first load
+            if(
+                direction == Const.MessageLoadDirection.append
+                    && lastMessageId == 0){
+
+                    const webHookModel = WebhookModel.get();
+
+                    webHookModel.find({
+                        organizationId:result.organizationId,
+                        state:1
+                    },(err,webhooks) => {
+    
+                        if(!webhooks || webhooks.length == 0){
+                            console.log('no webhook found')
+                            return;
+                        }
+
+                        const requestbody = {
+                            event:Const.webhookEventStartConversation,
+                            roomId:roomId,
+                            isFirst:result.messages.length == 0,
+                            from: {
+                                userid:result.fromUser.userid,
+                                name:result.fromUser.name,
+                                created: result.fromUser.created,
+                                avatar: result.fromUser.avatar
+                            }
+                        };
+                        
+                        if(result.toUser){
+                            requestbody.user = {
+                                userid: result.toUser.userid,
+                                name:result.toUser.name,
+                                created: result.toUser.created,
+                                avatar: result.toUser.avatar
+                            };
+                        }
+
+                        if(result.room){
+                            requestbody.room = {
+                                id: result.room._id.toString(),
+                                name: result.room.name,
+                                created: result.room.created,
+                                owner: result.room.owner
+                            };
+                        }
+
+                        if(result.group){
+                            requestbody.group = {
+                                id:result.group._id.toString(),
+                                name:result.group.name,
+                                created: result.group.created
+                            };
+                        }
+ 
+                        webhooks.forEach((webhook) => {
+    
+                            request.post({
+                                url: webhook.url,
+                                json: true,  
+                                body: requestbody,
+                                headers: {
+                                    'User-Agent': 'spikawebhook',
+                                    'spika-key': webhook.key
+                                },
+                                timeout:10
+                            },(err) => {
+    
+                            });
+    
+                        });
+    
+                    });
+
+            } else {
+                done(null,result);
+            }
+
         }
         ],
         function(err,result){
@@ -272,7 +461,7 @@ var MessageList = {
 
             if(encrypt){
 
-                var encryptedMessages = _.map(result,function(message){
+                var encryptedMessages = _.map(result.messages,function(message){
 
                     if(message.type == Const.messageTypeText){
                         message.message = EncryptionManager.encryptText(message.message)
@@ -286,7 +475,7 @@ var MessageList = {
 
             } else {
 
-                onSuccess(result);
+                onSuccess(result.messages);
 
             }
 

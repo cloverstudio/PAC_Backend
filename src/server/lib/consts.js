@@ -241,5 +241,8 @@
 
     }
 
+    Const.webhookEventMessage = "message";
+    Const.webhookEventStartConversation = "start_conversation";
+
     // Exports ----------------------------------------------
     module["exports"] = Const;

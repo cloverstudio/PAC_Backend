@@ -544,6 +544,7 @@ var NotifyNewMessage = {
 
                     // generate model to send to webhook
                     const requestbody = {
+                        event:Const.webhookEventMessage,
                         message: { 
                             id: obj._id.toString(),
                             userID:  obj.userID,
@@ -618,9 +619,6 @@ var NotifyNewMessage = {
                     }
 
                     webhooks.forEach((webhook) => {
-
-                        console.log('send webhook',webhook.url);
-                        console.log('send webhook',requestbody);
 
                         request.post({
                             url: webhook.url,

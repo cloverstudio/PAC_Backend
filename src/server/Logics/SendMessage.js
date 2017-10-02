@@ -14,10 +14,14 @@ var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
 
 var UpdateHistory = require("./UpdateHistory");
 var NotifyNewMessage = require("./NotifyNewMessage");
+var Permission = require("./Permission");
 
 var HookModel = require('../Models/Hook');
 var UserModel = require('../Models/User');
 var MessageModel = require("../Models/Message");
+var GroupModel = require('../Models/Group');
+var RoomModel = require('../Models/Room');
+
 
 var SendMessage = {
     
@@ -60,7 +64,39 @@ var SendMessage = {
 
             });
 
-        },(result,done) => {
+        },
+        (result,done) => {
+
+            var messageTargetTypeAry = roomID.split("-");
+            if(messageTargetTypeAry.length < 2){
+
+                if(errorCB)
+                    errorCB("invalid room id");
+                    
+                return;
+
+            }
+            var messageTargetType = messageTargetTypeAry[0];
+
+            if(messageTargetType == Const.chatTypePrivate){
+                return done(null,result);
+            }
+
+            var groupModel = GroupModel.get();
+            var roomModel = RoomModel.get();
+
+            Permission.checkPermissionByChatId(userID,roomID,
+                (error) => {
+                    if(errorCB)
+                        errorCB(error);
+                    return;
+                },
+                (group) => {
+                    done(null,result);
+            });
+
+        },
+        (result,done) => {
             // check block
             var messageTargetTypeAry = roomID.split("-");
             if(messageTargetTypeAry.length < 2){

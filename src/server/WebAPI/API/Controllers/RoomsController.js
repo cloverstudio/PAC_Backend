@@ -537,6 +537,7 @@ RoomsController.prototype.init = function(app){
                     done(null,result);
 
                 }, (err) => {
+
                     console.log("Critical Error", err);
                     done(err,result)
                 });

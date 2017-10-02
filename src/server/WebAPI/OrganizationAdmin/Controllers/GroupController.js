@@ -1648,9 +1648,9 @@ GroupController.prototype.init = function(app){
                 });
 
                 // send block signal
-                SocketAPIHandler.emitToUser(userId,"delete_group",{
-                    groupIds:[groupId]
-                });
+                //SocketAPIHandler.emitToUser(userId,"delete_group",{
+                //    groupIds:[groupId]
+                //});
 
             }
         ],

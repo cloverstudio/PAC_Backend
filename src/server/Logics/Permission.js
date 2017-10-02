@@ -297,8 +297,101 @@ var Permission = {
             
         });
         
-    }
+    },
 
+    checkPermissionByChatId:function(userId,chatId,errorCB,cb){
+
+        // check permission
+        var messageTargetTypeAry = chatId.split("-")
+        if(messageTargetTypeAry.length < 2){
+            if(errorCB)
+                errorCB("invalid room id");
+            return;
+        }
+        
+        var messageTargetType = messageTargetTypeAry[0];
+        var messageTargetId = messageTargetTypeAry[1];
+
+        if(messageTargetType == Const.chatTypeGroup){
+            
+            this.checkGroupPermission(userId,messageTargetId,errorCB,cb);
+        }
+        else if(messageTargetType == Const.chatTypeRoom){
+            
+            this.checkRoomPermission(userId,messageTargetId,errorCB,cb);
+
+        }
+    },
+
+    checkGroupPermission: function(userId,groupId,errorCB,cb){
+
+        var groupModel = GroupModel.get();
+
+        groupModel.findOne({
+            _id:groupId
+        },(err,findResult) => {
+
+            if(findResult){
+
+                var group = findResult;
+
+                if(!findResult.users.find((groupUserId) => {
+
+                    return groupUserId == userId;
+
+                })){
+                    if(errorCB)
+                        errorCB("no permission");
+                    return;
+                }
+
+            } else {
+                if(errorCB)
+                    errorCB("invalid group id");
+                return;
+            }
+
+            if(cb)
+                cb(group);
+            
+        });
+
+    },
+    checkRoomPermission: function(userId,roomId,errorCB,cb){
+
+        var roomModel = RoomModel.get();
+
+        roomModel.findOne({
+            _id:roomId
+        },(err,findResult) => {
+
+            if(findResult){
+
+                var group = findResult;
+
+                if(!findResult.users.find((roomUserId) => {
+
+                    return roomUserId == userId;
+
+                })){
+                    if(errorCB)
+                        errorCB("no permission");
+                    return;
+                }
+
+            } else {
+                if(errorCB)
+                    errorCB("invalid room id");
+                return;
+            }
+
+            if(cb)
+                cb(group);
+            
+        });
+
+    }
+    
 };
 
 

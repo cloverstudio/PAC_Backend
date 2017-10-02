@@ -47,7 +47,7 @@ describe('API', function () {
                 .set('access-token', global.user1.apiaccesstoken)
                 .send({
                     targetType:3, // room message
-                    target: global.room2.id,
+                    target: global.room1.id,
                     messageType: 1, // text message
                     message: "hi room"
                 })
@@ -69,7 +69,7 @@ describe('API', function () {
         
         it('Get messages of the room works', (done) => {
             request(app)
-                .get('/api/v3/rooms/' + global.room2.id + "/messages")
+                .get('/api/v3/rooms/' + global.room1.id + "/messages")
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .expect(200)

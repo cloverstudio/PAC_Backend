@@ -19,6 +19,10 @@ var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
 var Utils = require( pathTop + 'lib/utils');
 var UserModel = require( pathTop + 'Models/User');
 var RoomModel = require( pathTop + 'Models/Room');
+var HistoryModel = require( pathTop + 'Models/History');
+
+var SocketAPIHandler = require( pathTop + 'SocketAPI/SocketAPIHandler');
+
 var tokenChecker = require( pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
@@ -194,6 +198,30 @@ RemoveUsersFromRoomController.prototype.init = function(app){
             	});
 
             },
+            function (result,done){
+
+                done(null,result);
+
+                // delete from history
+                var historyModel = HistoryModel.get();
+                result.users.forEach((user) => {
+                    
+                    historyModel.remove({ 
+                        chatId: roomId,
+                        userId: user._id
+                    }, function(err, deleteResult) {
+    
+                        SocketAPIHandler.emitToUser(
+                            user._id,
+                            'delete_room',
+                            {conversation:result.updatedData}
+                        );
+                        
+                    });
+                });
+
+            },
+
             
         ],
             function (err, result) {

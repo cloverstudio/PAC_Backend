@@ -87,7 +87,7 @@ SendMessageController.prototype.init = function(app){
 
         request.body.encrypted = true;
         request.body.userID = request.user._id.toString();
-
+        
         async.waterfall([(done) => {
 
             var result = {};

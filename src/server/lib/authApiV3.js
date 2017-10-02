@@ -95,8 +95,11 @@ function checkAPIKey(request, response, next) {
                 return tokenObjInAry.token == token;
             });
             
-            var tokenGenerated = tokenObj.generateAt;
+            var tokenGenerated = 0;
             
+            if(tokenObj)
+                tokenGenerated = tokenObj.generateAt;
+
             var diff = Utils.now() - tokenGenerated;
 
             if(diff > Const.tokenValidInteval){
