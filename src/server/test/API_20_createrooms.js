@@ -138,6 +138,26 @@ describe('API', () => {
                 });
         });
 
+        it('Create rooms works correctly even if set own id to belonging users list', (done) => {
+            request(app)
+                .post('/api/v3/rooms/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user2.apiaccesstoken)   
+                .field('users', global.user2._id + "," + global.user3._id + "," + global.user4._id)                
+                .expect(200)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.body.should.have.property('room');                    
+                    res.body.room.should.not.have.property('_id');
+                    res.body.room.should.have.property('id');                     
+                    res.body.room.should.have.property('name');
+                    res.body.room.name.should.equal('user2\'s New Room');
+                    res.body.room.users.should.be.instanceof(Array).and.have.lengthOf(3);
+                    global.room2 = res.body.room;
+                    done();
+                });
+        });
+
         it('Create rooms works without avatar file', (done) => {
             const name = 'room3_' + global.getRandomStr();
             const description = 'Description of ' + name;

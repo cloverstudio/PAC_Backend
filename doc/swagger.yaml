@@ -611,7 +611,7 @@ paths:
         - in: formData
           type: string
           name: users
-          description: User ids list of new group by string separated by comma
+          description: User id list of new group by string separated by comma. If you don't add any user, group which has no user will be create. So, if you want to join group, should add your own id to here.
         - in: formData
           type: file
           name: avatar
