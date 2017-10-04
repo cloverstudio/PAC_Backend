@@ -63,8 +63,7 @@ SignupController.prototype.init = function (app) {
             validate,
             addUser,
             sendActivationCode
-        ],
-            endAsync);
+        ], endAsync);
 
 
         /**********************
@@ -96,7 +95,6 @@ SignupController.prototype.init = function (app) {
             userModel.findOne({
                 userid: phoneNumber,
                 organizationId: result.organization._id.toString(),
-                status: Const.userStatus.disabled
             }, (err, findResult) => {
 
                 if (err)
@@ -223,38 +221,18 @@ SignupController.prototype.init = function (app) {
         var userModel = UserModel.get();
 
         async.waterfall([
-            validate,
             enableUser
-        ],
-            endAsync);
+        ], endAsync);
 
 
         /**********************
         ****** FUNCTIONS ******
         **********************/
 
-        function validate(done) {
-            userModel.findOne({
-                activationCode: activationCode,
-                status: Const.userStatus.enabled
-            }, (err, findResult) => {
-
-                if (err)
-                    return done(err);
-
-                if (findResult)
-                    return done({ handledError: Const.responsecodeSignupUserAlreadyVerified });
-
-                done(null, {});
-
-            });
-        };
-
         function enableUser(result, done) {
 
             userModel.findOne({
                 activationCode: activationCode,
-                status: Const.userStatus.disabled
             }, (err, findResult) => {
 
                 if (err)
