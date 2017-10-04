@@ -7,7 +7,8 @@
         </div>
         
         <span class="chat-name">
-                {{user.name}}@{{user.organization.organizationId}}
+                {{user.name}}<br />
+                {{user.userid}}@{{user.organization.organizationId}}
         </span><br />
         
         <span class="chat-description">{{user.description}}</span><br />
@@ -36,6 +37,12 @@
                     <input type="checkbox" name="checkbox-block">
                 </div>
                     
+            </a>
+        </li>
+
+        <li>
+            <a href="javascript:void(0)" id="btn-copychatid" chatid="{{chatId}}">
+                <img class="icon" src="/images/UI/clipboard.png" /> {{l10n "Copy ChatID"}}<br />
             </a>
         </li>
 

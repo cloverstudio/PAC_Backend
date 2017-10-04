@@ -115,6 +115,7 @@ var ChatManager = {
         });
 
         Backbone.trigger(Const.NotificationOpenChat,{
+            chatId:chatId,
             user: user
         });
         
@@ -148,6 +149,7 @@ var ChatManager = {
         });
 
         Backbone.trigger(Const.NotificationOpenChat,{
+            chatId:roomId,
             group: group
         });
         
@@ -180,6 +182,7 @@ var ChatManager = {
         });
 
         Backbone.trigger(Const.NotificationOpenChat,{
+            chatId: roomId,
             room: room
         });
         

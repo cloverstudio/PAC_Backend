@@ -73171,9 +73171,9 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Pictures",{"name":"l10n","hash":{},"data":data}))
     + "</li>\n    <li class=\"tab-selector\" tab=\"url\" id=\"messages-tab-urls\">"
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"URLs",{"name":"l10n","hash":{},"data":data}))
-    + "</li>\n    \n    <li class=\"tab-selector selected\" tab=\"detail\" id=\"messages-tab-detail\">"
+    + "</li>\n    <li class=\"tab-selector selected\" tab=\"detail\" id=\"messages-tab-detail\">"
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Message",{"name":"l10n","hash":{},"data":data}))
-    + "</li>\n    -->\n</ul>\n\n<div class=\"clearfix\"></div>\n\n<div id=\"message-info-title\" style=\"display:none\">"
+    + "</li>\n    -->\n    \n</ul>\n\n<div class=\"clearfix\"></div>\n\n<div id=\"message-info-title\" style=\"display:none\">"
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Message Detail",{"name":"l10n","hash":{},"data":data}))
     + "</div>\n\n<div class=\"tab-panel\" id=\"messages-tab-files-panel\" style=\"display:none\">\n    \n    <div class=\"alert alert-warning\" role=\"alert\">"
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Sorry this feature comming soon..",{"name":"l10n","hash":{},"data":data}))
@@ -73317,6 +73317,8 @@ var DetailInfoView = Backbone.View.extend({
             
             function render(){
 
+                console.log('obj',obj);
+
                 var html = detailTemplate(obj)
                 
                 $('#chat-detail').html(html);
@@ -73400,6 +73402,13 @@ var DetailInfoView = Backbone.View.extend({
                     
                 });
     
+                $('#btn-copychatid').on('click',function(){
+                    
+                   var chatId = $(this).attr('chatid');
+                   Utils.copyToClipBoard(chatId);
+
+                });
+                
                 $('#btn-audiocall').on('click',function(){
                     
                     Backbone.trigger(Const.NotificationStartCalling,{
@@ -73627,7 +73636,7 @@ module.exports = DetailInfoView;
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "\n    <div class=\"chat-info detail-group\">\n        \n        <div class=\"img-holder\">\n            <img class=\"img-circle\" src=\"/api/v2/avatar/group/"
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
@@ -73635,9 +73644,13 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.name : stack1), depth0))
     + "</span><br />\n        \n        <span class=\"chat-description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</span><br />\n        \n        <div class=\"clearfix\"></div>\n    </div>\n\n\n    <ul class=\"onlineusers\">\n\n        \n    </ul>\n    \n    \n    <ul class=\"menu\">\n        \n        <li>\n            <a href=\"javascript:void(0)\" class=\"disabled\">\n                "
+    + "</span><br />\n        \n        <div class=\"clearfix\"></div>\n    </div>\n\n\n    <ul class=\"onlineusers\">\n\n        \n    </ul>\n    \n    \n    <ul class=\"menu\">\n        \n\n        <li>\n            <a href=\"javascript:void(0)\" class=\"disabled\">\n                "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Notification",{"name":"l10n","hash":{},"data":data}))
-    + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-notify\">\n                </div>\n            \n            </a>\n            \n        </li>\n\n        <li><a href=\"javascript:void(0)\" id=\"btn-groupdetail\">"
+    + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-notify\">\n                </div>\n            \n            </a>\n            \n        </li>\n\n        <li>\n            <a href=\"javascript:void(0)\" id=\"btn-copychatid\" chatid=\""
+    + alias2(((helper = (helper = helpers.chatId || (depth0 != null ? depth0.chatId : depth0)) != null ? helper : alias4),(typeof helper === "function" ? helper.call(alias3,{"name":"chatId","hash":{},"data":data}) : helper)))
+    + "\">\n                <img class=\"icon\" src=\"/images/UI/clipboard.png\" /> "
+    + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Copy ChatID",{"name":"l10n","hash":{},"data":data}))
+    + "<br />\n            </a>\n        </li>\n        \n        <li><a href=\"javascript:void(0)\" id=\"btn-groupdetail\">"
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Show Detail",{"name":"l10n","hash":{},"data":data}))
     + "</a></li>\n        \n    </ul>\n";
 },"useData":true});
@@ -74000,7 +74013,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"Leave Room",{"name":"l10n","hash":{},"data":data}))
     + "</a></li>\n            \n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "\n    <div class=\"chat-info detail-room\">\n        \n        <div class=\"img-holder\">\n            <img class=\"img-circle\" src=\"/api/v2/avatar/room/"
     + alias2(alias1(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
@@ -74008,9 +74021,13 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.name : stack1), depth0))
     + "</span><br />\n        \n        <span class=\"chat-description\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</span><br />\n        \n        <div class=\"clearfix\"></div>\n    </div>\n\n    <ul class=\"onlineusers\">\n\n        \n    </ul>\n    \n    <ul class=\"menu\">\n\n        <li>\n            <a href=\"javascript:void(0)\" class=\"disabled\">\n                "
+    + "</span><br />\n        \n        <div class=\"clearfix\"></div>\n    </div>\n\n    <ul class=\"onlineusers\">\n\n        \n    </ul>\n    \n    <ul class=\"menu\">\n\n\n        <li>\n            <a href=\"javascript:void(0)\" class=\"disabled\">\n                "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Notification",{"name":"l10n","hash":{},"data":data}))
-    + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-notify\">\n                </div>\n            </a>\n\n        </li>\n                \n        <li><a href=\"javascript:void(0)\" id=\"btn-roomdetail\">"
+    + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-notify\">\n                </div>\n            </a>\n\n        </li>\n                \n        <li>\n            <a href=\"javascript:void(0)\" id=\"btn-copychatid\" chatid=\""
+    + alias2(((helper = (helper = helpers.chatId || (depth0 != null ? depth0.chatId : depth0)) != null ? helper : alias4),(typeof helper === "function" ? helper.call(alias3,{"name":"chatId","hash":{},"data":data}) : helper)))
+    + "\">\n                <img class=\"icon\" src=\"/images/UI/clipboard.png\" /> "
+    + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Copy ChatID",{"name":"l10n","hash":{},"data":data}))
+    + "<br />\n            </a>\n        </li>\n        \n        <li><a href=\"javascript:void(0)\" id=\"btn-roomdetail\">"
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Show Detail",{"name":"l10n","hash":{},"data":data}))
     + "</a></li>\n        \n"
     + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias4).call(alias3,((stack1 = (depth0 != null ? depth0.loginUser : depth0)) != null ? stack1._id : stack1),((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.owner : stack1),{"name":"condition","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -74044,7 +74061,7 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
     return "  <img class=\"img-circle onlineicon\" src=\"/images/onlineIcon.png\" /> ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=helpers.helperMissing;
 
   return "\n    <div class=\"chat-info detail-user\" id=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1._id : stack1), depth0))
@@ -74054,6 +74071,8 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.onlineStatus : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n        </div>\n        \n        <span class=\"chat-name\">\n                "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1), depth0))
+    + "<br />\n                "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.userid : stack1), depth0))
     + "@"
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.organization : stack1)) != null ? stack1.organizationId : stack1), depth0))
     + "\n        </span><br />\n        \n        <span class=\"chat-description\">"
@@ -74062,7 +74081,11 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Notification",{"name":"l10n","hash":{},"data":data}))
     + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-notify\">\n                </div>\n                    \n            </a>\n        </li>\n\n        <li>\n            <a href=\"javascript:void(0)\" class=\"disabled\">\n                "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Block",{"name":"l10n","hash":{},"data":data}))
-    + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-block\">\n                </div>\n                    \n            </a>\n        </li>\n\n        <li>\n            <a href=\"javascript:void(0)\" id=\"btn-audiocall\">\n                <img class=\"icon\" src=\"/images/UI/audio_call.png\" /> "
+    + "\n\n                <div class=\"switch-container\">\n                    <input type=\"checkbox\" name=\"checkbox-block\">\n                </div>\n                    \n            </a>\n        </li>\n\n        <li>\n            <a href=\"javascript:void(0)\" id=\"btn-copychatid\" chatid=\""
+    + alias2(((helper = (helper = helpers.chatId || (depth0 != null ? depth0.chatId : depth0)) != null ? helper : alias4),(typeof helper === "function" ? helper.call(alias3,{"name":"chatId","hash":{},"data":data}) : helper)))
+    + "\">\n                <img class=\"icon\" src=\"/images/UI/clipboard.png\" /> "
+    + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Copy ChatID",{"name":"l10n","hash":{},"data":data}))
+    + "<br />\n            </a>\n        </li>\n\n        <li>\n            <a href=\"javascript:void(0)\" id=\"btn-audiocall\">\n                <img class=\"icon\" src=\"/images/UI/audio_call.png\" /> "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Make audio call",{"name":"l10n","hash":{},"data":data}))
     + "\n            </a>\n        </li>\n\n        <li>\n            <a href=\"javascript:void(0)\" id=\"btn-videocall\">\n                <img class=\"icon\" src=\"/images/UI/video_call.png\" /> "
     + alias2((helpers.l10n || (depth0 && depth0.l10n) || alias4).call(alias3,"Make video call",{"name":"l10n","hash":{},"data":data}))
@@ -80833,6 +80856,7 @@ var ChatManager = {
         });
 
         Backbone.trigger(Const.NotificationOpenChat,{
+            chatId:chatId,
             user: user
         });
         
@@ -80866,6 +80890,7 @@ var ChatManager = {
         });
 
         Backbone.trigger(Const.NotificationOpenChat,{
+            chatId:roomId,
             group: group
         });
         
@@ -80898,6 +80923,7 @@ var ChatManager = {
         });
 
         Backbone.trigger(Const.NotificationOpenChat,{
+            chatId: roomId,
             room: room
         });
         
@@ -82688,7 +82714,6 @@ var Config = {
     SpikaSocketURL : "/spika",
     hashSalt: "8zgqvU6LaziThJI1uz3PevYd",
     AESPassword: "cl0v3r-S+uD10-h4X0r1"
-    
 };
 
 // Exports ----------------------------------------------
@@ -83025,7 +83050,8 @@ var sha1 = require('sha1');
     Utils.prototype.escapeRegExp = escapeRegExp;
     Utils.prototype.strip = strip;
     Utils.prototype.contentExtract = contentExtract;
-
+    Utils.prototype.copyToClipBoard = copyToClipBoard;
+    
     // Implementation ---------------------------------------
     function logging(obj) {
         console.log(obj);
@@ -83431,6 +83457,28 @@ var sha1 = require('sha1');
         else
             return linkify(inputText);
         
+    }
+
+    function copyToClipBoard(text){
+        if (window.clipboardData && window.clipboardData.setData) {
+            // IE specific code path to prevent textarea being shown while dialog is visible.
+            return clipboardData.setData("Text", text); 
+    
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = text;
+            textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            } catch (ex) {
+                alert('faild to copy to clipboard');
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
     }
 
     // Exports ----------------------------------------------

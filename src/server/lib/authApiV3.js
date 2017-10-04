@@ -23,7 +23,7 @@ function checkAPIKey(request, response, next) {
         
         return;
     }
-
+    
     async.waterfall([(done) => {
 
         var result = {};

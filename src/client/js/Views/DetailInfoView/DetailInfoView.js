@@ -130,6 +130,8 @@ var DetailInfoView = Backbone.View.extend({
             
             function render(){
 
+                console.log('obj',obj);
+
                 var html = detailTemplate(obj)
                 
                 $('#chat-detail').html(html);
@@ -213,6 +215,13 @@ var DetailInfoView = Backbone.View.extend({
                     
                 });
     
+                $('#btn-copychatid').on('click',function(){
+                    
+                   var chatId = $(this).attr('chatid');
+                   Utils.copyToClipBoard(chatId);
+
+                });
+                
                 $('#btn-audiocall').on('click',function(){
                     
                     Backbone.trigger(Const.NotificationStartCalling,{
