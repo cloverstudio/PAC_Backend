@@ -229,8 +229,10 @@ SignupController.prototype.init = function (app) {
         ****** FUNCTIONS ******
         **********************/
 
-        function enableUser(result, done) {
+        function enableUser(done) {
 
+            var result = {};
+            
             userModel.findOne({
                 activationCode: activationCode,
             }, (err, findResult) => {
