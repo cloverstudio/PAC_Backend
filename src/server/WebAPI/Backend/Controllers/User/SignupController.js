@@ -351,8 +351,7 @@ SignupController.prototype.init = function (app) {
             saveThumb,
             saveUser,
             saveUserToDepartment
-        ],
-            endAsync);
+        ], endAsync);
 
 
         /**********************
@@ -390,6 +389,7 @@ SignupController.prototype.init = function (app) {
             var candidate2 = salt + (tenSec - 1);
             var candidate3 = salt + (tenSec - 2);
 
+            console.log("secret start");
             if (sha1(candidate1) == secret ||
                 sha1(candidate2) == secret ||
                 sha1(candidate3) == secret) {
@@ -401,13 +401,15 @@ SignupController.prototype.init = function (app) {
                     return done({ handledError: Const.responsecodeSigninWrongSecret });
 
             }
-
+            console.log("secret end");
             done(null, result);
 
         };
 
         function getTopDepartment(result, done) {
 
+            console.log("get top departments start");
+            
             groupModel.findOne({
                 organizationId: user.organizationId,
                 type: Const.groupType.department,
@@ -416,7 +418,8 @@ SignupController.prototype.init = function (app) {
 
                 if (err)
                     return done(err);
-
+                    console.log("get top departments end");
+            
                 result.group = findResult;
                 done(null, result);
 
@@ -429,6 +432,8 @@ SignupController.prototype.init = function (app) {
             if (!result.file)
                 return done(null, result);
 
+                console.log("save file start");
+                
             // save to upload dir
             var tempPath = result.file.path;
             var destPath = Config.uploadPath + "/";
@@ -458,6 +463,8 @@ SignupController.prototype.init = function (app) {
             if (!result.file)
                 return done(null, result);
 
+                console.log("save thumb start");
+                
             var file = result.file;
 
             // generate thumbnail      
@@ -507,6 +514,8 @@ SignupController.prototype.init = function (app) {
 
         function saveUser(result, done) {
 
+            console.log("save user start");
+            
             user.name = result.fields.name;
             user.sortName = result.fields.name.toLowerCase();
             user.password = result.fields.password;
@@ -533,7 +542,8 @@ SignupController.prototype.init = function (app) {
 
                 if (err)
                     return done(err);
-
+                    console.log("save user end");
+                    
                 result.user = saveResult.toObject();
                 done(null, result);
 
@@ -542,7 +552,8 @@ SignupController.prototype.init = function (app) {
         };
 
         function saveUserToDepartment(result, done) {
-
+            console.log("save user to department start");
+            
             var group = result.group;
 
             group.users.push(user._id);
@@ -551,7 +562,8 @@ SignupController.prototype.init = function (app) {
 
                 if (err)
                     return done(err);
-
+                console.log("save user to department end");
+            
                 done(null, result);
 
             });
@@ -559,7 +571,8 @@ SignupController.prototype.init = function (app) {
         };
 
         function endAsync(err, result) {
-
+            console.log("end async start");
+            
             if (err) {
                 if (err.handledError) {
                     self.successResponse(response, err.handledError);
@@ -570,6 +583,8 @@ SignupController.prototype.init = function (app) {
                 }
             }
             else {
+            console.log("end async end");
+            
                 self.successResponse(response, Const.responsecodeSucceed, { user: result.user });
             }
 
