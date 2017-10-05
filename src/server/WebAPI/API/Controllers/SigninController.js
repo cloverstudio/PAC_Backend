@@ -190,8 +190,6 @@ SigninController.prototype.init = function(app){
 
 
     router.post('/guest',checkAPIKey,function(request,response){
-
-        console.log('guest login',request.body);
         
         var organization = request.body.organization;
         var username = request.body.username;
@@ -332,7 +330,7 @@ SigninController.prototype.init = function(app){
             {
                 "access-token": result.newAccessToken,
                 "user": {
-                    "_id": result.user._id,
+                    "id": result.user._id,
                     "name": result.user.name,
                     "avatar": result.user.avatar,
                     "description": result.user.description,
@@ -344,7 +342,7 @@ SigninController.prototype.init = function(app){
                     "created": result.user.created
                 },
                 "organization": {
-                    "_id": result.organization._id,
+                    "id": result.organization._id,
                     "name": result.organization.name,
                     "created": result.organization.created
                 }

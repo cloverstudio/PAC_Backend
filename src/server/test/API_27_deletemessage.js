@@ -11,7 +11,7 @@ describe('API', function () {
     
         it('returns 401, wrong apiKey', (done) => {
             request(app)
-                .delete('/api/v3/messages/' + global.createdMessage._id)
+                .delete('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey + "wrong")
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(401, done)
@@ -19,7 +19,7 @@ describe('API', function () {
 
         it('returns 403, Wrong access token', (done) => {
             request(app)
-                .delete('/api/v3/messages/' + global.createdMessage._id)
+                .delete('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken + "wrong")
                 .expect(403, done) 
@@ -27,7 +27,7 @@ describe('API', function () {
 
         it('return 403, user1 is not sender', (done) => {
             request(app)
-                .delete('/api/v3/messages/' + global.createdMessage._id)
+                .delete('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .expect(403)
@@ -80,7 +80,7 @@ describe('API', function () {
 
         it('delete message', (done) => {
             request(app)
-                .delete('/api/v3/messages/' + global.createdMessage._id)
+                .delete('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(200, done)

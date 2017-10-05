@@ -6,12 +6,12 @@ describe('API', function () {
 
     var req, res;
 
-    describe('/v3/file/upload POST', function () {
+    describe('/v3/files/upload POST', function () {
     
         it('file upload works', function (done) {
 
             request(app)
-                .post('/api/v3/file/upload')
+                .post('/api/v3/files/upload')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .attach('file', './src/server/test/samplefiles/max.jpg')
@@ -38,7 +38,7 @@ describe('API', function () {
         it('wrong apikey', function (done) {
 
             request(app)
-                .post('/api/v3/file/upload')
+                .post('/api/v3/files/upload')
                 .set('apikey', "sss")
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(401) 
@@ -57,7 +57,7 @@ describe('API', function () {
         it('wrong access token', function (done) {
 
             request(app)
-                .post('/api/v3/file/upload')
+                .post('/api/v3/files/upload')
                 .set('apikey', global.apikey)
                 .set('access-token', "sssss")
                 .expect(403) 

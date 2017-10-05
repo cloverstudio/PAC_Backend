@@ -28,7 +28,7 @@ describe('API', function () {
     			}
 
                 res.body.should.have.property('message');
-                res.body.message.should.have.property('_id');
+                res.body.message.should.have.property('id');
                 global.createdMessage = res.body.message;
                 
                 done();
@@ -59,7 +59,7 @@ describe('API', function () {
                 }
 
                 res.body.should.have.property('message');
-                res.body.message.should.have.property('_id');
+                res.body.message.should.have.property('id');
                 
                 done();
             
@@ -70,7 +70,7 @@ describe('API', function () {
         it('send file messsage works', function (done) {
 
             request(app)
-                .post('/api/v3/file/upload')
+                .post('/api/v3/files/upload')
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .attach('file', './src/server/test/samplefiles/max.jpg')
@@ -118,7 +118,7 @@ describe('API', function () {
                     }
 
                     res.body.should.have.property('message');
-                    res.body.message.should.have.property('_id');
+                    res.body.message.should.have.property('id');
                     
                     done();
                 

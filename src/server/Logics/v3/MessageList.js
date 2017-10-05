@@ -238,6 +238,23 @@ var MessageList = {
             
         },function(result,done){
             
+            // formate message json for API v3
+
+            result = result.map( (message) => {
+
+                return {
+                    id: message._id,
+                    userID: message.userID,
+                    roomID: message.roomID,
+                    type: message.type,
+                    created:message.created,
+                    user: message.user,
+                    seenBy: message.seenBy,
+                    isFavorite: message.isFavorite
+                }
+
+            });
+        
             done(null,result);
             
         }

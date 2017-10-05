@@ -98,8 +98,6 @@ SeenByController.prototype.init = function(app){
 
             });
 
-            console.log(responseAry);
-            
             self.successResponse(response,Const.responsecodeSucceed,{
                 seenBy:responseAry
             });

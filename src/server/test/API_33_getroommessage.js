@@ -59,7 +59,7 @@ describe('API', function () {
                 }
 
                 res.body.should.have.property('message');
-                res.body.message.should.have.property('_id');
+                res.body.message.should.have.property('id');
                 
                 done();
             
@@ -76,8 +76,6 @@ describe('API', function () {
                 .end((err, res) => {
                     if (err) throw err;
                     res.body.should.have.property('messages');
-                    
-                    console.log(res.body.messages);
                     
                     done();
                 });

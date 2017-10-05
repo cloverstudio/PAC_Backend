@@ -11,7 +11,7 @@ describe('API', function () {
     
         it('returns 401, wrong apiKey', (done) => {
             request(app)
-                .put('/api/v3/messages/' + global.createdMessage._id)
+                .put('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey + "wrong")
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(401, done)
@@ -19,7 +19,7 @@ describe('API', function () {
 
         it('returns 403, Wrong access token', (done) => {
             request(app)
-                .put('/api/v3/messages/' + global.createdMessage._id)
+                .put('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken + "wrong")
                 .expect(403, done) 
@@ -40,7 +40,7 @@ describe('API', function () {
 
         it('returns 403, User who try to update is not sender', (done) => {
             request(app)
-                .put('/api/v3/messages/' + global.createdMessage._id)
+                .put('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user1.apiaccesstoken)
                 .send({
@@ -56,7 +56,7 @@ describe('API', function () {
 
         it('Update messages works without params', (done) => {
             request(app)
-                .put('/api/v3/messages/' + global.createdMessage._id)
+                .put('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .send({
@@ -72,7 +72,7 @@ describe('API', function () {
 
         it('Update messages works', (done) => {
             request(app)
-                .put('/api/v3/messages/' + global.createdMessage._id)
+                .put('/api/v3/messages/' + global.createdMessage.id)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .send({

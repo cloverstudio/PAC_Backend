@@ -88,7 +88,7 @@ describe('API', function () {
                     }
 
                     res.body.should.have.property('access-token');
-                    global.guestuserid = res.body.user._id;
+                    global.guestuserid = res.body.user.id;
 
                     done();
                 });
@@ -113,7 +113,7 @@ describe('API', function () {
                     }
 
                     res.body.should.have.property('access-token');
-                    res.body.user._id.should.equal(global.guestuserid);
+                    res.body.user.id.should.equal(global.guestuserid);
 
                     done();
                 });
@@ -139,7 +139,7 @@ describe('API', function () {
                     }
 
                     res.body.should.have.property('access-token');
-                    res.body.user._id.should.not.equal(global.guestuserid);
+                    res.body.user.id.should.not.equal(global.guestuserid);
 
                     done();
                 });

@@ -538,7 +538,6 @@ var NotifyNewMessage = {
                 },(err,webhooks) => {
 
                     if(!webhooks || webhooks.length == 0){
-                        console.log('no webhook found')
                         return;
                     }
 

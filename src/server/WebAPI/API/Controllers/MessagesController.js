@@ -85,9 +85,6 @@ MessagesController.prototype.init = function(app){
                 
                 if(!findResult){
 
-                    console.log("to",target);
-                    console.log("from",request.user);
-
                     done({
                         status: Const.httpCodeBadParameter,
                         message: Const.errorMessage.userNotExistInOrganization
@@ -126,13 +123,13 @@ MessagesController.prototype.init = function(app){
                     return self.errorResponse(response, Const.httpCodeServerError);
                 },(message) => {  
                     const messageData = {
-                        "_id": message._id,
+                        "id": message._id,
                         "message": message.message,
                         "roomID": message.roomID,
                         "created": message.created
                     };
                     const userData = {
-                        "_id": request.user._id,
+                        "id": request.user._id,
                         "name": request.user.name,
                         "avatar": request.user.avatar,
                         "description": request.user.description,

@@ -11,8 +11,6 @@ describe('WEB API', function () {
     
         it('should work messagelist', function (done) {
 
-            console.log(global.room1);
-
             request(app)
                 .get('/api/v2/message/list/3-' + global.room1._id + '/0/new')
                 .set('access-token', global.user1.accessToken)

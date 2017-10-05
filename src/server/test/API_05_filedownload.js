@@ -6,12 +6,12 @@ describe('API', function () {
 
     var req, res;
 
-    describe('/v3/file/upload POST', function () {
+    describe('/v3/files/upload POST', function () {
     
         it('file upload works', function (done) {
 
             request(app)
-                .get('/api/v3/file/download/' + global.APIFile1)
+                .get('/api/v3/files/download/' + global.APIFile1)
                 .set('apikey', global.apikey)
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(200) 
@@ -30,7 +30,7 @@ describe('API', function () {
         it('wrong apikey', function (done) {
 
             request(app)
-                .get('/api/v3/file/download/' + global.APIFile1)
+                .get('/api/v3/files/download/' + global.APIFile1)
                 .set('apikey', "sss")
                 .set('access-token', global.user2.apiaccesstoken)
                 .expect(401) 
@@ -49,7 +49,7 @@ describe('API', function () {
         it('wrong access token', function (done) {
 
             request(app)
-                .get('/api/v3/file/download/' + global.APIFile1)
+                .get('/api/v3/files/download/' + global.APIFile1)
                 .set('apikey', global.apikey)
                 .set('access-token', "sssss")
                 .expect(403) 

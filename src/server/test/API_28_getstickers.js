@@ -33,7 +33,6 @@ describe('API', () => {
                 .end((err, res) => {
                     if (err) throw err;
                     res.body.should.have.property('stickers');
-                    console.log(res.body.stickers);
                     res.body.stickers.should.be.instanceof(Array).and.have.lengthOf(0);                 
                     done();
                 });
