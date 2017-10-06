@@ -38,6 +38,7 @@ var BackendMain ={
         router.use("/user/mute", require("./Controllers/User/MuteController").init(app));
         router.use("/user/mutelist", require("./Controllers/User/MuteListController").init(app));
         router.use("/user/blocklist", require("./Controllers/User/BlockListController").init(app));
+        router.use("/user/sync", require("./Controllers/User/UserSyncContactsController").init(app));
         
         router.use("/room/list/mine", require("./Controllers/Room/RoomListMineController").init(app));        
         router.use("/room/new", require("./Controllers/Room/CreateRoomController").init(app));
