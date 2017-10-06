@@ -133,6 +133,10 @@ const Room = {
                     users: params.users
                 }
 
+                // little modification for user support system
+                if(params.ownerID)
+                    result.saveData.owner = params.ownerID
+
                 if (avatar) {
                     AvatarLogic.createRoomAvatarData(avatar, (err, avatarData) => {
                         if (avatarData)
