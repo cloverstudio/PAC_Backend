@@ -1713,7 +1713,7 @@ GroupController.prototype.init = function(app){
         criteria.organizationId = organizationId;
         
         // don't show current user
-        criteria._id = { $ne: baseUser._id };
+        //criteria._id = { $ne: baseUser._id };
 
         if (organizationAdmin) {
             criteria.groups = { $ne: groupId };
