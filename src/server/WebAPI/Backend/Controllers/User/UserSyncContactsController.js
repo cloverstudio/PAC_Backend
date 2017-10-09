@@ -9,6 +9,7 @@ var pathTop = "../../../../";
 
 var Const = require(pathTop + "lib/consts");
 var UserModel = require(pathTop + 'Models/User');
+var OrganizationModel = require(pathTop + 'Models/Organization');
 
 var BackendBase = require('../BackendBase');
 
@@ -27,7 +28,7 @@ UserSyncContactsController.prototype.init = function (app) {
       * @apiGroup WebAPI
       * @apiDescription User Sync Contacts
       *   
-      * @apiParam {String} organizationId _id of organization 
+      * @apiParam {String} organization organization name
       * @apiParam {String} phoneNumbers should receive with all numbers like this: "+385987654324,+385998765456,+385916342536"
       * 
       * @apiSuccessExample Success-Response:
@@ -72,12 +73,16 @@ UserSyncContactsController.prototype.init = function (app) {
 
     router.post('/', (request, response) => {
 
-        var organizationId = request.body.organizationId;
-        var arrPhoneNumbers = _.map(request.body.phoneNumbers.split(","), _.trim);
+        var organization = request.body.organization;
+        var phoneNumbers = request.body.phoneNumbers || "";
+        
+        var arrPhoneNumbers = _.map(phoneNumbers.split(","), _.trim);
 
         var userModel = UserModel.get();
+        var organizationModel = OrganizationModel.get();
 
         async.waterfall([
+            validate,
             getUsersByPhoneNumber
         ], endAsync);
 
@@ -86,13 +91,30 @@ UserSyncContactsController.prototype.init = function (app) {
         ****** FUNCTIONS ******
         **********************/
 
-        function getUsersByPhoneNumber(done) {
+        function validate(done) {
+
+            if (_.isEmpty(organization))
+                return done({ handledError: Const.responsecodeNoOrganizationName });
+
+            // get organization 
+            organizationModel.findOne({ organizationId: organization }, (err, findResult) => {
+
+                if (_.isEmpty(findResult))
+                    return done({ handledError: Const.responsecodeWrongOrganizationName });
+
+                done(err, { organization: findResult.toObject() });
+
+            });
+
+        };
+
+        function getUsersByPhoneNumber(result, done) {
 
             userModel.find(
                 {
                     userid: { $in: arrPhoneNumbers },
                     status: Const.userStatus.enabled,
-                    organizationId: organizationId
+                    organizationId: result.organization._id.toString(),
                 },
                 {
                     userid: true,
@@ -103,7 +125,8 @@ UserSyncContactsController.prototype.init = function (app) {
                 },
                 (err, findResult) => {
 
-                    done(err, { users: findResult });
+                    result.users = findResult;
+                    done(err, result);
 
                 });
 
@@ -121,7 +144,9 @@ UserSyncContactsController.prototype.init = function (app) {
                 }
             }
             else {
-                self.successResponse(response, Const.responsecodeSucceed, result);
+                self.successResponse(response, Const.responsecodeSucceed, {
+                    users: result.users
+                });
             }
 
         };
