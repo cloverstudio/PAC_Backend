@@ -121,7 +121,8 @@ UserSyncContactsController.prototype.init = function (app) {
                     phoneNumber: true,
                     name: true,
                     description: true,
-                    avatar: true
+                    avatar: true,
+                    created: true
                 },
                 (err, findResult) => {
 
