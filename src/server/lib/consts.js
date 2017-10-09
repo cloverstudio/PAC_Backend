@@ -92,6 +92,9 @@
     Const.resCodeSocketOpenMessageNoUserId = 4000083;
 
     Const.responsecodeSeenByInvalidMessageId = 4000084;
+    
+    Const.responsecodeNoOrganizationName = 4000085;
+    Const.responsecodeWrongOrganizationName = 4000086;
 
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
