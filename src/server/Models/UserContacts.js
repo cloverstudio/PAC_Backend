@@ -17,7 +17,7 @@ UserContacts.prototype.init = function (mongoose) {
 
     this.schema = new mongoose.Schema({
         userId: { type: String, index: true },
-        contact: [
+        contacts: [
             {
                 id: { type: String, index: true },
                 name: String
@@ -34,19 +34,5 @@ UserContacts.get = function () {
     return DatabaseManager.getModel('UserContacts').model;
 
 }
-
-
-UserContacts.getUsersById = function (userIds, callBack) {
-
-    var model = this.get();
-
-    model.find({ _id: { "$in": userIds } }, function (err, result) {
-
-        if (callBack)
-            callBack(err, result);
-
-    });
-
-};
 
 module["exports"] = UserContacts;

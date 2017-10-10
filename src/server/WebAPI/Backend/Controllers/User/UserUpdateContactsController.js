@@ -31,8 +31,9 @@ UserUpdateContactsController.prototype.init = function (app) {
       
       * @apiHeader {String} access-token Users unique access-token.
 
-      * @apiParam {String} organization organization name
-      * @apiParam {String} phoneNumbers should receive with all numbers like this: "+385987654324,+385998765456,+385916342536"
+      * @apiParam {Object[]} contacts object array of contacts
+      * @apiParam {String} contacts.id
+      * @apiParam {String} contacts.name
       * 
       * @apiSuccessExample Success-Response:
         {
@@ -49,6 +50,8 @@ UserUpdateContactsController.prototype.init = function (app) {
 
         var user = request.user;
 
+        var userContactsModel = UserContactsModel.get();
+
         async.waterfall([
             saveUserContacts
         ], endAsync);
@@ -60,8 +63,62 @@ UserUpdateContactsController.prototype.init = function (app) {
 
         function saveUserContacts(done) {
 
+            var result = {};
 
-            done(null, {});
+            userContactsModel.findOne({
+                userId: user._id.toString()
+            }, (err, findResult) => {
+
+                if (findResult) {
+
+                    var userContacts = findResult.contacts.toObject();
+
+                    userContacts = _.map(userContacts, (userContact) => {
+
+                        var updateContact = _.find(contacts, { id: userContact.id });
+
+                        if (updateContact)
+                            userContact.name = updateContact.name;
+
+                        return userContact;
+
+                    });
+
+                    _.forEach(contacts, (contact) => {
+
+                        if (!_.find(userContacts, { id: contact.id }))
+                            userContacts.push(contact);
+
+                    });
+
+                    findResult.contacts = userContacts;
+
+                    // update user
+                    findResult.save((err, saveResult) => {
+
+                        done(err, result);
+
+                    });
+
+                }
+                else {
+
+                    var data = {
+                        userId: user._id.toString(),
+                        contacts: contacts
+                    };
+
+                    // add new user contacts         
+                    var userContacts = new userContactsModel(data);
+                    userContacts.save((err, saveResult) => {
+
+                        done(err, result);
+
+                    });
+
+                }
+
+            });
 
 
         };
@@ -78,9 +135,7 @@ UserUpdateContactsController.prototype.init = function (app) {
                 }
             }
             else {
-                self.successResponse(response, Const.responsecodeSucceed, {
-                    users: result.users
-                });
+                self.successResponse(response, Const.responsecodeSucceed);
             }
 
         };
