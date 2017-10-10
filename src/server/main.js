@@ -79,7 +79,7 @@ function startServer(){
                 res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, access-token');
 
                 // debug output
-                console.log( 'method : ' + req.method + ' url : ' + req.originalUrl);
+                console.log('method :', req.method, 'url :', req.originalUrl);
 
                 next();
             });
