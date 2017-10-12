@@ -135,7 +135,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.dev.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-
+                        apnProvider.shutdown();
                     }); 
                     
                     donePushOne(null);
@@ -185,7 +185,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.adhoc.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-
+                        apnProvider.shutdown();
                     }); 
 
                     donePushOne(null);
@@ -235,7 +235,7 @@ PushNotificationSender = {
                     note.topic = Config.apnsCertificates.store.appbundleid;
 
                     apnProvider.send(note, pushToken).then( (result) => {
-
+                        apnProvider.shutdown();
                     }); 
 
                     donePushOne(null);
@@ -292,7 +292,7 @@ PushNotificationSender = {
                     note.payload = payload;
 
                     apnProvider.send(note, pushToken).then( (result) => {
- 
+                        apnProvider.shutdown();
                     }); 
 
                     donePushOne(null);
