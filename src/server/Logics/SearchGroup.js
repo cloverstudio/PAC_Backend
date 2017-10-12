@@ -151,7 +151,7 @@ var SearchGroup = {
                         console.log(userModels.length,row.users.length);
                         
                         result.list[index].usersCount =  row.users.length;
-                        result.list[index].userModels =  userModels.slice(0,4);
+                        result.list[index].userModels =  _.unique(userModels.slice(0,4));
 
                     });
                     
