@@ -82714,6 +82714,7 @@ var Config = {
     SpikaSocketURL : "/spika",
     hashSalt: "8zgqvU6LaziThJI1uz3PevYd",
     AESPassword: "cl0v3r-S+uD10-h4X0r1"
+    
 };
 
 // Exports ----------------------------------------------
