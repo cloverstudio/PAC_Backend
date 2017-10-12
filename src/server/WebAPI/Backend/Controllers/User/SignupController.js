@@ -232,7 +232,7 @@ SignupController.prototype.init = function (app) {
         function enableUser(done) {
 
             var result = {};
-            
+
             userModel.findOne({
                 activationCode: activationCode,
             }, (err, findResult) => {
@@ -406,7 +406,7 @@ SignupController.prototype.init = function (app) {
         };
 
         function getTopDepartment(result, done) {
-            
+
             groupModel.findOne({
                 organizationId: user.organizationId,
                 type: Const.groupType.department,
@@ -415,7 +415,7 @@ SignupController.prototype.init = function (app) {
 
                 if (err)
                     return done(err);
-            
+
                 result.group = findResult;
                 done(null, result);
 
@@ -427,7 +427,7 @@ SignupController.prototype.init = function (app) {
 
             if (!result.file)
                 return done(null, result);
-                
+
             // save to upload dir
             var tempPath = result.file.path;
             var destPath = Config.uploadPath + "/";
@@ -456,7 +456,7 @@ SignupController.prototype.init = function (app) {
 
             if (!result.file)
                 return done(null, result);
-                
+
             var file = result.file;
 
             // generate thumbnail      
@@ -505,11 +505,13 @@ SignupController.prototype.init = function (app) {
         };
 
         function saveUser(result, done) {
-            
+
             user.name = result.fields.name;
             user.sortName = result.fields.name.toLowerCase();
             user.password = result.fields.password;
-            user.groups = result.group._id;
+
+            if (_.isEmpty(user.groups))
+                user.groups = result.group._id;
 
             if (result.file) {
                 user.avatar = {
@@ -532,7 +534,7 @@ SignupController.prototype.init = function (app) {
 
                 if (err)
                     return done(err);
-                    
+
                 result.user = saveResult.toObject();
                 done(null, result);
 
@@ -541,16 +543,18 @@ SignupController.prototype.init = function (app) {
         };
 
         function saveUserToDepartment(result, done) {
-            
+
             var group = result.group;
 
-            group.users.push(user._id);
+            if (_.indexOf(group.users, user._id.toString()) > -1)
+                return done(null, result);
 
+            group.users.push(user._id);
             group.save((err, saveResult) => {
 
                 if (err)
                     return done(err);
-            
+
                 done(null, result);
 
             });
@@ -558,7 +562,7 @@ SignupController.prototype.init = function (app) {
         };
 
         function endAsync(err, result) {
-            
+
             if (err) {
                 if (err.handledError) {
                     self.successResponse(response, err.handledError);
@@ -568,7 +572,7 @@ SignupController.prototype.init = function (app) {
                     self.successResponse(response, Const.responsecodeUnknownError);
                 }
             }
-            else {            
+            else {
                 self.successResponse(response, Const.responsecodeSucceed, { user: result.user });
             }
 
