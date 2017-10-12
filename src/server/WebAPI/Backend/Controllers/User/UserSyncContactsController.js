@@ -1,4 +1,5 @@
 /** Called for /api/v2/user/sync API */
+'use strict';
 
 var express = require('express');
 var router = express.Router();

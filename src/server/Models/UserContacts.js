@@ -17,12 +17,8 @@ UserContacts.prototype.init = function (mongoose) {
 
     this.schema = new mongoose.Schema({
         userId: { type: String, index: true },
-        contacts: [
-            {
-                id: { type: String, index: true },
-                name: String
-            }
-        ]
+        contactId: { type: String, index: true },
+        name: String
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "user_contacts", this.schema);

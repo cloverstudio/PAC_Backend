@@ -1,4 +1,5 @@
 /** Called for /api/v2/user/sync API */
+'use strict';
 
 var express = require('express');
 var router = express.Router();
@@ -46,14 +47,21 @@ UserUpdateContactsController.prototype.init = function (app) {
 
     router.post('/', tokenChecker, (request, response) => {
 
-        var contacts = request.body.contacts;
-
         var user = request.user;
+
+        var contacts = _.map(request.body.contacts, (contact) => {
+            contact.userId = user._id.toString();
+            contact.contactId = contact.id;
+            delete contact.id;
+
+            return contact;
+        });
 
         var userContactsModel = UserContactsModel.get();
 
         async.waterfall([
-            saveUserContacts
+            deleteContacts,
+            saveContacts
         ], endAsync);
 
 
@@ -61,65 +69,30 @@ UserUpdateContactsController.prototype.init = function (app) {
         ****** FUNCTIONS ******
         **********************/
 
-        function saveUserContacts(done) {
+        function deleteContacts(done) {
 
             var result = {};
 
-            userContactsModel.findOne({
-                userId: user._id.toString()
-            }, (err, findResult) => {
+            var contactsIds = _.map(contacts, "contactId");
 
-                if (findResult) {
+            userContactsModel.remove({
+                userId: user._id.toString(),
+                contactId: { $in: contactsIds }
+            }, (err, deleteResult) => {
 
-                    var userContacts = findResult.contacts.toObject();
-
-                    userContacts = _.map(userContacts, (userContact) => {
-
-                        var updateContact = _.find(contacts, { id: userContact.id });
-
-                        if (updateContact)
-                            userContact.name = updateContact.name;
-
-                        return userContact;
-
-                    });
-
-                    _.forEach(contacts, (contact) => {
-
-                        if (!_.find(userContacts, { id: contact.id }))
-                            userContacts.push(contact);
-
-                    });
-
-                    findResult.contacts = userContacts;
-
-                    // update user
-                    findResult.save((err, saveResult) => {
-
-                        done(err, result);
-
-                    });
-
-                }
-                else {
-
-                    var data = {
-                        userId: user._id.toString(),
-                        contacts: contacts
-                    };
-
-                    // add new user contacts         
-                    var userContacts = new userContactsModel(data);
-                    userContacts.save((err, saveResult) => {
-
-                        done(err, result);
-
-                    });
-
-                }
+                done(err, result);
 
             });
 
+        };
+
+        function saveContacts(result, done) {
+            
+            userContactsModel.create(contacts, (err, insertResult) => {
+
+                done(err, result);
+
+            });
 
         };
 
