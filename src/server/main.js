@@ -7,6 +7,14 @@ var signaling = require('../../modules_customised/webrtcsignaling/sockets')
 var geoip = require('geoip-lite');
 var path = require('path');
 var redis = require('socket.io-redis');
+var heapdump = require('heapdump');
+
+setInterval(() => {
+    heapdump.writeSnapshot((err, filename) => {
+        console.log('dump written to', filename);
+    });
+},30000);
+
 
 var Conf = require('./lib/init.js');
 
