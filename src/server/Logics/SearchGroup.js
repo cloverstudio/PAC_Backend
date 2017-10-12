@@ -123,13 +123,10 @@ var SearchGroup = {
                 // get users
                 var userIds = [];
                 
-                _.forEach(_.pluck(result.list,'users'),function(row){
-                    
-                    if(!_.isArray(row))
-                        return;
-                    
-                    userIds = userIds.concat(row.slice(0,4));
-                    
+                result.list.forEach( (group) => {
+
+                    userIds = userIds.concat( group.users );
+
                 });
                 
                 userIds = _.unique(userIds);
@@ -147,7 +144,7 @@ var SearchGroup = {
                         var userModels = _.filter(userFindResult,function(userModel){
 
                             if(_.isArray(row.users))
-                                return row.users.indexOf(userModel._id.toObject);
+                                return row.users.indexOf(userModel._id.toString()) != -1;
                             
                         });
                         
