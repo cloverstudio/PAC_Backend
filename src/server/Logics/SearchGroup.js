@@ -133,6 +133,8 @@ var SearchGroup = {
                 
                 var userModel = UserModel.get();
                 
+                console.log("userIds",userIds);
+
                 userModel.find({_id:{$in:userIds}},function(err,userFindResult){
                     
                     userFindResult = userFindResult.map(function(item){
