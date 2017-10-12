@@ -76,4 +76,34 @@ describe('WEB API', function () {
         
     });
     
+    describe('/history/markchat POST', function () {
+        
+        it('works', function (done) {
+
+            request(app)
+                .post('/api/v2/user/history/markchat')
+                .set('access-token', global.user1.accessToken)
+                .send({
+                    chatId:global.room1._id,
+                    chatType:"3"
+                })
+                .end(function (err, res) {
+                
+                if (err) {
+                    throw err;
+                }
+
+                console.log(res.body);
+
+                res.body.should.have.property('code');
+                res.body.code.should.equal(1);
+
+                done();
+                
+            });   
+            
+        });
+        
+    });
+
 });

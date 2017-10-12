@@ -12,6 +12,8 @@ var localzationManager = require('../../../lib/localzationManager');
 var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
+var MarkAllAsReadClient = require('../../../lib/APIClients/MarkAllAsReadClient');
+
 
 var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
@@ -161,9 +163,7 @@ var HistoryListView = Backbone.View.extend({
 
             // generate roomID by users
             if(historyObj.chatType == Const.chatTypePrivate){
-                
                 roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
-
             }
 
             return roomID == messageObj.roomID;
@@ -181,6 +181,9 @@ var HistoryListView = Backbone.View.extend({
             self.mergeData([historyObj]);
             self.renderList(); 
             
+            // update unread count
+            // MarkAllAsReadClient.send(historyObj.chatId,historyObj.chatType);
+
         }
 
     },
@@ -213,7 +216,6 @@ var HistoryListView = Backbone.View.extend({
             
         },function(errorCode){
             
-            console.log(errorCode);
             UIUtils.handleAPIErrors(errorCode);
             
         });
@@ -255,12 +257,42 @@ var HistoryListView = Backbone.View.extend({
                 
             }
             
-                
+            
         });
         
         this.dataList = _.sortBy(this.dataList,function(historyObj){
             
             return -1 * historyObj.lastUpdate;
+             
+        });
+        
+        // make unread count to zero if user is opened the chat
+        this.dataList = _.map(this.dataList,function(historyObj){
+            
+            var chatId = "";
+
+            if(historyObj.chatType == Const.chatTypePrivate){
+                
+                chatId = Utils.chatIdByUser(historyObj.user,loginUserManager.user);
+                
+            }else if(historyObj.chatType == Const.chatTypeGroup){
+    
+                chatId = Utils.chatIdByGroup(historyObj.group);
+                
+            }else if(historyObj.chatType == Const.chatTypeRoom){
+    
+                chatId = Utils.chatIdByRoom(historyObj.room);
+    
+            }
+
+            if(loginUserManager.currentConversation == chatId){
+
+                // force zero locally and update to server
+                historyObj.unreadCount = 0;
+                MarkAllAsReadClient.send(historyObj.chatId,historyObj.chatType);
+            }
+                
+            return historyObj;
              
         });
         

@@ -282,7 +282,6 @@ var NotifyNewMessage = {
                         message = "New message to " + obj.room.name;
                     }
                    
-                    
                     userModel.find({
                         $and : [
                             {_id:{ $in : obj.room.users}},

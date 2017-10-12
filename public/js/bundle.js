@@ -77834,6 +77834,8 @@ var localzationManager = require('../../../lib/localzationManager');
 var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
+var MarkAllAsReadClient = require('../../../lib/APIClients/MarkAllAsReadClient');
+
 
 var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
@@ -77983,9 +77985,7 @@ var HistoryListView = Backbone.View.extend({
 
             // generate roomID by users
             if(historyObj.chatType == Const.chatTypePrivate){
-                
                 roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
-
             }
 
             return roomID == messageObj.roomID;
@@ -78003,6 +78003,9 @@ var HistoryListView = Backbone.View.extend({
             self.mergeData([historyObj]);
             self.renderList(); 
             
+            // update unread count
+            // MarkAllAsReadClient.send(historyObj.chatId,historyObj.chatType);
+
         }
 
     },
@@ -78035,7 +78038,6 @@ var HistoryListView = Backbone.View.extend({
             
         },function(errorCode){
             
-            console.log(errorCode);
             UIUtils.handleAPIErrors(errorCode);
             
         });
@@ -78077,12 +78079,42 @@ var HistoryListView = Backbone.View.extend({
                 
             }
             
-                
+            
         });
         
         this.dataList = _.sortBy(this.dataList,function(historyObj){
             
             return -1 * historyObj.lastUpdate;
+             
+        });
+        
+        // make unread count to zero if user is opened the chat
+        this.dataList = _.map(this.dataList,function(historyObj){
+            
+            var chatId = "";
+
+            if(historyObj.chatType == Const.chatTypePrivate){
+                
+                chatId = Utils.chatIdByUser(historyObj.user,loginUserManager.user);
+                
+            }else if(historyObj.chatType == Const.chatTypeGroup){
+    
+                chatId = Utils.chatIdByGroup(historyObj.group);
+                
+            }else if(historyObj.chatType == Const.chatTypeRoom){
+    
+                chatId = Utils.chatIdByRoom(historyObj.room);
+    
+            }
+
+            if(loginUserManager.currentConversation == chatId){
+
+                // force zero locally and update to server
+                historyObj.unreadCount = 0;
+                MarkAllAsReadClient.send(historyObj.chatId,historyObj.chatType);
+            }
+                
+            return historyObj;
              
         });
         
@@ -78164,7 +78196,7 @@ var HistoryListView = Backbone.View.extend({
 
 module.exports = HistoryListView;
 
-},{"../../../lib/APIClients/HistoryListClient":251,"../../../lib/ChatManager":273,"../../../lib/EncryptionManager":274,"../../../lib/UIUtils":283,"../../../lib/consts":284,"../../../lib/init":285,"../../../lib/localzationManager":287,"../../../lib/loginUserManager":288,"../../../lib/utils":290,"./HistoryListContents.hbs":222,"./HistoryListView.hbs":223,"backbone":7,"lodash":75}],225:[function(require,module,exports){
+},{"../../../lib/APIClients/HistoryListClient":251,"../../../lib/APIClients/MarkAllAsReadClient":254,"../../../lib/ChatManager":273,"../../../lib/EncryptionManager":274,"../../../lib/UIUtils":283,"../../../lib/consts":284,"../../../lib/init":285,"../../../lib/localzationManager":287,"../../../lib/loginUserManager":288,"../../../lib/utils":290,"./HistoryListContents.hbs":222,"./HistoryListView.hbs":223,"backbone":7,"lodash":75}],225:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -82401,9 +82433,9 @@ var socketIOManager = {
             // History is refreshed by ChatView when the chat is opened
             if(loginUserManager.currentConversation != obj.roomID)
                 Backbone.trigger(Const.NotificationRefreshHistory);
-            else
+            else{
                 Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
-
+            }
             Backbone.trigger(Const.NotificationNewMessage,obj);
 
             if(loginUserManager.user._id != obj.userID)
