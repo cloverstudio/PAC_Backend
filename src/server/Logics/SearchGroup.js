@@ -141,7 +141,7 @@ var SearchGroup = {
                                 
                     _.forEach(result.list,function(row,index){
                         
-                        row.users = _.uniqueId(row.users);
+                        row.users = _.unique(row.users);
                         
                         var userModels = _.filter(userFindResult,function(userModel){
 
