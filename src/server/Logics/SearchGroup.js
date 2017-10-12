@@ -141,8 +141,12 @@ var SearchGroup = {
                                 
                     _.forEach(result.list,function(row,index){
                         
+                        console.log(1,row.users);
+
                         row.users = _.unique(row.users);
                         
+                        console.log(2,row.users);
+
                         var userModels = _.filter(userFindResult,function(userModel){
 
                             if(_.isArray(row.users))
