@@ -15,6 +15,8 @@ var BackendBaseController = require("./BackendBaseController");
 var DatabaseManager = require('../../../lib/DatabaseManager');
 var Utils = require('../../../lib/utils');
 
+var SocketAPIHandler = require("../../../SocketAPI/SocketAPIHandler");
+
 var GroupModel = require('../../../Models/Group');
 var UserModel = require('../../../Models/User');
 var HistoryModel = require('../../../Models/History');
@@ -1029,10 +1031,7 @@ DepartmentController.prototype.init = function(app){
         criteria.organizationId = organizationId;
         criteria.groups = departmentId;
 
-        if (!organizationAdmin) {
-            criteria._id = { $ne: baseUser._id };
-        }
-
+        
         if (!_.isEmpty(keyword)) {            
             criteria.name = new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i");            
         }
@@ -1476,7 +1475,8 @@ DepartmentController.prototype.init = function(app){
         }
         
         var model = UserModel.get();
-        
+        var historyModel = HistoryModel.get();
+
         async.waterfall([
             
             function(done) {
@@ -1556,6 +1556,26 @@ DepartmentController.prototype.init = function(app){
 
                 });     
 
+            },
+            function(result, done) {
+
+                // remove from favorite
+                historyModel.remove({ 
+                    userId:userId,
+                    chatId:departmentId
+                }, function(err, deleteResult) {
+
+                    if(err)
+                        console.log(err);
+                    
+                    SocketAPIHandler.emitToUser(userId,"delete_group",{
+                        groupIds:[departmentId]
+                    });
+
+                    done(null, result);
+                    
+                });
+
             }
         ],
         function(err, result) {
@@ -1629,7 +1649,7 @@ DepartmentController.prototype.init = function(app){
                 criteria.organizationId = baseUser.organizationId;
                 
                 // don't show current user
-                criteria._id = { $ne: baseUser._id };
+                //criteria._id = { $ne: baseUser._id };
 
                 if (organizationAdmin) {
                     criteria.groups = { $nin: result.departmentIds };
