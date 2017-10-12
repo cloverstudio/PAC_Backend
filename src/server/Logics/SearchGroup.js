@@ -148,6 +148,8 @@ var SearchGroup = {
                             
                         });
                         
+                        console.log(userModels.length,row.users.length);
+                        
                         result.list[index].usersCount =  row.users.length;
                         result.list[index].userModels =  userModels.slice(0,4);
 
