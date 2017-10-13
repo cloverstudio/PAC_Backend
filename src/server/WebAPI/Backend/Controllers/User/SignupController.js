@@ -53,6 +53,7 @@ SignupController.prototype.init = function (app) {
 
         var phoneNumber = request.body.phoneNumber;
         var organizationId = request.body.organizationId;
+        var isUnitTest = request.body.isUnitTest;
 
         var activationCode = Utils.getRandomNumber();
 
@@ -164,7 +165,7 @@ SignupController.prototype.init = function (app) {
                 }
             }
             else {
-                self.successResponse(response, Const.responsecodeSucceed);
+                self.successResponse(response, Const.responsecodeSucceed, (isUnitTest ? { activationCode: activationCode } : {}));
             }
 
         };

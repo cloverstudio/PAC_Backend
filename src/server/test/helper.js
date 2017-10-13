@@ -81,6 +81,16 @@ global.user4 = {
     permission: 1
 }
 
+global.user5 = {
+    name: "user5",
+    userid: "+15005550006",
+    password: sha1(password + global.hashsalt),
+    passwordOrig: password,
+    organizationId : 1,
+    permission: 1,
+    phoneNumber: "+15005550006"
+}
+
 global.group1 = {
     name: "group1",
     description: "DESCRIPTION group1",
@@ -120,7 +130,8 @@ global.department1 = {
     name: "department1",
     description: "DESCRIPTIPN department1",
     users: [],
-    type: 2
+    type: 2,
+    default: 1
 }
 
 global.department2 = {
@@ -403,6 +414,7 @@ before(function(doneMain){
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
                 .field('type', global.department1.type)                
+                .field('default', global.department1.default)                
                 .end(function (err, res) {
                     if (err) throw err;
                     global.department1._id = res.body.data.group._id;

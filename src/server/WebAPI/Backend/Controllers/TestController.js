@@ -138,7 +138,8 @@ TestController.prototype.init = function(app){
                         created: Utils.now(),
                         organizationId: fields.organizationId,
                         users: fields.users.split(','),
-                        type: fields.type
+                        type: fields.type,
+                        default: fields.default
                     };
 
                     if (fields.type==Const.groupType.department)
