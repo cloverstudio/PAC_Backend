@@ -133,8 +133,6 @@ var SearchGroup = {
                 
                 var userModel = UserModel.get();
                 
-                console.log("userIds",userIds);
-
                 userModel.find({_id:{$in:userIds}},function(err,userFindResult){
                     
                     userFindResult = userFindResult.map(function(item){
@@ -143,20 +141,14 @@ var SearchGroup = {
                                 
                     _.forEach(result.list,function(row,index){
                         
-                        console.log(1,row.users);
-
                         row.users = _.unique(row.users);
                         
-                        console.log(2,row.users);
-
                         var userModels = _.filter(userFindResult,function(userModel){
 
                             if(_.isArray(row.users))
                                 return row.users.indexOf(userModel._id.toString()) != -1;
                             
                         });
-                        
-                        console.log(userModels.length,row.users.length);
                         
                         result.list[index].usersCount =  row.users.length;
                         result.list[index].userModels =  userModels.slice(0,4);

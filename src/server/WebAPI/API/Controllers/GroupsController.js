@@ -355,6 +355,7 @@ GroupsController.prototype.init = function(app){
         const groupId = request.params.groupId;  
         const userIds = request.body.users;
         const groupModel = GroupModel.get();
+        const userModel = UserModel.get();
 
         // Check params 
         if (!mongoose.Types.ObjectId.isValid(groupId))
@@ -408,7 +409,34 @@ GroupsController.prototype.init = function(app){
 
                 });
 
-            }
+            },
+            (result,done) => {
+
+                userIds.forEach( (userID) => {
+
+                    userModel.findOne({ _id: userID },(err,findResult) => {
+
+                        if(err || !findResult)
+                            return;
+
+                        if(!Array.isArray(findResult.groups))
+                            return;
+
+                        const newGroups = _.uniq(findResult.groups.concat(groupId));
+
+                        userModel.update({ _id: userID }, {
+                            groups:newGroups
+                        }, (err, updated) => {
+
+                            done(err, result);
+        
+                        });
+
+                    });
+                    
+                });
+
+            },
         ],
         (err,result) => {
 
@@ -437,6 +465,7 @@ GroupsController.prototype.init = function(app){
         const groupId = request.params.groupId;  
         const userIds = request.body.users;
         const groupModel = GroupModel.get();
+        const userModel = UserModel.get();
 
         // Check params
         if (!mongoose.Types.ObjectId.isValid(groupId))
@@ -494,7 +523,37 @@ GroupsController.prototype.init = function(app){
 
                 });
 
-            }
+            },
+            (result,done) => {
+
+                userIds.forEach( (userID) => {
+
+                    userModel.findOne({ _id: userID },(err,findResult) => {
+
+                        if(err || !findResult)
+                            return;
+
+                        if(!Array.isArray(findResult.groups))
+                            return;
+
+                        const newGroups = findResult.groups.filter( (groupIdInUser) => {
+                            return groupIdInUser !=groupId
+                        });
+
+                        
+                        userModel.update({ _id: userID }, {
+                            groups:newGroups
+                        }, (err, updated) => {
+
+                            done(err, result);
+        
+                        });
+
+                    });
+                    
+                });
+
+            },
         ],
         (err,result) => {
 

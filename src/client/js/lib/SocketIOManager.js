@@ -67,9 +67,9 @@ var socketIOManager = {
             // History is refreshed by ChatView when the chat is opened
             if(loginUserManager.currentConversation != obj.roomID)
                 Backbone.trigger(Const.NotificationRefreshHistory);
-            else
+            else{
                 Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
-
+            }
             Backbone.trigger(Const.NotificationNewMessage,obj);
 
             if(loginUserManager.user._id != obj.userID)

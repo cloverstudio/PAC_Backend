@@ -29,13 +29,11 @@ MarkAllAsReadController.prototype.init = function(app){
     var self = this;
 
    /**
-     * @api {post} /api/v2/user/history/markall MarkAll
+     * @api {post} /api/v2/user/history/markchat MarkAll
      * @apiName MarkAll
      * @apiGroup WebAPI
      * @apiDescription Mark all as read
      * @apiHeader {String} access-token Users unique access-token.
-     * @apiParam {String} chatId
-     * @apiParam {String} chatType
      * @apiSuccessExample Success-Response:
 {}
 
@@ -47,10 +45,26 @@ MarkAllAsReadController.prototype.init = function(app){
             
             var result = {};
             
+            // check params
+            if(!request.body.chatId){
+                self.successResponse(response,Const.responsecodeMuteWrongParam);
+                return;
+            }
+
+            if(!request.body.chatType){
+                self.successResponse(response,Const.responsecodeMuteWrongParam);
+                return;
+            }
+
+
             var historyModel = HistoryModel.get();
             
             historyModel.update(
-                { userId: request.user._id.toString() }, 
+                {
+                    userId: request.user._id.toString(),
+                    chatId: request.body.chatid,
+                    chatType: request.body.chatType
+                }, 
                 {       unreadCount: 0,
                         lastUpdateUnreadCount: Utils.now()
                 }, 
@@ -73,6 +87,8 @@ MarkAllAsReadController.prototype.init = function(app){
                 self.errorResponse(response,Const.httpCodeServerError);
                 return;
             }
+
+            console.log('ssssssssss');
             
             self.successResponse(response,Const.responsecodeSucceed,result);
             

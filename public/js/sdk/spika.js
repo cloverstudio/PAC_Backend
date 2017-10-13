@@ -14299,7 +14299,7 @@ var _spikaInit = (function(root) { // receives global object
 
         var result = {};
 
-        fetch(this.baseURL + '/file/upload', {
+        fetch(this.baseURL + '/files/upload', {
             method: 'POST',
             body: data,
             mode: 'cors',
@@ -14330,7 +14330,7 @@ var _spikaInit = (function(root) { // receives global object
 
         var result = {};
         
-        fetch(this.baseURL + '/file/download/' + fileID, {
+        fetch(this.baseURL + '/files/download/' + fileID, {
             method: 'GET',
             mode: 'cors',
             headers:{

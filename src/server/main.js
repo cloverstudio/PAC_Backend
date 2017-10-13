@@ -1,5 +1,4 @@
 /** Main of server side backend */
-
 var socket = require('socket.io');
 var express = require('express');
 var http = require('http');
