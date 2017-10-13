@@ -87,9 +87,7 @@ UserSyncContactsController.prototype.init = function (app) {
             getUsersByPhoneNumber
         ], endAsync);
 
-        console.log("\n--------organization------------\n", organization);
-        console.log("\n---------phoneNumbers--------------\n", phoneNumbers);
-        
+
         /**********************
         ****** FUNCTIONS ******
         **********************/
@@ -113,9 +111,6 @@ UserSyncContactsController.prototype.init = function (app) {
 
         function getUsersByPhoneNumber(result, done) {
 
-            console.log("\n-------phoneNumbersarray---------\n", arrPhoneNumbers);
-            console.log("\n--------organizationId-----------\n", result.organization._id.toString());
-
             userModel.find(
                 {
                     userid: { $in: arrPhoneNumbers },
@@ -131,12 +126,8 @@ UserSyncContactsController.prototype.init = function (app) {
                     created: true
                 },
                 (err, findResult) => {
-                    console.log("\n----------users before------------\n", findResult);
-                    
-                    result.users = findResult.map((user) => {
-                        return user.toObject();
-                    });
-                    console.log("\n------------users------------\n", result.users);
+
+                    result.users = findResult;
                     done(err, result);
 
                 });
