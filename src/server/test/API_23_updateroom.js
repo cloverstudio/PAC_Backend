@@ -25,6 +25,14 @@ describe('API', function () {
                 .expect(403, done) 
         });
 
+        it('returns 403, caller is not owner of the room', (done) => {
+            request(app)
+                .put('/api/v3/rooms/' + global.room3.id)
+                .set('apikey', global.apikey)
+                .set('access-token', global.user2.apiaccesstoken)
+                .expect(403, done) 
+        });
+
         it('returns 422, if name has larger than the max length', (done) => {
             const name = global.getRandomStr(Const.nameMaxLength+1);
             const sortName = 'room_' + global.getRandomStr();            

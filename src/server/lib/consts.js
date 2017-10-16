@@ -238,10 +238,10 @@
         ownerCannotLeaveRoom: "The room owner can\'t leave room.",
         includeGroupsNotExistInOrganiation: "Some groupId in groups doesn't exist in your organization.",
         wrongUserIds: "users parameter is wrong.",
-        cannotDeleteRoom: "you can't delete this room because you are not the owner.",
+        cannotUpdateRoom: "you can't update this room because you are not owner",
+        cannotDeleteRoom: "you can't delete this room because you are not owner.",
         cannotUpdateMessage: "you can't update this message because you are not sender",
         cannotDeleteMessage: "you can't delete this message because you are not sender."
-
     }
 
     Const.webhookEventMessage = "message";
