@@ -1571,6 +1571,9 @@ DepartmentController.prototype.init = function(app){
                     SocketAPIHandler.emitToUser(userId,"delete_group",{
                         groupIds:[departmentId]
                     });
+        
+                    // stop sending notification
+                    SocketAPIHandler.leaveFrom(userId,Const.chatTypeGroup,departmentId);
 
                     done(null, result);
                     

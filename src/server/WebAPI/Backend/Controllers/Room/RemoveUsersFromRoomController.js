@@ -205,6 +205,9 @@ RemoveUsersFromRoomController.prototype.init = function(app){
                 // delete from history
                 var historyModel = HistoryModel.get();
                 result.users.forEach((user) => {
+
+                    // stop sending notification
+                    SocketAPIHandler.leaveFrom(user._id,Const.chatTypeRoom,roomId);
                     
                     historyModel.remove({ 
                         chatId: roomId,

@@ -66,9 +66,7 @@
             <td>{{userid}}</td>
             <td>{{formatDate created}}</td>
             <td>
-                {{#unless (checkIfUserIsOrganizationAdmin permission)}}            
-                    <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/group/userlist/delete/{{../groupId}}/{{_id}}"'>{{l10n "Delete"}}</button>
-                {{/unless}}
+                <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/group/userlist/delete/{{../groupId}}/{{_id}}"'>{{l10n "Delete"}}</button>
             </td>
         </tr> 
         

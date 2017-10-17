@@ -1652,6 +1652,8 @@ GroupController.prototype.init = function(app){
                     groupIds:[groupId]
                 });
 
+                // stop sending notification
+                SocketAPIHandler.leaveFrom(userId,Const.chatTypeGroup,groupId);
             }
         ],
         function(err, result) {
