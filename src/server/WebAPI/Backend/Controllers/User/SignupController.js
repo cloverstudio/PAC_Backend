@@ -39,6 +39,7 @@ SignupController.prototype.init = function (app) {
       *   
       * @apiParam {String} organizationId organizationId 
       * @apiParam {String} phoneNumber phoneNumber
+      * @apiParam {Number=0,1} isWeb if api is called from web (1), otherwise (0)
       * 
       * @apiSuccessExample Success-Response:
          {
@@ -54,6 +55,7 @@ SignupController.prototype.init = function (app) {
         var phoneNumber = request.body.phoneNumber;
         var organizationId = request.body.organizationId;
         var isUnitTest = request.body.isUnitTest;
+        var isWeb = request.body.isWeb;
 
         var activationCode = Utils.getRandomNumber();
 
@@ -62,8 +64,7 @@ SignupController.prototype.init = function (app) {
 
         async.waterfall([
             validate,
-            addUser,
-            sendActivationCode
+            addUser
         ], endAsync);
 
 
@@ -103,52 +104,55 @@ SignupController.prototype.init = function (app) {
 
                 if (findResult) {
 
-                    findResult.activationCode = activationCode;
-
-                    // update user
-                    findResult.save((err, saveResult) => {
+                    Utils.sendSMS(phoneNumber, self.l10n("Hi! Your activation code is ") + activationCode + ".", (err, message) => {
 
                         if (err)
                             return done(err);
 
-                        done(null, result);
+                        findResult.activationCode = activationCode;
+
+                        // update user
+                        findResult.save((err, saveResult) => {
+
+                            done(err, result);
+
+                        });
 
                     });
 
                 }
                 else {
 
-                    var data = {
-                        organizationId: result.organization._id,
-                        created: Utils.now(),
-                        phoneNumber: phoneNumber,
-                        userid: phoneNumber,
-                        activationCode: activationCode,
-                        status: Const.userStatus.disabled,
-                        permission: Const.userPermission.webClient
-                    };
+                    if (isWeb == 1)
+                        return done({ handledError: Const.responsecodeSigninUserNotFound });
 
-                    // add new user           
-                    var user = new userModel(data);
-                    user.save((err, saveResult) => {
+                    Utils.sendSMS(phoneNumber, self.l10n("Hi! Your activation code is ") + activationCode + ".", (err, message) => {
 
                         if (err)
                             return done(err);
 
-                        done(null, result);
+                        var data = {
+                            organizationId: result.organization._id,
+                            created: Utils.now(),
+                            phoneNumber: phoneNumber,
+                            userid: phoneNumber,
+                            activationCode: activationCode,
+                            status: Const.userStatus.disabled,
+                            permission: Const.userPermission.webClient
+                        };
+
+                        // add new user           
+                        var user = new userModel(data);
+                        user.save((err, saveResult) => {
+
+                            done(err, result);
+
+                        });
 
                     });
 
                 }
 
-            });
-
-        };
-
-        function sendActivationCode(result, done) {
-
-            Utils.sendSMS(phoneNumber, self.l10n("Hi! Your activation code is ") + activationCode + ".", (err, message) => {
-                done(err, result);
             });
 
         };

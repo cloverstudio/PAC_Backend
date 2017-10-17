@@ -96,6 +96,8 @@
     Const.responsecodeNoOrganizationName = 4000085;
     Const.responsecodeWrongOrganizationName = 4000086;
 
+    Const.responsecodeSigninUserNotFound = 4000087;
+    
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;

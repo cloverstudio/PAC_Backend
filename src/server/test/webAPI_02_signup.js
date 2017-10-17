@@ -83,6 +83,30 @@ describe('WEB API', function () {
 
         });
 
+        it('web user not found', function (done) {
+
+            request(app)
+                .post('/api/v2/user/signup/sendSms')
+                .send({
+                    organizationId: global.organization1.name,
+                    phoneNumber: "+999999999",
+                    isWeb: 1
+                })
+                .end(function (err, res) {
+
+                    if (err) {
+                        throw err;
+                    }
+
+                    res.body.should.have.property('code');
+                    res.body.code.should.equal(Const.responsecodeSigninUserNotFound);
+
+                    done();
+
+                });
+
+        });
+
     });
 
     describe('/api/v2/user/signup/verify POST', function () {
