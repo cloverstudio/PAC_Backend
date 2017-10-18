@@ -13,7 +13,7 @@ var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
 var MarkAllAsReadClient = require('../../../lib/APIClients/MarkAllAsReadClient');
-
+var MarkChatAsReadClient = require('../../../lib/APIClients/MarkChatAsReadClient');
 
 var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
@@ -181,8 +181,6 @@ var HistoryListView = Backbone.View.extend({
             self.mergeData([historyObj]);
             self.renderList(); 
             
-            // update unread count
-            // MarkAllAsReadClient.send(historyObj.chatId,historyObj.chatType);
 
         }
 
@@ -289,7 +287,7 @@ var HistoryListView = Backbone.View.extend({
 
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
-                MarkAllAsReadClient.send(historyObj.chatId,historyObj.chatType);
+                MarkChatAsReadClient.send(historyObj.chatId,historyObj.chatType);
             }
                 
             return historyObj;

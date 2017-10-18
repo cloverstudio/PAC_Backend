@@ -4,11 +4,11 @@ var _ = require('lodash');
 var Conf = require('../init');
 var loginUserManager = require('../loginUserManager');
 
-var MarkAllAsReadClient = function(){};
+var MarkChatAsReadClient = function(){};
 
-_.extend(MarkAllAsReadClient.prototype,APIClientBase.prototype);
+_.extend(MarkChatAsReadClient.prototype,APIClientBase.prototype);
 
-MarkAllAsReadClient.prototype.send = function(chatId,chatTypesuccess,err){
+MarkChatAsReadClient.prototype.send = function(chatId,chatTypesuccess,err){
     
     this.postRequst("/user/history/markchat",{
         chatId: chatId,
@@ -17,4 +17,4 @@ MarkAllAsReadClient.prototype.send = function(chatId,chatTypesuccess,err){
     
 }
     // returns instance
-module["exports"] = new MarkAllAsReadClient();
+module["exports"] = new MarkChatAsReadClient();
