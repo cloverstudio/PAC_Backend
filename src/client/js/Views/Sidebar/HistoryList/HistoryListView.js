@@ -285,6 +285,8 @@ var HistoryListView = Backbone.View.extend({
 
             if(loginUserManager.currentConversation == chatId){
 
+                console.log(historyObj);
+                
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
                 MarkChatAsReadClient.send(historyObj.chatId,historyObj.chatType);

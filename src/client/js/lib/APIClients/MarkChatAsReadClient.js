@@ -8,7 +8,7 @@ var MarkChatAsReadClient = function(){};
 
 _.extend(MarkChatAsReadClient.prototype,APIClientBase.prototype);
 
-MarkChatAsReadClient.prototype.send = function(chatId,chatTypesuccess,err){
+MarkChatAsReadClient.prototype.send = function(chatId,chatType,success,err){
     
     this.postRequst("/user/history/markchat",{
         chatId: chatId,

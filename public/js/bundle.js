@@ -78107,6 +78107,8 @@ var HistoryListView = Backbone.View.extend({
 
             if(loginUserManager.currentConversation == chatId){
 
+                console.log(historyObj);
+                
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
                 MarkChatAsReadClient.send(historyObj.chatId,historyObj.chatType);
@@ -80310,7 +80312,7 @@ var MarkChatAsReadClient = function(){};
 
 _.extend(MarkChatAsReadClient.prototype,APIClientBase.prototype);
 
-MarkChatAsReadClient.prototype.send = function(chatId,chatTypesuccess,err){
+MarkChatAsReadClient.prototype.send = function(chatId,chatType,success,err){
     
     this.postRequst("/user/history/markchat",{
         chatId: chatId,
@@ -83110,15 +83112,15 @@ Const.typingOn = 1;
 module["exports"] = Const;
 },{}],291:[function(require,module,exports){
 var Config = {
-    AppTitle : "Spika",
-    APIEndpoint : '/api/v2',
-    SpikaBaseURL : '/spika',
-    defaultContaier : 'body', // write JQuery style selector
-    socketUrl : "/spikaenterprise",
-    SpikaSocketURL : "/spika",
+    AppTitle: "Spika",
+    APIEndpoint: '/api/v2',
+    SpikaBaseURL: '/spika',
+    defaultContaier: 'body', // write JQuery style selector
+    socketUrl: "/spikaenterprise",
+    SpikaSocketURL: "/spika",
     hashSalt: "8zgqvU6LaziThJI1uz3PevYd",
-    AESPassword: "cl0v3r-S+uD10-h4X0r1"
-    
+    AESPassword: "cl0v3r-S+uD10-h4X0r1",
+    phoneNumberSignin: false
 };
 
 // Exports ----------------------------------------------
