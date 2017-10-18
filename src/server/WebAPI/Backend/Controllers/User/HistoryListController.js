@@ -418,6 +418,9 @@ HistioryListController.prototype.getList = function(lastUpdate,page,request,resp
                 return item.toObject();
             });
 			
+			if(data.length > 100)
+				console.log(lastUpdate,data[100].toObject());
+				
             done(err,result);
             
         }); 

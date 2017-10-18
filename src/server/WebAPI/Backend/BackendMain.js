@@ -29,7 +29,7 @@ var BackendMain ={
         router.use("/user/updatepassword", require("./Controllers/User/UpdatePasswordController").init(app));
         router.use("/user/history", require("./Controllers/User/HistoryListController").init(app));
         router.use("/user/history/markall", require("./Controllers/User/MarkAllAsReadController").init(app));
-        router.use("/user/history/markchat", require("./Controllers/User/MarkAllAsReadController").init(app));
+        router.use("/user/history/markchat", require("./Controllers/User/MarkAsReadByChatController").init(app));
         router.use("/user/online", require("./Controllers/User/GetOnlineStatusController").init(app));
         router.use("/user/detail", require("./Controllers/User/UserDetailController").init(app));
         router.use("/user/savepushtoken", require("./Controllers/User/SavePushTokenController").init(app));
