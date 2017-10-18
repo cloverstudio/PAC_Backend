@@ -289,7 +289,7 @@ var HistoryListView = Backbone.View.extend({
                 
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
-                MarkChatAsReadClient.send(historyObj.chatId,historyObj.chatType);
+               // MarkChatAsReadClient.send(historyObj.chatId,historyObj.chatType);
             }
                 
             return historyObj;
