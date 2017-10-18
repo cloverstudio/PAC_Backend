@@ -14,6 +14,7 @@ var PermissionLogic = require('./Permission');
 var GetUserOnlineStatus = require('./GetUserOnlineStatus');
 
 var UserModel = require('../Models/User');
+var UserContactsModel = require('../Models/UserContacts');
 var RoomModel = require('../Models/Room');
 var GroupModel = require('../Models/Group');
 var HistoryModel = require('../Models/History');
@@ -23,6 +24,9 @@ var SearchUser = {
     
     search: function(baseUser,keyword,page,onSuccess,onError){
         
+        if (Config.phoneNumberSignin)
+            return this.searchContacts(baseUser,keyword,page,onSuccess,onError); 
+
         if(/.*@.*/.test(keyword)){
             this.searchPerson(baseUser,keyword,page,onSuccess,onError);
         } else {
@@ -184,6 +188,139 @@ var SearchUser = {
                     conditions['$or'] = [
                         { name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
                         { description: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
+                    ];
+                }
+                
+                model.count(conditions,function(err,countResult){
+                    
+                    result.count = countResult;
+                    
+                    done(null,result);
+
+                });
+                
+            },
+            function(result, done) {
+                
+                var userIds = _.pluck(result.list,'_id');
+                
+                GetUserOnlineStatus.get(userIds,function(err,onlineStatusResult){
+                    
+                    _.forEach(onlineStatusResult,function(row){
+                        
+                        if(!row.userId) 
+                            return;
+                        
+                        var key = _.findKey(result.list,function(userForKey){
+                            
+                            return userForKey._id == row.userId;
+                            
+                        });
+                        
+                        result.list[key].onlineStatus = row.onlineStatus;
+                        
+                    });
+                    
+                    done(null,result);
+                        
+                });
+
+            }
+        ],
+        function(err,result){
+
+            if(err){
+                if(onError)
+                    onError(err);
+                
+                return;
+            }
+            
+            if(onSuccess)
+                onSuccess(result);
+            
+        });  
+
+    },
+    searchContacts:function(baseUser,keyword,page,onSuccess,onError){
+        
+        var user = baseUser;
+        var organizationId = baseUser.organizationId;
+
+        var model = UserModel.get();
+        var userContactsModel = UserContactsModel.get();
+
+        async.waterfall([
+
+            function(done) {
+
+                var result = {};
+                
+                userContactsModel.find({ userId: user._id.toString() }, (err, findResult) => {
+    
+                    result.userContacts = findResult;
+                    done(err, result);
+    
+                });
+
+            },
+            function(result, done){
+
+                var conditions = {
+                    _id: { $in: _.map(result.userContacts, "contactId") }
+                };
+                
+                if(!_.isEmpty(keyword)){
+                    conditions['$or'] = [
+                        { name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
+                        { sortName: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
+                        { description: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") }
+                    ];
+                }
+                
+                var query = model.find(conditions)
+                .skip(Const.pagingRows * page)
+                .sort({'sortName': 'asc'})
+                .limit(Const.pagingRows);        
+                
+                query.exec(function(err,data){
+                    
+                    if(err){
+                        done(err,null);
+                        return;
+                    }
+
+                    var userContactName = "";
+
+                    data = data.map(function(item){
+                        item = item.toObject();
+
+                        userContactName = _.find(result.userContacts, { contactId: item._id.toString() }).name;
+
+                        if (userContactName)data
+                            item.name = userContactName;
+
+                        return item;
+                    });
+
+                    result.list = data;
+                    
+                    done(err,result);
+                    
+                }); 
+            
+            },
+            function(result,done){
+
+                var conditions = {
+                    _id: { $in: _.map(result.userContacts, "contactId") }
+                };
+                
+                if(!_.isEmpty(keyword)){
+                    conditions['$or'] = [
+                        { name: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
+                        { sortName: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") },
+                        { description: new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i") }
                     ];
                 }
                 
