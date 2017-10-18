@@ -6,42 +6,45 @@ Const.responsecodeUnknownError = 4000000;
 Const.responsecodeTokenInvalid = 4000007;
 
 Const.ErrorCodes = {
-        4000000 : "Unknown Error",
-        4000001 : "Please input userid.",
-        4000002 : "Please input password.",
-        4000003 : "Organization id is wrong.",
-        4000004 : "Wrong secret.",
-        4000005 : "Organization id is wrong.",
-        4000006 : "Wrong userid or password.",
-        4000007 : "Invalid token.",
-        4000008 : "Invalid name",
-        4000009 : "Invalid file.",
-        4000010 : "Wrong current password.",
-        4000011 : "Invalid new password.",
-        4000012 : "Wrong room id.",
-        4000013 : "Wrong room name.",
-        4000014 : "Wrong file type.",
-        4000015 : "Invalid room id",
-        4000016 : "Invalid user id",
-        4000017 : "Invalid user id.",
-        4000018 : "Invalid group id.",
-        4000019 : "Invalid room id.",
-        4000020 : "Invalid message id.",
-        4000021 : "Invalid message id.",
-        4000022 : "The message is already in favorite.",
-        4000023 : "Invalid message id.",
-        4000024 : "Invalid message id.",
-        4000025 : "Wrong room id",
-        4000026 : "Wrong user id",
-        4000027 : "Wrong room id",
-        4000028 : "Wrong user id",
-        4000029 : "Invalid chat id",
-        4000030 : "Invalid message id",
-        4000057 : "You can't add more rooms.",
-        4000067 : "You have no permission.",
-        4999999 : ""              
-},
-     
+        4000000: "Unknown Error",
+        4000001: "Please input userid.",
+        4000002: "Please input password.",
+        4000003: "Organization id is wrong.",
+        4000004: "Wrong secret.",
+        4000005: "Organization id is wrong.",
+        4000006: "Wrong userid or password.",
+        4000007: "Invalid token.",
+        4000008: "Invalid name",
+        4000009: "Invalid file.",
+        4000010: "Wrong current password.",
+        4000011: "Invalid new password.",
+        4000012: "Wrong room id.",
+        4000013: "Wrong room name.",
+        4000014: "Wrong file type.",
+        4000015: "Invalid room id",
+        4000016: "Invalid user id",
+        4000017: "Invalid user id.",
+        4000018: "Invalid group id.",
+        4000019: "Invalid room id.",
+        4000020: "Invalid message id.",
+        4000021: "Invalid message id.",
+        4000022: "The message is already in favorite.",
+        4000023: "Invalid message id.",
+        4000024: "Invalid message id.",
+        4000025: "Wrong room id",
+        4000026: "Wrong user id",
+        4000027: "Wrong room id",
+        4000028: "Wrong user id",
+        4000029: "Invalid chat id",
+        4000030: "Invalid message id",
+        4000057: "You can't add more rooms.",
+        4000062: "You must enter organization name.",
+        4000064: "You entered invalid activation code.",
+        4000067: "You have no permission.",
+        4000087: "You don't have a Spika account yet, please sign up with Android / iPhone first.",
+        4999999: ""
+};
+
 Const.NotificationUpdateWindowSize = "NotificationUpdateWindowSize";
 
 Const.LocalStorageKeyUserId = 'ls_userid';
@@ -65,7 +68,7 @@ Const.NotificationRefreshUser = "notification_refresh_user";
 Const.NotificationRefreshGroup = "notification_refresh_group";
 Const.NotificationShowSearch = "notification_show_search";
 Const.NotificationShowFavorite = "notification_show_favorite";
-Const.NotificationCustomHeader  = "notification_show_customhader";
+Const.NotificationCustomHeader = "notification_show_customhader";
 Const.NotificationUpdateUnreadCount = "notification_update_unreadcount";
 Const.NotificationShowWebHook = "notification_show_webhook";
 Const.NotificationOpenChat = "notification_open_chat";
