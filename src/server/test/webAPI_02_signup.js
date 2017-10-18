@@ -109,7 +109,7 @@ describe('WEB API', function () {
 
     });
 
-    describe('/api/v2/user/signup/verify POST', function () {
+    describe('/user/signup/verify POST', function () {
 
         it('works', function (done) {
 
@@ -129,6 +129,7 @@ describe('WEB API', function () {
                     res.body.should.have.property('data');
                     res.body.data.should.have.property('newToken');
                     res.body.data.should.have.property('user');
+                    res.body.data.should.have.property('organization');
 
                     global.user5.accessToken = res.body.data.newToken;
 
@@ -162,7 +163,7 @@ describe('WEB API', function () {
 
     });
 
-    describe('/api/v2/user/signup/finish POST', function () {
+    describe('/user/signup/finish POST', function () {
 
         it('works without file', function (done) {
 

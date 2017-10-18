@@ -3,6 +3,7 @@ var _ = require('lodash');
 
 var utils = require('./lib/utils');
 var Const = require('./lib/consts');
+var Config = require('./lib/init');
 
 var loginUserManager = require('./lib/loginUserManager');
 var localStorage = require('./lib/localstorageManager');
@@ -11,12 +12,13 @@ var SocketIOManager = require('./lib/SocketIOManager');
 
 var SignoutClient = require('./lib/APIClients/SignoutClient');
 
-var Routing = function(){
-    
+var Routing = function () {
+
     // setting up router
     var AppRouter = Backbone.Router.extend({
         routes: {
             "login": "login",
+            "verify": "verify",
             "logout": "logout",
             "tokenExpired": "tokenExpired",
             "loginManually": "loginManually",
@@ -28,110 +30,127 @@ var Routing = function(){
             "*actions": "defaultRoute"
         }
     });
-    
+
     // Initiate the router
     var appRouter = new AppRouter;
-   
-    var MainView = require('./Views/Main/MainView.js');   
+
+    var MainView = require('./Views/Main/MainView.js');
     var mainView = null;
-            
-    appRouter.on('route:defaultRoute', function(action) {
-        
-        utils.goPage('login')
-        
+
+    appRouter.on('route:defaultRoute', function (action) {
+
+        utils.goPage('login');
+
     });
 
-    appRouter.on('route:logout', function(action) {
+    appRouter.on('route:logout', function (action) {
 
-        if(mainView){
+        if (mainView) {
             mainView.destroy();
         }
 
-        SignoutClient.send(function(){
+        SignoutClient.send(function () {
 
             loginUserManager.setUser(null);
             loginUserManager.setToken(null);
             loginUserManager.organization = null;
-            
+
             localStorage.del(Const.LocalStorageKeyRemember);
             localStorage.del(Const.LocalStorageKeyUserId);
             localStorage.del(Const.LocalStorageKeyPassword);
 
             SocketIOManager.disconnect();
-            Backbone.trigger(Const.NotificationUpdateUnreadCount,0);
+            Backbone.trigger(Const.NotificationUpdateUnreadCount, 0);
 
             utils.goPage('login');
-        
-        },function(){
-            
-        });
-        
-    });
-    
-    appRouter.on('route:login', function(action) {
 
-        if(mainView){
+        }, function () {
+
+        });
+
+    });
+
+    appRouter.on('route:login', function (action) {
+
+        if (mainView) {
             mainView.destroy();
         }
-            
-        var View = require('./Views/Signin/SigninView.js');   
+
+        if (Config.phoneNumberSignin)
+            var View = require('./Views/SigninPhoneNumber/SigninView.js');
+        else
+            var View = require('./Views/Signin/SigninView.js');
+
         var view = new View({
-            container : "#body"
+            container: "#body"
         });
-        
+
     });
 
-    appRouter.on('route:tokenExpired', function(action) {
-        
+    appRouter.on('route:verify', function (action) {
+
+        if (mainView) {
+            mainView.destroy();
+        }
+
+        var View = require('./Views/SigninPhoneNumber/VerifyView.js');
+        var view = new View({
+            container: "#body"
+        });
+
+    });
+
+    appRouter.on('route:tokenExpired', function (action) {
+
         loginUserManager.setUser(null);
         loginUserManager.setToken(null);
 
         utils.goPage('loginManually');
-        
+
     });
-    
-    appRouter.on('route:loginManually', function(action) {
-        
-        var View = require('./Views/Signin/SigninView.js');   
+
+    appRouter.on('route:loginManually', function (action) {
+
+        var View = require('./Views/Signin/SigninView.js');
         var view = new View({
-            container : "#body",
+            container: "#body",
             disableAutoLogin: true
         });
-        
+
     });
-    
-    appRouter.on('route:open', function(action) {
+
+    appRouter.on('route:open', function (action) {
 
         var accessToken = loginUserManager.getToken();
-        
-        if(!accessToken){
+
+        if (!accessToken) {
             utils.goPage('login');
-        }else{
-            
+        } else {
+
             mainView = new MainView({
-                container : "#body"
+                container: "#body"
             });
 
         }
 
-        if(mainView)
+        if (mainView)
             mainView.switchToThreeColumn();
 
     });
-    
-    appRouter.on('route:main', function(action) {
+
+    appRouter.on('route:main', function (action) {
 
         var accessToken = loginUserManager.getToken();
-        
-        if(!accessToken){
+
+        if (!accessToken) {
             utils.goPage('login');
-        }else{
-            
-            if(!mainView){
+        } else {
+
+            if (!mainView) {
                 mainView = new MainView({
-                    container : "#body"
+                    container: "#body"
                 });
-            }else{
+            } else {
                 // do nothings if mainView is alreay shown
             }
 
@@ -141,57 +160,57 @@ var Routing = function(){
 
     });
 
-    appRouter.on('route:search', function(action) {
-        
+    appRouter.on('route:search', function (action) {
+
         ChatManager.close();
-        
+
         var accessToken = loginUserManager.getToken();
-        
-        if(!accessToken){
+
+        if (!accessToken) {
             utils.goPage('login');
-        }else{
+        } else {
 
             Backbone.trigger(Const.NotificationShowSearch);
             mainView.switchToTwoColumn();
 
         }
-        
+
     });
 
-    appRouter.on('route:favorite', function(action) {
-        
+    appRouter.on('route:favorite', function (action) {
+
         ChatManager.close();
-        
+
         var accessToken = loginUserManager.getToken();
-        
-        if(!accessToken){
+
+        if (!accessToken) {
             utils.goPage('login');
-        }else{
+        } else {
 
             Backbone.trigger(Const.NotificationShowFavorite);
             mainView.switchToTwoColumn();
-        
+
         }
-        
+
     });
 
-    appRouter.on('route:webhook', function(action) {
-        
+    appRouter.on('route:webhook', function (action) {
+
         ChatManager.close();
-        
+
         var accessToken = loginUserManager.getToken();
-        
-        if(!accessToken){
+
+        if (!accessToken) {
             utils.goPage('login');
-        }else{
+        } else {
 
             Backbone.trigger(Const.NotificationShowWebHook);
             mainView.switchToTwoColumn();
 
         }
-        
+
     });
-    
+
 }
 
 // Exports ----------------------------------------------

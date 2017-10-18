@@ -224,9 +224,11 @@ SignupController.prototype.init = function (app) {
         var activationCode = request.body.activationCode;
 
         var userModel = UserModel.get();
-
+        var organizationModel = OrganizationModel.get();
+        
         async.waterfall([
-            enableUser
+            enableUser,
+            getOrganization
         ], endAsync);
 
 
@@ -269,6 +271,18 @@ SignupController.prototype.init = function (app) {
                     done(null, result);
 
                 });
+
+            });
+
+        };
+
+        function getOrganization(result, done) {
+
+            // get organization 
+            organizationModel.findOne({ _id: result.user.organizationId }, (err, findResult) => {
+
+                result.organization = findResult;
+                done(err, result);
 
             });
 
