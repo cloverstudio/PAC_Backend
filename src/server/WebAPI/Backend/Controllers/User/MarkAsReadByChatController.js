@@ -19,12 +19,12 @@ var HistoryModel = require( pathTop + 'Models/History');
 
 var BackendBase = require('../BackendBase');
 
-var MarkAllAsReadController = function(){
+var MarkAsReadByChatController = function(){
 }
 
-_.extend(MarkAllAsReadController.prototype,BackendBase.prototype);
+_.extend(MarkAsReadByChatController.prototype,BackendBase.prototype);
 
-MarkAllAsReadController.prototype.init = function(app){
+MarkAsReadByChatController.prototype.init = function(app){
         
     var self = this;
 
@@ -100,4 +100,4 @@ MarkAllAsReadController.prototype.init = function(app){
 
 }
 
-module["exports"] = new MarkAllAsReadController();
+module["exports"] = new MarkAsReadByChatController();
