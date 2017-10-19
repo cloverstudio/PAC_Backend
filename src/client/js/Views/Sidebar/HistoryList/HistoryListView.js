@@ -12,7 +12,7 @@ var localzationManager = require('../../../lib/localzationManager');
 var EncryptionManager = require('../../../lib/EncryptionManager');
 
 var HistoryListClient = require('../../../lib/APIClients/HistoryListClient');
-var MarkChatAsReadClient = require('../../../lib/APIClients/MarkChatAsReadClient');
+var MarkChatReadClient = require('../../../lib/APIClients/MarkChatAsReadClient');
 
 var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
@@ -69,9 +69,10 @@ var HistoryListView = Backbone.View.extend({
         });
 
         Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
-            
             self.updateListWithoutLoading(obj);
-            
+
+            // reset unread count instead of loading message
+            MarkChatReadClient.updateByMessage(obj);
         });
 
         Backbone.on(Const.NotificationRemoveRoom, function(obj){
@@ -143,7 +144,12 @@ var HistoryListView = Backbone.View.extend({
             self.mergeData(data.list);
             self.renderList(); 
             
-            Backbone.trigger(Const.NotificationUpdateUnreadCount,data.totalUnreadCount);
+            let totalUnreadCount = 0;
+            self.dataList.forEach( function(historyObj) {
+                totalUnreadCount += historyObj.unreadCount;
+            });
+
+            Backbone.trigger(Const.NotificationUpdateUnreadCount,totalUnreadCount);
             
         },function(errorCode){
             
@@ -284,11 +290,9 @@ var HistoryListView = Backbone.View.extend({
 
             if(loginUserManager.currentConversation == chatId){
 
-                console.log(historyObj);
-                
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
-                MarkChatAsReadClient.send(historyObj.chatId,historyObj.chatType);
+                
             }
                 
             return historyObj;

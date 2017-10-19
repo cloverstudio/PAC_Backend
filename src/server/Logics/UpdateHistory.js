@@ -477,6 +477,7 @@ var UpdateHistory = {
 
                 async.each(groupUsers, function(userId, doneEach) { 
                     
+                    
                     var historyData = {
                         userId : userId,
                         chatId : groupId,

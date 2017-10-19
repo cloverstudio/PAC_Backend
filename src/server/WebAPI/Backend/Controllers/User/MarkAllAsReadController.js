@@ -50,9 +50,13 @@ MarkAllAsReadController.prototype.init = function(app){
             var historyModel = HistoryModel.get();
             
             historyModel.update(
-                { userId: request.user._id.toString() }, 
-                {       unreadCount: 0,
-                        lastUpdateUnreadCount: Utils.now()
+                { 
+                    userId: request.user._id.toString(),
+                    unreadCount: {$gt:0}
+                }, 
+                {       
+                    unreadCount: 0,
+                    lastUpdateUnreadCount: Utils.now()
                 }, 
                 { multi: true }, 
             function(err, updateResult) {

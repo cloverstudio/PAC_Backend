@@ -16,5 +16,27 @@ MarkChatAsReadClient.prototype.send = function(chatId,chatType,success,err){
     },success,err);
     
 }
-    // returns instance
+
+MarkChatAsReadClient.prototype.updateByMessage = function(message){
+
+    console.log('message',message);
+
+    var roomIDSplit = message.roomID.split('-');
+    if(roomIDSplit.length < 1)
+        return;
+
+    var chatType = roomIDSplit[0];
+    var chatId = "";
+    if(chatType == CONST.chatTypeGroup || chatType == CONST.chatTypeRoom)
+        chatId = roomIDSplit[1];
+
+    if(chatType == CONST.chatTypePrivate)
+        chatId = message.userID;
+
+    this.send(chatId,chatType);
+
+
+}
+
+// returns instance
 module["exports"] = new MarkChatAsReadClient();

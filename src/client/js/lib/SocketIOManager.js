@@ -70,10 +70,12 @@ var socketIOManager = {
             else{
                 Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
             }
+
             Backbone.trigger(Const.NotificationNewMessage,obj);
 
             if(loginUserManager.user._id != obj.userID)
                 NotificationManager.handleNewMessage(obj);
+            
             
         });
             

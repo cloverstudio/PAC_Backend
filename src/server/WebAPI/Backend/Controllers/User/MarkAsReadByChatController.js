@@ -62,11 +62,14 @@ MarkAsReadByChatController.prototype.init = function(app){
             historyModel.update(
                 {
                     userId: request.user._id.toString(),
-                    chatId: request.body.chatid,
-                    chatType: request.body.chatType
+                    chatId: request.body.chatId,
+                    chatType: request.body.chatType,
+                    unreadCount: { $gt : 0 }
                 }, 
-                {       unreadCount: 0,
-                        lastUpdateUnreadCount: Utils.now()
+                {       
+                    unreadCount: 0,    
+                    // lastUpdateUnreadCount: Utils.now()
+                    // prevent updating history in client side
                 }, 
                 { multi: true }, 
             function(err, updateResult) {
@@ -88,8 +91,6 @@ MarkAsReadByChatController.prototype.init = function(app){
                 return;
             }
 
-            console.log('ssssssssss');
-            
             self.successResponse(response,Const.responsecodeSucceed,result);
             
         });
