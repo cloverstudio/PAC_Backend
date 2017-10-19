@@ -17,6 +17,9 @@ const RoomModel = require(pathTop + 'Models/Room');
 const UserModel = require(pathTop + 'Models/User');
 const OrganizationModel = require(pathTop + 'Models/Organization');
 const MessageListLogic = require( pathTop + "Logics/v3/MessageList");
+const HistoryModel = require( pathTop + 'Models/History');
+
+var SocketAPIHandler = require( pathTop + 'SocketAPI/SocketAPIHandler');
 
 const RoomLogic = require( pathTop + "Logics/v3/Room");
 
@@ -466,6 +469,34 @@ RoomsController.prototype.init = function(app){
 
                 done(null,result);
 
+
+            },
+            (result,done) => {
+
+                // delete from history
+                var historyModel = HistoryModel.get();
+
+                userIds.forEach((userId) => {
+
+                    // stop sending notification
+                    SocketAPIHandler.leaveFrom(userId,Const.chatTypeRoom,roomId);
+                    
+                    historyModel.remove({ 
+                        chatId: roomId,
+                        userId: userId
+                    }, function(err, deleteResult) {
+    
+                        SocketAPIHandler.emitToUser(
+                            userId,
+                            'delete_room',
+                            {conversation:result.roomDetail}
+                        );
+
+                        done(err,result);
+                        
+                    });
+
+                });
 
             },
             (result,done) => {
