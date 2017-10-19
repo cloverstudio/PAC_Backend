@@ -2,6 +2,11 @@ var should = require('should');
 var request = require('supertest');
 var app = require('../mainTest');
 var Const = require("../lib/consts");
+var Utils = require("../lib/utils");
+
+Utils.sendSMS = function (to, body, callback) {
+    callback(null, {});
+};
 
 describe('WEB API', function () {
 
