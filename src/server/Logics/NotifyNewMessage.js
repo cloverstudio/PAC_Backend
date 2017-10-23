@@ -135,7 +135,7 @@ var NotifyNewMessage = {
                     done(null,result);
                     
                 });
-                  
+                
             },
             function(result,done){
                 
@@ -281,7 +281,7 @@ var NotifyNewMessage = {
                     }else{
                         message = "New message to " + obj.room.name;
                     }
-                   
+                    
                     userModel.find({
                         $and : [
                             {_id:{ $in : obj.room.users}},

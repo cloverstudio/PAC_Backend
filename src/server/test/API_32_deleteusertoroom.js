@@ -13,7 +13,7 @@ describe('API', function () {
             request(app)
                 .delete('/api/v3/rooms/' + global.room2.id + "/users")
                 .set('apikey', global.apikey + "wrong")
-                .set('access-token', global.user1.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(401, done)
         });
 
@@ -21,16 +21,33 @@ describe('API', function () {
             request(app)
                 .delete('/api/v3/rooms/' + global.room2.id + "/users")
                 .set('apikey', global.apikey)
-                .set('access-token', global.user1.apiaccesstoken + "wrong")
+                .set('access-token', global.user2.apiaccesstoken + "wrong")
                 .expect(403, done) 
         });
 
+        it('returns 403, if owner is wrong', (done) => {
+            request(app)
+                .delete('/api/v3/rooms/' + global.room2.id + "/users")
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .send({
+                    users:[
+                        global.user4._id                   
+                    ]
+                })
+                .expect(403)
+                .end((err, res) => {
+                    if (err) throw err;
+                    done();
+                });
+
+        });
 
         it('returns 422, if room id is wrong', (done) => {
             request(app)
                 .delete('/api/v3/rooms/' + 'wrongId' + "/users")
                 .set('apikey', global.apikey)
-                .set('access-token', global.user1.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
@@ -42,7 +59,7 @@ describe('API', function () {
             request(app)
                 .delete('/api/v3/rooms/' + global.room2.id + "/users")
                 .set('apikey', global.apikey)
-                .set('access-token', global.user1.apiaccesstoken)
+                .set('access-token', global.user2.apiaccesstoken)
                 .send({
                     users:[
                         global.user4._id                   

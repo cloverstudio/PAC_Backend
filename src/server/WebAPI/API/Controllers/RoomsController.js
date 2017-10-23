@@ -373,6 +373,15 @@ RoomsController.prototype.init = function(app){
             },
             (result,done) => {
 
+                // check owner
+                if(result.roomDetail.owner != request.user._id)
+                    return response.status(Const.httpCodeForbidden).send("No Permission");
+                else
+                    done(null,result);
+
+            },
+            (result,done) => {
+
                 const newUsers = _.uniq(result.roomDetail.users.concat(userIds));
                 result.newUsers = newUsers;
 
@@ -455,6 +464,15 @@ RoomsController.prototype.init = function(app){
                     console.log("Critical Error", err);
                     done(err,result)
                 });
+
+            },
+            (result,done) => {
+                
+                // check owner
+                if(result.roomDetail.owner != request.user._id)
+                    return response.status(Const.httpCodeForbidden).send("No Permission");
+                else
+                    done(null,result);
 
             },
             (result,done) => {
