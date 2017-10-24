@@ -16,14 +16,14 @@ var SendMessageLogic = require("../Logics/SendMessage");
 
 var SocketAPIHandler = require('./SocketAPIHandler');
 
-var SendTypingActionHandler = function(){
-    
+var SendTypingActionHandler = function () {
+
 }
 
-_.extend(SendTypingActionHandler.prototype,SocketHandlerBase.prototype);
+_.extend(SendTypingActionHandler.prototype, SocketHandlerBase.prototype);
 
-SendTypingActionHandler.prototype.attach = function(io,socket){
-        
+SendTypingActionHandler.prototype.attach = function (io, socket) {
+
     var self = this;
 
     /**
@@ -37,21 +37,21 @@ SendTypingActionHandler.prototype.attach = function(io,socket){
      * @apiParam {string} type 0: Remove typing notificaiton 1: Show typing notification
      *
      */
-     
-    socket.on('sendtyping', function(param){
 
-        if(!param.userID){
-            socket.emit('socketerror', {code:Const.resCodeSocketTypingNoUserID});
+    socket.on('sendtyping', function (param) {
+
+        if (!param.userID) {
+            socket.emit('socketerror', { code: Const.resCodeSocketTypingNoUserID });
             return;
         }
-        
-        if(!param.roomID){
-            socket.emit('socketerror', {code:Const.resCodeSocketTypingNoRoomID});
+
+        if (!param.roomID) {
+            socket.emit('socketerror', { code: Const.resCodeSocketTypingNoRoomID });
             return;
         }
-        
-        if(param.type === undefined){
-            socket.emit('socketerror', {code:Const.resCodeSocketTypingNoType});
+
+        if (param.type === undefined) {
+            socket.emit('socketerror', { code: Const.resCodeSocketTypingNoType });
             return;
         }
 
@@ -62,85 +62,93 @@ SendTypingActionHandler.prototype.attach = function(io,socket){
         var roomIDSplitted = param.roomID.split("-");
 
         async.waterfall([
-            
-            function(done){
+
+            function (done) {
 
                 var result = {};
 
-                done(null,result);
+                done(null, result);
+
 
             },
-            function(result,done){
+            function (result, done) {
 
                 // websocket notification
-                if(chatType == Const.chatTypeGroup){
-                    
-                    SocketAPIHandler.emitToRoom(roomID,'typing',param);
-                    
-                } else if(chatType == Const.chatTypeRoom) {
-                    
-                    SocketAPIHandler.emitToRoom(roomID,'typing',param);
+                if (chatType == Const.chatTypeGroup) {
 
-                } else if(chatType == Const.chatTypePrivate){
-                    
+                    SocketAPIHandler.emitToRoom(roomID, 'typing', param);
+
+                } else if (chatType == Const.chatTypeRoom) {
+
+                    SocketAPIHandler.emitToRoom(roomID, 'typing', param);
+
+                } else if (chatType == Const.chatTypePrivate) {
+
                     var splitAry = roomID.split("-");
-                    
-                    if(splitAry.length < 2)
+
+                    if (splitAry.length < 2)
                         return;
-                    
+
                     var user1 = splitAry[1];
                     var user2 = splitAry[2];
-                    
+
                     var toUser = null;
                     var fromUser = null;
 
-                    if(user1 == param.userID){
+                    if (user1 == param.userID) {
                         toUser = user2;
                         fromUser = user1;
-                    }else{
+                    } else {
                         toUser = user1;
                         fromUser = user2;
                     }
 
                     // send to user who got message
-                    DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
-                        
-                        var socketIds = _.pluck(redisResult,"socketId");
-                        
-                        if(!_.isArray(redisResult))
-                            return;
-                        
-                        _.forEach(redisResult,function(socketIdObj){
-                            SocketAPIHandler.emitToSocket(socketIdObj.socketId,'typing',param);
-                        })
+                    DatabaseManager.redisGet(Const.redisKeyUserId + toUser, function (err, redisResult) {
 
-                        done(null,result);
+                        var socketIds = _.pluck(redisResult, "socketId");
+
+                        if (!_.isArray(redisResult))
+                            return;
+
+                        UserModel.getUserById(toUser, (findResult) => {
+
+                            var user = findResult || {};
+
+                            if (_.indexOf(user.blocked, fromUser) != -1)
+                                return done("user is blocked");
+
+                            _.forEach(redisResult, function (socketIdObj) {
+                                SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'typing', param);
+                            })
+
+                            done(null, result);
+                        });
 
                     });
 
                 }
 
             },
-            function(result,done){
-                done(null,result);
+            function (result, done) {
+                done(null, result);
             },
-            function(result,done){
-                done(null,result);
+            function (result, done) {
+                done(null, result);
             },
-            function(result,done){
-                done(null,result);
+            function (result, done) {
+                done(null, result);
             },
-            function(result,done){
-                done(null,result);
+            function (result, done) {
+                done(null, result);
             }
-        ],
-        function(err,result){
+        ], function (err, result) {
 
-            if(err)
+            if (err)
                 return;
 
         });
-        
+
     });
 
 }
