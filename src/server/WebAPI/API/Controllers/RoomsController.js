@@ -154,6 +154,25 @@ RoomsController.prototype.init = function(app){
                     done(err, result);
                 });
             },
+            // Validate request uer whether owner
+            (result, done) => {
+                const roomModel = RoomModel.get();
+                roomModel.findOne({_id: roomId}, (err, foundRoom) => {
+                    if (err || !foundRoom) {
+                        return done({
+                            code: Const.httpCodeBadParameter,
+                            message: Const.errorMessage.roomNotExist
+                        }, null);
+                    }
+                    if (request.user._id != foundRoom.owner.toString()) {
+                        return done({
+                            code: Const.httpCodeForbidden,
+                            message: Const.errorMessage.cannotDeleteRoom
+                        }, null);
+                    }
+                    done(null, result);
+                });
+            },
             // Validate presense and max length
             (result, done) => {
                 self.validateMaxLength(result.fields, (err) => {
@@ -215,19 +234,14 @@ RoomsController.prototype.init = function(app){
                             message: Const.errorMessage.roomNotExist
                         }, null);
                     }
+                    if (request.user._id != foundRoom.owner.toString()) {
+                        return done({
+                            code: Const.httpCodeForbidden,
+                            message: Const.errorMessage.cannotDeleteRoom
+                        }, null);
+                    }
                     done(null, foundRoom)
                 });
-            },
-            // Validate that loginUser is not owner of the room
-            (room, done) => {
-                if (request.user._id != room.owner.toString()) {
-                    return done({
-                        code: Const.httpCodeForbidden,
-                        message: Const.errorMessage.cannotDeleteRoom
-                    }, null);
-                } else {
-                    done(null, room);
-                }
             }
         ],
         (err, room) => {
