@@ -117,7 +117,8 @@ const Room = {
             // Create a new Room data
             (result, done) => {
                 if (params.users) {
-                    params.users.push(baseUser.id.toString());   
+                    params.users.push(baseUser.id.toString());
+                    params.users = _.uniq(params.users);
                 } else {
                     params.users = [ baseUser.id.toString() ];
                 }
