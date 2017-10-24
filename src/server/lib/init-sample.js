@@ -134,6 +134,6 @@
 
     Config.robotUserId = "56e0084a62a63ebf55eef398";
     
-    Config.phoneNumberSignin = false;
+    Config.phoneNumberSignin = false; 
     
     module["exports"] = Config;
