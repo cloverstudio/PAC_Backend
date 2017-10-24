@@ -97,6 +97,7 @@
     Const.responsecodeWrongOrganizationName = 4000086;
 
     Const.responsecodeSigninUserNotFound = 4000087;
+    Const.responsecodeWrongUserContactId = 4000088;
     
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
