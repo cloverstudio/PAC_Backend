@@ -17,6 +17,7 @@ var Utils = require(pathTop + 'lib/utils');
 var UserModel = require(pathTop + 'Models/User');
 var GroupModel = require(pathTop + 'Models/Group');
 var OrganizationModel = require(pathTop + 'Models/Organization');
+var OrganizationSettingsModel = require(pathTop + 'Models/OrganizationSettings');
 
 var tokenChecker = require(pathTop + 'lib/authApi');
 
@@ -181,9 +182,12 @@ SignupController.prototype.init = function (app) {
      * @apiName Signup Verify Sms
      * @apiGroup WebAPI
      * @apiDescription Returns new token for the user.
+     * 
+     * @apiHeader {String} uuid uuid
      *   
      * @apiParam {String} activationCode Activation code received in SMS 
-
+     * @apiParam {String} pushToken pushToken 
+     * @apiParam {String} voipPushToken voipPushToken
      * 
      * @apiSuccessExample Success-Response:
         {
@@ -222,12 +226,20 @@ SignupController.prototype.init = function (app) {
     router.post('/verify', (request, response) => {
 
         var activationCode = request.body.activationCode;
+        var UUID = request.headers['uuid'];
 
         var userModel = UserModel.get();
         var organizationModel = OrganizationModel.get();
-        
+        var organizationSettingsModel = OrganizationSettingsModel.get();
+
         async.waterfall([
-            enableUser,
+            getUser,
+            checkUUID,
+            createToken,
+            addUUID,
+            addPushToken,
+            addVoipPushToken,
+            saveUser,
             getOrganization
         ], endAsync);
 
@@ -236,7 +248,7 @@ SignupController.prototype.init = function (app) {
         ****** FUNCTIONS ******
         **********************/
 
-        function enableUser(done) {
+        function getUser(done) {
 
             var result = {};
 
@@ -250,27 +262,195 @@ SignupController.prototype.init = function (app) {
                 if (!findResult)
                     return done({ handledError: Const.responsecodeSignupInvalidActivationCode });
 
-                // create token
-                var newToken = Utils.getRandomString(Const.tokenLength);
+                result.user = findResult;
+                done(null, result);
 
-                var tokenObj = {
-                    token: newToken,
-                    generateAt: Utils.now()
-                };
+            });
 
-                findResult.status = Const.userStatus.enabled;
-                findResult.token = tokenObj;
+        };
 
-                findResult.save((err, saveResult) => {
+        function checkUUID(result, done) {
 
-                    if (err)
-                        return done(err);
+            // check UUID
 
-                    result.newToken = newToken;
-                    result.user = saveResult.toObject();
-                    done(null, result);
+            var uuidAry = result.user.UUID;
+
+            var UUIDSaved = _.filter(uuidAry, (uuidObj) => {
+                return uuidObj.UUID == UUID;
+            });
+
+            if (UUIDSaved.length > 0) {
+
+                // check blocked
+                if (UUIDSaved[0].blocked)
+                    return done({ handledError: Const.responsecodeDeviceRejected });
+
+            }
+
+            // check multiple device
+
+            // get organization settings
+            organizationSettingsModel.findOne({ organizationId: result.user.organizationId }, function (err, findResult) {
+
+                if (_.isEmpty(findResult))
+                    return done(err, result);
+
+                result.organizationSettings = findResult.toObject();
+
+                if (result.organizationSettings.allowMultipleDevice != 0)
+                    return done(err, result);
+
+                // get last logined device uuid
+                var sortedUUIDs = _.sortBy(uuidAry, function (o) {
+                    return -1 * o.lastLogin;
+                });
+
+                // allow browser access 
+                if (!UUID)
+                    return done(err, result);
+
+                var lastLoginedDevice = sortedUUIDs[0];
+
+                // check blocked
+                if (lastLoginedDevice && lastLoginedDevice.UUID != UUID)
+                    return done({ handledError: Const.responsecodeUserBlocked });
+
+                done(err, result);
+
+            });
+
+        };
+
+        function createToken(result, done) {
+
+            var newToken = Utils.getRandomString(Const.tokenLength);
+            var now = Utils.now();
+
+            var tokenObj = {
+                token: newToken,
+                generateAt: now
+            };
+
+            var tokenAry = result.user.token;
+
+            if (!_.isArray(tokenAry))
+                tokenAry = [];
+
+            tokenAry.push(tokenObj);
+
+            // cleanup expired tokens
+            var cleanedTokenAry = _.filter(tokenAry, function (row) {
+                return row.generateAt + Const.tokenValidInteval > now;
+            });
+
+            result.newToken = newToken;
+
+            result.user.token = cleanedTokenAry;
+            done(null, result);
+
+        };
+
+        function addUUID(result, done) {
+
+            // UUID stuff
+
+            var uuidAry = result.user.UUID;
+
+            if (_.isEmpty(UUID))
+                return done(null, result);
+
+            var UUIDSaved = _.filter(uuidAry, (uuidObj) => {
+                return uuidObj.UUID == UUID;
+            });
+
+            if (UUIDSaved.length > 0) {
+
+                // Update
+                UUIDSaved.lastLogin = Utils.now();
+
+                uuidAry = _.map(uuidAry, (uuidObj) => {
+
+                    if (uuidObj.UUID == UUID) {
+                        uuidObj.lastLogin = Utils.now();
+                        uuidObj.lastToken = result.newToken;
+                    }
+
+                    return uuidObj;
 
                 });
+
+            } else {
+
+                // Insert
+                var UUIDObj = {
+                    UUID: UUID,
+                    lastLogin: Utils.now(),
+                    blocked: false,
+                    lastToken: result.newToken
+                }
+
+                if (!uuidAry)
+                    uuidAry = [];
+
+                uuidAry.push(UUIDObj);
+
+            }
+
+            uuidAry.lastToken = result.newToken;
+
+            result.user.UUID = uuidAry;
+            done(null, result);
+
+        };
+
+        function addPushToken(result, done) {
+
+            if (_.isEmpty(request.body.pushToken))
+                return done(null, result);
+
+            var newPushToken = request.body.pushToken;
+            var savedPushTokens = result.user.pushToken;
+
+            if (!savedPushTokens || !_.isArray(savedPushTokens))
+                savedPushTokens = [];
+
+            if (savedPushTokens.indexOf(newPushToken) != -1)
+                return done(null, result);
+
+            savedPushTokens.push(newPushToken);
+
+            result.user.pushToken = savedPushTokens;
+            done(null, result);
+
+        };
+
+        function addVoipPushToken(result, done) {
+
+            if (_.isEmpty(request.body.voipPushToken))
+                return done(null, result);
+
+            var newPushToken = request.body.voipPushToken;
+            var savedPushTokens = result.user.voipPushToken;
+
+            if (!savedPushTokens || !_.isArray(savedPushTokens))
+                savedPushTokens = [];
+
+            if (savedPushTokens.indexOf(newPushToken) != -1)
+                return done(null, result);
+
+            savedPushTokens.push(newPushToken);
+
+            result.user.voipPushToken = savedPushTokens;
+            done(null, result);
+
+        };
+
+        function saveUser(result, done) {
+
+            result.user.save((err, saveResult) => {
+
+                result.user = saveResult.toObject();
+                done(err, result);
 
             });
 
@@ -300,7 +480,11 @@ SignupController.prototype.init = function (app) {
                 }
             }
             else {
-                self.successResponse(response, Const.responsecodeSucceed, result);
+                self.successResponse(response, Const.responsecodeSucceed, {
+                    newToken: result.newToken,
+                    user: result.user,
+                    organization: result.organization
+                });
             }
 
         };
@@ -314,12 +498,12 @@ SignupController.prototype.init = function (app) {
      * @apiDescription Updates a user
      *   
      * @apiHeader {String} access-token Users unique access-token.
-
+    
      * @apiParam {String} name display name
      * @apiParam {String} password hashed password
      * @apiParam {String} secret secret
      * @apiParam {String} file avatar file
-
+    
      * 
      * @apiSuccessExample Success-Response:
         {
@@ -351,7 +535,7 @@ SignupController.prototype.init = function (app) {
                 }
             }
         }
-
+    
     */
 
     router.post('/finish', tokenChecker, (request, response) => {
