@@ -166,6 +166,52 @@ describe('WEB API', function () {
 
         });
 
+        it('device rejected', function (done) {
+
+            request(app)
+                .post('/api/v2/user/signup/verify')
+                .set('uuid', global.user5.UUID[0].UUID)
+                .send({
+                    activationCode: global.user5.activationCode
+                })
+                .end(function (err, res) {
+
+                    if (err) {
+                        throw err;
+                    }
+
+                    res.body.should.have.property('code');
+                    res.body.code.should.equal(Const.responsecodeDeviceRejected);
+
+                    done();
+
+                });
+
+        });
+
+        it('user blocked', function (done) {
+
+            request(app)
+                .post('/api/v2/user/signup/verify')
+                .set('uuid', "UUID")
+                .send({
+                    activationCode: global.user5.activationCode
+                })
+                .end(function (err, res) {
+
+                    if (err) {
+                        throw err;
+                    }
+
+                    res.body.should.have.property('code');
+                    res.body.code.should.equal(Const.responsecodeUserBlocked);
+
+                    done();
+
+                });
+
+        });
+
     });
 
     describe('/user/signup/finish POST', function () {

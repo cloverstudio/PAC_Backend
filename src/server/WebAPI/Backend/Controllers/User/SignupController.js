@@ -297,7 +297,7 @@ SignupController.prototype.init = function (app) {
 
                 result.organizationSettings = findResult.toObject();
 
-                if (result.organizationSettings.allowMultipleDevice != 0)
+                if (result.organizationSettings.allowMultipleDevice)
                     return done(err, result);
 
                 // get last logined device uuid
@@ -310,7 +310,6 @@ SignupController.prototype.init = function (app) {
                     return done(err, result);
 
                 var lastLoginedDevice = sortedUUIDs[0];
-
                 // check blocked
                 if (lastLoginedDevice && lastLoginedDevice.UUID != UUID)
                     return done({ handledError: Const.responsecodeUserBlocked });

@@ -18,6 +18,7 @@ var Utils = require( pathTop + 'lib/utils');
 var UserModel = require( pathTop + 'Models/User');
 var GroupModel = require( pathTop + 'Models/Group');
 var OrganizationModel = require( pathTop + 'Models/Organization');
+var OrganizationSettingsModel = require( pathTop + 'Models/OrganizationSettings');
 
 var BackendBase = require('./BackendBase');
 
@@ -64,12 +65,14 @@ TestController.prototype.init = function(app){
                 organizationId : body.organizationId,
                 created: Utils.now(),
                 status: 1,
-                permission: body.permission
-                    
+                permission: body.permission,
+                UUID: body.UUID || [],
+                phoneNumber: body.phoneNumber || ""
+                
             });
             
             user.save(function(err,saveResult){
-                
+
                 self.successResponse(response,Const.responsecodeSucceed,{
                     user : saveResult.toObject()
                 });
@@ -228,6 +231,8 @@ TestController.prototype.init = function(app){
         router.post('/createtemporg', function(request, response) {
             
             var model = OrganizationModel.get();
+            var orgSettingsModel = OrganizationSettingsModel.get();
+
             var body = request.body;
 
             var org = new model({
@@ -243,9 +248,19 @@ TestController.prototype.init = function(app){
             });
             
             org.save(function(err, saveResult) {
+                
+                var organization = saveResult.toObject();
+                
+                var orgSettings = new orgSettingsModel({
+                    organizationId: organization._id.toString()
+                });
 
-                self.successResponse(response, Const.responsecodeSucceed, {
-                    org : saveResult.toObject()
+                orgSettings.save(function(err, saveResult) {                
+    
+                    self.successResponse(response, Const.responsecodeSucceed, {
+                        org: organization
+                    });
+                    
                 });
                 
             });
