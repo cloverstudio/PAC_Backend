@@ -81,6 +81,8 @@ global.user4 = {
     permission: 1
 }
 
+password = "password"  + global.getRandomStr();
+
 global.user5 = {
     name: "user5",
     userid: "+15005550006",
@@ -88,7 +90,13 @@ global.user5 = {
     passwordOrig: password,
     organizationId : 1,
     permission: 1,
-    phoneNumber: "+15005550006"
+    phoneNumber: "+15005550006",
+    UUID: [
+        {
+            blocked: true,
+            UUID: "1234"
+        }
+    ]
 }
 
 global.group1 = {
@@ -186,6 +194,7 @@ before(function(doneMain){
                 global.user2.organizationId = result.organization._id;
                 global.user3.organizationId = result.organization._id;
                 global.user4.organizationId = result.organization._id;
+                global.user5.organizationId = result.organization._id;
 
                 done(null,result)
             
@@ -294,6 +303,25 @@ before(function(doneMain){
                 global.user4._id = res.body.data.user._id;
 
                 // global.group1.users.push(global.user4._id);
+
+                done(null,result)
+            
+            });  
+            
+        },
+        function(result, done) {
+            
+            // create user
+            request(app)
+                .post('/api/v2/test/createtempuser')
+                .send(global.user5)
+                .end(function (err, res) {
+
+                if (err) {
+                    throw err;
+                }
+                
+                global.user5._id = res.body.data.user._id;
 
                 done(null,result)
             
