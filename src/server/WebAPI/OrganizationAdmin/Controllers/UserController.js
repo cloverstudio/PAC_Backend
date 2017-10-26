@@ -763,32 +763,16 @@ UserController.prototype.init = function(app){
             function(result, done) {
                     
                 var sortName = _.isEmpty(templateParams.formValues.sortName) ? templateParams.formValues.name.toLowerCase() : templateParams.formValues.sortName;
+                let newGroups = [];
 
                 // if current users permision is sub-admin, then permission is not showing
                 if (!templateParams.formValues.showPermission) {
 
                     var groups = result.originalData.groups;
 
-                    // remove currently visible groups and departments
-                    _.remove(groups, function(groupId) { 
+                    if (!_.isEmpty(templateParams.formValues.groups))
+                        newGroups = templateParams.formValues.groups;                      
 
-                        var remove = false;
-
-                        if (!_.isEmpty(_.filter(result.groupList, { _id: DatabaseManager.toObjectId(groupId) })) ||
-                            !_.isEmpty(_.filter(result.departmentList, { _id: DatabaseManager.toObjectId(groupId) }))) {
-
-                            remove = true;
-
-                        };
-
-                        return remove;
-
-                    });
-                    
-                    if (_.isEmpty(templateParams.formValues.groups))
-                        templateParams.formValues.groups = groups;
-                    else                        
-                        templateParams.formValues.groups = _.union(groups, _.flattenDeep([templateParams.formValues.groups]));                        
 
                 };
 
@@ -799,7 +783,7 @@ UserController.prototype.init = function(app){
                     description: templateParams.formValues.description,
                     userid: templateParams.formValues.userid,
                     status: templateParams.formValues.status,
-                    groups: _.isEmpty(templateParams.formValues.groups) ? [] : templateParams.formValues.groups
+                    groups: newGroups
                 };
 
                 // force logout if status == 0, and stop sending push
@@ -985,9 +969,6 @@ UserController.prototype.init = function(app){
             },
             function(result, done){
 
-                // delete from history if user is deleted from group or department
-                //result.originalData
-                templateParams.formValues.groups
 
                 var deletedIds = _.filter(result.originalData.groups,function(originalDataGroupId){
 
@@ -1009,6 +990,9 @@ UserController.prototype.init = function(app){
                         doneEach(null, result);
                         
                     });
+
+                    // stop sending notification
+                    SocketAPIHandler.leaveFrom(_id,Const.chatTypeGroup,deleteGroupId);
 
                 },function(err){
 
