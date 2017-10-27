@@ -765,16 +765,8 @@ UserController.prototype.init = function(app){
                 var sortName = _.isEmpty(templateParams.formValues.sortName) ? templateParams.formValues.name.toLowerCase() : templateParams.formValues.sortName;
                 let newGroups = [];
 
-                // if current users permision is sub-admin, then permission is not showing
-                if (!templateParams.formValues.showPermission) {
-
-                    var groups = result.originalData.groups;
-
-                    if (!_.isEmpty(templateParams.formValues.groups))
-                        newGroups = templateParams.formValues.groups;                      
-
-
-                };
+                if (!_.isEmpty(templateParams.formValues.groups))
+                    newGroups = templateParams.formValues.groups;        
 
                 // update
                 var updateParams = {
