@@ -1,0 +1,25 @@
+export {
+    EnterTitle1,
+    EnterText1,
+    LoginTitle1,
+    LoginText2,
+    LoginFormPlaceholderOrganization,
+    LoginFormPlaceholderUsername,
+    LoginFormPlaceholderPassword,
+    LoginFormRemember,
+    LoginText3,
+    LoginLink1,
+    LoginButtonTitle,
+    LoginSucceed,
+    LoginFailed
+} from './strings/login'
+
+export {
+    SignupTitle1,
+    SignupFormPlaceholderUsername,
+    SignupFormPlaceholderPassword,
+    SignupFormPlaceholderRePassword,
+    SignUpButtonTitle,
+    SignUpLoginLink,
+    SignUpBackText
+} from './strings/signup'
