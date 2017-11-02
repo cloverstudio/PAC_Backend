@@ -119,6 +119,32 @@ describe('WEB API', function () {
             });                   
                 
         });
+
+        it('fails when user is not room owner', function (done) {
+            
+            request(app)
+                .post('/api/v2/room/users/add')
+                .set('access-token', global.user2.accessToken)
+                .send({
+                    roomId:global.room1._id,
+                    users : [
+                        global.user4._id
+                   ]
+                })
+                .end(function (err, res) {
+        
+                if (err) {
+                    throw err;
+                }
+
+                res.body.should.have.property('code');
+                res.body.code.should.equal(4000089);
+
+                done();
+
+            });                   
+                
+        });
                                  
     });
 
@@ -205,7 +231,33 @@ describe('WEB API', function () {
             });                   
                 
         });
-                                 
+        
+        it('fails when user is not room owner', function (done) {
+            
+            request(app)
+                .post('/api/v2/room/users/remove')
+                .set('access-token', global.user2.accessToken)
+                .send({
+                    roomId:global.room1._id,
+                    users : [
+                        global.user4._id
+                   ]
+                })
+                .end(function (err, res) {
+        
+                if (err) {
+                    throw err;
+                }
+
+                res.body.should.have.property('code');
+                res.body.code.should.equal(4000090);
+
+                done();
+
+            });                   
+                
+        });
+        
     });
     
 });

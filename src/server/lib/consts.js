@@ -99,6 +99,9 @@
     Const.responsecodeSigninUserNotFound = 4000087;
     Const.responsecodeWrongUserContactId = 4000088;
     
+    Const.responsecodeAddUsersToRoomUserIsNotOwner = 4000089;
+    Const.responsecodeRemoveUsersFromRoomUserIsNotOwner = 4000090;
+
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;
