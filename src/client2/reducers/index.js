@@ -4,6 +4,7 @@ import * as types from '../actions/types';
 
 import login from './login';
 import toast from './toast';
+import main from './main';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     login,
     toast,
     filter,
-    routing
+    routing,
+    main
 });
 
 export default rootReducer;

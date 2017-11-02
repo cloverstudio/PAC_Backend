@@ -8,5 +8,9 @@ export const LoginFormCheckRemember = 'Login/FormCheckRemember';
 export const LoginSucceed = 'Login/LoginSucceed';
 export const LoginFailed = 'Login/LoginFailed';
 
+
+export const MainShowNotification = 'Main/ShowNotification';
+export const MainHideNotification = 'Main/HideNotification';
+
 export const ToastShow = 'Toast/Show';
 export const ToastHide = 'Toast/Hide';
