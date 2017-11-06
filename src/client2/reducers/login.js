@@ -1,6 +1,9 @@
 import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import * as types from '../actions/types';
+import * as constant from '../lib/const';
+
+const rememberChecked = localStorage.getItem(constant.LocalStorageKeyAccessToken) != null;
 
 const loadingLogin = (state = false, action) => {
     switch (action.type) {
@@ -43,7 +46,7 @@ const password = (state = "", action) => {
     }
 };
 
-const remember = (state = false, action) => {
+const remember = (state = rememberChecked, action) => {
     switch (action.type) {
         case types.LoginFormCheckRemember:
             return action.v;

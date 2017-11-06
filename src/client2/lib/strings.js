@@ -23,3 +23,7 @@ export {
     SignUpLoginLink,
     SignUpBackText
 } from './strings/signup'
+
+export {
+    FailedToGetHistory
+} from './strings/history'

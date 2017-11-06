@@ -4,7 +4,7 @@ import api from './api';
 import * as config from '../config';
 import * as constant from '../const';
 
-export function login({organization,username,password}){
+export function callLogin({organization,username,password}){
 
     return api.get(constant.ApiUrlTest).then( (response) => {
 

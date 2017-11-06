@@ -1,9 +1,10 @@
 
 // Core variables and mixins
 //
+@import "./themify-icons/themify-icons.css";
 @import "./fontawesome/font-awesome.scss";
 @import "./ionicons/scss/ionicons.scss";
 @import "./bootstrap/bootstrap.scss";
 @import "./template/app.scss";
 
-@import "./main";
+@import "./chat";

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import Toast from '../components/Toast';
 import * as actions from '../actions';
@@ -24,7 +24,8 @@ class Login extends Component {
         this.props.onLoginClick(
             this.props.organization,
             this.props.username,
-            this.props.password
+            this.props.password,
+            this.props.remember
         );
     }
 
@@ -44,10 +45,14 @@ class Login extends Component {
         this.props.onRememberCheck(v);
     }
 
+    componentWillMount() {
+
+    }
+
     render() {
-        
-        console.log(strings.EnterTitle1);
-        console.log(user.lang);
+
+        if(user.token)
+            return <Redirect to='/chat' />
 
         return (
             <div className="row no-gutters min-h-fullscreen bg-white">
@@ -140,7 +145,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoginClick: (org,username,password) => dispatch(actions.login.onLoginClick(org,username,password)),
+        onLoginClick: (org,username,password,remember) => dispatch(actions.login.onLoginClick(org,username,password,remember)),
         onOrgChange: (v) => dispatch(actions.login.onOrgChange(v)),
         onUserNameChange: (v) => dispatch(actions.login.onUserNameChange(v)),
         onPasswordChange: (v) => dispatch(actions.login.onPasswordChange(v)),

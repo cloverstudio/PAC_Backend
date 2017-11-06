@@ -1,5 +1,6 @@
 import * as config from '../config';
 import * as constant from '../const';
+import user from '../user';
 
 class api {
 
@@ -12,6 +13,10 @@ class api {
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
+        }
+
+        if(user.token){
+            headers['access-token'] = user.token;
         }
 
         return fetch(config.APIEndpoint + method, 
@@ -31,6 +36,7 @@ class api {
 
         }).then((response) => {
 
+
             return Promise.resolve(response);
 
         });
@@ -42,6 +48,10 @@ class api {
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
+        }
+
+        if(user.token){
+            headers['access-token'] = user.token;
         }
 
         return fetch(config.APIEndpoint + method, 

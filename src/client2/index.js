@@ -4,16 +4,17 @@ import { AppContainer } from 'react-hot-loader';
 import { configureStore, history } from './store/configureStore';
 import Root from './containers/Root';
 
-const store = configureStore();
+const theStore = configureStore();
 
 render(
     <AppContainer>
-        <Root store={store} history={history} />
+        <Root store={theStore} history={history} />
     </AppContainer>,
     document.getElementById('root')
 );
 
 if (module.hot) {
+
     module.hot.accept('./containers/Root', () => {
         const newConfigureStore = require('./store/configureStore');
         const newStore = newConfigureStore.configureStore();
@@ -28,5 +29,4 @@ if (module.hot) {
     });
 }
 
-export const globalStore = store;
-export const globalHistory = history;
+export const store = theStore;

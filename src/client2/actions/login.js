@@ -1,17 +1,15 @@
-import { browserHistory } from 'react-router'
+import { push } from 'react-router-redux'
 
 import * as types from './types';
 import * as actions from '../actions';
 
-import {login} from '../lib/api/';
+import {callLogin} from '../lib/api/';
 import * as strings from '../lib/strings';
 import user from '../lib/user';
 
-import {globalHistory} from '../index';
+import {store} from '../index';
 
-console.log('history',globalHistory);
-
-export function onLoginClick(organization,username,password) {
+export function onLoginClick(organization,username,password,remember) {
 
     return (dispatch, getState) => {
 
@@ -19,7 +17,7 @@ export function onLoginClick(organization,username,password) {
 			type: types.LoginClick
         });
 
-        login({organization,username,password})
+        callLogin({organization,username,password})
 
         .then( (response) => {
             
@@ -30,9 +28,9 @@ export function onLoginClick(organization,username,password) {
 
             dispatch(actions.notification.showToast(strings.LoginSucceed[user.lang]));
 
-            user.signinSucceed(response);
+            user.signinSucceed(response,remember);
 
-            globalHistory.push('/chat');
+            store.dispatch(push('/chat'));
 
         }).catch( (err) => {
 

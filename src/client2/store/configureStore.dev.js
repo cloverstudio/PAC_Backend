@@ -7,6 +7,7 @@ import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
 
 export const history = createHistory();
+
 const middleware = routerMiddleware(history);
 
 const logger = store => next => action => {

@@ -2,7 +2,8 @@ import * as types from './types';
 
 import * as login from './login';
 import * as notification from './notification';
-import * as main from './main';
+import * as chatUI from './chatUI';
+import * as history from './history';
 
 export function filterTable(filter) {
     return {
@@ -14,5 +15,6 @@ export function filterTable(filter) {
 export {
     login,
     notification,
-    main
+    chatUI,
+    history
 }

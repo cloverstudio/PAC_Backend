@@ -1,4 +1,9 @@
 
 export {
-    login
+    callLogin
 } from './login';
+
+export {
+    callGetHistory
+} from './history';
+
