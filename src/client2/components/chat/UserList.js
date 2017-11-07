@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 
-import AvatarImage from '../AvatarImage';
+import AvatarImageUser from '../AvatarImageUser';
 
 class UserList extends Component {
 
@@ -21,8 +21,6 @@ class UserList extends Component {
     }
     
     render() {
-
-        console.log("ssssaaa",this.props.users);
 
         return (
             <div>
@@ -44,6 +42,7 @@ class UserList extends Component {
                     {this.props.users.map( (user) => {
 
                         let fileId = null;
+                        
                         if(user.avatar && user.avatar.thumbnail)
                             fileId = user.avatar.thumbnail.nameOnServer;
 
@@ -51,7 +50,7 @@ class UserList extends Component {
 
                             <span className="flexbox flex-grow gap-items text-truncate">
 
-                                <AvatarImage fileId={fileId} />
+                                <AvatarImageUser fileId={fileId} />
 
                                 <div className="media-body text-truncate">
                                     <h6>{user.name}</h6>

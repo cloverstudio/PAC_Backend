@@ -15,7 +15,7 @@ export function loadHistoryInitial() {
             type: types.HistoryLoadInitial
         });
 
-        callGetHistory().then( (data) => {
+        callGetHistory(1).then( (data) => {
 
             dispatch({
                 type: types.HistoryLoadInitialSucceed,
@@ -28,6 +28,35 @@ export function loadHistoryInitial() {
 
             dispatch({
                 type: types.HistoryLoadInitialFailed
+            });
+
+        });
+
+    };
+
+}
+
+export function loadHistory(page) {
+
+    return (dispatch, getState) => {
+
+        dispatch({
+            type: types.HistoryLoadStart
+        });
+
+        callGetHistory(page).then( (data) => {
+
+            dispatch({
+                type: types.HistoryLoadSucceed,
+                data
+            });
+
+        }).catch( (err) => {
+
+            dispatch(actions.notification.showToast(strings.FailedToGetHistory[user.lang]));
+
+            dispatch({
+                type: types.HistoryLoadFailed
             });
 
         });

@@ -4,18 +4,44 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
+import * as constant from '../../lib/const';
 
-import spikaLogoPic from '../../assets/img/logoLight.png';
+import HistoryRow from './HistoryRow';
 
 class History extends Component {
 
     static propTypes = {
     }
 
+    constructor(){
+        super();
+
+        this.currentPage = 1;
+
+    }
+
+    onScroll = (e) => {
+
+        const scrollPos = e.target.scrollTop + 0;
+        const realScrollPos = scrollPos +  e.target.clientHeight;
+        const scrollHeight = e.target.scrollHeight;
+
+        // if scroll position is between 2px from bottom
+        if(Math.abs(realScrollPos - scrollHeight) < 1){
+
+            if(!this.props.historyLoading){
+                this.currentPage++;
+                this.props.loadHistory(this.currentPage);  
+            } 
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+
+    }
+    
 	componentDidMount() {
-        
         this.props.loadHistoryInitial();
-        
 	}
 
     render() {
@@ -32,7 +58,7 @@ class History extends Component {
 
                 <div className="aside-body pt-0">
 
-                    <div className="media-list media-list-divided media-list-hover">
+                    <div onScroll={this.onScroll} className="media-list media-list-divided media-list-hover">
 
                         <header className="media-list-header b-0">
                             <form className="lookup lookup-lg w-100 bb-1 border-light">
@@ -42,107 +68,14 @@ class History extends Component {
 
                         <div className="media-list-body">
 
-                            {/*this.props.history.map( (hisotyObj) => 
-                                <div key={historyObj._id}>
-                                    {historyObj._id}
-                                </div>
-                            )*/}
+                            {this.props.historyList.map( (history) => {
+                                return <HistoryRow key={history._id} history={history} />
+                            })}
 
-                            <a className="media align-items-center active" href="#">
-                                <span className="avatar status-success">
-                                <img src="../assets/img/avatar/1.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                    <div className="flexbox align-items-center">
-                                        <strong className="title">Maryam Amiri</strong>
-                                        <time dateTime="2017-07-14 20:00">12:11</time>
-                                        <span className="badge badge-pill badge-primary">3</span>
-                                    </div>
-                                    <p className="text-truncate">You need to update the changelog in documentation before we release the current version.</p>
-                                </div>
-                            </a>
-
-                            <a className="media align-items-center" href="#">
-                                <span className="avatar status-warning">
-                                <img src="../assets/img/avatar/2.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Patric Johnson</strong>
-                                    <time dateTime="2017-07-14 20:00">09:34</time>
-                                    <span className="badge badge-pill badge-primary">1</span>
-                                </div>
-                                <p className="text-truncate">Ok, I'll take care of it</p>
-                                </div>
-                            </a>
-
-                            <a className="media align-items-center" href="#">
-                                <span className="avatar status-danger">
-                                <img src="../assets/img/avatar/3.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Sarah Conner</strong>
-                                    <time dateTime="2017-07-14 20:00">04:29</time>
-                                </div>
-                                <p className="text-truncate">Good Morning!</p>
-                                </div>
-                            </a>
-
-                            <a className="media align-items-center" href="#">
-                                <span className="avatar status-warning">
-                                <img src="../assets/img/avatar/default.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Teisha Hummel</strong>
-                                    <time dateTime="2017-07-14 20:00">Yesterday</time>
-                                </div>
-                                <p className="text-truncate">Bye</p>
-                                </div>
-                            </a>
-
-                            <a className="media align-items-center" href="#">
-                                <span className="avatar status-success">
-                                <img src="../assets/img/avatar/5.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Bobby Mincy</strong>
-                                    <time dateTime="2017-07-14 20:00">Yesterday</time>
-                                </div>
-                                <p className="text-truncate">See you then</p>
-                                </div>
-                            </a>
-
-                            <a className="media align-items-center" href="#">
-                                <span className="avatar status-danger">
-                                <img src="../assets/img/avatar/6.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Tim Hank</strong>
-                                    <time dateTime="2017-07-14 20:00">2 days ago</time>
-                                </div>
-                                <p className="text-truncate">Continually grow corporate solutions rather than ethical.</p>
-                                </div>
-                            </a>
-
-                            <a className="media align-items-center" href="#">
-                                <span className="avatar status-success">
-                                <img src="../assets/img/avatar/8.jpg" alt="..." />
-                                </span>
-                                <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Fidel Tonn</strong>
-                                    <time dateTime="2017-07-14 20:00">2 days ago</time>
-                                </div>
-                                <p className="text-truncate">Foster resource maximizing niches before high standards.</p>
-                                </div>
-                            </a>
                         </div>
 
                     </div>
+
                 </div>
 
                 <button className="aside-toggler"></button>
@@ -157,13 +90,14 @@ class History extends Component {
 const mapStateToProps = (state) => {
     return {
         historyLoading: state.history.historyLoading,
-        history: state.history.history
+        historyList: state.history.historyList
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadHistoryInitial: () => dispatch(actions.history.loadHistoryInitial())
+        loadHistoryInitial: () => dispatch(actions.history.loadHistoryInitial()),
+        loadHistory: (page) => dispatch(actions.history.loadHistory(page))
     };
 };
 

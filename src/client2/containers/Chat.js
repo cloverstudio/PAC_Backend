@@ -6,7 +6,7 @@ import { push } from 'react-router-redux'
 
 import * as actions from '../actions';
 
-import * as constnat from '../lib/const';
+import * as constant from '../lib/const';
 import * as strings from '../lib/strings';
 import user from '../lib/user';
 import {store} from '../index';

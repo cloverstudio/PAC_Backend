@@ -21,6 +21,9 @@ export const ChatHideGroupsView = 'Chat/HideGroupsView';
 export const HistoryLoadInitial = 'History/LoadInitial';
 export const HistoryLoadInitialSucceed = 'History/LoadInitialSucceed';
 export const HistoryLoadInitialFailed = 'History/LoadInitialFailed';
+export const HistoryLoadStart = 'History/LoadStart';
+export const HistoryLoadSucceed = 'History/LoadSucceed';
+export const HistoryLoadFailed = 'History/LoadFailed';
 
 // UserList
 export const UserListLoadStart = 'UserList/LoadStart';
