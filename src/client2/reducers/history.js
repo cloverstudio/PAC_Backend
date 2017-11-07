@@ -15,7 +15,16 @@ const historyLoading = (state = false, action) => {
     }
 };
 
+const history = (state = [], action) => {
+    switch (action.type) {
+        case types.HistoryLoadInitialSucceed:
+            return action.data.list;
+        default:
+            return state;
+    }
+}
 
 export default combineReducers({
-    historyLoading
+    historyLoading,
+    history
 });;

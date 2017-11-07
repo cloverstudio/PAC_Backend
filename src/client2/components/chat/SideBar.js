@@ -84,10 +84,10 @@ class SideBar extends Component {
                         </li>
                 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon ion-log-out"></span>
-                            <span className="title">Logout</span>
-                            </a>
+                            <Link to={'/logout'} className="menu-link">
+                                <span className="icon ion-log-out"></span>
+                                <span className="title">Logout</span>
+                            </Link>
                         </li>
 
                         <li className="menu-category">Links</li>

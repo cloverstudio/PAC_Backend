@@ -7,6 +7,9 @@ import * as actions from '../../actions';
 
 import spikaLogoPic from '../../assets/img/logoLight.png';
 
+import UserList from './UserList';
+import GroupList from './GroupList';
+
 class Header extends Component {
 
     static propTypes = {
@@ -58,18 +61,15 @@ class Header extends Component {
                 </div>
 
                 <div className="topbar-right">
+                    
                     <a className="topbar-btn" onClick={this.toggleUsersView}><i className="fa fa-user"></i></a>
                     <div className={usersViewClass}>
-                        <div className="spinner-linear">
-                            <div className="line"></div>
-                        </div>
+                        <UserList />
                     </div>
 
                     <a className="topbar-btn" onClick={this.toggleGroupsView}><i className="fa fa-users"></i></a>
                     <div className={groupsViewClass}>
-                        <div className="spinner-linear">
-                            <div className="line"></div>
-                        </div>
+                        <GroupList />
                     </div>
 
 

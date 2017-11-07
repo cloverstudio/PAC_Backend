@@ -15,6 +15,10 @@ export {
 } from './strings/login'
 
 export {
+    LogoutSucceed
+} from './strings/logout'
+
+export {
     SignupTitle1,
     SignupFormPlaceholderUsername,
     SignupFormPlaceholderPassword,

@@ -24,3 +24,7 @@ export const HistoryLoadInitialFailed = 'History/LoadInitialFailed';
 
 export const ToastShow = 'Toast/Show';
 export const ToastHide = 'Toast/Hide';
+
+
+// Logout
+export const Logout = 'Logout';

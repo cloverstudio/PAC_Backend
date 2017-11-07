@@ -31,6 +31,14 @@ class user{
 
     }
 
+    logout(){
+
+        this.userData = null;
+        this.token = null;
+
+        localStorage.removeItem(constant.LocalStorageKeyAccessToken);
+        localStorage.removeItem(constant.LocalStorageKeyUserData);
+    }
 }
 
 export default new user();

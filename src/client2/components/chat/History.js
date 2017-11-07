@@ -41,98 +41,105 @@ class History extends Component {
                         </header>
 
                         <div className="media-list-body">
-                        <a className="media align-items-center active" href="#">
-                            <span className="avatar status-success">
-                            <img src="../assets/img/avatar/1.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                                <div className="flexbox align-items-center">
-                                    <strong className="title">Maryam Amiri</strong>
-                                    <time dateTime="2017-07-14 20:00">12:11</time>
-                                    <span className="badge badge-pill badge-primary">3</span>
+
+                            {/*this.props.history.map( (hisotyObj) => 
+                                <div key={historyObj._id}>
+                                    {historyObj._id}
                                 </div>
-                                <p className="text-truncate">You need to update the changelog in documentation before we release the current version.</p>
-                            </div>
-                        </a>
+                            )*/}
 
-                        <a className="media align-items-center" href="#">
-                            <span className="avatar status-warning">
-                            <img src="../assets/img/avatar/2.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                            <div className="flexbox align-items-center">
-                                <strong className="title">Patric Johnson</strong>
-                                <time dateTime="2017-07-14 20:00">09:34</time>
-                                <span className="badge badge-pill badge-primary">1</span>
-                            </div>
-                            <p className="text-truncate">Ok, I'll take care of it</p>
-                            </div>
-                        </a>
+                            <a className="media align-items-center active" href="#">
+                                <span className="avatar status-success">
+                                <img src="../assets/img/avatar/1.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                    <div className="flexbox align-items-center">
+                                        <strong className="title">Maryam Amiri</strong>
+                                        <time dateTime="2017-07-14 20:00">12:11</time>
+                                        <span className="badge badge-pill badge-primary">3</span>
+                                    </div>
+                                    <p className="text-truncate">You need to update the changelog in documentation before we release the current version.</p>
+                                </div>
+                            </a>
 
-                        <a className="media align-items-center" href="#">
-                            <span className="avatar status-danger">
-                            <img src="../assets/img/avatar/3.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                            <div className="flexbox align-items-center">
-                                <strong className="title">Sarah Conner</strong>
-                                <time dateTime="2017-07-14 20:00">04:29</time>
-                            </div>
-                            <p className="text-truncate">Good Morning!</p>
-                            </div>
-                        </a>
+                            <a className="media align-items-center" href="#">
+                                <span className="avatar status-warning">
+                                <img src="../assets/img/avatar/2.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                <div className="flexbox align-items-center">
+                                    <strong className="title">Patric Johnson</strong>
+                                    <time dateTime="2017-07-14 20:00">09:34</time>
+                                    <span className="badge badge-pill badge-primary">1</span>
+                                </div>
+                                <p className="text-truncate">Ok, I'll take care of it</p>
+                                </div>
+                            </a>
 
-                        <a className="media align-items-center" href="#">
-                            <span className="avatar status-warning">
-                            <img src="../assets/img/avatar/default.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                            <div className="flexbox align-items-center">
-                                <strong className="title">Teisha Hummel</strong>
-                                <time dateTime="2017-07-14 20:00">Yesterday</time>
-                            </div>
-                            <p className="text-truncate">Bye</p>
-                            </div>
-                        </a>
+                            <a className="media align-items-center" href="#">
+                                <span className="avatar status-danger">
+                                <img src="../assets/img/avatar/3.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                <div className="flexbox align-items-center">
+                                    <strong className="title">Sarah Conner</strong>
+                                    <time dateTime="2017-07-14 20:00">04:29</time>
+                                </div>
+                                <p className="text-truncate">Good Morning!</p>
+                                </div>
+                            </a>
 
-                        <a className="media align-items-center" href="#">
-                            <span className="avatar status-success">
-                            <img src="../assets/img/avatar/5.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                            <div className="flexbox align-items-center">
-                                <strong className="title">Bobby Mincy</strong>
-                                <time dateTime="2017-07-14 20:00">Yesterday</time>
-                            </div>
-                            <p className="text-truncate">See you then</p>
-                            </div>
-                        </a>
+                            <a className="media align-items-center" href="#">
+                                <span className="avatar status-warning">
+                                <img src="../assets/img/avatar/default.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                <div className="flexbox align-items-center">
+                                    <strong className="title">Teisha Hummel</strong>
+                                    <time dateTime="2017-07-14 20:00">Yesterday</time>
+                                </div>
+                                <p className="text-truncate">Bye</p>
+                                </div>
+                            </a>
 
-                        <a className="media align-items-center" href="#">
-                            <span className="avatar status-danger">
-                            <img src="../assets/img/avatar/6.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                            <div className="flexbox align-items-center">
-                                <strong className="title">Tim Hank</strong>
-                                <time dateTime="2017-07-14 20:00">2 days ago</time>
-                            </div>
-                            <p className="text-truncate">Continually grow corporate solutions rather than ethical.</p>
-                            </div>
-                        </a>
+                            <a className="media align-items-center" href="#">
+                                <span className="avatar status-success">
+                                <img src="../assets/img/avatar/5.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                <div className="flexbox align-items-center">
+                                    <strong className="title">Bobby Mincy</strong>
+                                    <time dateTime="2017-07-14 20:00">Yesterday</time>
+                                </div>
+                                <p className="text-truncate">See you then</p>
+                                </div>
+                            </a>
 
-                        <a className="media align-items-center" href="#">
-                            <span className="avatar status-success">
-                            <img src="../assets/img/avatar/8.jpg" alt="..." />
-                            </span>
-                            <div className="media-body">
-                            <div className="flexbox align-items-center">
-                                <strong className="title">Fidel Tonn</strong>
-                                <time dateTime="2017-07-14 20:00">2 days ago</time>
-                            </div>
-                            <p className="text-truncate">Foster resource maximizing niches before high standards.</p>
-                            </div>
-                        </a>
+                            <a className="media align-items-center" href="#">
+                                <span className="avatar status-danger">
+                                <img src="../assets/img/avatar/6.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                <div className="flexbox align-items-center">
+                                    <strong className="title">Tim Hank</strong>
+                                    <time dateTime="2017-07-14 20:00">2 days ago</time>
+                                </div>
+                                <p className="text-truncate">Continually grow corporate solutions rather than ethical.</p>
+                                </div>
+                            </a>
+
+                            <a className="media align-items-center" href="#">
+                                <span className="avatar status-success">
+                                <img src="../assets/img/avatar/8.jpg" alt="..." />
+                                </span>
+                                <div className="media-body">
+                                <div className="flexbox align-items-center">
+                                    <strong className="title">Fidel Tonn</strong>
+                                    <time dateTime="2017-07-14 20:00">2 days ago</time>
+                                </div>
+                                <p className="text-truncate">Foster resource maximizing niches before high standards.</p>
+                                </div>
+                            </a>
                         </div>
 
                     </div>
@@ -149,13 +156,13 @@ class History extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        historyLoading: state.history.historyLoading
+        historyLoading: state.history.historyLoading,
+        history: state.history.history
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        
         loadHistoryInitial: () => dispatch(actions.history.loadHistoryInitial())
     };
 };
