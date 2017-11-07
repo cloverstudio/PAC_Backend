@@ -5,278 +5,67 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 
+import AvatarImage from '../AvatarImage';
 
 class UserList extends Component {
 
     static propTypes = {
     }
 
+    componentWillReceiveProps(nextProps){
+
+    }
+
+	componentDidMount() {
+        
+    }
+    
     render() {
+
+        console.log("ssssaaa",this.props.users);
 
         return (
             <div>
 
-                <div className="spinner-linear">
-                    <div className="line"></div>
-                </div>
+                {this.props.isLoading ?
+                    <div className="spinner-linear">
+                        <div className="line"></div>
+                    </div>: null
+                }
 
+                <header className="media-list-header b-0">
+                    <form className="lookup lookup-lg w-100 bb-1 border-light">
+                        <input className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
+                    </form>
+                </header>
+                
                 <div className="media-list-body bg-white">
 
-                    <div className="media align-items-center">
+                    {this.props.users.map( (user) => {
 
-                        <span className="flexbox flex-grow gap-items text-truncate">
+                        let fileId = null;
+                        if(user.avatar && user.avatar.thumbnail)
+                            fileId = user.avatar.thumbnail.nameOnServer;
 
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
+                        return <div className="media align-items-center" key={user._id}>
 
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
+                            <span className="flexbox flex-grow gap-items text-truncate">
 
-                        </span>
+                                <AvatarImage fileId={fileId} />
 
-                    </div>
+                                <div className="media-body text-truncate">
+                                    <h6>{user.name}</h6>
+                                    <small>
+                                        <span>{user.description}</span>
+                                    </small>
+                                </div>
 
-                    <div className="media align-items-center">
+                            </span>
 
-                        <span className="flexbox flex-grow gap-items text-truncate">
+                        </div>
 
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
+                    })}
 
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
-
-                    <div className="media align-items-center">
-
-                        <span className="flexbox flex-grow gap-items text-truncate">
-
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-
-                            <div className="media-body text-truncate">
-                                <h6>Maryam Amiri</h6>
-                                <small>
-                                    <span>maryam.amiri@gmail.com</span>
-                                </small>
-                            </div>
-
-                        </span>
-
-                    </div>
 
                 </div>
                 
@@ -288,11 +77,14 @@ class UserList extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        isLoading: state.userlist.loading,
+        users: state.userlist.users
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        loadUserList: (page) => dispatch(actions.userlist.loadUserList(page))
     };
 };
 

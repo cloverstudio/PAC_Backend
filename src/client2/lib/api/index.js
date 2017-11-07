@@ -7,3 +7,6 @@ export {
     callGetHistory
 } from './history';
 
+export {
+    callGetUserList
+} from './userlist';

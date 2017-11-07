@@ -25,6 +25,10 @@ class Main extends Component {
 
     globalClick = (e) => {
 
+        if(/input/i.test(e.target.tagName)){
+            return;
+        }
+
         if(! /topbar-btn|bell/.test(e.target.className))
             this.props.hideNotifications();
 

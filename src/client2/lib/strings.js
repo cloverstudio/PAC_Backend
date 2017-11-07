@@ -31,3 +31,8 @@ export {
 export {
     FailedToGetHistory
 } from './strings/history'
+
+export {
+    FailedToGetUserList
+} from './strings/userlist'
+

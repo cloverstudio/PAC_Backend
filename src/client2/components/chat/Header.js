@@ -12,6 +12,11 @@ import GroupList from './GroupList';
 
 class Header extends Component {
 
+    constructor(){
+        super();
+        this.initialUserListLoaded = false;
+    }
+
     static propTypes = {
     }
 
@@ -24,8 +29,15 @@ class Header extends Component {
 
 
     toggleUsersView = (e) => {
-        if(!this.props.usersViewState)
+        if(!this.props.usersViewState){
             this.props.showUsersView();
+
+            if(!this.initialUserListLoaded){
+                this.props.loadUserList(1);
+                this.initialUserListLoaded = true;
+            }
+
+        }
         else
             this.props.hideUsersView();
     }
@@ -158,7 +170,8 @@ const mapDispatchToProps = (dispatch) => {
         showUsersView: () => dispatch(actions.chatUI.showUsersView()),
         hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
         showGroupsView: () => dispatch(actions.chatUI.showGroupsView()),
-        hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView())
+        hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
+        loadUserList: page => dispatch(actions.userlist.loadUserList(page))
     };
 };
 

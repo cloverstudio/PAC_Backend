@@ -22,6 +22,12 @@ export const HistoryLoadInitial = 'History/LoadInitial';
 export const HistoryLoadInitialSucceed = 'History/LoadInitialSucceed';
 export const HistoryLoadInitialFailed = 'History/LoadInitialFailed';
 
+// UserList
+export const UserListLoadStart = 'UserList/LoadStart';
+export const UserListLoadSucceed = 'UserList/LoadSucceed';
+export const UserListLoadFailed= 'UserList/LoadFailed';
+
+// Toast
 export const ToastShow = 'Toast/Show';
 export const ToastHide = 'Toast/Hide';
 

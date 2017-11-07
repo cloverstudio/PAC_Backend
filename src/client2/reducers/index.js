@@ -6,6 +6,7 @@ import login from './login';
 import toast from './toast';
 import chatUI from './chatUI';
 import history from './history';
+import userlist from './userlist';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     filter,
     routing,
     chatUI,
-    history
+    history,
+    userlist
 });
 
 export default rootReducer;

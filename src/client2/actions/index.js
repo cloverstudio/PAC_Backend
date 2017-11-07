@@ -5,6 +5,7 @@ import * as notification from './notification';
 import * as chatUI from './chatUI';
 import * as history from './history';
 import * as logout from './logout';
+import * as userlist from './userlist';
 
 export function filterTable(filter) {
     return {
@@ -18,5 +19,6 @@ export {
     notification,
     chatUI,
     history,
-    logout
+    logout,
+    userlist
 }
