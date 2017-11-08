@@ -34,6 +34,10 @@ export const UserListLoadFailed= 'UserList/LoadFailed';
 export const ToastShow = 'Toast/Show';
 export const ToastHide = 'Toast/Hide';
 
-
 // Logout
 export const Logout = 'Logout';
+
+// Chat
+export const ChatOpenByUser = 'Chat/OpenByUser';
+export const ChatOpenByGroup = 'Chat/OpenByGroup';
+export const ChatOpenByRoom = 'Chat/OpenByRoom';

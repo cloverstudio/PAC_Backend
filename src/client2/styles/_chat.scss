@@ -67,3 +67,17 @@
     }
 }
 
+.history-list{
+
+    .history-row{
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .history-row:hover{
+        background-color: $color-bg-light;
+    }
+
+}
+
+

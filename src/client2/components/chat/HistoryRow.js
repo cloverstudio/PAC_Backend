@@ -17,6 +17,14 @@ class HistoryRow extends Component {
     static propTypes = {
     }
 
+    cunstructor(){
+        super();
+    }
+
+    selected(){
+        
+    }
+
     render() {
 
         const history = this.props.history;
@@ -27,8 +35,6 @@ class HistoryRow extends Component {
         const group = history.group;
         const room = history.room;
         let userClass = "avatar ";
-
-        console.log('history',history);
 
         if(user && user.avatar && user.avatar.thumbnail){
             fileId = user.avatar.thumbnail.nameOnServer;
@@ -50,7 +56,7 @@ class HistoryRow extends Component {
             lastMessage = history.lastMessage.message;
             
         return (
-                <div>
+                <div className="history-row" onClick={this.selected}>
 
                     {history.chatType == constant.ChatTypePrivate ?
                         <div className={"media align-items-center"}>
@@ -127,6 +133,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        openChatByUser: (user) => dispatch(actions.history.loadHistoryInitial()),
     };
 };
 
