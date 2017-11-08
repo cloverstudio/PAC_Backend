@@ -54,7 +54,7 @@ export function searchUserList(value) {
 
         })
         .catch( (err) => {
-            dispatch(actions.notification.showToast(strings.FailedToGetUserList[user.lang]));
+            dispatch(actions.notification.showToast(strings.FailedToSearchUserList[user.lang]));
             
             dispatch({
                 type: types.UserListLoadFailed
@@ -62,22 +62,4 @@ export function searchUserList(value) {
 
         });
     };
-}
-
-export function onLoadHistoryInitialSucceed(data) {
-    
-    return {
-        type: types.HistoryLoadInitialSucceed,
-        data
-    };
-
-}
-
-export function onLoadHistoryInitialFailed(err) {
-    
-    return {
-        type: types.HistoryLoadInitialFailed,
-        err
-    };
-
 }

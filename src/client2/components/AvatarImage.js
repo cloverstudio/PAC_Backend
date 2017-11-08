@@ -18,7 +18,7 @@ class AvatarImage extends Component {
         
         if(this.props.type == constant.AvatarUser)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
-        if(this.props.type == constant.AvatarUser)
+        if(this.props.type == constant.AvatarGroup)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetGroupAvatar + this.props.fileId;
         if(this.props.type == constant.AvatarUser)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetRoomAvatar + this.props.fileId;
@@ -28,7 +28,7 @@ class AvatarImage extends Component {
             classname += this.props.className;
         
         return (
-            <img className={classname} src={fileUrl} alt="..." />
+            <img className={classname} src={fileUrl} alt={this.props.type + ' avatar'} />
         );
     }
 

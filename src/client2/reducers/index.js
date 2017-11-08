@@ -7,6 +7,7 @@ import toast from './toast';
 import chatUI from './chatUI';
 import history from './history';
 import userlist from './userlist';
+import grouplist from './grouplist';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
     routing,
     chatUI,
     history,
-    userlist
+    userlist, 
+    grouplist
 });
 
 export default rootReducer;

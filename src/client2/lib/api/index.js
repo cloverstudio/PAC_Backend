@@ -1,4 +1,3 @@
-
 export {
     callLogin
 } from './login';
@@ -11,3 +10,8 @@ export {
     callGetUserList,
     callSearchUserList
 } from './userlist';
+
+export {
+    callGetGroupList, 
+    callSearchGroupList
+} from './grouplist';

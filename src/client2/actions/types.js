@@ -31,6 +31,12 @@ export const UserListLoadSucceed = 'UserList/LoadSucceed';
 export const UserListLoadFailed= 'UserList/LoadFailed';
 export const UserListSearchSucceed = 'UserList/SearchSucceed';
 
+// GroupList
+export const GroupListLoadStart = 'GroupList/LoadStart';
+export const GroupListLoadSucceed = 'GroupList/LoadSucceed';
+export const GroupListLoadFailed= 'GroupList/LoadFailed';
+export const GroupListSearchSucceed = 'GroupList/SearchSucceed';
+
 // Toast
 export const ToastShow = 'Toast/Show';
 export const ToastHide = 'Toast/Hide';
