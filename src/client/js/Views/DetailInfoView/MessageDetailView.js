@@ -7,6 +7,7 @@ var Utils = require('../../lib/utils');
 var UIUtils = require('../../lib/UIUtils');
 var Const = require('../../lib/consts');
 var Config = require('../../lib/init');
+var EncryptionManager = require('../../lib/EncryptionManager');
 
 var NotificationManager = require('../../lib/NotificationManager');
 var loginUserManager = require('../../lib/loginUserManager');
@@ -83,7 +84,9 @@ var MessageDetailView = Backbone.View.extend({
             
             });
 
-            $("#seenby-container").html(templateSeenBy({seenBy:self.seenByUsers}));
+            $("#seenby-container").html(templateSeenBy({
+                seenBy:self.seenByUsers,
+            }));
 
         },function(errCode){
 
@@ -98,6 +101,7 @@ var MessageDetailView = Backbone.View.extend({
         if(obj.deleted && obj.deleted != 0){
             $('.deltedalert').show();
             $('#btn-deletemessage').hide();  
+            $('#btn-updatemessage').hide();  
             $('#btn-removefromfavorite').hide();
             $('#btn-addtofavorite').hide();
             return;
@@ -105,29 +109,45 @@ var MessageDetailView = Backbone.View.extend({
 
         if(obj.userID == loginUserManager.user._id){
             $('#btn-deletemessage').show();
+            $('#btn-updatemessage').show();
         }else{
             $('#btn-deletemessage').hide();
+            $('#btn-updatemessage').hide();
         }
         
         if(!obj.deleted || obj.deleted == 0){
             $('.deltedalert').hide();
             $('#btn-addtofavorite').show();
             $('#btn-removefromfavorite').show();
-            
         }else{
-            
             $('.deltedalert').show();
             $('#btn-deletemessage').hide();  
+            $('#btn-updatemessage').hide();  
             $('#btn-removefromfavorite').hide();
             $('#btn-addtofavorite').hide();      
         }
 
         $('#btn-closeinfoview').unbind().on('click',function(){
-            
             $(self.el).removeclass('on');
+        });
+        
+        $('#btn-updatemessage').unbind().on('click',function(){
+            
+            var newMessage = '';
+
+            if(newMessage = prompt(localzationManager.get('Please input new message.'),EncryptionManager.decryptText(self.currentMessage.message))){
+                
+                socketIOManager.emit('updateMessage',{
+                    messageID: self.currentMessage._id,
+                    userID: loginUserManager.user._id,
+                    message: newMessage
+                });
+                
+            }
             
         });
         
+
         $('#btn-deletemessage').unbind().on('click',function(){
             
             if(confirm(localzationManager.get('Are you sure to delete this message ?'))){
