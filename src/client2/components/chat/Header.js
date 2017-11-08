@@ -55,7 +55,7 @@ class Header extends Component {
         if(this.props.notificationState)
             notificationsMenuClass += " show";
 
-        let usersViewClass = "quickview usersview";
+        let usersViewClass = "quickview";
         if(this.props.usersViewState)
             usersViewClass += " reveal";
 

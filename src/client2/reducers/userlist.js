@@ -8,8 +8,10 @@ const loading = (state = false, action) => {
             return true;
         case types.UserListLoadSucceed:
             return false;
-        case types.UserListLoadFaild:
+        case types.UserListLoadFailed:
             return false;
+        case types.UserListSearchSucceed:
+            return false
         default:
             return state;
     }
@@ -18,7 +20,9 @@ const loading = (state = false, action) => {
 const users = (state = [], action) => {
     switch (action.type) {
         case types.UserListLoadSucceed:
-            return action.data.list;
+            return state.concat(action.data.list);
+        case types.UserListSearchSucceed:
+            return action.data.list
         default:
             return state;
     }
