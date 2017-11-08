@@ -17,3 +17,7 @@ export const LocalStorageKeyUserData = "userdata";
 export const ChatTypePrivate = 1;
 export const ChatTypeGroup = 2;
 export const ChatTypeRoom = 3;
+
+export const AvatarUser = 'user';
+export const AvatarGroup = 'group';
+export const AvatarRoom = 'room';

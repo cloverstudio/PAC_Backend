@@ -43,3 +43,27 @@
     overflow-x: hidden;    
     height: 100%;
 }
+
+.usersview,.groupsview{
+
+    height: 100vh;
+    overflow-y: auto;
+
+    .media{
+        cursor: pointer;   
+    }
+    .media:hover{
+        background-color: $color-bg-light;
+    }
+}
+
+.info-container{
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .card{
+        margin-bottom: 0px;
+    }
+}
+

@@ -67,7 +67,6 @@
     "nodemailer-smtp-pool": "^2.5.2",
     "oniyi-vcard-parser": "^1.0.0",
     "quickthumb": "0.0.11",
-    "reactstrap": "^5.0.0-alpha.3",
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "rncryptor-js": "0.0.1",

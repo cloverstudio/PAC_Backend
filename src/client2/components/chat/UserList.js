@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import * as constant from '../../lib/const';
 import * as actions from '../../actions';
 
-import AvatarImageUser from '../AvatarImageUser';
+import AvatarImage from '../AvatarImage';
 
 class UserList extends Component {
 
@@ -50,7 +51,7 @@ class UserList extends Component {
 
                             <span className="flexbox flex-grow gap-items text-truncate">
 
-                                <AvatarImageUser fileId={fileId} />
+                                <AvatarImage fileId={fileId} type={constant.AvatarUser} />
 
                                 <div className="media-body text-truncate">
                                     <h6>{user.name}</h6>
