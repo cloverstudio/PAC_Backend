@@ -11,3 +11,7 @@ export {
     callGetUserList,
     callSearchUserList
 } from './userlist';
+
+export {
+    callGetMessageList
+} from './chat';

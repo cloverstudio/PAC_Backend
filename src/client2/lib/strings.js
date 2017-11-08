@@ -36,3 +36,6 @@ export {
     FailedToGetUserList
 } from './strings/userlist'
 
+export {
+    FailedToLoatMessage
+} from './strings/chat'

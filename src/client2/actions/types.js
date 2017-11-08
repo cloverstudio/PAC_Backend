@@ -42,3 +42,5 @@ export const Logout = 'Logout';
 export const ChatOpenByUser = 'Chat/OpenByUser';
 export const ChatOpenByGroup = 'Chat/OpenByGroup';
 export const ChatOpenByRoom = 'Chat/OpenByRoom';
+export const ChatLoadMessageSucceed = 'Chat/LoadMessageSucceed';
+export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';

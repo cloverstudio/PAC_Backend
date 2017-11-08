@@ -41,6 +41,19 @@ class Conversation extends Component {
 
                 <div className="scrollable flex-grow" id="chat-content" data-provide="emoji">
 
+                    {this.props.messageList.map( (message) => {
+                        
+                        return <div className="media media-chat" key={message._id}>
+                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
+                            <div className="media-body">
+                                <p>{message.message}</p>
+                                <p className="meta"><time dateTime="2017">23:58</time></p>
+                            </div>
+                        </div>
+
+                    })}
+
+                    {/*
                     <div className="media media-chat">
                     <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
                     <div className="media-body">
@@ -114,6 +127,7 @@ class Conversation extends Component {
                         <p className="meta"><time dateTime="2017">00:12</time></p>
                     </div>
                     </div>
+                    */}
 
                 </div>
 
@@ -141,6 +155,7 @@ const mapStateToProps = (state) => {
     return {
         chatAvatar:state.chat.chatAvatar,
         isLoading:state.chat.isLoading,
+        messageList: state.chat.messageList
     };
 };
 

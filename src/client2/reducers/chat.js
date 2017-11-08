@@ -11,6 +11,7 @@ const initial = {
         name: null
     },
     isLoading: false,
+    messageList: []
 }
 const chatAvatar = (state = initial.chatAvatar, action) => {
 
@@ -72,12 +73,37 @@ const isLoading = (state = initial.isLoading, action) => {
             return true;
         case types.ChatOpenByRoom:
             return true;
+        case types.ChatLoadMessageSucceed:
+            return false;
+        case types.ChatLoadMessageFailed:
+            return false;
         default:
             return state;
     }
 }
 
+const messageList = (state = initial.messageList, action) => {
+    
+    const oldState = state;
+    let newState = oldState;
+
+    if(action.type == types.ChatOpenByUser
+        || action.type == types.ChatOpenByGroup
+        || action.type == types.ChatOpenByRoom){
+
+            newState = [];
+    }
+
+    if(action.type == types.ChatLoadMessageSucceed){
+            newState = action.messages;
+    }    
+
+    return newState;
+
+}
+
 export default combineReducers({
     chatAvatar,
-    isLoading
+    isLoading,
+    messageList
 });
