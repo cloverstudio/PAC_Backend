@@ -73813,7 +73813,7 @@ var MessageDetailView = Backbone.View.extend({
                 socketIOManager.emit('updateMessage',{
                     messageID: self.currentMessage._id,
                     userID: loginUserManager.user._id,
-                    message: newMessage
+                    message: EncryptionManager.encryptText(newMessage)
                 });
                 
             }

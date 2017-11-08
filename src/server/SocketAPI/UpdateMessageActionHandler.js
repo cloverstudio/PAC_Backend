@@ -109,7 +109,7 @@ UpdateMessageActionHandler.prototype.attach = function(io,socket){
             function(result,done){
 
                 result.message.update({
-                    message: newMessage,
+                    message: EncryptionManager.decryptText(newMessage),
                 },{},function(err,userResult){
 
                     if(err) {
