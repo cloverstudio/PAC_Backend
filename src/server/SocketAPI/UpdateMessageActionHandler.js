@@ -95,7 +95,7 @@ UpdateMessageActionHandler.prototype.attach = function(io,socket){
                     historyModel.update({
                         _id: element._id
                     },{
-                        "lastMessage.message" : newMessage,
+                        "lastMessage.message" : EncryptionManager.decryptText(newMessage),
                         lastUpdate: Utils.now()
                     },(err,updateResult) => {
 
