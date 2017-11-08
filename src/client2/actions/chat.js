@@ -11,7 +11,7 @@ export function openChatByUser(user) {
     
     return {
         type: types.ChatOpenByUser,
-        data
+        user
     };
 
 }

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 
-import spikaLogoPic from '../../assets/img/logoLight.png';
 
 class GroupList extends Component {
 

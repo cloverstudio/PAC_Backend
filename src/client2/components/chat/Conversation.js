@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 
-import spikaLogoPic from '../../assets/img/logoLight.png';
+import AvatarImage from '../AvatarImage';
 
 class Conversation extends Component {
 
@@ -18,13 +18,24 @@ class Conversation extends Component {
             
             <div className="chat-container card card-bordered flex-column">
 
+                {this.props.isLoading ?
+                    <div className="spinner-linear">
+                        <div className="line"></div>
+                    </div> : null
+                }
+
                 <header className="flexbox align-items-center p-12 pr-20 bg-lighter bb-1 border-light">
                     <div className="media align-items-center p-0">
-                        <a href="#"><img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." /></a>
+
+                        <AvatarImage 
+                            fileId={this.props.chatAvatar.fileId} 
+                            type={this.props.chatAvatar.type} />
+
                         <div className="media-body">
-                            <h6><a href="#">Maryam Amiri</a></h6>
+                            <h6>{this.props.chatAvatar.name}</h6>
                             <small>Typing...</small>
                         </div>
+                        
                     </div>
                 </header>
 
@@ -128,6 +139,8 @@ class Conversation extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        chatAvatar:state.chat.chatAvatar,
+        isLoading:state.chat.isLoading,
     };
 };
 

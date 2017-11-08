@@ -6,7 +6,7 @@ import * as chatUI from './chatUI';
 import * as history from './history';
 import * as logout from './logout';
 import * as userlist from './userlist';
-import * as chat from './userlist';
+import * as chat from './chat';
 
 export function filterTable(filter) {
     return {
@@ -21,5 +21,6 @@ export {
     chatUI,
     history,
     logout,
-    userlist
+    userlist,
+    chat
 }

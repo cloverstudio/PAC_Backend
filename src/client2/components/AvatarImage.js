@@ -14,6 +14,9 @@ class AvatarImage extends Component {
 
     render() {
         
+        if(!this.props.type)
+            return null;
+            
         let fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
         
         if(this.props.type == constant.AvatarUser)

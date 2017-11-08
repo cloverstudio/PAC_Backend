@@ -17,12 +17,22 @@ class HistoryRow extends Component {
     static propTypes = {
     }
 
-    cunstructor(){
+    constructor(){
         super();
     }
 
-    selected(){
-        
+    selected = () => {
+
+        if(this.props.history.chatType == constant.ChatTypePrivate){
+            this.props.openChatByUser(this.props.history.user);
+        }
+        else if(this.props.history.chatType == constant.ChatTypeGroup){
+            this.props.openChatByGroup(this.props.history.group);
+        }
+        else if(this.props.history.chatType == constant.ChatTypeRoom){
+            this.props.openChatByRoom(this.props.history.room);
+        }
+
     }
 
     render() {
@@ -133,7 +143,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        openChatByUser: (user) => dispatch(actions.history.loadHistoryInitial()),
+        openChatByUser: user => dispatch(actions.chat.openChatByUser(user)),
+        openChatByGroup: group => dispatch(actions.chat.openChatByGroup(group)),
+        openChatByRoom: room => dispatch(actions.chat.openChatByRoom(room)),
     };
 };
 
