@@ -29,6 +29,7 @@ export const HistoryLoadFailed = 'History/LoadFailed';
 export const UserListLoadStart = 'UserList/LoadStart';
 export const UserListLoadSucceed = 'UserList/LoadSucceed';
 export const UserListLoadFailed= 'UserList/LoadFailed';
+export const UserListSearchSucceed = 'UserList/SearchSucceed';
 
 // Toast
 export const ToastShow = 'Toast/Show';

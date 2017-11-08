@@ -8,5 +8,6 @@ export {
 } from './history';
 
 export {
-    callGetUserList
+    callGetUserList,
+    callSearchUserList
 } from './userlist';

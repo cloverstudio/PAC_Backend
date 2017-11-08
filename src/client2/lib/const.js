@@ -9,6 +9,8 @@ export const ApiUrlGetUserAvatar = "/avatar/user/";
 export const ApiUrlGetGroupAvatar = "/avatar/group/";
 export const ApiUrlGetRoomAvatar = "/avatar/room/";
 
+export const ApiUrlSearchUserList = "/user/search/"
+
 export const ErrorCodeInvalidToken = 4000007;
 
 export const LocalStorageKeyAccessToken = "accesstoken";

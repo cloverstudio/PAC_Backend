@@ -13,6 +13,39 @@ class UserList extends Component {
     static propTypes = {
     }
 
+    constructor(){
+        super();
+        this.currentPage = 1;
+        this.lastSearchTimeout;
+    }
+
+    onScroll = (e) => {
+        
+        const scrollPos = e.target.scrollTop + 0;
+        const realScrollPos = scrollPos +  e.target.clientHeight;
+        const scrollHeight = e.target.scrollHeight;
+
+        // if scroll position is between 2px from bottom
+        if(Math.abs(realScrollPos - scrollHeight) < 1){
+
+            if(!this.props.isLoading){
+                this.currentPage++;
+                this.props.loadUserList(this.currentPage);  
+            } 
+        }
+    }
+
+    onInputChange = (e) => {
+        e.persist();
+
+        clearTimeout(this.lastSearchTimeout);
+
+        this.lastSearchTimeout = setTimeout(()=>{
+            this.props.searchUserList(e.target.value)
+            
+        }, 300);
+    }
+
     componentWillReceiveProps(nextProps){
 
     }
@@ -25,50 +58,52 @@ class UserList extends Component {
 
         return (
             <div>
-
                 {this.props.isLoading ?
                     <div className="spinner-linear">
                         <div className="line"></div>
                     </div>: null
                 }
 
-                <header className="media-list-header b-0">
-                    <form className="lookup lookup-lg w-100 bb-1 border-light">
-                        <input className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
-                    </form>
-                </header>
-                
-                <div className="media-list-body bg-white">
+                <div onScroll={this.onScroll} className="usersview">
 
-                    {this.props.users.map( (user) => {
+                    <header className="media-list-header b-0">
+                        <form className="lookup lookup-lg w-100 bb-1 border-light">
+                            <input onChange={this.onInputChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
+                        </form>
+                    </header>
+                    
+                    <div className="media-list-body bg-white">
 
-                        let fileId = null;
-                        
-                        if(user.avatar && user.avatar.thumbnail)
-                            fileId = user.avatar.thumbnail.nameOnServer;
+                        {this.props.users.map( (user) => {
 
-                        return <div className="media align-items-center" key={user._id}>
+                            let fileId = null;
+                            
+                            if(user.avatar && user.avatar.thumbnail)
+                                fileId = user.avatar.thumbnail.nameOnServer;
 
-                            <span className="flexbox flex-grow gap-items text-truncate">
+                            return <div className="media align-items-center" key={user._id}>
 
-                                <AvatarImage fileId={fileId} type={constant.AvatarUser} />
+                                <span className="flexbox flex-grow gap-items text-truncate">
 
-                                <div className="media-body text-truncate">
-                                    <h6>{user.name}</h6>
-                                    <small>
-                                        <span>{user.description}</span>
-                                    </small>
-                                </div>
+                                    <AvatarImage fileId={fileId} type={constant.AvatarUser} />
 
-                            </span>
+                                    <div className="media-body text-truncate">
+                                        <h6>{user.name}</h6>
+                                        <small>
+                                            <span>{user.description}</span>
+                                        </small>
+                                    </div>
 
-                        </div>
+                                </span>
 
-                    })}
+                            </div>
+
+                        })}
 
 
+                    </div>
+                    
                 </div>
-                
             </div>
         );
     }
@@ -84,7 +119,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadUserList: (page) => dispatch(actions.userlist.loadUserList(page))
+        loadUserList: (page) => dispatch(actions.userlist.loadUserList(page)),
+        searchUserList: (value) => dispatch(actions.userlist.searchUserList(value))
     };
 };
 

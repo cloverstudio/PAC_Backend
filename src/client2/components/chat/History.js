@@ -23,7 +23,7 @@ class History extends Component {
         const scrollPos = e.target.scrollTop + 0;
         const realScrollPos = scrollPos +  e.target.clientHeight;
         const scrollHeight = e.target.scrollHeight;
-
+        
         // if scroll position is between 2px from bottom
         if(Math.abs(realScrollPos - scrollHeight) < 1){
             if(!this.props.historyLoading){

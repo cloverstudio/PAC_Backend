@@ -17,3 +17,17 @@ export function callGetUserList(page){
     });
     
 }
+
+export function callSearchUserList(value){
+
+    return api.get(constant.ApiUrlSearchUserList + '1?keyword=' + value)
+    
+    .then( (response) => {
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to search user list");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+            });
+}
