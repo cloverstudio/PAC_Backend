@@ -11,8 +11,41 @@ const initial = {
         name: null
     },
     isLoading: false,
-    messageList: []
+    messageList: [],
+    chatId: "",
+    chatType: constant.ChatTypePrivate
 }
+
+const chatId = ( state = initial.chatId, action ) => {
+
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return action.chatId;
+         case types.ChatOpenByGroup:
+            return action.chatId;
+        case types.ChatOpenByRoom:
+            return action.chatId;
+        default:
+            return state;
+    }
+
+}
+
+const chatType = ( state = initial.chatType, action ) => {
+
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return constant.ChatTypePrivate;
+        case types.ChatOpenByGroup:
+            return constant.ChatTypeGroup;
+        case types.ChatOpenByRoom:
+            return constant.ChatTypeRoom;
+        default:
+            return state;
+    }
+
+}
+
 const chatAvatar = (state = initial.chatAvatar, action) => {
 
     const oldState = state;
@@ -105,5 +138,7 @@ const messageList = (state = initial.messageList, action) => {
 export default combineReducers({
     chatAvatar,
     isLoading,
-    messageList
+    messageList,
+    chatId,
+    chatType
 });

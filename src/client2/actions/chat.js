@@ -3,7 +3,14 @@ import { push } from 'react-router-redux'
 
 import * as types from './types';
 import * as actions from '../actions';
-import {callGetMessageList} from '../lib/api/';
+
+import {
+    callGetMessageList,
+    callGetUserDetail,
+    callGetGroupDetail,
+    callGetRoomDetail,
+} from '../lib/api/';
+
 import * as strings from '../lib/strings';
 import user from '../lib/user';
 import * as utils from '../lib/utils';
@@ -36,16 +43,99 @@ export function loadNewChat(chatId){
 
 }
 
+export function openChatByChatId(chatId){
+    
+    return (dispatch, getState) => {
+
+        if(!chatId)
+            return;
+
+        const chatIdSplit = chatId.split('-');
+        const chatType = chatIdSplit[0];
+
+        if(chatType == constant.ChatTypePrivate){
+          
+            const user1 = chatIdSplit[1];
+            const user2 = chatIdSplit[2];
+
+            if(!user1 || !user2)
+                return;
+            
+            let targetUser = user1;
+            if(user1 == user.userData._id)
+                targetUser = user2;
+
+            callGetUserDetail(targetUser).then( (data) => {
+                
+                dispatch(openChatByUser(data.user));
+                dispatch(loadNewChat(chatId));
+
+            }).catch( (err) => {
+    
+                dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
+    
+            });
+
+        }
+
+        if(chatType == constant.ChatTypeGroup){
+
+            const groupId = chatIdSplit[1];
+
+            if(!groupId)
+                return;
+
+            callGetGroupDetail(groupId).then( (data) => {
+                
+                dispatch(openChatByGroup(data.group));
+                dispatch(loadNewChat(chatId));
+
+            }).catch( (err) => {
+    
+                dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
+    
+            });
+        }
+
+        if(chatType == constant.ChatTypeRoom){
+
+            const roomId = chatIdSplit[1];
+
+            if(!roomId)
+                return;
+
+            callGetRoomDetail(roomId).then( (data) => {
+                
+                dispatch(openChatByRoom(data.room));
+                dispatch(loadNewChat(chatId));
+
+            }).catch( (err) => {
+    
+                dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
+    
+            });
+
+        }
+        
+    };
+
+}
+
 export function openChatByUser(targetUser) {
     
     return (dispatch, getState) => {
 
         const chatId = utils.chatIdByUser(targetUser);
+
+        if(getState().chat.chatId == chatId)
+            return;
+
         store.dispatch(push(`/chat/${chatId}`));
 
         dispatch({
             type: types.ChatOpenByUser,
-            user: targetUser
+            user: targetUser,
+            chatId
         });
         
     }
@@ -57,11 +147,16 @@ export function openChatByGroup(group) {
     return (dispatch, getState) => {
         
         const chatId = utils.chatIdByGroup(group);
-        store.dispatch(push(`/chat/${chatId}`));
+
+        if(getState().chat.chatId == chatId)
+            return;
+
+        dispatch(push(`/chat/${chatId}`));
 
         dispatch({
             type: types.ChatOpenByGroup,
-            group
+            group,
+            chatId
         });
 
     }
@@ -74,11 +169,16 @@ export function openChatByRoom(room) {
     return (dispatch, getState) => {
 
         const chatId = utils.chatIdByRoom(room);
-        store.dispatch(push(`/chat/${chatId}`));
+
+        if(getState().chat.chatId == chatId)
+            return;
+
+        dispatch(push(`/chat/${chatId}`));
 
         dispatch({
             type: types.ChatOpenByRoom,
-            room
+            room,
+            chatId
         });
 
     }

@@ -59,10 +59,9 @@ class Main extends Component {
         // location update
         const chatId = util.getChatIdFromUrl(this.props.location);
         
-        /*
         if(chatId && chatId.length > 0)
-            this.props.loadNewChat(chatId);
-        */
+            this.props.openChatByChatId(chatId);
+
     }
     
     render() {
@@ -108,6 +107,7 @@ const mapDispatchToProps = (dispatch) => {
         hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
         hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
+        openChatByChatId: (chatId) => dispatch(actions.chat.openChatByChatId(chatId)),
         loadNewChat: (chatId) => dispatch(actions.chat.loadNewChat(chatId)),
     };
 };

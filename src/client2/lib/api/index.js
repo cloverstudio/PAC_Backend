@@ -19,3 +19,10 @@ export {
 export{
     callGetMessageList
 } from './chat';
+
+export{
+    callGetUserDetail,
+    callGetGroupDetail,
+    callGetRoomDetail,
+} from './getDetail';
+

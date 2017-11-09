@@ -11,6 +11,10 @@ export const ApiUrlGetGroupAvatar = "/avatar/group/";
 export const ApiUrlGetRoomAvatar = "/avatar/room/";
 export const ApiUrlMessageList = "/message/list/";
 
+export const ApiUrlGetUserDetail = "/user/detail/";
+export const ApiUrlGetGroupDetail = "/group/detail/";
+export const ApiUrlGetRoomDetail = "/room/detail/";
+
 export const ApiUrlSearchUserList = "/user/search/";
 export const ApiUrlSearchGroupList = "/group/search/";
 

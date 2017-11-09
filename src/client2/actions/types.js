@@ -16,6 +16,9 @@ export const ChatShowUsersView = 'Chat/ShowUsersView';
 export const ChatHideUsersView = 'Chat/HideUsersView';
 export const ChatShowGroupsView = 'Chat/ShowGroupsView';
 export const ChatHideGroupsView = 'Chat/HideGroupsView';
+export const UserInfoTabChange = 'Chat/UserInfoTabChange';
+export const GroupInfoTabChange = 'Chat/GroupInfoTabChange';
+export const RoomInfoTabChange = 'Chat/RoomInfoTabChange';
 
 // History
 export const HistoryLoadInitial = 'History/LoadInitial';

@@ -37,8 +37,39 @@ const groupsViewState = (state = false, action) => {
     }
 };
 
+const userInfoTabState = (state = "general", action) => {
+    switch (action.type) {
+        case types.UserInfoTabChange:
+            return action.tabName;
+        default:
+            return state;
+    }
+};
+
+
+const groupInfoTabState = (state = "general", action) => {
+    switch (action.type) {
+        case types.GroupInfoTabChange:
+            return action.tabName;
+        default:
+            return state;
+    }
+};
+
+const roomInfoTabState = (state = "general", action) => {
+    switch (action.type) {
+        case types.RoomInfoTabChange:
+            return action.tabName;
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     notificationState,
     usersViewState,
-    groupsViewState
+    groupsViewState,
+    userInfoTabState,
+    groupInfoTabState,
+    roomInfoTabState
 });;

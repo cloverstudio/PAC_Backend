@@ -51,3 +51,34 @@ export function hideGroupsView() {
 
 }
 
+
+export function tabChangedUserInfo(tabName) {
+    
+    return {
+        type: types.UserInfoTabChange,
+        tabName
+    };
+
+}
+
+export function tabChangedGroupInfo(tabName) {
+    
+    return {
+        type: types.GroupInfoTabChange,
+        tabName
+    };
+
+}
+
+export function tabChangedRoomInfo(tabName) {
+    
+    return {
+        type: types.RoomInfoTabChange,
+        tabName
+    };
+
+}
+
+
+
+

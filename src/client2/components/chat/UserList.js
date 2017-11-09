@@ -32,6 +32,7 @@ class UserList extends Component {
                 this.currentPage++;
                 this.props.loadUserList(this.currentPage);  
             } 
+            
         }
     }
 
