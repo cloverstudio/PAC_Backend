@@ -43,7 +43,7 @@ class UserList extends Component {
         this.lastSearchTimeout = setTimeout(()=>{
             this.props.searchUserList(e.target.value)
             
-        }, 300);
+        }, constant.SearchInputTimeout);
     }
 
     componentWillReceiveProps(nextProps){
@@ -58,7 +58,7 @@ class UserList extends Component {
 
         return (
             <div>
-                {this.props.isLoading ?
+                {this.props.usersLoading ?
                     <div className="spinner-linear">
                         <div className="line"></div>
                     </div>: null
@@ -81,22 +81,24 @@ class UserList extends Component {
                             if(user.avatar && user.avatar.thumbnail)
                                 fileId = user.avatar.thumbnail.nameOnServer;
 
-                            return <div className="media align-items-center" key={user._id}>
+                            return (
+                                <div className="media align-items-center" key={user._id}>
 
-                                <span className="flexbox flex-grow gap-items text-truncate">
+                                    <span className="flexbox flex-grow gap-items text-truncate">
 
-                                    <AvatarImage fileId={fileId} type={constant.AvatarUser} />
+                                        <AvatarImage fileId={fileId} type={constant.AvatarUser} />
 
-                                    <div className="media-body text-truncate">
-                                        <h6>{user.name}</h6>
-                                        <small>
-                                            <span>{user.description}</span>
-                                        </small>
-                                    </div>
+                                        <div className="media-body text-truncate">
+                                            <h6>{user.name}</h6>
+                                            <small>
+                                                <span>{user.description}</span>
+                                            </small>
+                                        </div>
 
-                                </span>
+                                    </span>
 
-                            </div>
+                                </div>
+                            )
 
                         })}
 
@@ -112,7 +114,7 @@ class UserList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoading: state.userlist.loading,
+        usersLoading: state.userlist.loading,
         users: state.userlist.users
     };
 };

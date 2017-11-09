@@ -1,4 +1,3 @@
-
 export {
     callLogin
 } from './login';
@@ -13,5 +12,10 @@ export {
 } from './userlist';
 
 export {
+    callGetGroupList, 
+    callSearchGroupList
+} from './grouplist';
+
+export{
     callGetMessageList
 } from './chat';

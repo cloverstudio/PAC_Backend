@@ -33,8 +33,14 @@ export {
 } from './strings/history'
 
 export {
-    FailedToGetUserList
+    FailedToGetUserList, 
+    FailedToSearchUserList
 } from './strings/userlist'
+
+export {
+    FailedToGetGroupList, 
+    FailedToSearchGroupList
+} from './strings/grouplist'
 
 export {
     FailedToLoatMessage

@@ -15,6 +15,7 @@ class Header extends Component {
     constructor(){
         super();
         this.initialUserListLoaded = false;
+        this.initialGroupsLoaded = false;
     }
 
     static propTypes = {
@@ -43,8 +44,15 @@ class Header extends Component {
     }
 
     toggleGroupsView = (e) => {
-        if(!this.props.groupsViewState)
+        if(!this.props.groupsViewState){
             this.props.showGroupsView();
+
+            if(!this.initialGroupsLoaded){
+                this.props.loadGroupList(1);
+                this.initialGroupsLoaded = true;
+            }
+
+        }
         else
             this.props.hideGroupsView();
     }
@@ -60,7 +68,7 @@ class Header extends Component {
             usersViewClass += " reveal";
 
 
-        let groupsViewClass = "quickview groupsview";
+        let groupsViewClass = "quickview";
         if(this.props.groupsViewState)
             groupsViewClass += " reveal";
 
@@ -171,7 +179,8 @@ const mapDispatchToProps = (dispatch) => {
         hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
         showGroupsView: () => dispatch(actions.chatUI.showGroupsView()),
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
-        loadUserList: page => dispatch(actions.userlist.loadUserList(page))
+        loadUserList: page => dispatch(actions.userlist.loadUserList(page)), 
+        loadGroupList: page => dispatch(actions.grouplist.loadGroupList(page))
     };
 };
 
