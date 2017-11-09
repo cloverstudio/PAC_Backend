@@ -15,9 +15,7 @@ class History extends Component {
 
     constructor(){
         super();
-
         this.currentPage = 1;
-
     }
 
     onScroll = (e) => {
@@ -28,12 +26,12 @@ class History extends Component {
         
         // if scroll position is between 2px from bottom
         if(Math.abs(realScrollPos - scrollHeight) < 1){
-
             if(!this.props.historyLoading){
                 this.currentPage++;
                 this.props.loadHistory(this.currentPage);  
             } 
         }
+        
     }
 
     componentWillReceiveProps(nextProps){
@@ -66,7 +64,7 @@ class History extends Component {
                             </form>
                         </header>
 
-                        <div className="media-list-body">
+                        <div className="history-list media-list-body">
 
                             {this.props.historyList.map( (history) => {
                                 return <HistoryRow key={history._id} history={history} />

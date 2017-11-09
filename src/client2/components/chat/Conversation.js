@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 
-import spikaLogoPic from '../../assets/img/logoLight.png';
+import AvatarImage from '../AvatarImage';
 
 class Conversation extends Component {
 
@@ -18,18 +18,42 @@ class Conversation extends Component {
             
             <div className="chat-container card card-bordered flex-column">
 
+                {this.props.isLoading ?
+                    <div className="spinner-linear">
+                        <div className="line"></div>
+                    </div> : null
+                }
+
                 <header className="flexbox align-items-center p-12 pr-20 bg-lighter bb-1 border-light">
                     <div className="media align-items-center p-0">
-                        <a href="#"><img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." /></a>
+
+                        <AvatarImage 
+                            fileId={this.props.chatAvatar.fileId} 
+                            type={this.props.chatAvatar.type} />
+
                         <div className="media-body">
-                            <h6><a href="#">Maryam Amiri</a></h6>
+                            <h6>{this.props.chatAvatar.name}</h6>
                             <small>Typing...</small>
                         </div>
+                        
                     </div>
                 </header>
 
                 <div className="scrollable flex-grow" id="chat-content" data-provide="emoji">
 
+                    {this.props.messageList.map( (message) => {
+                        
+                        return <div className="media media-chat" key={message._id}>
+                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
+                            <div className="media-body">
+                                <p>{message.message}</p>
+                                <p className="meta"><time dateTime="2017">23:58</time></p>
+                            </div>
+                        </div>
+
+                    })}
+
+                    {/*
                     <div className="media media-chat">
                     <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
                     <div className="media-body">
@@ -103,6 +127,7 @@ class Conversation extends Component {
                         <p className="meta"><time dateTime="2017">00:12</time></p>
                     </div>
                     </div>
+                    */}
 
                 </div>
 
@@ -128,6 +153,9 @@ class Conversation extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        chatAvatar:state.chat.chatAvatar,
+        isLoading:state.chat.isLoading,
+        messageList: state.chat.messageList
     };
 };
 

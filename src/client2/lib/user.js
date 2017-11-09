@@ -9,7 +9,7 @@ class user{
         const checkLocalStoraget = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
         if(checkLocalStoraget){
-            this.userData = localStorage.getItem(constant.LocalStorageKeyUserData);
+            this.userData = JSON.parse(localStorage.getItem(constant.LocalStorageKeyUserData));
             this.token = localStorage.getItem(constant.LocalStorageKeyAccessToken);
         }
     }
@@ -20,7 +20,7 @@ class user{
 
         if(save){
             localStorage.setItem(constant.LocalStorageKeyAccessToken, signinData.newToken);
-            localStorage.setItem(constant.LocalStorageKeyUserData, signinData.user);
+            localStorage.setItem(constant.LocalStorageKeyUserData, JSON.stringify(signinData.user));
         }else{
             localStorage.removeItem(constant.LocalStorageKeyAccessToken);
             localStorage.removeItem(constant.LocalStorageKeyUserData);

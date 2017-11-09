@@ -8,6 +8,7 @@ import chatUI from './chatUI';
 import history from './history';
 import userlist from './userlist';
 import grouplist from './grouplist';
+import chat from './chat';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     chatUI,
     history,
     userlist, 
-    grouplist
+    grouplist,
+    chat
 });
 
 export default rootReducer;

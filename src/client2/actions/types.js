@@ -41,6 +41,12 @@ export const GroupListSearchSucceed = 'GroupList/SearchSucceed';
 export const ToastShow = 'Toast/Show';
 export const ToastHide = 'Toast/Hide';
 
-
 // Logout
 export const Logout = 'Logout';
+
+// Chat
+export const ChatOpenByUser = 'Chat/OpenByUser';
+export const ChatOpenByGroup = 'Chat/OpenByGroup';
+export const ChatOpenByRoom = 'Chat/OpenByRoom';
+export const ChatLoadMessageSucceed = 'Chat/LoadMessageSucceed';
+export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';

@@ -9,6 +9,7 @@ export const ApiUrlGetGroupList = "/group/list/";
 export const ApiUrlGetUserAvatar = "/avatar/user/";
 export const ApiUrlGetGroupAvatar = "/avatar/group/";
 export const ApiUrlGetRoomAvatar = "/avatar/room/";
+export const ApiUrlMessageList = "/message/list/";
 
 export const ApiUrlSearchUserList = "/user/search/";
 export const ApiUrlSearchGroupList = "/group/search/";
@@ -27,3 +28,5 @@ export const AvatarGroup = 'group';
 export const AvatarRoom = 'room';
 
 export const SearchInputTimeout = 300;
+export const ChatDirectionNew = 'new';
+export const ChatDirectionOld = 'old';

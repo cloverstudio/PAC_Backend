@@ -41,3 +41,7 @@ export {
     FailedToGetGroupList, 
     FailedToSearchGroupList
 } from './strings/grouplist'
+
+export {
+    FailedToLoatMessage
+} from './strings/chat'

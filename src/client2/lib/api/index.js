@@ -15,3 +15,7 @@ export {
     callGetGroupList, 
     callSearchGroupList
 } from './grouplist';
+
+export{
+    callGetMessageList
+} from './chat';
