@@ -11,16 +11,9 @@ import * as constant from '../lib/const';
 
 import {store} from '../index';
 
-export function openChatByUser(targetUser) {
-    
-    return (dispatch, getState) => {
+export function loadNewChat(chatId){
 
-        dispatch({
-            type: types.ChatOpenByUser,
-            user: targetUser
-        });
-        
-        const chatId = utils.chatIdByUser(targetUser);
+    return (dispatch, getState) => {
 
         callGetMessageList(chatId,0,constant.ChatDirectionNew).then( (data) => {
 
@@ -38,7 +31,23 @@ export function openChatByUser(targetUser) {
             });
 
         });
-                    
+
+    }
+
+}
+
+export function openChatByUser(targetUser) {
+    
+    return (dispatch, getState) => {
+
+        const chatId = utils.chatIdByUser(targetUser);
+        store.dispatch(push(`/chat/${chatId}`));
+
+        dispatch({
+            type: types.ChatOpenByUser,
+            user: targetUser
+        });
+        
     }
 
 }
@@ -47,29 +56,14 @@ export function openChatByGroup(group) {
 
     return (dispatch, getState) => {
         
+        const chatId = utils.chatIdByGroup(group);
+        store.dispatch(push(`/chat/${chatId}`));
+
         dispatch({
             type: types.ChatOpenByGroup,
             group
         });
-        
-        const chatId = utils.chatIdByGroup(group);
 
-        callGetMessageList(chatId,0,constant.ChatDirectionNew).then( (data) => {
-
-            dispatch({
-                type: types.ChatLoadMessageSucceed,
-                messages: data.messages
-            });
-
-        }).catch( (err) => {
-
-            dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
-
-            dispatch({
-                type: types.ChatLoadMessageFailed
-            });
-
-        });
     }
 
 }
@@ -79,30 +73,14 @@ export function openChatByRoom(room) {
     
     return (dispatch, getState) => {
 
+        const chatId = utils.chatIdByRoom(room);
+        store.dispatch(push(`/chat/${chatId}`));
+
         dispatch({
             type: types.ChatOpenByRoom,
             room
         });
-    
-        const chatId = utils.chatIdByRoom(room);
 
-        callGetMessageList(chatId,0,constant.ChatDirectionNew).then( (data) => {
-
-            dispatch({
-                type: types.ChatLoadMessageSucceed,
-                messages: data.messages
-            });
-
-        }).catch( (err) => {
-
-            dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
-
-            dispatch({
-                type: types.ChatLoadMessageFailed
-            });
-
-        });
-        
     }
 
 }

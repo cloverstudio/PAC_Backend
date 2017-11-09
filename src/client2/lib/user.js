@@ -1,4 +1,5 @@
 import * as constant from './const';
+import SocketManager from './SocketManager';
 
 class user{
     
@@ -11,12 +12,19 @@ class user{
         if(checkLocalStoraget){
             this.userData = JSON.parse(localStorage.getItem(constant.LocalStorageKeyUserData));
             this.token = localStorage.getItem(constant.LocalStorageKeyAccessToken);
+
+            setTimeout(() => {
+                SocketManager.join();
+            },100);
+            
         }
     }
 
     signinSucceed(signinData,save){
         this.userData = signinData.user;
         this.token = signinData.newToken;
+
+        SocketManager.join();
 
         if(save){
             localStorage.setItem(constant.LocalStorageKeyAccessToken, signinData.newToken);

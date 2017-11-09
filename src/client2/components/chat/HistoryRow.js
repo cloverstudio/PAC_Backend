@@ -7,8 +7,6 @@ import * as constant from '../../lib/const';
 import * as actions from '../../actions';
 
 import AvatarImage from '../AvatarImage';
-
-
 import DateTime from '../DateTime';
 
 

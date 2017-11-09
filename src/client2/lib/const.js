@@ -27,3 +27,11 @@ export const AvatarRoom = 'room';
 
 export const ChatDirectionNew = 'new';
 export const ChatDirectionOld = 'old';
+
+export const MessageTypeText = 1;
+export const MessageTypeFile = 2;
+export const MessageTypeLocation = 3;
+export const MessageTypeContact = 4;
+export const MessageTypeSticker = 5;
+export const MessageFileUploading = 10000;
+

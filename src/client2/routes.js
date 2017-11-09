@@ -12,6 +12,7 @@ export default (
 		<Route exact path="/signup" component={SignUp} />
 		<Route path="/about" component={About} />
 		<Route path="/chat" component={Chat} />
+		<Route path="/chat/:chatId" component={Chat} />
 		<Route path="/logout" component={Logout} />
 	</Switch>
 );

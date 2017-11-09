@@ -80,4 +80,40 @@
 
 }
 
+.chat-container{
+
+    .chat-content{
+
+        overflow-x: hidden;
+
+        .media-chat{
+            padding-right: 12px;
+        }
+    
+        .mymessage{
+    
+            flex-direction: row-reverse;
+            
+            p{
+                background-color: $color-blue;
+                color: #fff;
+            }
+            
+            .media-body{
+                flex: none;
+            }
+    
+            .meta{
+                text-align: right;
+                min-width: 200px;
+            }
+        }
+    
+        p{
+            max-width: 90%;
+            min-width: 20%;
+        }
+    }
+
+}
 

@@ -4,8 +4,16 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
+import * as constant from '../../lib/const';
+import * as strings from '../../lib/strings';
+import * as config from '../../lib/config';
+import * as util from '../../lib/utils';
 
+import user from '../../lib/user';
+
+import Ecnryption from '../../lib/encryption/encryption';
 import AvatarImage from '../AvatarImage';
+import DateTime from '../DateTime';
 
 class Conversation extends Component {
 
@@ -13,6 +21,29 @@ class Conversation extends Component {
     }
 
     render() {
+        
+        // combine messages from same user
+        const combinedMessages = [];
+        let currentUserMessages = [];
+        let lastUser = "";
+        
+        for(let i = 0 ; i < this.props.messageList.length ; i++){
+
+            const message = this.props.messageList[i];
+            const currentUser = message.user._id;
+
+            if(lastUser != "" && currentUser != lastUser){
+                combinedMessages.push(currentUserMessages);
+                currentUserMessages = [];
+            }
+
+            currentUserMessages.push(message);
+            lastUser = currentUser;
+
+        }
+
+        if(currentUserMessages.length > 0)
+            combinedMessages.push(currentUserMessages);
 
         return (
             
@@ -39,22 +70,58 @@ class Conversation extends Component {
                     </div>
                 </header>
 
-                <div className="scrollable flex-grow" id="chat-content" data-provide="emoji">
+                <div className="scrollable flex-grow chat-content">
 
-                    {this.props.messageList.map( (message) => {
+                    {combinedMessages.map( (messagesFromSameUser) => {
+
+                        const firstMessage = messagesFromSameUser[0];
+                        const lastMessage = messagesFromSameUser[messagesFromSameUser.length - 1];
+                        const user = firstMessage.user;
                         
-                        return <div className="media media-chat" key={message._id}>
-                            <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
-                            <div className="media-body">
-                                <p>{message.message}</p>
-                                <p className="meta"><time dateTime="2017">23:58</time></p>
+                        if(user._id == this.props.user._id){
+
+                            return <div className="media media-chat mymessage" key={firstMessage._id}>
+                                <div className="media-body">
+
+                                    {messagesFromSameUser.map( (message) => {
+
+                                        if(message.type == constant.MessageTypeText)
+                                            message.message = Ecnryption.decryptText(message.message);
+
+                                        return <p key={message._id}>{message.message}</p>
+                                    
+                                    })}
+
+                                    <p className="meta">
+                                        <DateTime timestamp={lastMessage.created} />
+                                    </p>
+
+                                </div>
                             </div>
-                        </div>
+                        }else
+                            return <div className="media media-chat" key={firstMessage._id}>
+                                <AvatarImage type={constant.AvatarUser} user={user} />
+                                <div className="media-body">
+    
+                                        {messagesFromSameUser.map( (message) => {
+    
+                                            if(message.type == constant.MessageTypeText)
+                                                message.message = Ecnryption.decryptText(message.message);
+    
+                                            return <p key={message._id}>{message.message}</p>
+                                        
+                                        })}
+    
+                                        <p className="meta">
+                                            <DateTime timestamp={lastMessage.created} />
+                                        </p>
+    
+                                    </div>
+                                </div> 
 
                     })}
 
-                    {/*
-                    <div className="media media-chat">
+                    {/*<div className="media media-chat">
                     <img className="avatar" src="../assets/img/avatar/1.jpg" alt="..." />
                     <div className="media-body">
                         <p>Hi</p>
@@ -66,7 +133,7 @@ class Conversation extends Component {
 
                     <div className="media media-meta-day">Today</div>
 
-                    <div className="media media-chat media-chat-reverse">
+                    <div className="media media-chat mymessage">
                     <div className="media-body">
                         <p>Hiii, I'm good.</p>
                         <p>How are you doing?</p>
@@ -84,7 +151,7 @@ class Conversation extends Component {
                     </div>
                     </div>
 
-                    <div className="media media-chat media-chat-reverse">
+                    <div className="media media-chat mymessage">
                     <div className="media-body">
                         <p>That's awesome!</p>
                         <p>You should tell me everything with all small details. I'm so curious to hear your stories.</p>
@@ -106,7 +173,7 @@ class Conversation extends Component {
                     </div>
                     </div>
 
-                    <div className="media media-chat media-chat-reverse">
+                    <div className="media media-chat mymessage">
                     <div className="media-body">
                         <p>These places are fantastic. Wish I could join you guys :disappointed: :disappointed:</p>
                         <p className="meta"><time dateTime="2017">00:10</time></p>
@@ -121,13 +188,12 @@ class Conversation extends Component {
                     </div>
                     </div>
 
-                    <div className="media media-chat media-chat-reverse">
+                    <div className="media media-chat mymessage">
                     <div className="media-body">
                         <p>Are you serious?!! :heart_eyes:</p>
                         <p className="meta"><time dateTime="2017">00:12</time></p>
                     </div>
-                    </div>
-                    */}
+                </div> */}
 
                 </div>
 
@@ -155,7 +221,8 @@ const mapStateToProps = (state) => {
     return {
         chatAvatar:state.chat.chatAvatar,
         isLoading:state.chat.isLoading,
-        messageList: state.chat.messageList
+        messageList: state.chat.messageList,
+        user:user.userData
     };
 };
 

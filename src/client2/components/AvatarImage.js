@@ -19,11 +19,24 @@ class AvatarImage extends Component {
             
         let fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
         
-        if(this.props.type == constant.AvatarUser)
-            fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
-        if(this.props.type == constant.AvatarUser)
+        if(this.props.type == constant.AvatarUser){
+
+            if(!this.props.fileId){
+                
+                const user = this.props.user;
+                if(user && user.avatar &&  user.avatar.thumbnail){
+                    fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + user.avatar.thumbnail.nameOnServer;
+                }
+
+            }else{
+                fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
+            }
+            
+        }
+        if(this.props.type == constant.AvatarGroup)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetGroupAvatar + this.props.fileId;
-        if(this.props.type == constant.AvatarUser)
+            
+        if(this.props.type == constant.AvatarRoom)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetRoomAvatar + this.props.fileId;
 
         let classname = "avatar ";

@@ -8,6 +8,8 @@ import * as actions from '../actions';
 
 import * as constant from '../lib/const';
 import * as strings from '../lib/strings';
+import * as util from '../lib/utils';
+
 import user from '../lib/user';
 import {store} from '../index';
 
@@ -17,6 +19,7 @@ import Header from '../components/chat/Header';
 import History from '../components/chat/History';
 import Conversation from '../components/chat/Conversation';
 import Information from '../components/chat/Information';
+import ReLogin from '../components/ReLogin';
 
 class Main extends Component {
 
@@ -39,13 +42,32 @@ class Main extends Component {
             this.props.hideGroupsView();
     }
 
+    componentWillReceiveProps(nextProps){
+
+        if(this.props.location != nextProps.location){
+            
+            // location update
+            const chatId = util.getChatIdFromUrl(nextProps.location);
+
+            if(chatId && chatId.length > 0)
+                this.props.loadNewChat(chatId);
+
+        }
+    }
+
     componentDidMount() {
+        // location update
+        const chatId = util.getChatIdFromUrl(this.props.location);
         
+        /*
+        if(chatId && chatId.length > 0)
+            this.props.loadNewChat(chatId);
+        */
     }
     
     render() {
         if(!user.token)
-            return <Redirect to='/' />
+            return <ReLogin />
 
         return (
             <div className="pace-done sidebar-folded" onClick={this.globalClick}>
@@ -77,6 +99,7 @@ class Main extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        location: state.routing.location.pathname
     };
 };
 
@@ -84,7 +107,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
         hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
-        hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView())
+        hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
+        loadNewChat: (chatId) => dispatch(actions.chat.loadNewChat(chatId)),
     };
 };
 

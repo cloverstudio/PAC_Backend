@@ -31,3 +31,27 @@ export function chatIdByGroup(group){
 export function chatIdByRoom(room){
     return constant.ChatTypeRoom + "-" + room._id;
 }
+
+export function getChatIdFromUrl(url){
+
+    console.log(url);
+    
+    if(url)
+        return url.replace('/chat/','');
+
+    return url;
+}
+
+export function getRandomString(length){
+
+    if(length == undefined)
+        length = 32;
+        
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < length; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
