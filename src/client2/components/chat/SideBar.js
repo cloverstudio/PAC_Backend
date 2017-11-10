@@ -38,10 +38,10 @@ class SideBar extends Component {
                         </li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa fa-plus"></span>
-                            <span className="title">New Room</span>
-                            </a>
+                            <Link to={'/newroom'} className="menu-link">
+                                <span className="icon fa fa fa-plus"></span>
+                                <span className="title">New Room</span>
+                            </Link>
                         </li>
 
 

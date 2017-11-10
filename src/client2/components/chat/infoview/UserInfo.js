@@ -26,7 +26,7 @@ class UserInfo extends Component {
         let cnTabContentGeneral = "tab-pane fade show  mt-12 pr-12";
         let cnTabContentDetail = "tab-pane fade show bg-white";
 
-        if(this.props.tabState == 'general'){
+        if(this.props.tabState == 'options'){
             cnTabGeneral += " active";
             cnTabContentGeneral += " active";
         }
@@ -51,8 +51,8 @@ class UserInfo extends Component {
             <div> 
                 
                 <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info">
-                    <li className="nav-item" onClick={ () => {this.tabChange("general")}}  >
-                        <a className={cnTabGeneral}>General</a>
+                    <li className="nav-item" onClick={ () => {this.tabChange("options")}}  >
+                        <a className={cnTabGeneral}>Options</a>
                     </li>
                     <li className="nav-item" onClick={ () => {this.tabChange("detail")}}   >
                         <a className={cnTabDetail}>Detail</a>
@@ -64,11 +64,13 @@ class UserInfo extends Component {
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
-                            <div className="media-body">
-                            </div>
-                            <button className="btn btn-w-md btn-multiline btn-primary"><i className="ti-video-camera fs-30"></i><br />Video Call</button>
-                            <button className="btn btn-w-md btn-multiline btn-info"><i className="ti-headphone-alt fs-30"></i><br />Voice Call</button>
+                            <button className="btn btn-label btn-primary btn-block"><label><i className="ti-video-camera"></i></label> Video Call</button>                    
                         </div>
+
+                        <div className="media">
+                            <button className="btn btn-label btn-primary btn-info btn-block"><label><i className="ti-headphone-alt"></i></label> Voice Call</button>                    
+                        </div>
+
 
                         <div className="media">
                             <div className="media-body">

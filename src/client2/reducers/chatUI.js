@@ -37,7 +37,7 @@ const groupsViewState = (state = false, action) => {
     }
 };
 
-const userInfoTabState = (state = "general", action) => {
+const userInfoTabState = (state = "options", action) => {
     switch (action.type) {
         case types.UserInfoTabChange:
             return action.tabName;
@@ -47,7 +47,7 @@ const userInfoTabState = (state = "general", action) => {
 };
 
 
-const groupInfoTabState = (state = "general", action) => {
+const groupInfoTabState = (state = "options", action) => {
     switch (action.type) {
         case types.GroupInfoTabChange:
             return action.tabName;
@@ -56,7 +56,7 @@ const groupInfoTabState = (state = "general", action) => {
     }
 };
 
-const roomInfoTabState = (state = "general", action) => {
+const roomInfoTabState = (state = "options", action) => {
     switch (action.type) {
         case types.RoomInfoTabChange:
             return action.tabName;

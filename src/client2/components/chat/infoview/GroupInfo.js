@@ -25,7 +25,7 @@ class GroupInfo extends Component {
         let cnTabContentGeneral = "tab-pane fade show ";
         let cnTabContentDetail = "tab-pane fade show ";
 
-        if(this.props.tabState == 'general'){
+        if(this.props.tabState == 'options'){
             cnTabGeneral += " active";
             cnTabContentGeneral += " active";
         }
@@ -41,8 +41,8 @@ class GroupInfo extends Component {
             <div> 
 
                 <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info">
-                    <li className="nav-item" onClick={ () => {this.tabChange("general")}}>
-                        <a className={cnTabGeneral}>General</a>
+                    <li className="nav-item" onClick={ () => {this.tabChange("options")}}>
+                        <a className={cnTabGeneral}>Options</a>
                     </li>
                     <li className="nav-item" onClick={ () => {this.tabChange("detail")}}>
                         <a className={cnTabDetail}>Detail</a>
@@ -52,6 +52,7 @@ class GroupInfo extends Component {
                 <div className="tab-content">
                     
                     <div className={cnTabContentGeneral}>
+
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>Notification</strong></p>
@@ -63,17 +64,6 @@ class GroupInfo extends Component {
                             </label>
                         </div>
 
-                        
-                        <div className="media">
-                            <div className="media-body">
-                                <p><strong>Block</strong></p>
-                                <p>This user is not blocked.</p>
-                            </div>
-                            <label className="switch switch-lg">
-                                <input type="checkbox" />
-                                <span className="switch-indicator"></span>
-                            </label>
-                        </div>
                     </div>
 
                     <div className={cnTabContentDetail}>
