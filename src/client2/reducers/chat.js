@@ -1,6 +1,7 @@
 import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
 
+import user from '../lib/user';
 import * as constant from '../lib/const';
 import * as types from '../actions/types';
 
@@ -13,7 +14,8 @@ const initial = {
     isLoading: false,
     messageList: [],
     chatId: "",
-    chatType: constant.ChatTypePrivate
+    chatType: constant.ChatTypePrivate,
+    isTyping: false
 }
 
 const chatId = ( state = initial.chatId, action ) => {
@@ -110,6 +112,10 @@ const isLoading = (state = initial.isLoading, action) => {
             return false;
         case types.ChatLoadMessageFailed:
             return false;
+        case types.ChatLoadOldMessagesStart:
+            return true;
+        case types.ChatLoadOldMessagesSucceed:
+            return false;
         default:
             return state;
     }
@@ -129,10 +135,55 @@ const messageList = (state = initial.messageList, action) => {
 
     if(action.type == types.ChatLoadMessageSucceed){
             newState = action.messages;
-    }    
+    }
+
+    if(action.type === types.ChatLoadOldMessagesSucceed){
+        newState = action.messages.reverse().concat(oldState) 
+    }
+
+    if(action.type === types.ChatSendMessage){
+        newState = oldState.concat(action.message)
+    }
+
+    if(action.type === types.ChatReceiveMessage){
+
+        if (action.message.userID === user.userData._id){
+            let myMessageIndex = oldState.findIndex(message => message.localID === action.message.localID)
+    
+            if (myMessageIndex > -1){
+                return oldState.map((msg, i) => {
+                    if (i === myMessageIndex) {
+                        return action.message
+                    }
+                    else return msg
+                })
+            }
+        }
+
+        else {
+            newState = oldState.concat(action.message)
+        }
+    }
 
     return newState;
 
+}
+
+const isTyping = (state = initial.isTyping, action) => {
+    switch(action.type){
+        case types.ChatOpenByUser:
+            return false
+        case types.ChatOpenByGroup:
+            return false
+        case types.ChatOpenByRoom:
+            return false
+        case types.ChatStartedTyping:
+            return true
+        case types.ChatStoppedTyping:
+            return false
+        default:
+            return state
+    }
 }
 
 export default combineReducers({
@@ -140,5 +191,6 @@ export default combineReducers({
     isLoading,
     messageList,
     chatId,
-    chatType
+    chatType,
+    isTyping
 });

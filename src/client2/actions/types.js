@@ -51,5 +51,13 @@ export const Logout = 'Logout';
 export const ChatOpenByUser = 'Chat/OpenByUser';
 export const ChatOpenByGroup = 'Chat/OpenByGroup';
 export const ChatOpenByRoom = 'Chat/OpenByRoom';
+export const ChatLoadOldMessagesStart = 'Chat/LoadOldMessagesStart'
+export const ChatLoadOldMessagesSucceed = 'Chat/LoadOldMessagesSucceed';
 export const ChatLoadMessageSucceed = 'Chat/LoadMessageSucceed';
 export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';
+
+export const ChatSendMessage = 'Chat/SendMessage';
+export const ChatReceiveMessage = 'Chat/ReceiveMessage';
+
+export const ChatStartedTyping = 'Chat/StartedTyping';
+export const ChatStoppedTyping = 'Chat/StoppedTyping';

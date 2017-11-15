@@ -14,3 +14,4 @@ out
 src/server/lib/init.js
 src/client/js/lib/init.js
 src/server/assets/certificates/**
+src/client2/.vscode/launch.json

@@ -6,6 +6,13 @@ import * as util from './utils';
 
 import user from './user';
 
+import * as actions from '../actions';
+import * as types from '../actions/types';
+
+import Encryption from "./encryption/encryption";
+import {store} from '../index';
+import {chat} from '../actions'; 
+
 class SocketManager {
 
     constructor(){
@@ -32,11 +39,27 @@ class SocketManager {
         });
 
         this.ioNsp.on('typing', function(obj){
-
+            if(store.getState().chat.chatId === obj.roomID && 
+                obj.userID != user.userData._id){
+                if (obj.type === 1){
+                    store.dispatch(actions.chat.startedTyping());
+                }
+                else {
+                    store.dispatch(actions.chat.stoppedTyping());
+                }
+            }
         });
 
         this.ioNsp.on('newmessage', function(obj){
-            
+            if (store.getState().chat.chatId === obj.roomID){
+                
+                store.dispatch(actions.chat.receiveMessage(obj));
+
+                this.emit('openMessage', {
+                    messageID: obj._id,
+                    userID: user.userData._id
+                })
+            }
         });
             
         this.ioNsp.on('updatemessages', function(ary){
@@ -91,6 +114,45 @@ class SocketManager {
     }
 
     actionListener = store => next => action => {
+
+        //construct msg
+        if (action.type === types.ChatSendMessage){
+            const currentState = store.getState();
+            
+            //common fields
+            action.message = {
+                roomID: currentState.chat.chatId, 
+                userID: user.userData._id,
+                type: action.messageType,
+                localID: util.getRandomString(),
+                attributes: {"useclient":"web"}
+            }
+            
+            //user
+            if (action.messageType === constant.MessageTypeText || action.messageType === constant.MessageTypeFile){
+                action.message.user = user.userData
+            }
+
+            //message / file field
+            switch(action.messageType){
+                case constant.MessageTypeText:
+                    action.message.message = Encryption.encryptText(action.content);
+                    break;
+                case constant.messageTypeFile:
+                    action.message.file = action.content;
+                    break;
+                case constant.messageTypeSticker:
+                    action.message.message = action.content;
+                    break;
+                default:
+                    return false;
+            }
+
+            this.emit('sendMessage', action.message);
+            //add created field
+            action.message.created = new Date().getTime();
+
+        }
         next(action);
     }
 

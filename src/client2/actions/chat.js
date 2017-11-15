@@ -184,3 +184,56 @@ export function openChatByRoom(room) {
     }
 
 }
+
+export function loadOldMessages(chatId, lastMessage){
+
+    return (dispatch, getState) => {
+        dispatch({
+            type:types.ChatLoadOldMessagesStart
+        })
+        
+        callGetMessageList(chatId,lastMessage, constant.ChatDirectionOld).then( (data) => {
+
+            dispatch({
+                type: types.ChatLoadOldMessagesSucceed,
+                messages: data.messages
+            });
+
+        }).catch( (err) => {
+            dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
+
+            dispatch({
+                type: types.ChatLoadMessageFailed
+            });
+
+        });
+
+    }
+}
+
+export function receiveMessage(message){
+    return{
+        type: types.ChatReceiveMessage,
+        message
+    }
+}
+
+export function sendMessage(messageType, content){
+    return{
+        type: types.ChatSendMessage, 
+        messageType,
+        content
+    }
+}
+
+export function startedTyping(){
+    return {
+        type: types.ChatStartedTyping
+    }
+}
+
+export function stoppedTyping(){
+    return {
+        type: types.ChatStoppedTyping
+    }
+}
