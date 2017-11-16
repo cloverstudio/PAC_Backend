@@ -8,6 +8,7 @@ import * as logout from './logout';
 import * as userlist from './userlist';
 import * as grouplist from './grouplist';
 import * as chat from './chat';
+import * as stickers from './stickers';
 
 export function filterTable(filter) {
     return {
@@ -24,5 +25,6 @@ export {
     logout,
     grouplist,
     userlist,
-    chat
+    chat,
+    stickers
 }

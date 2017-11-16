@@ -65,11 +65,23 @@ const roomInfoTabState = (state = "general", action) => {
     }
 };
 
+const stickersViewState = (state = false, action) => {
+    switch(action.type) {
+        case types.ChatShowStickersView:
+            return true;
+        case types.ChatHideStickersView:
+            return false;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     notificationState,
     usersViewState,
     groupsViewState,
     userInfoTabState,
     groupInfoTabState,
-    roomInfoTabState
+    roomInfoTabState, 
+    stickersViewState
 });;

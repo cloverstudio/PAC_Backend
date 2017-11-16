@@ -10,6 +10,7 @@ import userlist from './userlist';
 import grouplist from './grouplist';
 import chat from './chat';
 import infoview from './infoview';
+import stickers from './stickers';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     userlist, 
     grouplist,
     chat,
-    infoview
+    infoview,
+    stickers
 });
 
 export default rootReducer;

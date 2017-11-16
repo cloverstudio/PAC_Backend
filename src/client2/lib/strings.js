@@ -45,3 +45,7 @@ export {
 export {
     FailedToLoatMessage
 } from './strings/chat'
+
+export {
+    FailedToGetStickers
+} from './strings/stickers'

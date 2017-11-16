@@ -79,6 +79,20 @@ export function tabChangedRoomInfo(tabName) {
 
 }
 
+export function hideStickersView() {
+    
+    return {
+        type: types.ChatHideStickersView
+    };
+}
+
+export function showStickersView() {
+
+    return {
+        type: types.ChatShowStickersView
+    };
+}
+
 
 
 

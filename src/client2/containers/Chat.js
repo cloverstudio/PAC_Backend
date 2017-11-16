@@ -40,6 +40,9 @@ class Main extends Component {
         
         if(! /topbar-btn|fa-users/.test(e.target.className))
             this.props.hideGroupsView();
+
+        if(! /publisher-btn|fa-smile-o/.test(e.target.className))
+            this.props.hideStickersView();
     }
 
     componentWillReceiveProps(nextProps){
@@ -109,6 +112,7 @@ const mapDispatchToProps = (dispatch) => {
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
         openChatByChatId: (chatId) => dispatch(actions.chat.openChatByChatId(chatId)),
         loadNewChat: (chatId) => dispatch(actions.chat.loadNewChat(chatId)),
+        hideStickersView: () => dispatch(actions.chatUI.hideStickersView())
     };
 };
 
