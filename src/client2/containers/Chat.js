@@ -96,6 +96,7 @@ const mapDispatchToProps = (dispatch) => {
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
         openChatByChatId: (chatId) => dispatch(actions.chat.openChatByChatId(chatId)),
         loadNewChat: (chatId) => dispatch(actions.chat.loadNewChat(chatId)),
+        hideStickersView: () => dispatch(actions.chatUI.hideStickersView())
     };
 };
 

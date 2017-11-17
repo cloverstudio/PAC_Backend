@@ -20,6 +20,9 @@ export const UserInfoTabChange = 'Chat/UserInfoTabChange';
 export const GroupInfoTabChange = 'Chat/GroupInfoTabChange';
 export const RoomInfoTabChange = 'Chat/RoomInfoTabChange';
 
+export const ChatShowStickersView = 'Chat/ShowStickersView';
+export const ChatHideStickersView = 'Chat/HideStickersView';
+
 // History
 export const HistoryLoadInitial = 'History/LoadInitial';
 export const HistoryLoadInitialSucceed = 'History/LoadInitialSucceed';
@@ -51,5 +54,18 @@ export const Logout = 'Logout';
 export const ChatOpenByUser = 'Chat/OpenByUser';
 export const ChatOpenByGroup = 'Chat/OpenByGroup';
 export const ChatOpenByRoom = 'Chat/OpenByRoom';
+export const ChatLoadOldMessagesStart = 'Chat/LoadOldMessagesStart'
+export const ChatLoadOldMessagesSucceed = 'Chat/LoadOldMessagesSucceed';
 export const ChatLoadMessageSucceed = 'Chat/LoadMessageSucceed';
 export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';
+
+export const ChatSendMessage = 'Chat/SendMessage';
+export const ChatReceiveMessage = 'Chat/ReceiveMessage';
+
+export const ChatStartedTyping = 'Chat/StartedTyping';
+export const ChatStoppedTyping = 'Chat/StoppedTyping';
+
+// Stickers
+export const StickersLoadStart = 'Stickers/LoadStart';
+export const StickersLoadSucceed = 'Stickers/LoadSucceed';
+export const StickersLoadFailed = 'Stickers/LoadFailed';

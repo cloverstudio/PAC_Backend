@@ -18,6 +18,8 @@ export const ApiUrlGetRoomDetail = "/room/detail/";
 export const ApiUrlSearchUserList = "/user/search/";
 export const ApiUrlSearchGroupList = "/group/search/";
 
+export const ApiUrlGetStickers = "/stickers";
+
 export const ErrorCodeInvalidToken = 4000007;
 
 export const LocalStorageKeyAccessToken = "accesstoken";
@@ -42,3 +44,4 @@ export const MessageTypeContact = 4;
 export const MessageTypeSticker = 5;
 export const MessageFileUploading = 10000;
 
+export const urlRegularExpression = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})$/;

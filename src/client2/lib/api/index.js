@@ -26,3 +26,6 @@ export{
     callGetRoomDetail,
 } from './getDetail';
 
+export{
+    callGetStickers
+} from './stickers';

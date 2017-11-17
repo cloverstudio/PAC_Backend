@@ -55,3 +55,9 @@ export function getRandomString(length){
 
     return text;
 }
+
+export function scrollElemBottom(element){
+    if (element.scrollHeight > element.clientHeight){
+        element.scrollTop = element.scrollHeight - element.clientHeight
+    }
+}
