@@ -41,7 +41,7 @@ StickersController.prototype.init = function(app){
     /**
      * @api {get} /api/v3/stickers/{stickerId} get sticker details
      **/
-    router.get('/:stickerId', checkAPIKey, (request,response) => {
+    router.get('/:stickerId', (request,response) => {
         const stickerId = request.params.stickerId;
         const filePath = Config.uploadPath + "/" + stickerId;
         
