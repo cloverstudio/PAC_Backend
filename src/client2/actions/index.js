@@ -9,6 +9,7 @@ import * as userlist from './userlist';
 import * as grouplist from './grouplist';
 import * as chat from './chat';
 import * as stickers from './stickers';
+import * as createRoom from './createRoom';
 
 export function filterTable(filter) {
     return {
@@ -26,5 +27,6 @@ export {
     grouplist,
     userlist,
     chat,
-    stickers
+    stickers,
+    createRoom
 }

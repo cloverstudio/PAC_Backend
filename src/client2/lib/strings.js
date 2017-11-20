@@ -49,3 +49,19 @@ export {
 export {
     FailedToGetStickers
 } from './strings/stickers'
+
+export {
+    Save,
+    Cancel,
+    NoUserFound,
+    CreateRoom,
+    UsersTitle,
+    UserName,
+    SelectedUsers,
+    RoomName,
+    Description,
+    AvatarImage,
+    ChooseFile,
+    UserNameHelp,
+    FailedToCreateRoom
+} from './strings/createRoom'

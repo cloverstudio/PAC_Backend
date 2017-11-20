@@ -29,3 +29,7 @@ export{
 export{
     callGetStickers
 } from './stickers';
+
+export{
+    createRoom
+} from './createRoom';

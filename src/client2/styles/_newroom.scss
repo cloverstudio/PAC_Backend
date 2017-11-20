@@ -3,17 +3,45 @@
         height: auto;
     }
 
-    .user-picker{
+    .users-container{
 
-        position: absolute;
-        background-color: $color-bg-new;
+        position: relative;
+
+        .user-picker-container{
+
+            padding: 0px 15px 0px 15px;
+            margin: 0px;
+
+            position: absolute;
+            width: 100%;
+            top: 70px;
+            left: 0px;
+            z-index: 100;
+
+            .user-picker{
+                
+                max-height: 330px;
+                overflow-y: auto;
+                background-color: $white;
+                
+                .media{
+                    cursor: pointer;
+                }
         
-        .media{
-            cursor: pointer;
+                .media:hover{
+                    background-color: $gray-100;
+                }
+        
+            }   
+        
         }
 
-        .media:hover{
-            background-color: #fff;
+    }
+
+    .button-container{
+
+        button{
+            margin-left: 12px;
         }
 
     }

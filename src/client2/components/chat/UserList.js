@@ -43,7 +43,6 @@ class UserList extends Component {
 
         this.lastSearchTimeout = setTimeout(()=>{
             this.props.searchUserList(e.target.value)
-            
         }, constant.SearchInputTimeout);
     }
 

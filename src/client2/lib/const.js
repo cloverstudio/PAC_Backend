@@ -20,6 +20,8 @@ export const ApiUrlSearchGroupList = "/group/search/";
 
 export const ApiUrlGetStickers = "/stickers";
 
+export const ApiUrlCreateRoom = "/room/new";
+
 export const ErrorCodeInvalidToken = 4000007;
 
 export const LocalStorageKeyAccessToken = "accesstoken";

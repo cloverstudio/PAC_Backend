@@ -69,3 +69,18 @@ export const ChatStoppedTyping = 'Chat/StoppedTyping';
 export const StickersLoadStart = 'Stickers/LoadStart';
 export const StickersLoadSucceed = 'Stickers/LoadSucceed';
 export const StickersLoadFailed = 'Stickers/LoadFailed';
+
+// create room
+export const CreateRoomSearchUserStart = 'CreateRoom/SearchUserStart';
+export const CreateRoomSearchUserSucceed = 'CreateRoom/SearchUserSucceed';
+export const CreateRoomSearchUserFailed = 'CreateRoom/SearchUserFailed';
+export const CreateRoomAddMember = 'CreateRoom/AddMember';
+export const CreateRoomDeleteMember = 'CreateRoom/DeleteMember';
+export const CreateRoomTypeName = 'CreateRoom/TypeName';
+export const CreateRoomTypeDescription = 'CreateRoom/TypeDescription';
+export const CreateRoomSelectFile = 'CreateRoom/SelectFile';
+export const CreateRoomDeleteFile = 'CreateRoom/DeleteFile';
+export const CreateRoomSaveStart = 'CreateRoom/SaveStart';
+export const CreateRoomSaveSucceed = 'CreateRoom/SaveSucceed';
+export const CreateRoomSaveFailed = 'CreateRoom/SaveFailed';
+export const CreateRoomCancel = 'CreateRoom/Cancel';

@@ -174,6 +174,10 @@ class Conversation extends Component {
                         }
 
                         const firstMessage = messagesFromSameUser[0];
+
+                        if(!firstMessage)
+                            return null;
+                            
                         const lastMessage = messagesFromSameUser[messagesFromSameUser.length - 1];
                         const user = firstMessage.user;
                         
