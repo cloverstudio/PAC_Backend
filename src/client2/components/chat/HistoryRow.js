@@ -30,7 +30,7 @@ class HistoryRow extends Component {
         else if(this.props.history.chatType == constant.ChatTypeRoom){
             this.props.openChatByRoom(this.props.history.room);
         }
-
+        
     }
 
     render() {

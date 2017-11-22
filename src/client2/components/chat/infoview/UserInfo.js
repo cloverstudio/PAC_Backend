@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 
 import * as constant from '../../../lib/const';
 import * as actions from '../../../actions';
+import * as strings from '../../../lib/strings';
+
+import user from '../../../lib/user';
 
 import AvatarImage from '../../AvatarImage';
 import DateTime from '../../DateTime';
@@ -18,6 +21,16 @@ class UserInfo extends Component {
         this.props.tabChange(tabName);
     }
 
+    componentWillReceiveProps(nextProps){
+
+        if(this.props.user != nextProps.user ||
+            this.props.chatId != nextProps.chatId){
+            
+
+        }
+    }
+    
+
     render() {
 
         let cnTabGeneral = "nav-link ";
@@ -30,7 +43,6 @@ class UserInfo extends Component {
             cnTabGeneral += " active";
             cnTabContentGeneral += " active";
         }
-
 
         if(this.props.tabState == 'detail'){
             cnTabDetail += " active";
@@ -52,10 +64,10 @@ class UserInfo extends Component {
                 
                 <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info">
                     <li className="nav-item" onClick={ () => {this.tabChange("options")}}  >
-                        <a className={cnTabGeneral}>Options</a>
+                        <a className={cnTabGeneral}>{strings.InfoViewUserDetailOptions[user.lang]}</a>
                     </li>
                     <li className="nav-item" onClick={ () => {this.tabChange("detail")}}   >
-                        <a className={cnTabDetail}>Detail</a>
+                        <a className={cnTabDetail}>{strings.InfoViewUserDetailDetail[user.lang]}</a>
                     </li>
                 </ul>
                 
@@ -64,17 +76,17 @@ class UserInfo extends Component {
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
-                            <button className="btn btn-label btn-primary btn-block"><label><i className="ti-video-camera"></i></label> Video Call</button>                    
+                            <button className="btn btn-label btn-primary btn-block"><label><i className="ti-video-camera"></i></label>{strings.InfoViewUserDetailVideoCall[user.lang]}</button>                    
                         </div>
 
                         <div className="media">
-                            <button className="btn btn-label btn-primary btn-info btn-block"><label><i className="ti-headphone-alt"></i></label> Voice Call</button>                    
+                            <button className="btn btn-label btn-primary btn-info btn-block"><label><i className="ti-headphone-alt"></i></label>{strings.InfoViewUserDetailVoiceCall[user.lang]}</button>                    
                         </div>
 
 
                         <div className="media">
                             <div className="media-body">
-                                <p><strong>Notification</strong></p>
+                                <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
                                 <p>This room is muted.</p>
                             </div>
                             <label className="switch switch-lg">
@@ -86,7 +98,7 @@ class UserInfo extends Component {
                         
                         <div className="media">
                             <div className="media-body">
-                                <p><strong>Block</strong></p>
+                                <p><strong>{strings.InfoViewUserDetailBlock[user.lang]}</strong></p>
                                 <p>This user is not blocked.</p>
                             </div>
                             <label className="switch switch-lg">
@@ -102,19 +114,19 @@ class UserInfo extends Component {
                         <div className="quickview-block form-type-material">
                             <div className="form-group do-float">
                                 <span className="form-control">{this.props.user.name}</span>
-                                <label>Name</label>
+                                <label>{strings.InfoViewUserDetailName[user.lang]}</label>
                             </div>
                 
                             <div className="form-group do-float">
                                 <span className="form-control">{this.props.user.description}</span>
-                                <label>Description</label>
+                                <label>{strings.InfoViewUserDetailDescription[user.lang]}</label>
                             </div>
 
                             <div className="form-group do-float">
                                 <span className="form-control">
                                     <DateTime timestamp={lastlogin} />
                                 </span>
-                                <label>Last Login</label>
+                                <label>{strings.InfoViewUserDetailLastLogin[user.lang]}</label>
                             </div>
 
 
@@ -133,7 +145,8 @@ class UserInfo extends Component {
 const mapStateToProps = (state) => {
     return {
         tabState: state.chatUI.userInfoTabState,
-        user: state.infoview.user
+        user: state.infoview.user,
+        chatId: state.chat.chatId
 
     };
 };

@@ -98,7 +98,7 @@ class Information extends Component {
 const mapStateToProps = (state) => {
     return {
         chatType: state.chat.chatType,
-        chatAvatar:state.chat.chatAvatar,
+        chatAvatar: state.chat.chatAvatar,
     };
 };
 

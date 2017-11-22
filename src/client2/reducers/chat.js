@@ -15,7 +15,9 @@ const initial = {
     messageList: [],
     chatId: "",
     chatType: constant.ChatTypePrivate,
-    isTyping: false
+    isTyping: false,
+    currentChatUser: null
+
 }
 
 const chatId = ( state = initial.chatId, action ) => {
@@ -42,6 +44,21 @@ const chatType = ( state = initial.chatType, action ) => {
             return constant.ChatTypeGroup;
         case types.ChatOpenByRoom:
             return constant.ChatTypeRoom;
+        default:
+            return state;
+    }
+
+}
+
+const currentChatUser = ( state = initial.currentChatUser, action ) => {
+    
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return action.user;
+        case types.ChatOpenByGroup:
+            return null;
+        case types.ChatOpenByRoom:
+            return null;
         default:
             return state;
     }
@@ -192,5 +209,6 @@ export default combineReducers({
     messageList,
     chatId,
     chatType,
-    isTyping
+    isTyping,
+    currentChatUser
 });

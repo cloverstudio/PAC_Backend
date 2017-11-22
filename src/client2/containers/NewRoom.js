@@ -33,6 +33,8 @@ class NewRoom extends Base {
 
         e.persist();
         
+        this.props.typeKeyword(e.target.value);
+
         clearTimeout(this.lastSearchTimeout);
 
         this.lastSearchTimeout = setTimeout( () =>{
@@ -87,7 +89,7 @@ class NewRoom extends Base {
 
                                         <div className="input-group">
                                             <span className="input-group-addon" id="basic-addon1"><i className="ti-search"></i></span>
-                                            <input type="text" onChange={this.onInputKeyword} className="form-control" placeholder={strings.UserName[user.lang]} />
+                                            <input type="text" value={this.props.keyword} onChange={this.onInputKeyword} className="form-control" placeholder={strings.UserName[user.lang]} />
                                         </div>
                                         <small className="form-text">{strings.UserNameHelp[user.lang]}</small>
                                     
@@ -157,14 +159,14 @@ class NewRoom extends Base {
                                         <label>{strings.RoomName[user.lang]}</label>
 
                                         <div className="input-group">
-                                           <input type="text" className="form-control" placeholder={strings.RoomName[user.lang]} onChange={ e => { this.props.typeName ( e.target.value ) }}/>
+                                           <input type="text" value={this.props.name} className="form-control" placeholder={strings.RoomName[user.lang]} onChange={ e => { this.props.typeName ( e.target.value ) }}/>
                                         </div>
 
                                         <br />
 
                                         <label>{strings.Description[user.lang]}</label>
                                         <div className="input-group">
-                                            <textarea type="text" className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }}></textarea>
+                                            <textarea type="text" className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }}>{this.props.description}</textarea>
                                         </div>
 
                                         <br />
@@ -236,7 +238,10 @@ const mapStateToProps = (state) => {
         members: state.createRoom.members,
         avatarImage: state.createRoom.avatarImage,
         avatarImageUrl: state.createRoom.avatarImageUrl,
-        saving: state.createRoom.saving
+        saving: state.createRoom.saving,
+        keyword: state.createRoom.keyword,
+        name: state.createRoom.name,
+        description: state.createRoom.description
     };
 };
 
@@ -250,6 +255,7 @@ const mapDispatchToProps = (dispatch) => {
         save: () => dispatch(actions.createRoom.save()),
         addMember: user => dispatch(actions.createRoom.addMember(user)),
         deleteMember: user => dispatch(actions.createRoom.deleteMember(user)),
+        typeKeyword: keyword => dispatch(actions.createRoom.typeKeyword(keyword)),
         typeName: name => dispatch(actions.createRoom.typeName(name)),
         typeDescription: description => dispatch(actions.createRoom.typeDescription(description)),
         selectFile: file => dispatch(actions.createRoom.selectFile(file)),

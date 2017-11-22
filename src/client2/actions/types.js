@@ -76,6 +76,7 @@ export const CreateRoomSearchUserSucceed = 'CreateRoom/SearchUserSucceed';
 export const CreateRoomSearchUserFailed = 'CreateRoom/SearchUserFailed';
 export const CreateRoomAddMember = 'CreateRoom/AddMember';
 export const CreateRoomDeleteMember = 'CreateRoom/DeleteMember';
+export const CreateRoomTypeKeyword = 'CreateRoom/TypeKeyword';
 export const CreateRoomTypeName = 'CreateRoom/TypeName';
 export const CreateRoomTypeDescription = 'CreateRoom/TypeDescription';
 export const CreateRoomSelectFile = 'CreateRoom/SelectFile';

@@ -85,6 +85,15 @@ export function save() {
     }
 }
 
+export function typeKeyword(keyword) {
+
+    return {
+        type: types.CreateRoomTypeKeyword,
+        keyword
+    }
+    
+}
+
 export function typeName(name) {
 
     return {

@@ -6,7 +6,7 @@ import { isError } from 'util';
 
 const keyword = (state = "", action) => {
     switch (action.type) {
-        case types.CreateRoomSearchUserStart:
+        case types.CreateRoomTypeKeyword:
             return action.keyword;
         case types.CreateRoomAddMember:
             return "";
@@ -70,6 +70,7 @@ const members = (state = [], action) => {
             return state;
     }
 }
+
 
 const name = (state = "", action) => {
     switch (action.type) {

@@ -65,3 +65,16 @@ export {
     UserNameHelp,
     FailedToCreateRoom
 } from './strings/createRoom'
+
+export {
+    InfoViewUserDetailOptions,
+    InfoViewUserDetailDetail,
+    InfoViewUserDetailBlock,
+    InfoViewUserDetailNotification,
+    InfoViewUserDetailDescription,
+    InfoViewUserDetailLastLogin,
+    InfoViewUserDetailName,
+    InfoViewUserDetailVideoCall,
+    InfoViewUserDetailVoiceCall,    
+} from './strings/infoview'
+
