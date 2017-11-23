@@ -7,6 +7,10 @@ import * as constant from '../../../lib/const';
 import * as actions from '../../../actions';
 import * as strings from '../../../lib/strings';
 
+import {
+    callGetUserDetail
+} from '../../../lib/api/';
+
 import user from '../../../lib/user';
 
 import AvatarImage from '../../AvatarImage';
@@ -23,13 +27,66 @@ class UserInfo extends Component {
 
     componentWillReceiveProps(nextProps){
 
-        if(this.props.user != nextProps.user ||
-            this.props.chatId != nextProps.chatId){
+        if(this.props.timestampByChat != nextProps.timestampByChat){
             
-
+            this.updateSwitches();
+            
         }
     }
     
+    updateSwitches = () =>{
+
+        callGetUserDetail(user.userData._id).then( (data) => {
+            
+            const targetUserId = this.props.user._id;
+
+            this.props.loadDone();
+
+            const blockedUsers = data.user.blocked;
+            const mutedUsers = data.user.muted;
+
+            if(blockedUsers.indexOf(targetUserId) != -1){
+
+                this.props.loadBlockState(true);
+
+            }else{
+
+                this.props.loadBlockState(false);
+
+            }
+            
+            if(mutedUsers.indexOf(targetUserId) != -1){
+
+                this.props.loadMuteState(true);
+
+            }else{
+
+                this.props.loadMuteState(false);
+
+            }
+            
+        }).catch( (err) => {
+
+            console.error(err);
+            this.props.showError(strings.InfoViewFailedToGetDetail[user.lang]);
+
+        });
+
+    }
+
+    tuggleMute = () => {
+        
+        this.props.updateMuteState(!this.props.muted);
+        this.props.loadMuteState(!this.props.muted);
+
+    }
+
+    tuggleBlock = () => {
+        
+        this.props.updateBlockState(!this.props.blocked);
+        this.props.loadBlockState(!this.props.blocked);
+
+    }
 
     render() {
 
@@ -87,10 +144,12 @@ class UserInfo extends Component {
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
-                                <p>This room is muted.</p>
+                                {this.props.muted ? 
+                                    <p>{strings.InfoViewTextMutedExplanation[user.lang]}</p> : null
+                                }
                             </div>
                             <label className="switch switch-lg">
-                                <input type="checkbox" />
+                                <input type="checkbox" checked={this.props.muted} onClick={this.tuggleMute} />
                                 <span className="switch-indicator"></span>
                             </label>
                         </div>
@@ -99,10 +158,12 @@ class UserInfo extends Component {
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailBlock[user.lang]}</strong></p>
-                                <p>This user is not blocked.</p>
+                                {this.props.blocked ? 
+                                    <p>{strings.InfoViewTextBlockedExplanation[user.lang]}</p> : null
+                                }
                             </div>
                             <label className="switch switch-lg">
-                                <input type="checkbox" />
+                                <input type="checkbox" checked={this.props.blocked} onClick={this.tuggleBlock}/>
                                 <span className="switch-indicator"></span>
                             </label>
                         </div>
@@ -145,15 +206,23 @@ class UserInfo extends Component {
 const mapStateToProps = (state) => {
     return {
         tabState: state.chatUI.userInfoTabState,
-        user: state.infoview.user,
-        chatId: state.chat.chatId
-
+        user: state.infoView.user,
+        chatId: state.chat.chatId,
+        timestampByChat: state.chat.timestampByChat,
+        blocked: state.infoView.blocked,
+        muted: state.infoView.muted
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        tabChange: tabName => dispatch(actions.chatUI.tabChangedUserInfo(tabName))
+        tabChange: tabName => dispatch(actions.chatUI.tabChangedUserInfo(tabName)),
+        loadDone: () => dispatch(actions.infoView.loadDone()),
+        loadMuteState: (state) => dispatch(actions.infoView.loadMuteState(state)),
+        loadBlockState: (state) => dispatch(actions.infoView.loadBlockState(state)),
+        showError: (err) => dispatch(actions.notification.showToast(err)),
+        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state,constant.ChatTypePrivate)),
+        updateBlockState: (state) => dispatch(actions.infoView.updateBlockState(state)),
     };
 };
 

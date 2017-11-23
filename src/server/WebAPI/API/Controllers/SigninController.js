@@ -58,6 +58,12 @@ SigninController.prototype.init = function(app){
             return;
         }
 
+        
+        if(request.organization.organizationId != organization){
+            response.status(403).send('Wrong organization.');
+            return;
+        }
+        
         async.waterfall([(done) => {
 
             var result = {};

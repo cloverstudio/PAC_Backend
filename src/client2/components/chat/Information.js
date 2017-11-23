@@ -23,9 +23,11 @@ class Information extends Component {
             
             <div className="info-container bg-lighter border-light">
 
-                <div className="spinner-linear">
-                    <div className="line"></div>
-                </div>
+                {this.props.isLoading ?
+                    <div className="spinner-linear">
+                        <div className="line"></div>
+                    </div> : null
+                }
                 
                 <div className="quickview-body ps-container ps-theme-default">
 
@@ -99,6 +101,7 @@ const mapStateToProps = (state) => {
     return {
         chatType: state.chat.chatType,
         chatAvatar: state.chat.chatAvatar,
+        isLoading: state.infoView.isLoading
     };
 };
 

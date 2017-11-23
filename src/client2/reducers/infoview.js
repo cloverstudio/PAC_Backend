@@ -11,7 +11,10 @@ const initial = {
         token:[]
     },
     group:null,
-    room:null
+    room:null,
+    isLoading: false,
+    blocked: false,
+    muted: false
 }
 
 const user = ( state = initial.user, action ) => {
@@ -47,10 +50,49 @@ const room = ( state = initial.room, action ) => {
 
 }
 
+const isLoading = (state = initial.isLoading, action) => {
     
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return true;
+         case types.ChatOpenByGroup:
+            return true;
+        case types.ChatOpenByRoom:
+            return true;
+        case types.InfoViewLoadDone:
+            return false;
+        default:
+            return state;
+    }
+}
+
+
+const blocked = (state = initial.blocked, action) => {
+    
+    switch (action.type) {
+        case types.InfoViewLoadBlockState:
+            return action.state;
+        default:
+            return state;
+    }
+}
+
+const muted = (state = initial.muted, action) => {
+    
+    switch (action.type) {
+        case types.InfoViewLoadMuteState:
+            return action.state;
+        default:
+            return state;
+    }
+}
+
 
 export default combineReducers({
     user,
     group,
-    room
+    room,
+    isLoading,
+    muted,
+    blocked
 });

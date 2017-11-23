@@ -9,7 +9,7 @@ import history from './history';
 import userlist from './userlist';
 import grouplist from './grouplist';
 import chat from './chat';
-import infoview from './infoview';
+import infoView from './infoview';
 import stickers from './stickers';
 import createRoom from './createRoom';
 
@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
     userlist, 
     grouplist,
     chat,
-    infoview,
+    infoView,
     stickers,
     createRoom
 });

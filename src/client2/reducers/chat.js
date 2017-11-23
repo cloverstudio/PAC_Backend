@@ -16,7 +16,22 @@ const initial = {
     chatId: "",
     chatType: constant.ChatTypePrivate,
     isTyping: false,
-    currentChatUser: null
+    timestampByChat: 0
+
+}
+
+const timestampByChat = ( state = initial.timestampByChat, action ) => {
+
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return (new Date()).getTime();
+            case types.ChatOpenByGroup:
+            return (new Date()).getTime();
+        case types.ChatOpenByRoom:
+            return (new Date()).getTime();
+        default:
+            return state;
+    }
 
 }
 
@@ -210,5 +225,5 @@ export default combineReducers({
     chatId,
     chatType,
     isTyping,
-    currentChatUser
+    timestampByChat
 });

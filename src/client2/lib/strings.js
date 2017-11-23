@@ -75,6 +75,11 @@ export {
     InfoViewUserDetailLastLogin,
     InfoViewUserDetailName,
     InfoViewUserDetailVideoCall,
-    InfoViewUserDetailVoiceCall,    
+    InfoViewUserDetailVoiceCall,  
+    InfoViewFailedToGetDetail,
+    InfoViewTextMutedExplanation,
+    InfoViewTextBlockedExplanation,
+    InfoViewFailedToBlock,
+    InfoViewFailedToMute
 } from './strings/infoview'
 

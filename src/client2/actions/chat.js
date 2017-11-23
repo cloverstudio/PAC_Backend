@@ -127,9 +127,6 @@ export function openChatByUser(targetUser) {
 
         const chatId = utils.chatIdByUser(targetUser);
 
-        if(getState().chat.chatId == chatId)
-            return;
-
         store.dispatch(push(`/chat/${chatId}`));
 
         dispatch({
@@ -147,9 +144,6 @@ export function openChatByGroup(group) {
     return (dispatch, getState) => {
         
         const chatId = utils.chatIdByGroup(group);
-
-        if(getState().chat.chatId == chatId)
-            return;
 
         dispatch(push(`/chat/${chatId}`));
 
@@ -169,9 +163,6 @@ export function openChatByRoom(room) {
     return (dispatch, getState) => {
 
         const chatId = utils.chatIdByRoom(room);
-
-        if(getState().chat.chatId == chatId)
-            return;
 
         dispatch(push(`/chat/${chatId}`));
 

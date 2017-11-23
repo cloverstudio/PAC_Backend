@@ -4,8 +4,6 @@ import user from './user';
 
 export function chatIdByUser(targetUser){
     
-    console.log('user',user);
-    
     let chatId = "";
     let user1 = user.userData;
     let user2 = targetUser;

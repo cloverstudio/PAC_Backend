@@ -58,12 +58,15 @@ export const ChatLoadOldMessagesStart = 'Chat/LoadOldMessagesStart'
 export const ChatLoadOldMessagesSucceed = 'Chat/LoadOldMessagesSucceed';
 export const ChatLoadMessageSucceed = 'Chat/LoadMessageSucceed';
 export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';
-
 export const ChatSendMessage = 'Chat/SendMessage';
 export const ChatReceiveMessage = 'Chat/ReceiveMessage';
-
 export const ChatStartedTyping = 'Chat/StartedTyping';
 export const ChatStoppedTyping = 'Chat/StoppedTyping';
+
+// Info
+export const InfoViewLoadDone = 'InfoView/LoadDone';
+export const InfoViewLoadMuteState = 'InfoView/MuteState';
+export const InfoViewLoadBlockState = 'InfoView/BlockState';
 
 // Stickers
 export const StickersLoadStart = 'Stickers/LoadStart';

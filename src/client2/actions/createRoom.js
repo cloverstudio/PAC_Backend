@@ -50,7 +50,7 @@ export function save() {
 
         const state = getState();
 
-        createRoom(
+        callCreateRoom(
             state.createRoom.members,
             state.createRoom.name,
             state.createRoom.description,

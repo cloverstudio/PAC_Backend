@@ -8,6 +8,7 @@ import * as logout from './logout';
 import * as userlist from './userlist';
 import * as grouplist from './grouplist';
 import * as chat from './chat';
+import * as infoView from './infoView';
 import * as stickers from './stickers';
 import * as createRoom from './createRoom';
 
@@ -28,5 +29,6 @@ export {
     userlist,
     chat,
     stickers,
-    createRoom
+    createRoom,
+    infoView
 }

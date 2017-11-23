@@ -31,7 +31,8 @@ class Main extends Base {
 
     componentWillReceiveProps(nextProps){
 
-        if(this.props.location != nextProps.location){
+        if(this.props.location != nextProps.location || 
+            this.props.timestampByChat != nextProps.timestampByChat){
             
             // location update
             const chatId = util.getChatIdFromUrl(nextProps.location);
@@ -85,7 +86,8 @@ class Main extends Base {
 
 const mapStateToProps = (state) => {
     return {
-        location: state.routing.location.pathname
+        location: state.routing.location.pathname,
+        timestampByChat: state.chat.timestampByChat
     };
 };
 

@@ -22,6 +22,9 @@ export const ApiUrlGetStickers = "/stickers";
 
 export const ApiUrlCreateRoom = "/room/new";
 
+export const ApiUrlMute = "/user/mute";
+export const ApiUrlBlock = "/user/block";
+
 export const ErrorCodeInvalidToken = 4000007;
 
 export const LocalStorageKeyAccessToken = "accesstoken";

@@ -5,7 +5,7 @@ import * as constant from '../const';
 
 import user from '../user';
 
-export function createRoom(
+export function callCreateRoom(
     users,
     name,
     description,

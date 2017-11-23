@@ -31,5 +31,14 @@ export{
 } from './stickers';
 
 export{
-    createRoom
+    callCreateRoom
 } from './createRoom';
+
+export{
+    callMute
+} from './mute';
+
+export{
+    callBlock
+} from './block';
+
