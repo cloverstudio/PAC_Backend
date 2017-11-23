@@ -247,6 +247,7 @@ var MessageList = {
                     userID: message.userID,
                     roomID: message.roomID,
                     type: message.type,
+                    message: message.message,
                     created:message.created,
                     user: message.user,
                     seenBy: message.seenBy,
