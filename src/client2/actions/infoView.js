@@ -121,7 +121,7 @@ export function loadMembers() {
         let lastMembersCount = constant.ApiDefauleListItemCount;
         let page = 1;
 
-        if(group){
+        if(group._id){
 
             function loadMember(page){
 
@@ -156,15 +156,15 @@ export function loadMembers() {
         
                 });
              
-                loadMember(page);
+                
             }
 
+            loadMember(page);
             return;
         }
 
+        if(room._id){
 
-        if(room){
-            
             function loadMember(page){
 
                 callRoomUserList(
@@ -202,10 +202,9 @@ export function loadMembers() {
         
                 });
                 
-                loadMember(page);
-
             }
             
+            loadMember(page);
             return;
         }
 
