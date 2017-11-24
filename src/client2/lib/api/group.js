@@ -29,5 +29,22 @@ export function callSearchGroupList(value){
         else {
             return Promise.resolve(response.data);
         }
-            });
+    });
+
 }
+
+export function callGroupUserList(groupId,page){
+
+    return api.get(constant.ApiUrlGetGroupUserList + '/' + groupId + '/' + page)
+    
+    .then( (response) => {
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to get user list");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+    
+}
+

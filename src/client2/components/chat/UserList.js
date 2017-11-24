@@ -82,7 +82,7 @@ class UserList extends Component {
                                 fileId = user.avatar.thumbnail.nameOnServer;
 
                             return (
-                                <div className="media align-items-center" key={user._id}>
+                                <div className="media align-items-center" key={user._id} onClick={ () => { this.props.openChat(user) }}>
 
                                     <span className="flexbox flex-grow gap-items text-truncate">
 
@@ -122,7 +122,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadUserList: (page) => dispatch(actions.userlist.loadUserList(page)),
-        searchUserList: (value) => dispatch(actions.userlist.searchUserList(value))
+        searchUserList: (value) => dispatch(actions.userlist.searchUserList(value)),
+        openChat: user => dispatch(actions.chat.openChatByUser(user)),
     };
 };
 

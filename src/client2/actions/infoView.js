@@ -3,10 +3,18 @@ import { push } from 'react-router-redux'
 import * as types from './types';
 import * as actions from '../actions';
 import * as strings from '../lib/strings';
+import * as constant from '../lib/const';
 
-import {callGetHistory,callBlock,callMute} from '../lib/api/';
+import {
+    callGetHistory,
+    callBlock,callMute,
+    callGroupUserList,
+    callRoomUserList
+} from '../lib/api/';
+
 import user from '../lib/user';
 import {store} from '../index';
+
 
 export function loadDone() {
     
@@ -81,14 +89,13 @@ export function updateBlockState(state){
         if(!targetUser)
             return;
 
-        callBlock(
+        callGroupUserList(
             state,
             targetUser._id,
         ).then ( (result) => {
 
             if(result !== undefined){
 
-                
 
             }else{
                 dispatch(actions.notification.showToast(strings.InfoViewFailedToBlock[user.lang]));
@@ -101,5 +108,109 @@ export function updateBlockState(state){
         });
 
     }
+
+}
+
+export function loadMembers() {
+    
+    return (dispatch, getState) => {
+
+        const group = getState().infoView.group;
+        const room = getState().infoView.room;
+
+        let members = [];
+        let lastMembersCount = constant.ApiDefauleListItemCount;
+        let page = 1;
+
+        if(group){
+
+            function loadMember(page){
+
+                callGroupUserList(
+                    group._id,
+                    page,
+                ).then ( (result) => {
+        
+                    if(result.list){
+        
+                        members = members.concat(result.list);
+                        
+                        if(result.list.length >= constant.ApiDefauleListItemCount){
+                            loadMember(++page);
+                        }else{
+
+                            dispatch({
+                                type:types.InfoViewLoadMembersSuccess,
+                                members
+                            })
+
+                        }
+
+                    }else{
+                        dispatch(actions.notification.showToast(strings.InfoViewFailedToLoadUserList[user.lang]));
+                    }
+        
+                }).catch( (err) => {
+                    
+                    dispatch(actions.notification.showToast(strings.InfoViewFailedToLoadUserList[user.lang]));
+        
+                });
+                
+            }
+            
+            loadMember(page);
+
+            return;
+        }
+
+
+        if(room){
+            
+            function loadMember(page){
+
+                callRoomUserList(
+                    room._id,
+                    page,
+                ).then ( (result) => {
+        
+                    if(result.list){
+        
+                        members = members.concat(result.list);
+                        
+                        if(result.list.length >= constant.ApiDefauleListItemCount){
+                            
+                            loadMember(++page);
+
+                        }else{
+
+                            dispatch({
+                                type:types.InfoViewLoadMembersSuccess,
+                                members
+                            })
+
+                        }
+
+                    }else{
+
+                        dispatch(actions.notification.showToast(strings.InfoViewFailedToLoadUserList[user.lang]));
+
+                    }
+        
+                }).catch( (err) => {
+                    
+                    console.error(err);
+                    dispatch(actions.notification.showToast(strings.InfoViewFailedToLoadUserList[user.lang]));
+        
+                });
+                
+            }
+            
+            loadMember(page);
+
+            return;
+        }
+
+    }
+
 
 }

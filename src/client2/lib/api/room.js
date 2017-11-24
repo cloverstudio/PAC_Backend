@@ -1,5 +1,6 @@
 import sha1 from 'sha1';
 
+import api from './api'; 
 import * as config from '../config';
 import * as constant from '../const';
 
@@ -48,3 +49,20 @@ export function callCreateRoom(
     });
     
 }
+
+export function callRoomUserList(roomId,page){
+
+    return api.get(constant.ApiUrlGetRoomUserList + '/' + roomId + '/' + page)
+    
+    .then( (response) => {
+
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to get user list");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+    
+}
+

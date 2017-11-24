@@ -74,7 +74,7 @@ class GroupList extends Component {
                                 fileId = group.avatar.thumbnail.nameOnServer;
                             
                             return (
-                                <div className="media align-items-center" key={group._id}>
+                                <div className="media align-items-center" key={group._id} onClick={ () => { this.props.openChat(group) }} >
                                     <span className="flexbox flex-grow gap-items text-truncate">
                                        
                                         <AvatarImage fileId={fileId} type={constant.AvatarGroup} />
@@ -110,7 +110,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadGroupList: (page) => dispatch(actions.grouplist.loadGroupList(page)),
-        searchGroupList: (value) => dispatch(actions.grouplist.searchGroupList(value))
+        searchGroupList: (value) => dispatch(actions.grouplist.searchGroupList(value)),
+        openChat: group => dispatch(actions.chat.openChatByGroup(group))
     };
 };
 

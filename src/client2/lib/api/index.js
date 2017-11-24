@@ -13,8 +13,9 @@ export {
 
 export {
     callGetGroupList, 
-    callSearchGroupList
-} from './grouplist';
+    callSearchGroupList,
+    callGroupUserList
+} from './group';
 
 export{
     callGetMessageList
@@ -31,8 +32,9 @@ export{
 } from './stickers';
 
 export{
-    callCreateRoom
-} from './createRoom';
+    callCreateRoom,
+    callRoomUserList
+} from './room';
 
 export{
     callMute

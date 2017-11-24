@@ -14,7 +14,8 @@ const initial = {
     room:null,
     isLoading: false,
     blocked: false,
-    muted: false
+    muted: false,
+    members: []
 }
 
 const user = ( state = initial.user, action ) => {
@@ -87,6 +88,18 @@ const muted = (state = initial.muted, action) => {
     }
 }
 
+const members = (state = initial.members, action) => {
+    
+    switch (action.type) {
+        case types.InfoViewLoadMembersSuccess:
+            return action.members;
+        default:
+            return state;
+    }
+}
+
+
+
 
 export default combineReducers({
     user,
@@ -94,5 +107,6 @@ export default combineReducers({
     room,
     isLoading,
     muted,
-    blocked
+    blocked,
+    members
 });

@@ -14,7 +14,7 @@ export const InfoViewUserDetailBlock = {
 }
 
 export const InfoViewUserDetailNotification = {
-    EN:"Notification"
+    EN:"Mute"
 }
 
 export const InfoViewUserDetailName = {
@@ -42,7 +42,7 @@ export const InfoViewFailedToGetDetail = {
 }
 
 export const InfoViewTextMutedExplanation = {
-    EN:"This room is muted."
+    EN:"This chat is muted."
 }
 
 export const InfoViewTextBlockedExplanation = {
@@ -55,4 +55,16 @@ export const InfoViewFailedToMute = {
 
 export const InfoViewFailedToBlock = {
     EN:"Failed to block."
+}
+
+export const InfoViewCreated = {
+    EN:"Created"
+}
+
+export const InfoViewUserDetailMembers = {
+    EN:"Members"
+}
+
+export const InfoViewFailedToLoadUserList = {
+    EN:"Failed to get users. Please try again while after."
 }

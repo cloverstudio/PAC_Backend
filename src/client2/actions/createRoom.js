@@ -4,7 +4,7 @@ import * as utils from '../lib/utils';
 
 import * as types from './types';
 import * as actions from '../actions';
-import {callSearchUserList,createRoom} from '../lib/api/';
+import {callSearchUserList,callCreateRoom} from '../lib/api/';
 import * as strings from '../lib/strings';
 import user from '../lib/user';
 import {store} from '../index';

@@ -67,6 +67,7 @@ export const ChatStoppedTyping = 'Chat/StoppedTyping';
 export const InfoViewLoadDone = 'InfoView/LoadDone';
 export const InfoViewLoadMuteState = 'InfoView/MuteState';
 export const InfoViewLoadBlockState = 'InfoView/BlockState';
+export const InfoViewLoadMembersSuccess = 'InfoView/LoadMembersSuccess';
 
 // Stickers
 export const StickersLoadStart = 'Stickers/LoadStart';

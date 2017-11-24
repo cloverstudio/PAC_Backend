@@ -80,6 +80,9 @@ export {
     InfoViewTextMutedExplanation,
     InfoViewTextBlockedExplanation,
     InfoViewFailedToBlock,
-    InfoViewFailedToMute
+    InfoViewFailedToMute,
+    InfoViewCreated,
+    InfoViewUserDetailMembers,
+    InfoViewFailedToLoadUserList
 } from './strings/infoview'
 

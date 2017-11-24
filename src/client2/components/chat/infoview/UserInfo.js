@@ -43,7 +43,7 @@ class UserInfo extends Component {
             this.props.loadDone();
 
             const blockedUsers = data.user.blocked;
-            const mutedUsers = data.user.muted;
+            const mutedChat = data.user.muted;
 
             if(blockedUsers.indexOf(targetUserId) != -1){
 
@@ -55,7 +55,7 @@ class UserInfo extends Component {
 
             }
             
-            if(mutedUsers.indexOf(targetUserId) != -1){
+            if(mutedChat.indexOf(targetUserId) != -1){
 
                 this.props.loadMuteState(true);
 
@@ -179,7 +179,7 @@ class UserInfo extends Component {
                             </div>
                 
                             <div className="form-group do-float">
-                                <span className="form-control">{this.props.user.description}</span>
+                                <span className="form-control">{this.props.user.description}&nbsp;</span>
                                 <label>{strings.InfoViewUserDetailDescription[user.lang]}</label>
                             </div>
 
