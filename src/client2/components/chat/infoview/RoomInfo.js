@@ -44,6 +44,9 @@ class RoomInfo extends Component {
 
         callGetUserDetail(user.userData._id).then( (data) => {
             
+            if(!this.props.room)
+                return;
+
             const roomId = this.props.room._id;
 
             this.props.loadDone();
@@ -58,6 +61,7 @@ class RoomInfo extends Component {
             
         }).catch( (err) => {
 
+            console.error(err);
             this.props.showError(strings.InfoViewFailedToGetDetail[user.lang]);
 
         });

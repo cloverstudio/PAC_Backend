@@ -25,6 +25,10 @@ class UserInfo extends Component {
         this.props.tabChange(tabName);
     }
 
+    componentDidMount(nextProps){
+        this.updateSwitches();
+    }
+
     componentWillReceiveProps(nextProps){
 
         if(this.props.timestampByChat != nextProps.timestampByChat){
@@ -38,6 +42,9 @@ class UserInfo extends Component {
 
         callGetUserDetail(user.userData._id).then( (data) => {
             
+            if(!this.props.user)
+                return;
+
             const targetUserId = this.props.user._id;
 
             this.props.loadDone();
@@ -109,7 +116,7 @@ class UserInfo extends Component {
         // get last login
         let lastlogin = 0;
 
-        if(this.props.user){
+        if(this.props.user && this.props.user.token){
             const lastToken = this.props.user.token[this.props.user.token.length - 1];
             if(lastToken)
                 lastlogin = lastToken.generateAt;
@@ -140,7 +147,6 @@ class UserInfo extends Component {
                             <button className="btn btn-label btn-primary btn-info btn-block"><label><i className="ti-headphone-alt"></i></label>{strings.InfoViewUserDetailVoiceCall[user.lang]}</button>                    
                         </div>
 
-
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
@@ -154,7 +160,6 @@ class UserInfo extends Component {
                             </label>
                         </div>
 
-                        
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailBlock[user.lang]}</strong></p>
@@ -173,6 +178,7 @@ class UserInfo extends Component {
                     <div className={cnTabContentDetail}>
 
                         <div className="quickview-block form-type-material">
+
                             <div className="form-group do-float">
                                 <span className="form-control">{this.props.user.name}</span>
                                 <label>{strings.InfoViewUserDetailName[user.lang]}</label>
@@ -189,7 +195,6 @@ class UserInfo extends Component {
                                 </span>
                                 <label>{strings.InfoViewUserDetailLastLogin[user.lang]}</label>
                             </div>
-
 
                         </div>
 

@@ -40,6 +40,9 @@ class GroupInfo extends Component {
 
         callGetUserDetail(user.userData._id).then( (data) => {
             
+            if(!this.props.group)
+                return;
+
             const groupId = this.props.group._id;
 
             this.props.loadDone();
@@ -54,6 +57,7 @@ class GroupInfo extends Component {
             
         }).catch( (err) => {
 
+            console.error(err);
             this.props.showError(strings.InfoViewFailedToGetDetail[user.lang]);
 
         });

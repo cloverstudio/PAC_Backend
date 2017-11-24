@@ -10,8 +10,16 @@ const initial = {
         description: "",
         token:[]
     },
-    group:null,
-    room:null,
+    group:{
+        name:"",
+        description: "",
+        created:0
+    },
+    room:{
+        name:"",
+        description: "",
+        created:0
+    },
     isLoading: false,
     blocked: false,
     muted: false,
@@ -23,6 +31,10 @@ const user = ( state = initial.user, action ) => {
     switch (action.type) {
         case types.ChatOpenByUser:
             return action.user;
+        case types.ChatOpenByGroup:
+            return initial.group;
+        case types.ChatOpenByRoom:
+            return initial.room;
         default:
             return state;
     }
@@ -32,8 +44,13 @@ const user = ( state = initial.user, action ) => {
 const group = ( state = initial.group, action ) => {
     
         switch (action.type) {
-             case types.ChatOpenByGroup:
+            case types.ChatOpenByUser:
+                return initial.user;
+            case types.ChatOpenByGroup:
                 return action.group;
+            case types.ChatOpenByRoom:
+                return initial.room;
+
             default:
                 return state;
         }
@@ -43,8 +60,13 @@ const group = ( state = initial.group, action ) => {
 const room = ( state = initial.room, action ) => {
     
     switch (action.type) {
+        case types.ChatOpenByUser:
+            return initial.user;
+        case types.ChatOpenByGroup:
+            return initial.group;
         case types.ChatOpenByRoom:
             return action.room;
+
         default:
             return state;
     }

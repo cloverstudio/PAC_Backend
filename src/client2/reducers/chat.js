@@ -25,7 +25,7 @@ const timestampByChat = ( state = initial.timestampByChat, action ) => {
     switch (action.type) {
         case types.ChatOpenByUser:
             return (new Date()).getTime();
-            case types.ChatOpenByGroup:
+        case types.ChatOpenByGroup:
             return (new Date()).getTime();
         case types.ChatOpenByRoom:
             return (new Date()).getTime();

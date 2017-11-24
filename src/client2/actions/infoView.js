@@ -51,11 +51,11 @@ export function updateMuteState(state,type){
         const targetGroup = getState().infoView.group;
         const targetRoom = getState().infoView.room;
 
-        if(targetUser)
+        if(targetUser._id)
             targetId = targetUser._id;
-        if(targetGroup)
+        if(targetGroup._id)
             targetId = targetGroup._id;
-        if(targetRoom)
+        if(targetRoom._id)
             targetId = targetRoom._id;
 
         callMute(
@@ -65,7 +65,6 @@ export function updateMuteState(state,type){
         ).then ( (result) => {
 
             if(result !== undefined){
-
 
 
             }else{
@@ -89,7 +88,7 @@ export function updateBlockState(state){
         if(!targetUser)
             return;
 
-        callGroupUserList(
+        callBlock(
             state,
             targetUser._id,
         ).then ( (result) => {
@@ -152,13 +151,13 @@ export function loadMembers() {
         
                 }).catch( (err) => {
                     
+                    console.error(err);
                     dispatch(actions.notification.showToast(strings.InfoViewFailedToLoadUserList[user.lang]));
         
                 });
-                
+             
+                loadMember(page);
             }
-            
-            loadMember(page);
 
             return;
         }
@@ -203,10 +202,10 @@ export function loadMembers() {
         
                 });
                 
+                loadMember(page);
+
             }
             
-            loadMember(page);
-
             return;
         }
 

@@ -31,6 +31,8 @@ export function loadNewChat(chatId){
 
         }).catch( (err) => {
 
+            console.error(err);
+
             dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
 
             dispatch({
@@ -71,7 +73,9 @@ export function openChatByChatId(chatId){
                 dispatch(loadNewChat(chatId));
 
             }).catch( (err) => {
-    
+                
+                console.error(err);
+
                 dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
     
             });
@@ -91,7 +95,8 @@ export function openChatByChatId(chatId){
                 dispatch(loadNewChat(chatId));
 
             }).catch( (err) => {
-    
+                
+                console.error(err);
                 dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
     
             });
@@ -110,7 +115,7 @@ export function openChatByChatId(chatId){
                 dispatch(loadNewChat(chatId));
 
             }).catch( (err) => {
-    
+                console.error(err);
                 dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
     
             });
@@ -191,6 +196,9 @@ export function loadOldMessages(chatId, lastMessage){
             });
 
         }).catch( (err) => {
+
+            console.error(err);
+            
             dispatch(actions.notification.showToast(strings.FailedToLoatMessage[user.lang]));
 
             dispatch({
