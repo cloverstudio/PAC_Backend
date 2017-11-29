@@ -57,6 +57,24 @@ class Header extends Component {
             this.props.hideGroupsView();
     }
 
+    tuggleSidebar = (e) => {
+
+        if(this.props.sidebarState)
+            this.props.hideSidebar();
+        else
+            this.props.showSidebar();
+
+    }
+
+    toggleInfoView = (e) => {
+
+        if(this.props.infoViewState)
+            this.props.hideInfoView();
+        else
+            this.props.showInfoView();
+
+    }
+    
     render() {
 
         let notificationsMenuClass = "dropdown-menu dropdown-menu-right";
@@ -67,7 +85,6 @@ class Header extends Component {
         if(this.props.usersViewState)
             usersViewClass += " reveal";
 
-
         let groupsViewClass = "quickview";
         if(this.props.groupsViewState)
             groupsViewClass += " reveal";
@@ -77,11 +94,18 @@ class Header extends Component {
             <header className="topbar">
 
                 <div className="topbar-left">
-                    <span className="topbar-btn sidebar-toggler"><i>&#9776;</i></span>
+                    <span onClick={this.tuggleSidebar} className="topbar-btn sidebar-toggler">
+                    <i className="sidebar-icon">&#9776;</i></span>
                 </div>
 
                 <div className="topbar-right">
                     
+                    <a className="topbar-btn hidden-sm-up" onClick={this.toggleInfoView}>
+                        <i className="fa fa-info-circle"></i>
+                    </a>
+
+                    <div className="topbar-divider hidden-sm-up"></div>
+
                     <a className="topbar-btn" onClick={this.toggleUsersView}><i className="fa fa-user"></i></a>
                     <div className={usersViewClass}>
                         <UserList />
@@ -91,7 +115,6 @@ class Header extends Component {
                     <div className={groupsViewClass}>
                         <GroupList />
                     </div>
-
 
                     <div className="topbar-divider"></div>
 
@@ -107,55 +130,60 @@ class Header extends Component {
 
                                 <div className="media-list media-list-hover media-list-divided media-list-xs">
 
-                                <a className="media media-new" href="#">
-                                    <span className="avatar bg-success"><i className="ti-user"></i></span>
-                                    <div className="media-body">
-                                    <p>New user registered</p>
-                                    <time dateTime="2017-07-14 20:00">Just now</time>
+                                    <a className="media media-new" href="#">
+                                        <span className="avatar bg-success"><i className="ti-user"></i></span>
+                                        <div className="media-body">
+                                        <p>New user registered</p>
+                                        <time dateTime="2017-07-14 20:00">Just now</time>
+                                        </div>
+                                    </a>
+
+                                    <a className="media" href="#">
+                                        <span className="avatar bg-info"><i className="ti-shopping-cart"></i></span>
+                                        <div className="media-body">
+                                        <p>New order received</p>
+                                        <time dateTime="2017-07-14 20:00">2 min ago</time>
+                                        </div>
+                                    </a>
+
+                                    <a className="media" href="#">
+                                        <span className="avatar bg-warning"><i className="ti-face-sad"></i></span>
+                                        <div className="media-body">
+                                        <p>Refund request from <b>Ashlyn Culotta</b></p>
+                                        <time dateTime="2017-07-14 20:00">24 min ago</time>
+                                        </div>
+                                    </a>
+
+                                    <a className="media" href="#">
+                                        <span className="avatar bg-primary"><i className="ti-money"></i></span>
+                                        <div className="media-body">
+                                        <p>New payment has made through PayPal</p>
+                                        <time dateTime="2017-07-14 20:00">53 min ago</time>
+                                        </div>
+                                    </a>
                                     </div>
-                                </a>
 
-                                <a className="media" href="#">
-                                    <span className="avatar bg-info"><i className="ti-shopping-cart"></i></span>
-                                    <div className="media-body">
-                                    <p>New order received</p>
-                                    <time dateTime="2017-07-14 20:00">2 min ago</time>
+                                    <div className="dropdown-footer">
+                                    <div className="left">
+                                        <a href="#">Read all notifications</a>
                                     </div>
-                                </a>
 
-                                <a className="media" href="#">
-                                    <span className="avatar bg-warning"><i className="ti-face-sad"></i></span>
-                                    <div className="media-body">
-                                    <p>Refund request from <b>Ashlyn Culotta</b></p>
-                                    <time dateTime="2017-07-14 20:00">24 min ago</time>
+                                    <div className="right">
+                                        <a href="#" data-provide="tooltip" title="Mark all as read"><i className="fa fa-circle-o"></i></a>
+                                        <a href="#" data-provide="tooltip" title="Update"><i className="fa fa-repeat"></i></a>
+                                        <a href="#" data-provide="tooltip" title="Settings"><i className="fa fa-gear"></i></a>
                                     </div>
-                                </a>
 
-                                <a className="media" href="#">
-                                    <span className="avatar bg-primary"><i className="ti-money"></i></span>
-                                    <div className="media-body">
-                                    <p>New payment has made through PayPal</p>
-                                    <time dateTime="2017-07-14 20:00">53 min ago</time>
-                                    </div>
-                                </a>
-                                </div>
-
-                                <div className="dropdown-footer">
-                                <div className="left">
-                                    <a href="#">Read all notifications</a>
-                                </div>
-
-                                <div className="right">
-                                    <a href="#" data-provide="tooltip" title="Mark all as read"><i className="fa fa-circle-o"></i></a>
-                                    <a href="#" data-provide="tooltip" title="Update"><i className="fa fa-repeat"></i></a>
-                                    <a href="#" data-provide="tooltip" title="Settings"><i className="fa fa-gear"></i></a>
-                                </div>
                                 </div>
 
                             </div>
+
                         </li>
+
                     </ul>
+
                 </div>
+
             </header>
 
         );
@@ -167,7 +195,9 @@ const mapStateToProps = (state) => {
     return {
         notificationState:state.chatUI.notificationState,
         usersViewState:state.chatUI.usersViewState,
-        groupsViewState:state.chatUI.groupsViewState
+        groupsViewState:state.chatUI.groupsViewState,
+        sidebarState:state.chatUI.sidebarState,
+        infoViewState:state.chatUI.infoViewState
     };
 };
 
@@ -180,7 +210,11 @@ const mapDispatchToProps = (dispatch) => {
         showGroupsView: () => dispatch(actions.chatUI.showGroupsView()),
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
         loadUserList: page => dispatch(actions.userlist.loadUserList(page)), 
-        loadGroupList: page => dispatch(actions.grouplist.loadGroupList(page))
+        loadGroupList: page => dispatch(actions.grouplist.loadGroupList(page)),
+        showSidebar: () => dispatch(actions.chatUI.showSidebar()),
+        hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
+        showInfoView: () => dispatch(actions.chatUI.showInfoView()),
+        hideInfoView: () => dispatch(actions.chatUI.hideInfoView()),
     };
 };
 

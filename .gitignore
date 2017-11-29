@@ -6,6 +6,7 @@ modules_customised/spika/public/uploads
 public/uploads
 public/doc/JS
 public/doc/API
+public/dist
 hostid
 nohup.out
 out

@@ -17,11 +17,16 @@ class Information extends Component {
     static propTypes = {
     }
 
+    //hidden-xs-down
     render() {
+
+        let infoContainerClass = "info-container bg-lighter border-light ";
+        if(this.props.infoViewState)
+            infoContainerClass += " show";
 
         return (
             
-            <div className="info-container bg-lighter border-light">
+            <div className={infoContainerClass}> 
 
                 {this.props.isLoading ?
                     <div className="spinner-linear">
@@ -55,41 +60,6 @@ class Information extends Component {
                 {this.props.chatType == constant.ChatTypeGroup ? <GroupInfo /> : null }
                 {this.props.chatType == constant.ChatTypeRoom ? <RoomInfo /> : null }
 
-                {/*
-                <div className="media">
-                    <div className="media-body">
-                        <p><strong>Notification</strong></p>
-                        <p>This room is muted.</p>
-                    </div>
-                    <label className="switch switch-lg">
-                        <input type="checkbox" />
-                        <span className="switch-indicator"></span>
-                    </label>
-                </div>
-
-                
-                <div className="media">
-                    <div className="media-body">
-                        <p><strong>Block</strong></p>
-                        <p>This user is not blocked.</p>
-                    </div>
-                    <label className="switch switch-lg">
-                        <input type="checkbox" />
-                        <span className="switch-indicator"></span>
-                    </label>
-                </div>
-                
-                <div className="media-list media-list-hover">
-
-                    <div className="media items-center">
-                        <img className="avatar avatar-sm" src="../assets/img/avatar/1.jpg" alt="..." />
-                        <p className="title">Maryam Amiri</p>
-                        <a className="media-action hover-primary" href="#"><i className="fa fa-envelope"></i></a>
-                    </div>
-                    
-                </div>
-                */}
-
             </div>
 
         );
@@ -101,7 +71,8 @@ const mapStateToProps = (state) => {
     return {
         chatType: state.chat.chatType,
         chatAvatar: state.chat.chatAvatar,
-        isLoading: state.infoView.isLoading
+        isLoading: state.infoView.isLoading,
+        infoViewState: state.chatUI.infoViewState
     };
 };
 

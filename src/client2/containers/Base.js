@@ -25,6 +25,14 @@ class Base extends Component {
         
         if(! /topbar-btn|fa-users/.test(e.target.className))
             this.props.hideGroupsView();
+
+        if(! /topbar-btn|sidebar-icon/.test(e.target.className))
+            this.props.hideSidebar();
+    
+        if(! /sidebar|history|menu-link/.test(e.target.className))
+            this.props.hideHistory();
+
+        console.log("classname",e.target.className);
     }
 
     

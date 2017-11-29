@@ -103,8 +103,6 @@ const EncryptManager = {
     
     init: function(callBack){
 
-        window.orientation = 1;
-        
         var timer = setInterval(function () {
             
             if(sjcl.random.isReady()) {

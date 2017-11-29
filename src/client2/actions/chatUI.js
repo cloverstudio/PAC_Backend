@@ -93,6 +93,38 @@ export function showStickersView() {
     };
 }
 
+export function showSidebar(){
+    return {
+        type: types.ChatShowSidebar
+    }
+}
 
+export function hideSidebar(){
+    return {
+        type: types.ChatHideSidebar
+    }
+}
 
+export function showHistory(){
+    return {
+        type: types.ChatShowHistory
+    }
+}
 
+export function hideHistory(){
+    return {
+        type: types.ChatHideHistory
+    }
+}
+
+export function showInfoView(){
+    return {
+        type: types.ChatShowInfoView
+    }
+}
+
+export function hideInfoView(){
+    return {
+        type: types.ChatHideInfoView
+    }
+}

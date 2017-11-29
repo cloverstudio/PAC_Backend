@@ -2,6 +2,31 @@
     overflow-y: auto;
 }
 
+
+.sidebar-folded {
+
+    .sidebar-icons-right {
+
+        @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+
+            &:hover {
+                left: -$width-cons-xl;
+            }
+
+        }
+
+        @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
+
+            &:hover {
+                left: 0;
+            }
+
+        }
+
+    }
+
+}
+
 .topbar{
     .dropdown-menu{
         position: absolute;
@@ -15,23 +40,123 @@
 }
 
 .layout-chat{
+
     .main-content{
         
         height: calc(100vh - 64px);
         padding: 0px;
         flex-direction: row;
         
+        @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+        
+            .chat-container{
+                width: 100%;
+            }
+        
+            .chat-container.hide{
+                width: 0%;
+            }
+
+            .info-container{
+                width: 0%;
+            }
+        
+            .info-container.show{
+                width: 100%;
+            }
+        
+        }
+        
+        @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
+            
+            .info-container{
+                width: 30%;
+            }
+
+            .chat-container{
+                width: 70%;
+            }
+
+        }
+        
         .chat-container{
-            margin: 0px;
-            width: 70%;
+        
+            overflow: hidden;
+
+            header{
+                .media{
+                    .media-body{
+                        small{
+                            display:inline-block;
+                            height:12px;
+                        }
+                    }
+                }
+            }
+        
+            .chat-content{
+        
+                overflow-x: hidden;
+        
+                .media-chat{
+                    padding-right: 12px;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
+        
+                    .media-body{
+                        max-width: 90%;
+        
+                        p{
+                            img{
+                                max-width: 150px;
+                            }
+                        }
+                    }
+                }
+            
+                .mymessage{
+            
+                    flex-direction: row-reverse;
+                    
+                    p{
+                        background-color: $color-blue;
+                        color: #fff;
+        
+                        a{
+                            u{
+                                color:white;
+                            }
+                        }
+                    }
+                    
+                    .media-body{
+                        flex: none;
+                    }
+            
+                    .meta{
+                        text-align: right;
+                        min-width: 200px;
+                    }
+                }
+            
+                p{
+                    min-width: 20%;
+        
+                    &.unsent{
+                        opacity:0.65;
+                    }
+                }
+            }
         }
 
         .info-container{
-
-            width: 30%;
+            .nav-tabs-info{
+                margin: 0px;
+            }
         }
 
     }
+
 }
 
 .scrollable{
@@ -80,78 +205,4 @@
 
 }
 
-.info-container{
-    .nav-tabs-info{
-        margin: 0px;
-    }
-}
-
-.chat-container{
-
-    header{
-        .media{
-            .media-body{
-                small{
-                    display:inline-block;
-                    height:12px;
-                }
-            }
-        }
-    }
-
-    .chat-content{
-
-        overflow-x: hidden;
-
-        .media-chat{
-            padding-right: 12px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-
-            .media-body{
-                max-width: 90%;
-
-                p{
-                    img{
-                        max-width: 150px;
-                    }
-                }
-            }
-        }
-    
-        .mymessage{
-    
-            flex-direction: row-reverse;
-            
-            p{
-                background-color: $color-blue;
-                color: #fff;
-
-                a{
-                    u{
-                        color:white;
-                    }
-                }
-            }
-            
-            .media-body{
-                flex: none;
-            }
-    
-            .meta{
-                text-align: right;
-                min-width: 200px;
-            }
-        }
-    
-        p{
-            min-width: 20%;
-
-            &.unsent{
-                opacity:0.65;
-            }
-        }
-    }
-
-}
 

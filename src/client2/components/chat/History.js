@@ -76,8 +76,6 @@ class History extends Component {
 
                 </div>
 
-                <button className="aside-toggler"></button>
-
             </aside>
 
         );

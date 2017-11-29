@@ -86,3 +86,21 @@ export {
     InfoViewFailedToLoadUserList
 } from './strings/infoview'
 
+export {
+    SidebarTitle1,
+    SidebarTitle2,
+    SidebarTitle3,
+    SidebarChat,
+    SidebarFavorite,
+    SidebarHistory,
+    SidebarSearch,
+    SidebarNewRoom,
+    SidebarMarkAll,
+    SidebarProfile,  
+    SidebarPassword,
+    SidebarAdmin,
+    SidebarLogout,
+    SidebarHelp
+} from './strings/sidebar'
+
+

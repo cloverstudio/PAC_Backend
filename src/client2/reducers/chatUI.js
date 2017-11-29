@@ -76,6 +76,44 @@ const stickersViewState = (state = false, action) => {
     }
 }
 
+const sidebarState = (state = false, action) => {
+    switch(action.type) {
+        case types.ChatShowSidebar:
+            return true;
+        case types.ChatHideSidebar:
+            return false;
+        case types.ChatShowHistory:
+            return false;
+        case types.ChatHideHistory:
+            return false;
+        default:
+            return state;
+    }
+}
+
+const historyBarState = (state = false, action) => {
+    switch(action.type) {
+        case types.ChatShowHistory:
+            return true;
+        case types.ChatHideHistory:
+            return false;
+        default:
+            return state;
+    }
+}
+
+const infoViewState = (state = false, action) => {
+    switch(action.type) {
+        case types.ChatShowInfoView:
+            return true;
+        case types.ChatHideInfoView:
+            return false;
+        default:
+            return state;
+    }
+}
+
+
 export default combineReducers({
     notificationState,
     usersViewState,
@@ -83,5 +121,8 @@ export default combineReducers({
     userInfoTabState,
     groupInfoTabState,
     roomInfoTabState, 
-    stickersViewState
+    stickersViewState,
+    sidebarState,
+    historyBarState,
+    infoViewState
 });;

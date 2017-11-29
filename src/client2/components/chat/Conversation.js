@@ -136,9 +136,13 @@ class Conversation extends Component {
         if(currentUserMessages.length > 0)
             combinedMessages.push(currentUserMessages);
 
+        let chatContainerClass = "chat-container card card-bordered flex-column";
+        if(this.props.infoViewState)
+            chatContainerClass += " hide";
+
         return (
             
-            <div className="chat-container card card-bordered flex-column">
+            <div className={chatContainerClass}>
 
                 {this.props.isLoading ?
                     <div className="spinner-linear">
@@ -309,7 +313,8 @@ const mapStateToProps = (state) => {
         messageList: state.chat.messageList,
         user:user.userData,
         isTyping: state.chat.isTyping,
-        stickersViewState: state.chatUI.stickersViewState
+        stickersViewState: state.chatUI.stickersViewState,
+        infoViewState: state.chatUI.infoViewState
     };
 };
 
