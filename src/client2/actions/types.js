@@ -95,3 +95,13 @@ export const CreateRoomSaveStart = 'CreateRoom/SaveStart';
 export const CreateRoomSaveSucceed = 'CreateRoom/SaveSucceed';
 export const CreateRoomSaveFailed = 'CreateRoom/SaveFailed';
 export const CreateRoomCancel = 'CreateRoom/Cancel';
+
+// call
+export const CallIncoming = 'Call/Incoming';
+export const CallIncomingClose = 'Call/IncomingClose';
+export const CallIncomingReject = 'Call/IncomingReject';
+
+
+
+
+

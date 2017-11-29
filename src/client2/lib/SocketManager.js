@@ -9,6 +9,7 @@ import user from './user';
 import * as actions from '../actions';
 import * as types from '../actions/types';
 
+
 import Encryption from "./encryption/encryption";
 import {store} from '../index';
 import {chat} from '../actions'; 
@@ -76,14 +77,19 @@ class SocketManager {
 
         this.ioNsp.on('call_request', function(obj){
 
+            store.dispatch(actions.call.incomingCall(obj));
+
         });
 
         this.ioNsp.on('call_received', function(){
                 
 
+
         });
         
         this.ioNsp.on('call_cancel', function(){
+
+            store.dispatch(actions.call.incomingCallClose());
 
         });
 
@@ -117,6 +123,7 @@ class SocketManager {
 
         //construct msg
         if (action.type === types.ChatSendMessage){
+
             const currentState = store.getState();
             
             //common fields
@@ -153,6 +160,21 @@ class SocketManager {
             action.message.created = new Date().getTime();
 
         }
+
+        if (action.type === types.CallIncomingReject) {
+
+            const user = store.getState().call.incomingcallUser;
+            if(user){
+                this.emit('call_reject',{
+                    userId : user._id,
+                    rejectType : constant.CallFailedUserReject
+                    
+                });
+            }
+
+
+        }
+        
         next(action);
     }
 

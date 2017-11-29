@@ -14,7 +14,7 @@ import {store} from '../index';
 
 import Base from './Base';
 
-import Toast from '../components/Toast';
+import Modals from '../components/Modals';
 import SideBar from '../components/chat/SideBar';
 import Header from '../components/chat/Header';
 import History from '../components/chat/History';
@@ -222,7 +222,7 @@ class NewRoom extends Base {
 
                 </main>
                 
-                <Toast />
+                <Modals />
                 
             </div>
         );
@@ -241,7 +241,9 @@ const mapStateToProps = (state) => {
         saving: state.createRoom.saving,
         keyword: state.createRoom.keyword,
         name: state.createRoom.name,
-        description: state.createRoom.description
+        description: state.createRoom.description,
+        sidebarState: state.chatUI.sidebarState,
+        historyBarState: state.chatUI.historyBarState
     };
 };
 
@@ -260,6 +262,9 @@ const mapDispatchToProps = (dispatch) => {
         typeDescription: description => dispatch(actions.createRoom.typeDescription(description)),
         selectFile: file => dispatch(actions.createRoom.selectFile(file)),
         deleteFile: file => dispatch(actions.createRoom.deleteFile()),
+        hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
+        hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
+        hideHistory: () => dispatch(actions.chatUI.hideHistory()),
     };
 };
 

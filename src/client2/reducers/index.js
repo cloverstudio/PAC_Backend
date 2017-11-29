@@ -12,6 +12,7 @@ import chat from './chat';
 import infoView from './infoview';
 import stickers from './stickers';
 import createRoom from './createRoom';
+import call from './call';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
     chat,
     infoView,
     stickers,
-    createRoom
+    createRoom,
+    call
 });
 
 export default rootReducer;

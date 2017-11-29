@@ -9,3 +9,7 @@
 
 @import "./chat";
 @import "./newroom";
+
+.scrollable{
+    -webkit-overflow-scrolling: touch;
+}

@@ -253,7 +253,6 @@ class Conversation extends Component {
                 </div>
 
                 <footer className="publisher">
-                    <img className="avatar align-self-start" src="../assets/img/avatar/2.jpg" alt="..." />
                     <input 
                         className="publisher-input" 
                         rows="1" 

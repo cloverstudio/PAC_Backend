@@ -49,3 +49,9 @@ export const MessageFileUploading = 10000;
 export const ApiDefauleListItemCount = 20;
 
 export const urlRegularExpression = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})$/;
+
+export const CallFailedUserOffline = 1;
+export const CallFailedUserBusy = 2;
+export const CallFailedUserReject = 3;
+export const CallFailedUserNotSupport = 4;
+

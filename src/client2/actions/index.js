@@ -11,6 +11,7 @@ import * as chat from './chat';
 import * as infoView from './infoView';
 import * as stickers from './stickers';
 import * as createRoom from './createRoom';
+import * as call from './call';
 
 export function filterTable(filter) {
     return {
@@ -30,5 +31,6 @@ export {
     chat,
     stickers,
     createRoom,
-    infoView
+    infoView,
+    call
 }

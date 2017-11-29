@@ -10,7 +10,7 @@
         @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
 
             &:hover {
-                left: -$width-cons-xl;
+                left: -$width-cons-xl - 80px;
             }
 
         }
@@ -25,6 +25,21 @@
 
     }
 
+
+    .sidebar-icons-right.sidebar-icons-boxed {
+        
+        @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+            
+            .logo-icon,.icon {
+                margin-left: -260px;
+            }
+    
+        }
+        
+    }
+        
+
+    
 }
 
 .topbar{
@@ -82,7 +97,8 @@
         .chat-container{
         
             overflow: hidden;
-
+            margin-bottom: 0px;
+            
             header{
                 .media{
                     .media-body{

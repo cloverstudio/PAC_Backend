@@ -12,11 +12,10 @@ import * as util from '../lib/utils';
 
 import Base from './Base';
 
-
 import user from '../lib/user';
 import {store} from '../index';
 
-import Toast from '../components/Toast';
+import Modals from '../components/Modals';
 import SideBar from '../components/chat/SideBar';
 import Header from '../components/chat/Header';
 import History from '../components/chat/History';
@@ -83,9 +82,10 @@ class Main extends Base {
 
                 </main>
                 
-                <Toast />
-                
+                <Modals />
+
             </div>
+
         );
         
     }
