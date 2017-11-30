@@ -94,7 +94,6 @@ MuteController.prototype.init = function(app){
                     { multi: false }, 
                 function(err, updateResult) {
                     
-                    SocketAPIHandler.joinTo(request.user._id,request.body.type,target);
                     done(err, result);
                     
                 });
@@ -113,7 +112,6 @@ MuteController.prototype.init = function(app){
                     { multi: false }, 
                 function(err, updateResult) {
 
-                    SocketAPIHandler.leaveFrom(request.user._id,request.body.type,target);
                     done(err, result);
                     
                 });
