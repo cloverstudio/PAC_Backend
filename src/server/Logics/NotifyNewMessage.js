@@ -146,21 +146,41 @@ var NotifyNewMessage = {
                     var encryptedMessage = EncryptionManager.encryptText(messageCloned.message);
                     messageCloned.message = encryptedMessage;
                 }
+                
+                var userModel = UserModel.get();
 
                 // websocket notification
                 if(chatType == Const.chatTypeGroup){
                     
-                    messageCloned.group = result.group;
-                    SocketAPIHandler.emitToRoom(messageCloned.roomID,'newmessage',messageCloned);
-                    
-                    done(null,result);
+                    userModel.find({
+                        muted: result.group._id.toString()
+                    }, function (err, findUserResult) {
+
+                        messageCloned.group = result.group;
+                        messageCloned.mutedUsersGroupRoom = _.map(findUserResult, (user) => {
+                            return user._id.toString();
+                        });
+                        SocketAPIHandler.emitToRoom(messageCloned.roomID,'newmessage',messageCloned);
+                        
+                        done(null,result);
+
+                    });
                     
                 } else if(chatType == Const.chatTypeRoom) {
                     
-                    messageCloned.room = result.room;
-                    SocketAPIHandler.emitToRoom(messageCloned.roomID,'newmessage',messageCloned);
+                    userModel.find({
+                        muted: result.room._id.toString()
+                    }, function (err, findUserResult) {
+                        
+                        messageCloned.room = result.room;
+                        messageCloned.mutedUsersGroupRoom = _.map(findUserResult, (user) => {
+                            return user._id.toString();
+                        });
+                        SocketAPIHandler.emitToRoom(messageCloned.roomID,'newmessage',messageCloned);
+                        
+                        done(null,result);
 
-                    done(null,result);
+                    });
                     
                 } else if(chatType == Const.chatTypePrivate){
                     
@@ -186,8 +206,6 @@ var NotifyNewMessage = {
 
                     
                     result.toUserId = toUser;
-
-                    var userModel = UserModel.get();
 
                     userModel.find({
                         _id:result.toUserId
