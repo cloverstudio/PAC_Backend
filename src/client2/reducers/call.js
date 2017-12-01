@@ -16,7 +16,7 @@ const incomingcallRinging = (state = false, action) => {
     }
 };
 
-const incomingcallUser = (state = {}, action) => {
+const incomingCallUser = (state = {}, action) => {
     switch (action.type) {
         case types.CallIncoming:
             return action.call.user;
@@ -25,8 +25,51 @@ const incomingcallUser = (state = {}, action) => {
     }
 };
 
+const outgoingCallRinging = (state = false, action) => {
+    switch (action.type) {
+        case types.CallOutgoing:
+            return true;
+        case types.CallOutgoingClose:
+            return false;
+        case types.CallOutgoingFailed:
+            return false;
+        default:
+            return state;
+    }
+};
+
+const outgoingCallUser = (state = {}, action) => {
+    switch (action.type) {
+        case types.CallOutgoing:
+            return action.call.user;
+        default:
+            return state;
+    }
+};
+
+const outgoingStatus = (state = "", action) => {
+    switch (action.type) {
+        case types.CallOutgoingStatusChanged:
+            return action.message;
+        default:
+            return state;
+    }
+};
+
+const calling = (state = false, action) => {
+    switch (action.type) {
+        case types.CallIncomingAccept:
+            return true;
+        default:
+            return state;
+    }
+};
 
 export default combineReducers({
+    calling,
     incomingcallRinging,
-    incomingcallUser
+    incomingCallUser,
+    outgoingCallRinging,
+    outgoingCallUser,
+    outgoingStatus
 });;

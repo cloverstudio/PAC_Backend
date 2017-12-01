@@ -103,4 +103,15 @@ export {
     SidebarHelp
 } from './strings/sidebar'
 
+export {
+    CallOutgoingFailedByOffile,
+    CallOutgoingFailedUnknown,
+    CallOutgoingFailedByUserBusy,
+    CallOutgoingFailedByReject,
+    CallOutgoingFailedByNotSupport,
+    CallOutgoingMediaError,
+    CallOutgoingStatusInitializingMedia,
+    CallOutgoingStatusConnecting,
+    CallOutgoingStatusRinging
+} from './strings/calling'
 

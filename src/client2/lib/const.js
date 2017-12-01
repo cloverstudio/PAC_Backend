@@ -55,3 +55,8 @@ export const CallFailedUserBusy = 2;
 export const CallFailedUserReject = 3;
 export const CallFailedUserNotSupport = 4;
 
+export const CallTypeOutgoing = 1;
+export const CallTypeIncomming = 2;
+
+export const CallMediaTypeAudio = 1;
+export const CallMediaTypeVideo = 2;

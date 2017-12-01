@@ -4,11 +4,10 @@ import * as constant from './const';
 import * as config from './config';
 import * as util from './utils';
 
-import user from './user';
-
 import * as actions from '../actions';
 import * as types from '../actions/types';
-
+import * as strings from '../lib/strings';
+import user from './user';
 
 import Encryption from "./encryption/encryption";
 import {store} from '../index';
@@ -73,6 +72,32 @@ class SocketManager {
         
         this.ioNsp.on('call_failed', function(obj){
 
+            const failedType = obj.failedType;
+
+            let message = "";
+
+            if(failedType == constant.CallFailedUserOffline){
+                message = strings.CallOutgoingFailedByOffile[user.lang];
+            }
+
+            else if(failedType == constant.CallFailedUserBusy){
+                message = strings.CallOutgoingFailedByUserBusy[user.lang];
+            }
+
+            else if(failedType == constant.CallFailedUserReject){
+                message = strings.CallOutgoingFailedByReject[user.lang];
+            }
+
+            else if(failedType == constant.CallFailedUserNotSupport){
+                message = strings.CallOutgoingFailedByNotSupport[user.lang];
+            }
+            
+            else {
+                message = strings.CallOutgoingFailedUnknown[user.lang];
+            }
+            
+            store.dispatch(actions.call.outgoingCallFailed(message));
+
         });
 
         this.ioNsp.on('call_request', function(obj){
@@ -83,7 +108,7 @@ class SocketManager {
 
         this.ioNsp.on('call_received', function(){
                 
-
+            store.dispatch(actions.call.outgoingCallStatusChanged(strings.CallOutgoingStatusRinging[user.lang]));
 
         });
         
@@ -156,26 +181,52 @@ class SocketManager {
             }
 
             this.emit('sendMessage', action.message);
+
             //add created field
             action.message.created = new Date().getTime();
 
         }
 
         if (action.type === types.CallIncomingReject) {
-
-            const user = store.getState().call.incomingcallUser;
+            const user = store.getState().call.incomingCallUser;
             if(user){
                 this.emit('call_reject',{
                     userId : user._id,
                     rejectType : constant.CallFailedUserReject
-                    
                 });
             }
-
-
         }
         
+        if (action.type === types.CallOutgoingConnect) {
+            const user = action.call.user;
+            if(user){
+                this.emit('call_request',{
+                    userId : user._id,
+                    mediaType : action.call.mediaType
+                });
+            }
+        }
+    
+        if (action.type === types.CallOutgoingClose) {
+            const user = store.getState().call.outgoingCallUser;
+            if(user){
+                this.emit('call_cancel',{
+                    userId : user._id,
+                });
+            }
+        }
+
+        if (action.type === types.CallIncomingAccept) {
+            const user = store.getState().call.incomingCallUser;
+            if(user){
+                this.emit('call_answer',{
+                    userId : user._id,
+                });
+            }
+        }
+
         next(action);
+
     }
 
     join(){

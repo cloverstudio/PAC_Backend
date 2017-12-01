@@ -1,0 +1,103 @@
+.modal-fill.calling{
+    justify-content: start;
+}
+
+.calling{
+
+    @media only screen and (max-width: map-get($grid-breakpoints, md)) {
+        padding-top: 0px;
+
+        .row{
+            margin: 0px;
+        }
+        
+    }
+
+    @media only screen and (min-width: map-get($grid-breakpoints, md)) {
+        padding-top: 10vh;
+        padding-bottom: 10vh;
+    }
+
+    .videos{
+
+        padding: 0px;
+        position: relative;
+        width: 100%;
+
+        @media only screen and (max-width: map-get($grid-breakpoints, md)) {
+            height: 100vh;
+        }
+
+        @media only screen and (min-width: map-get($grid-breakpoints, md)) {
+            height: 80vh;
+        }
+        
+        .target-video-holder{
+    
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 100;
+    
+        }
+
+        .my-video-holder{
+
+            position: absolute;
+
+            bottom: 10px;
+            right: 10px;
+            
+            background-color: #999;
+            z-index: 200;
+
+            overflow: hidden;
+            
+            @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+                width: 40vw;
+                height: 30vw;
+            }
+    
+            @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
+                width: 15vw;
+                height: 10vw;
+            }
+
+            video{
+
+                width: 100%;
+                height: 100%;
+
+            }
+
+        }
+
+        .buttons-holder{
+
+            position: absolute;
+            bottom: 10vw;
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            z-index: 300;
+            text-align: center;
+
+            button{
+                width: 45px;
+                height: 45px;
+                opacity: 0.5;
+                margin: 10px;
+            }
+
+            button:hover{
+                opacity: 1.0;
+            }
+
+        }
+        
+    }
+
+}

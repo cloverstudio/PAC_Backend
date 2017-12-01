@@ -10,6 +10,7 @@ import * as style from '../styles/main.scss'
 
 import Ecnryption from '../lib/encryption/encryption';
 import SocketManager from '../lib/SocketManager';
+import MediaStream from '../lib/MediaStream';
 
 class App extends Component {
 

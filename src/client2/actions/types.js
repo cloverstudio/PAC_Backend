@@ -100,8 +100,9 @@ export const CreateRoomCancel = 'CreateRoom/Cancel';
 export const CallIncoming = 'Call/Incoming';
 export const CallIncomingClose = 'Call/IncomingClose';
 export const CallIncomingReject = 'Call/IncomingReject';
-
-
-
-
-
+export const CallIncomingAccept = 'Call/IncomingAccept';
+export const CallOutgoing = 'Call/Outgoing';
+export const CallOutgoingClose = 'Call/OutgoingClose';
+export const CallOutgoingFailed = 'Call/OutgoingFailed';
+export const CallOutgoingStatusChanged = 'Call/OutgoingStatusChanged';
+export const CallOutgoingConnect = 'Call/OutgoingConnect';

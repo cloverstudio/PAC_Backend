@@ -95,6 +95,24 @@ class UserInfo extends Component {
 
     }
 
+    videoCall = () => {
+
+        this.props.makeOutgoingCall({
+            user: this.props.user,
+            mediaType: constant.CallMediaTypeAudio
+        })
+
+    }
+
+    voiceCall = () => {
+       
+        this.props.makeOutgoingCall({
+            user: this.props.user,
+            mediaType: constant.CallMediaTypeVideo
+        })
+        
+    }
+
     render() {
 
         let cnTabGeneral = "nav-link ";
@@ -140,11 +158,11 @@ class UserInfo extends Component {
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
-                            <button className="btn btn-label btn-primary btn-block"><label><i className="ti-video-camera"></i></label>{strings.InfoViewUserDetailVideoCall[user.lang]}</button>                    
+                            <button className="btn btn-label btn-primary btn-block" onClick={this.voiceCall}><label><i className="ti-video-camera"></i></label>{strings.InfoViewUserDetailVideoCall[user.lang]}</button>                    
                         </div>
 
                         <div className="media">
-                            <button className="btn btn-label btn-primary btn-info btn-block"><label><i className="ti-headphone-alt"></i></label>{strings.InfoViewUserDetailVoiceCall[user.lang]}</button>                    
+                            <button className="btn btn-label btn-primary btn-info btn-block" onClick={this.videoCall}><label><i className="ti-headphone-alt"></i></label>{strings.InfoViewUserDetailVoiceCall[user.lang]}</button>                    
                         </div>
 
                         <div className="media">
@@ -228,6 +246,7 @@ const mapDispatchToProps = (dispatch) => {
         showError: (err) => dispatch(actions.notification.showToast(err)),
         updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state,constant.ChatTypePrivate)),
         updateBlockState: (state) => dispatch(actions.infoView.updateBlockState(state)),
+        makeOutgoingCall: (callObj) => dispatch(actions.call.outgoingCall(callObj)),
     };
 };
 

@@ -9,6 +9,8 @@ import * as config from '../lib/config';
 
 import Toast from './Toast';
 import IncomingCallDialog from './call/IncomingCallDialog';
+import OutgoingCallDialog from './call/OutgoingCallDialog';
+import CallingDialog from './call/CallingDialog';
 
 class Modals extends Component {
 
@@ -21,6 +23,8 @@ class Modals extends Component {
             <div>
                 <Toast />
                 <IncomingCallDialog />
+                <OutgoingCallDialog />
+                <CallingDialog />
             </div>
         );
     }

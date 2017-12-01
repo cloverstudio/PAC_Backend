@@ -11,7 +11,7 @@ import loginPic from '../../assets/img/loginPic.jpg';
 
 import AvatarImage from '../AvatarImage';
 
-class IncomingCallDialog extends Component {
+class OutgoingCallDialog extends Component {
 
     static propTypes = {
     }
@@ -22,7 +22,7 @@ class IncomingCallDialog extends Component {
             display: 'none'
         }
 
-        if(this.props.showIncomingCall && !this.props.calling)
+        if(this.props.showOutgoingCall)
             mainStyle.display = 'block';
 
         let fileId = null;
@@ -37,16 +37,19 @@ class IncomingCallDialog extends Component {
                 <div className="modal modal-center fade show" id="modal-center" tabindex="-1" style={mainStyle}>
                     <div className="modal-dialog">
                         <div className="modal-content">
+
+                            <div className="modal-header">
+                                <h4 className="modal-title" id="myModalLabel">
+                                    <AvatarImage fileId={fileId} type={constant.AvatarUser} /> Calling <strong>{this.props.user.name}</strong>
+                                </h4>
+                            </div>
+
                             <div className="modal-body">
 
-                                <div className="media media-single">
-                                    <AvatarImage fileId={fileId} type={constant.AvatarUser} />
-                                    <span className="title"><strong>{this.props.user.name}</strong> is calling.</span>
-                                </div>
+                                {this.props.statusMessage}
 
                                 <div className="modal-footer">
-                                    <button className="btn btn-w-md btn-danger" onClick={this.props.reject} >Reject</button>
-                                    <button className="btn btn-w-md btn-primary" onClick={this.props.accept} >Accept</button>
+                                    <button className="btn btn-w-md btn-danger" onClick={this.props.stopCalling} >Stop Calling</button>
                                 </div>
 
                             </div>
@@ -54,7 +57,7 @@ class IncomingCallDialog extends Component {
                     </div>
                 </div>
 
-                {this.props.showIncomingCall && !this.props.calling ? <div className="modal-backdrop fade show"></div>:null }
+                {this.props.showOutgoingCall ? <div className="modal-backdrop fade show"></div>:null }
 
             </div>
         );
@@ -64,20 +67,19 @@ class IncomingCallDialog extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        showIncomingCall: state.call.incomingcallRinging,
-        user: state.call.incomingCallUser,
-        calling: state.call.calling
+        showOutgoingCall: state.call.outgoingCallRinging,
+        user: state.call.outgoingCallUser,
+        statusMessage: state.call.outgoingStatus
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        reject: tabName => dispatch(actions.call.incomingCallReject()),
-        accept: tabName => dispatch(actions.call.incomingCallAccept()),
+        stopCalling: tabName => dispatch(actions.call.outgoingCallClose()),
     };
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(IncomingCallDialog);
+)(OutgoingCallDialog);
