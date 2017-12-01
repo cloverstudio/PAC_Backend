@@ -41,9 +41,9 @@
                 <div class="lastmessage">
                     <b>
                         {{#if lastMessage.user}} 
-                            {{strip lastMessage.user.name 15}}
+                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastMessage.user.name 15}} {{/if}}
                         {{else}}
-                            {{strip lastUpdateUser.name 15}}
+                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastUpdateUser.name 15}} {{/if}}
                         {{/if}}
                     </b>: {{strip lastMessage.message 20}}
                 </div>
@@ -69,9 +69,9 @@
                 <div class="lastmessage">
                     <b>
                         {{#if lastMessage.user}} 
-                            {{strip lastMessage.user.name 15}}
+                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastMessage.user.name 15}} {{/if}}
                         {{else}}
-                            {{strip lastUpdateUser.name 15}}
+                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastUpdateUser.name 15}} {{/if}}
                         {{/if}}
                     </b>: {{strip lastMessage.message 20}}
                 </div>

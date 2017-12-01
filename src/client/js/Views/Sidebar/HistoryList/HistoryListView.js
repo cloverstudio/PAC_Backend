@@ -319,11 +319,23 @@ var HistoryListView = Backbone.View.extend({
 
                 if(row.lastMessage.type == 5)
                     row.lastMessage.message = localzationManager.get("Sticker");
+
+                if(row.chatType != Const.chatTypePrivate) {
+                    if(row.lastMessage.user) {
+                        if (row.lastMessage.user._id.toString() == loginUserManager.user._id.toString())
+                            row.currentUserIsSender = 1
+                    }
+                    else {
+                        if (row.lastUpdateUser._id.toString() == loginUserManager.user._id.toString())
+                            row.currentUserIsSender = 1
+                    }
+                }
+
             }
             
             return row;
         });
-        console.log("datalist", this.dataList)
+
         var html = templateContents({
             list: this.dataList
         });
