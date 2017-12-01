@@ -77741,7 +77741,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + " \n"
     + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),2,{"name":"condition","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "        \n"
-    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),3,{"name":"condition","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),3,{"name":"condition","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n            <div class=\"clearfix\"></div>\n        </div>\n        \n";
 },"2":function(container,depth0,helpers,partials,data) {
     return " unread ";
@@ -77776,23 +77776,39 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + alias1(container.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n                </div>\n                \n                <div class=\"name\">"
     + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n                \n                <div class=\"lastmessage\">"
-    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),35,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n\n                <div class=\"lasttimestamp\">"
+    + "</div>\n                \n                <div class=\"lastmessage\">\n                    <b>\n"
+    + ((stack1 = helpers["if"].call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.user : stack1),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
+    + "                    </b>: "
+    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),20,{"name":"strip","hash":{},"data":data}))
+    + "\n                </div>\n\n                <div class=\"lasttimestamp\">"
     + alias1((helpers.ufDate || (depth0 && depth0.ufDate) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.created : stack1),{"name":"ufDate","hash":{},"data":data}))
     + "</div>\n\n                "
     + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n                \n            </div>\n            \n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "                            "
+    + container.escapeExpression((helpers.strip || (depth0 && depth0.strip) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.user : stack1)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
+    + "\n";
+},"12":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "                            "
+    + container.escapeExpression((helpers.strip || (depth0 && depth0.strip) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.lastUpdateUser : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
+    + "\n";
+},"14":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing;
 
   return "\n            <div class=\"room\">\n\n                <div class=\"img-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/room/"
     + alias1(container.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n                </div>\n                \n                <div class=\"name\">"
     + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n                \n                <div class=\"lastmessage\">"
-    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),35,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n\n                <div class=\"lasttimestamp\">"
+    + "</div>\n                \n                <div class=\"lastmessage\">\n                    <b>\n"
+    + ((stack1 = helpers["if"].call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.user : stack1),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
+    + "                    </b>: "
+    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),20,{"name":"strip","hash":{},"data":data}))
+    + "\n                </div>\n\n                <div class=\"lasttimestamp\">"
     + alias1((helpers.ufDate || (depth0 && depth0.ufDate) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.created : stack1),{"name":"ufDate","hash":{},"data":data}))
     + "</div>\n                \n                "
     + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -78137,7 +78153,7 @@ var HistoryListView = Backbone.View.extend({
             
             return row;
         });
-
+        console.log("datalist", this.dataList)
         var html = templateContents({
             list: this.dataList
         });

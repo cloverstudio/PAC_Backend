@@ -38,7 +38,15 @@
                 
                 <div class="name">{{strip group.name 15}}</div>
                 
-                <div class="lastmessage">{{strip lastMessage.message 35}}</div>
+                <div class="lastmessage">
+                    <b>
+                        {{#if lastMessage.user}} 
+                            {{strip lastMessage.user.name 15}}
+                        {{else}}
+                            {{strip lastUpdateUser.name 15}}
+                        {{/if}}
+                    </b>: {{strip lastMessage.message 20}}
+                </div>
 
                 <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
 
@@ -58,7 +66,15 @@
                 
                 <div class="name">{{strip room.name 15}}</div>
                 
-                <div class="lastmessage">{{strip lastMessage.message 35}}</div>
+                <div class="lastmessage">
+                    <b>
+                        {{#if lastMessage.user}} 
+                            {{strip lastMessage.user.name 15}}
+                        {{else}}
+                            {{strip lastUpdateUser.name 15}}
+                        {{/if}}
+                    </b>: {{strip lastMessage.message 20}}
+                </div>
 
                 <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
                 

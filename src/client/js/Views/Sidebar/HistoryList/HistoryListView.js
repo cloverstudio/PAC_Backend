@@ -323,7 +323,7 @@ var HistoryListView = Backbone.View.extend({
             
             return row;
         });
-
+        console.log("datalist", this.dataList)
         var html = templateContents({
             list: this.dataList
         });
