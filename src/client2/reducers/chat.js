@@ -15,7 +15,7 @@ const initial = {
     messageList: [],
     chatId: "",
     chatType: constant.ChatTypePrivate,
-    isTyping: false,
+    typing: {},
     timestampByChat: 0
 
 }
@@ -201,20 +201,22 @@ const messageList = (state = initial.messageList, action) => {
 
 }
 
-const isTyping = (state = initial.isTyping, action) => {
+const typing = (state = initial.typing, action) => {
     switch(action.type){
         case types.ChatOpenByUser:
-            return false
+            return {};
         case types.ChatOpenByGroup:
-            return false
+            return {};            
         case types.ChatOpenByRoom:
-            return false
+            return {};            
         case types.ChatStartedTyping:
-            return true
+            return {...state, [action.userID]:action.userName};
         case types.ChatStoppedTyping:
-            return false
+            const newState = {...state};
+            delete newState[action.userID];
+            return newState;
         default:
-            return state
+            return state;
     }
 }
 
@@ -224,6 +226,6 @@ export default combineReducers({
     messageList,
     chatId,
     chatType,
-    isTyping,
+    typing,
     timestampByChat
 });

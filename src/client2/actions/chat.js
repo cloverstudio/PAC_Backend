@@ -225,14 +225,29 @@ export function sendMessage(messageType, content){
     }
 }
 
-export function startedTyping(){
+export function startedTyping(userID, userName){
     return {
-        type: types.ChatStartedTyping
+        type: types.ChatStartedTyping,
+        userID,
+        userName
     }
 }
 
-export function stoppedTyping(){
+export function stoppedTyping(userID){
     return {
-        type: types.ChatStoppedTyping
+        type: types.ChatStoppedTyping,
+        userID
+    }
+}
+
+export function sendStartTyping(){
+    return {
+        type: types.ChatSendStartTyping
+    }
+}
+
+export function sendStopTyping(){
+    return {
+        type: types.ChatSendStopTyping
     }
 }
