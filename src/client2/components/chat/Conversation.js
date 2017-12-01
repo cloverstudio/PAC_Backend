@@ -29,23 +29,6 @@ class Conversation extends Component {
     static propTypes = {
     }
 
-    sendStartTyping(roomID = this.props.currentChatId, userID= this.props.user._id, userName= this.props.user.name){
-        SocketManager.emit('sendtyping', {
-            roomID, 
-            type:1, 
-            userID, 
-            userName
-        })
-    }
-
-    sendStopTyping(roomID = this.props.currentChatId, userID= this.props.user._id){
-         SocketManager.emit('sendtyping', {
-             roomID, 
-             type:0, 
-             userID
-         })       
-    }
-
     onScroll = (e) => {  
         if (e.target.scrollTop === 0 && !this.props.isLoading){
             this.props.loadOldMessages(this.props.currentChatId, this.props.messageList[0]._id)
@@ -62,7 +45,7 @@ class Conversation extends Component {
             newInputValues[this.props.currentChatId] = this.chatInputElement.value
             this.savedTextInputValues = newInputValues
             
-            this.sendStopTyping()
+            this.props.sendStopTyping()
         }
     }
 
@@ -71,7 +54,7 @@ class Conversation extends Component {
                 if(this.savedTextInputValues[this.props.currentChatId]){
                     this.chatInputElement.value = this.savedTextInputValues[this.props.currentChatId]
                     
-                    this.sendStartTyping()
+                    this.props.sendStartTyping()
                 }
                 else {
                     this.chatInputElement.value = ''
@@ -113,7 +96,7 @@ class Conversation extends Component {
         for(let i = 0 ; i < this.props.messageList.length ; i++){
 
             const message = this.props.messageList[i];
-            const currentUser = message.user._id;
+            const currentUser = message.userID;
             const messageDate = new Date(message.created).getDate();
 
             if(!todayLimitSet && this.todayDate === messageDate){
@@ -159,7 +142,22 @@ class Conversation extends Component {
 
                         <div className="media-body">
                             <h6>{this.props.chatAvatar.name}</h6>
-                            <small>{this.props.isTyping ? 'Typing...' : null}</small>
+                            <small>{(()=>{
+                                const users = Object.values(this.props.UsersTyping);
+                                const len = users.length;
+                                
+                                if (len === 1){
+                                    return users[0]+' is typing...';
+                                }
+                                else if(len >= 2){
+                                    let typingStr = users.slice(0, len-1).join(', ');
+                                    typingStr+= ` and ${users[len-1]} are typing...`
+                                    return typingStr;
+                                }
+                                else{
+                                    return null;
+                                }
+                            })()}</small>
                         </div>
                         
                     </div>
@@ -193,6 +191,7 @@ class Conversation extends Component {
                                     {messagesFromSameUser.map( (message) => {
                                         
                                         let messageContent;
+                                        let messageClass = '';
 
                                         switch(message.type){
                                             case constant.MessageTypeText:
@@ -201,13 +200,15 @@ class Conversation extends Component {
                                                     messageContent = <a href={messageContent} target="_blank"><u>{messageContent}</u></a>
                                                 break;
                                             case constant.MessageTypeSticker:
-                                                messageContent = <img src={'https://spika.chat'+message.message}/>;
+                                                messageClass = 'sticker-message';
+                                                messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)}src={'https://spika.chat'+message.message}/>;
                                                 break;
                                             default:
                                                 messageContent = null;
                                         }
+                                        messageClass += typeof message._id === 'undefined' ? ' unsent' : '';
 
-                                        return <p className={typeof message._id === 'undefined' ? 'unsent' : null} key={message._id || message.localID}>{messageContent}</p>
+                                        return <p className={messageClass} key={message._id || message.localID}>{messageContent}</p>
 
                                     })}
 
@@ -225,6 +226,7 @@ class Conversation extends Component {
                                         {messagesFromSameUser.map( (message) => {
 
                                             let messageContent;
+                                            let messageClass = '';
 
                                             switch(message.type){
                                                 case constant.MessageTypeText:
@@ -233,13 +235,14 @@ class Conversation extends Component {
                                                         messageContent = <a href={messageContent} target="_blank"><u>{messageContent}</u></a>
                                                     break;
                                                 case constant.MessageTypeSticker:
-                                                    messageContent = <img src={'https://spika.chat'+message.message}/>;
+                                                    messageClass = 'sticker-message'
+                                                    messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)} src={'https://spika.chat'+message.message}/>;
                                                     break;
                                                 default:
                                                     messageContent = null;
                                             }
 
-                                            return <p key={message._id}>{messageContent}</p>
+                                            return <p className={messageClass} key={message._id}>{messageContent}</p>
                                         })}
     
                                         <p className="meta">
@@ -264,12 +267,12 @@ class Conversation extends Component {
                                 this.savedTextInputValues[this.props.currentChatId] = '';
                                 this.chatInputElement.value = '';
 
-                                this.sendStopTyping();
+                                this.props.sendStopTyping();
                             }
                         }}
                         onChange={e=> {
-                            if(e.target.value.length === 1) this.sendStartTyping()
-                            if(e.target.value.length === 0) this.sendStopTyping()
+                            if(e.target.value.length === 1) this.props.sendStartTyping()
+                            if(e.target.value.length === 0) this.props.sendStopTyping()
                             }}
                         />
                     <div className="align-self-end gap-items">
@@ -289,13 +292,15 @@ class Conversation extends Component {
                                 this.savedTextInputValues[this.props.currentChatId] = '';
                                 this.chatInputElement.value = '';
 
-                                this.sendStopTyping();
+                                this.props.sendStopTyping();
 
                             }}>
                             <i className="fa fa-paper-plane"></i>
                         </span>
                     </div>
                 </footer>
+
+                <Stickers/>
 
             </div>
 
@@ -311,7 +316,7 @@ const mapStateToProps = (state) => {
         isLoading:state.chat.isLoading,
         messageList: state.chat.messageList,
         user:user.userData,
-        isTyping: state.chat.isTyping,
+        UsersTyping: state.chat.typing,
         stickersViewState: state.chatUI.stickersViewState,
         infoViewState: state.chatUI.infoViewState
     };
@@ -323,7 +328,9 @@ const mapDispatchToProps = (dispatch) => {
         sendMessage : (messageType, content) => dispatch(actions.chat.sendMessage(messageType, content)),
         showStickersView : () => dispatch(actions.chatUI.showStickersView()),
         hideStickersView : () => dispatch(actions.chatUI.hideStickersView()),
-        loadStickers : () => dispatch(actions.stickers.loadStickers())
+        loadStickers : () => dispatch(actions.stickers.loadStickers()),
+        sendStartTyping: () => dispatch(actions.chat.sendStartTyping()),
+        sendStopTyping: () => dispatch(actions.chat.sendStopTyping())
     };
 };
 

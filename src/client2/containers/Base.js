@@ -32,6 +32,9 @@ class Base extends Component {
         if(! /sidebar|history|menu-link/.test(e.target.className))
             this.props.hideHistory();
 
+        if(! /publisher-btn|fa-smile-o/.test(e.target.className))
+            this.props.hideStickersView();
+
         console.log("classname",e.target.className);
     }
 

@@ -43,10 +43,10 @@ class SocketManager {
             if(store.getState().chat.chatId === obj.roomID && 
                 obj.userID != user.userData._id){
                 if (obj.type === 1){
-                    store.dispatch(actions.chat.startedTyping());
+                    store.dispatch(actions.chat.startedTyping(obj.userID, obj.userName));
                 }
                 else {
-                    store.dispatch(actions.chat.stoppedTyping());
+                    store.dispatch(actions.chat.stoppedTyping(obj.userID));
                 }
             }
         });
@@ -121,10 +121,10 @@ class SocketManager {
 
     actionListener = store => next => action => {
 
+        const currentState = store.getState();
+        
         //construct msg
         if (action.type === types.ChatSendMessage){
-
-            const currentState = store.getState();
             
             //common fields
             action.message = {
@@ -139,7 +139,7 @@ class SocketManager {
             if (action.messageType === constant.MessageTypeText || action.messageType === constant.MessageTypeFile){
                 action.message.user = user.userData
             }
-
+            
             //message / file field
             switch(action.messageType){
                 case constant.MessageTypeText:
@@ -148,7 +148,7 @@ class SocketManager {
                 case constant.messageTypeFile:
                     action.message.file = action.content;
                     break;
-                case constant.messageTypeSticker:
+                case constant.MessageTypeSticker:
                     action.message.message = action.content;
                     break;
                 default:
@@ -158,6 +158,27 @@ class SocketManager {
             this.emit('sendMessage', action.message);
             //add created field
             action.message.created = new Date().getTime();
+
+        }
+
+        if(action.type === types.ChatSendStartTyping){
+
+            this.emit('sendtyping', {
+                roomID:currentState.chat.chatId,
+                type:1,
+                userID: user.userData._id,
+                userName: user.userData.name
+            });
+
+        }
+
+        if(action.type === types.ChatSendStopTyping){
+
+            this.emit('sendtyping', {
+                roomID: currentState.chat.chatId,
+                type:0,
+                userID: user.userData._id
+            });
 
         }
 
