@@ -108,3 +108,5 @@ export const CallOutgoingClose = 'Call/OutgoingClose';
 export const CallOutgoingFailed = 'Call/OutgoingFailed';
 export const CallOutgoingStatusChanged = 'Call/OutgoingStatusChanged';
 export const CallOutgoingConnect = 'Call/OutgoingConnect';
+export const CallOutgoingAnswered = 'Call/OutgoingAnswered';
+export const CallClose = 'Call/Close';

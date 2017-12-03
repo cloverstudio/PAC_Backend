@@ -41,7 +41,14 @@
             height: 100%;
             background-color: #000;
             z-index: 100;
-    
+
+            text-align: center;
+
+            video{
+                height: 100%;
+            }
+
+            overflow: hidden;
         }
 
         .my-video-holder{
@@ -51,7 +58,6 @@
             bottom: 10px;
             right: 10px;
             
-            background-color: #999;
             z-index: 200;
 
             overflow: hidden;
@@ -62,8 +68,8 @@
             }
     
             @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
-                width: 15vw;
-                height: 10vw;
+                width: 16vw;
+                height: 12vw;
             }
 
             video{

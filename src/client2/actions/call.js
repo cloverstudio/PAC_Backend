@@ -37,12 +37,11 @@ export function incomingCallReject(){
 }
 
 export function incomingCallAccept(){
-    
-        return {
-            type: types.CallIncomingAccept
-        }
+
+    return {
+        type: types.CallIncomingAccept
     }
-    
+}
 
 export function outgoingCall(callData){
 
@@ -103,8 +102,6 @@ export function outgoingCallStatusChanged(message){
 }
 
 export function outgoingCallClose(){
-    
-    console.log(localstream);
 
     if(localstream)
         localstream.stop();
@@ -135,3 +132,20 @@ export function outgoingCallFailed(message){
 
     };
 }
+
+export function outgoingCallAnswered(){
+
+    return {
+        type: types.CallOutgoingAnswered
+    }
+}
+
+export function callClose(){
+    
+    return {
+        type: types.CallClose
+    }
+    
+}
+    
+    

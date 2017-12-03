@@ -124,6 +124,8 @@ class SocketManager {
 
         this.ioNsp.on('call_answer', function(){
 
+            store.dispatch(actions.call.outgoingCallAnswered());
+
         });
         
         this.ioNsp.on('call_close', function(){

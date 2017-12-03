@@ -29,28 +29,36 @@ class CallingDialog extends Component {
 
         if(this.props.calling != nextProps.calling && nextProps.calling){
 
-            const targetUser = this.props.incomingCallUser || this.props.outgoingCallUser;
+            let targetUser = null;
+
+            if(this.props.incomingCallUser)
+                targetUser = this.props.incomingCallUser;
+            if(this.props.outgoingCallUser)
+                targetUser = this.props.outgoingCallUser;
+    
             this.roomId = utils.chatIdByUser(targetUser);
 
             var media = {
-                video: true,
+                video: false,
                 audio: true
             };
 
-            media.video = { 
-                "width": {
-                    "min": "480",
-                    "max": "480"
-                },
-                "height": {
-                    "min": "320",
-                    "max": "320"
-                },
-                "frameRate": {
-                    "min": "8",
-                    "max": "8"
-                }
-            };
+            if(this.props.callingMediaType == constant.CallMediaTypeVideo){
+                media.video = { 
+                    "width": {
+                        "min": "480",
+                        "max": "480"
+                    },
+                    "height": {
+                        "min": "320",
+                        "max": "320"
+                    },
+                    "frameRate": {
+                        "min": "8",
+                        "max": "8"
+                    }
+                };    
+            }
 
             // init simplewebrtc
             this.webRTC = new SimpleWebRTC({
@@ -72,6 +80,8 @@ class CallingDialog extends Component {
             this.webRTC.on('readyToCall', () => {
                 this.webRTC.joinRoom(this.roomId);
             });
+
+            console.log('callingMediaType',this.props.callingMediaType);
 
         }
 
@@ -143,7 +153,8 @@ const mapStateToProps = (state) => {
     return {
         calling: state.call.calling,
         incomingCallUser: state.call.incomingCallUser,
-        outgoingCallUser: state.call.outgoingCallUser
+        outgoingCallUser: state.call.outgoingCallUser,
+        callingMediaType: state.call.callingMediaType
     };
 };
 

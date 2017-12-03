@@ -58,8 +58,24 @@ const outgoingStatus = (state = "", action) => {
 
 const calling = (state = false, action) => {
     switch (action.type) {
+        case types.CallOutgoingAnswered:
+            return true;
         case types.CallIncomingAccept:
             return true;
+        case types.CallClose:
+            return false;
+            
+        default:
+            return state;
+    }
+};
+
+const callingMediaType = (state = constant.CallMediaTypeVideo, action) => {
+    switch (action.type) {
+        case types.CallOutgoing:
+            return action.call.mediaType;
+        case types.CallIncoming:
+            return action.call.mediaType;
         default:
             return state;
     }
@@ -71,5 +87,6 @@ export default combineReducers({
     incomingCallUser,
     outgoingCallRinging,
     outgoingCallUser,
-    outgoingStatus
+    outgoingStatus,
+    callingMediaType
 });;
