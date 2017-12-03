@@ -11,6 +11,8 @@ const incomingcallRinging = (state = false, action) => {
             return false;
         case types.CallIncomingReject:
             return false;
+        case types.CallIncomingAccept:
+            return false;
         default:
             return state;
     }
@@ -20,6 +22,9 @@ const incomingCallUser = (state = {}, action) => {
     switch (action.type) {
         case types.CallIncoming:
             return action.call.user;
+        case types.CallClose:
+            return {};
+            
         default:
             return state;
     }
@@ -33,6 +38,8 @@ const outgoingCallRinging = (state = false, action) => {
             return false;
         case types.CallOutgoingFailed:
             return false;
+        case types.CallOutgoingAnswered:
+            return false;
         default:
             return state;
     }
@@ -42,6 +49,8 @@ const outgoingCallUser = (state = {}, action) => {
     switch (action.type) {
         case types.CallOutgoing:
             return action.call.user;
+        case types.CallClose:
+            return {};
         default:
             return state;
     }

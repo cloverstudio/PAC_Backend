@@ -31,9 +31,9 @@ class CallingDialog extends Component {
 
             let targetUser = null;
 
-            if(this.props.incomingCallUser)
+            if(this.props.incomingCallUser._id)
                 targetUser = this.props.incomingCallUser;
-            if(this.props.outgoingCallUser)
+            if(this.props.outgoingCallUser._id)
                 targetUser = this.props.outgoingCallUser;
     
             this.roomId = utils.chatIdByUser(targetUser);
@@ -81,7 +81,34 @@ class CallingDialog extends Component {
                 this.webRTC.joinRoom(this.roomId);
             });
 
-            console.log('callingMediaType',this.props.callingMediaType);
+            this.webRTC.on('leftRoom', () => {
+                
+                this.webRTC.disconnect();
+                
+                this.webRTC.off("connectionReady");
+                this.webRTC.off("readyToCall");
+                this.webRTC.off("createdPeer");
+                this.webRTC.off("remove");
+                this.webRTC.off("error");
+                this.webRTC.off("localMediaError");
+                this.webRTC.off("leftRoom");
+                
+                this.webRTC = null;
+                
+                document.querySelectorAll('#video-mine video').forEach( (elm) => {
+                    elm.remove();
+                });
+
+                console.log('webrtc released');
+                    
+            });
+
+        }
+
+        if(this.props.calling != nextProps.calling && !nextProps.calling){
+
+            this.webRTC.stopLocalVideo();
+            this.webRTC.leaveRoom();
 
         }
 

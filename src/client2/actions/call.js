@@ -76,8 +76,7 @@ export function outgoingCall(callData){
 
             dispatch({
                 type: types.CallOutgoingConnect,
-                call: callData,
-                stream
+                call: callData
             });
 
         })
@@ -135,6 +134,9 @@ export function outgoingCallFailed(message){
 
 export function outgoingCallAnswered(){
 
+    if(localstream)
+        localstream.stop();
+
     return {
         type: types.CallOutgoingAnswered
     }
@@ -145,7 +147,7 @@ export function callClose(){
     return {
         type: types.CallClose
     }
-    
+
 }
     
     

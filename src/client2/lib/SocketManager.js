@@ -130,6 +130,8 @@ class SocketManager {
         
         this.ioNsp.on('call_close', function(){
 
+            store.dispatch(actions.call.callClose());
+            
         });
 
         this.ioNsp.on('new_room', function(param){
