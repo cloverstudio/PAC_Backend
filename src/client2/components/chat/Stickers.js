@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 import * as constant from '../../lib/const';
+import * as config from '../../lib/config';
 
 class Stickers extends Component {
 
@@ -28,6 +29,31 @@ class Stickers extends Component {
     render() {
         let cardClass = this.props.visible ? 'card stickers-container stickers-visible' : 'card stickers-container';
 
+        let stickersNavTabs = [];
+        let stickersGridItems = [];
+
+        this.props.stickers.forEach( (stickerGroup, index) => {
+            let navClass = this.state.index === index ? 'nav-link active' : 'nav-link';
+            let paneClass= this.state.index === index ? 'tab-pane fade active show' : 'tab-pane fade'; 
+
+            stickersNavTabs.push(
+                <li key={index} className="nav-item" onClick={e => this.changeStickersTab(index) }>
+                    <span className={navClass}>
+                        <img className="stickers-nav" src={config.mediaBaseURL + stickerGroup.mainTitlePic}/>
+                    </span>
+                </li>);
+            
+            stickersGridItems.push(
+               <div key={index} className={paneClass}>
+                    {stickerGroup.list.map( sticker => 
+                            <span key={sticker.smallPic} className='dropdown-item' onClick={() => this.props.sendMessage(constant.MessageTypeSticker, sticker.fullPic)}>
+                                <img src={config.mediaBaseURL + sticker.smallPic}/>
+                            </span>
+                        )}
+                </div>);
+
+        });
+
         return (
             <div className={cardClass}>
             
@@ -40,41 +66,17 @@ class Stickers extends Component {
                         </div>
                     </div> : null
                 }
-{/* TODO: 1x loop only */}
+
                 <div className="card-body">
                     <ul className="nav nav-tabs">
-                        {this.props.stickers.map((stickerGroup, i) => {
-
-                            let navClass = i === this.state.index ? 'nav-link active' : 'nav-link';
-
-                            return(
-                                <li key={i} className="nav-item" onClick={e=> this.changeStickersTab(i)}>
-                                    <span className={navClass}>
-                                        <img src={'https://spika.chat'+stickerGroup.mainTitlePic}/>
-                                    </span> 
-                                </li>
-                            ) 
-                        })}
+                        {stickersNavTabs}
                     </ul>
 
                     <div className="tab-content">
-                        {this.props.stickers.map( (stickerGroup, i) => {
-                            let paneClass = i === this.state.index ? 'tab-pane fade active show' : 'tab-pane fade'
-
-                            return(
-                                <div key={i} className={paneClass}>
-                                    {stickerGroup.list.map( sticker => {
-                                        return(
-                                            <span key={sticker.smallPic} className="dropdown-item">
-                                                <img src={'https://spika.chat'+sticker.smallPic} onClick={e => this.props.sendMessage(constant.MessageTypeSticker, sticker.fullPic)}/>
-                                            </span>
-                                        )
-                                    })}
-                                </div>
-                            )
-                        })}
+                        {stickersGridItems}
                     </div>
                 </div>
+
             </div>
 
         );
