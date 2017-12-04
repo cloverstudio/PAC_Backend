@@ -17,7 +17,9 @@
                     {{strip user.name 15}}
                 </div>
                 
-                <div class="lastmessage">{{strip lastMessage.message 35}}</div>
+                <div class="lastmessage">
+                    {{#if currentUserIsSender}} <b>{{l10n "You"}}</b>: {{/if}} {{strip lastMessage.message 32}}
+                </div>
 
                 <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
                 
@@ -39,13 +41,12 @@
                 <div class="name">{{strip group.name 15}}</div>
                 
                 <div class="lastmessage">
-                    <b>
-                        {{#if lastMessage.user}} 
-                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastMessage.user.name 15}} {{/if}}
-                        {{else}}
-                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastUpdateUser.name 15}} {{/if}}
-                        {{/if}}
-                    </b>: {{strip lastMessage.message 20}}
+                    {{#if lastMessage.user}} 
+                        {{#if currentUserIsSender}} <b>{{l10n "You"}}</b>: {{else}} <b>{{strip lastMessage.user.name 15}}</b>: {{/if}}
+                    {{else}}
+                        {{#if currentUserIsSender}} <b>{{l10n "You"}}</b>: {{else}} <b>{{strip lastUpdateUser.name 15}}</b>: {{/if}}
+                    {{/if}}
+                    {{strip lastMessage.message 20}}
                 </div>
 
                 <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
@@ -67,13 +68,12 @@
                 <div class="name">{{strip room.name 15}}</div>
                 
                 <div class="lastmessage">
-                    <b>
-                        {{#if lastMessage.user}} 
-                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastMessage.user.name 15}} {{/if}}
-                        {{else}}
-                            {{#if currentUserIsSender}} {{l10n "You"}} {{else}} {{strip lastUpdateUser.name 15}} {{/if}}
-                        {{/if}}
-                    </b>: {{strip lastMessage.message 20}}
+                    {{#if lastMessage.user}} 
+                        {{#if currentUserIsSender}} <b>{{l10n "You"}}</b>: {{else}} <b>{{strip lastMessage.user.name 15}}</b>: {{/if}}
+                    {{else}}
+                        {{#if currentUserIsSender}} <b>{{l10n "You"}}</b>: {{else}} <b>{{strip lastUpdateUser.name 15}}</b>: {{/if}}
+                    {{/if}}
+                    {{strip lastMessage.message 20}}
                 </div>
 
                 <div class="lasttimestamp">{{ufDate lastMessage.created}}</div>
