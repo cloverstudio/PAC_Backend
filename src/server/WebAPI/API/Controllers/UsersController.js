@@ -252,6 +252,8 @@ UsersController.prototype.validatePresence = (values, callback) => {
         error.message = Const.errorMessage.userIdIsEmpty;
     } else if (!values.password) {
         error.message = Const.errorMessage.passwordIsEmpty;
+    } else if (values.permission != Const.userPermission.webClient && values.permission != Const.userPermission.subAdmin) {
+        error.message = Const.errorMessage.wrongUserPermission;
     }
 
     if (error.message) {

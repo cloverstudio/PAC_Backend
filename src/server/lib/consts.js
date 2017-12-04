@@ -251,7 +251,8 @@
         cannotUpdateRoom: "you can't update this room because you are not owner",
         cannotDeleteRoom: "you can't delete this room because you are not owner.",
         cannotUpdateMessage: "you can't update this message because you are not sender",
-        cannotDeleteMessage: "you can't delete this message because you are not sender."
+        cannotDeleteMessage: "you can't delete this message because you are not sender.",
+        wrongUserPermission: "User permission must be 1 (web client) or 3 (sub-admin)"
     }
 
     Const.webhookEventMessage = "message";

@@ -60,7 +60,7 @@ const User = {
                     params.password, 
                     params.status, 
                     organizationId, 
-                    baseUser.permission,
+                    params.permission,
                     _.isEmpty(params.groups) ? [] : params.groups, avatar,
                     (err, created) => {
                         result.created = created.user.toObject();
