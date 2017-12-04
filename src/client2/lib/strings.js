@@ -112,6 +112,7 @@ export {
     CallOutgoingMediaError,
     CallOutgoingStatusInitializingMedia,
     CallOutgoingStatusConnecting,
-    CallOutgoingStatusRinging
+    CallOutgoingStatusRinging,
+    CallFailedToInitizeDevice
 } from './strings/calling'
 

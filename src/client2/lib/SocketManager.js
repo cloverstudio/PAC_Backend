@@ -212,8 +212,19 @@ class SocketManager {
 
         }
 
+        if (action.type === types.CallIncomingMediaReady) {
+            const user = store.getState().call.incomingCallUser;
+
+            if(user){
+                this.emit('call_received',{
+                    userId : user._id,
+                });
+            }
+        }
+
         if (action.type === types.CallIncomingReject) {
             const user = store.getState().call.incomingCallUser;
+
             if(user){
                 this.emit('call_reject',{
                     userId : user._id,
@@ -224,6 +235,7 @@ class SocketManager {
         
         if (action.type === types.CallOutgoingConnect) {
             const user = action.call.user;
+
             if(user){
                 this.emit('call_request',{
                     userId : user._id,
@@ -236,6 +248,18 @@ class SocketManager {
             const user = store.getState().call.outgoingCallUser;
             if(user){
                 this.emit('call_cancel',{
+                    userId : user._id,
+                });
+            }
+        }
+
+        if (action.type === types.CallFinish) {
+            let user = store.getState().call.incomingCallUser;
+            if(!user)
+                user = store.getState().call.outgoingCallUser;
+
+            if(user){
+                this.emit('call_close',{
                     userId : user._id,
                 });
             }

@@ -60,3 +60,6 @@ export const CallTypeIncomming = 2;
 
 export const CallMediaTypeAudio = 1;
 export const CallMediaTypeVideo = 2;
+
+export const CallWindowStateMax = 1;
+export const CallWindowStateMin = 2;

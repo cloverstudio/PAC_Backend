@@ -37,4 +37,9 @@ export const CallOutgoingStatusRinging = {
     EN:"Ringing..."
 }
 
+export const CallFailedToInitizeDevice = {
+    EN:"Failed to initialize device. Please check browser's settings."
+}
+
+
 

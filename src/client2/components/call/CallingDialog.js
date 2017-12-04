@@ -19,13 +19,50 @@ import CamOnImage from '../../assets/img/cam-on.svg';
 import CamOffImage from '../../assets/img/cam-off.svg';
 import HangupImage from '../../assets/img/hangup.svg';
 import ArrowDownImage from '../../assets/img/arrow-down.svg';
+import ArrowUpImage from '../../assets/img/arrow-up.svg';
 
 class CallingDialog extends Component {
 
     static propTypes = {
     }
 
+    taggleWindowState = () => {
+
+        if(this.props.windowState == constant.CallWindowStateMax)
+            this.props.setWindowState(constant.CallWindowStateMin)
+        
+        if(this.props.windowState == constant.CallWindowStateMin)
+            this.props.setWindowState(constant.CallWindowStateMax)
+
+    }
+
     componentWillReceiveProps(nextProps){
+
+        if(this.props.micOn != nextProps.micOn){
+
+            if(!this.webRTC)
+                return;
+
+            if(nextProps.micOn)
+                this.webRTC.unmute();
+                
+            if(!nextProps.micOn)
+                this.webRTC.mute();
+
+        }
+
+        if(this.props.videoOn != nextProps.videoOn){
+
+            if(!this.webRTC)
+                return;
+
+            if(nextProps.videoOn)
+                this.webRTC.resumeVideo();
+            
+            if(!nextProps.videoOn)
+                this.webRTC.pauseVideo();
+
+        }
 
         if(this.props.calling != nextProps.calling && nextProps.calling){
 
@@ -120,50 +157,140 @@ class CallingDialog extends Component {
         if(this.props.calling)
             mainClass += " show";
 
+        if(this.props.windowState == constant.CallWindowStateMin)
+            mainClass += " minimized";
+
+        let minClass = "calling-minimized";
+        if(this.props.calling)
+            minClass += " show";
+
+        if(this.props.windowState == constant.CallWindowStateMax)
+            minClass += " minimized";
+
+        let targetUser = this.props.incomingCallUser;
+        if(!targetUser._id)
+            targetUser = this.props.outgoingCallUser;
+
+        let fileId = null;
+        
+        if(targetUser && targetUser.avatar && targetUser.avatar.thumbnail)
+            fileId = targetUser.avatar.thumbnail.nameOnServer;
+
+        let myFileId = "";
+
+        if(user.userData && user.userData.avatar && user.userData.avatar.thumbnail)
+            myFileId = user.userData.avatar.thumbnail.nameOnServer;
+        
         return (
 
-            <div className={mainClass}>
-                
-                <div className="row">
+            <div>
 
-                    <div className="offset-md-1 col-md-10 videos">
+                <div className={minClass}>
+
+                    <div className="user-holder">
+                        <AvatarImage fileId={fileId} type={constant.AvatarUser} />
+                        {targetUser.name}
+                    </div>
+
+                    <div className="button-holder">
+
+                        {this.props.micOn ?
+                        <button onClick={this.props.mute} className="btn btn-square btn-round btn-success">
+                            <img src={MicOnImage} />
+                        </button> : null }
+
+                        {!this.props.micOn ? 
+                        <button onClick={this.props.unmute} className="btn btn-square btn-round btn-danger">
+                            <img src={MicOffImage} />
+                        </button> : null }
+
+                        {this.props.videoOn && this.props.callingMediaType == constant.CallMediaTypeVideo ?
+                        <button onClick={this.props.stopVideo} className="btn btn-square btn-round btn-success">
+                            <img src={CamOnImage} />
+                        </button> : null }
+
+                        {!this.props.videoOn && this.props.callingMediaType == constant.CallMediaTypeVideo ?
+                        <button onClick={this.props.startVideo} className="btn btn-square btn-round btn-danger">
+                            <img src={CamOffImage} />
+                        </button> : null }
+
+                        <button onClick={this.props.finish} className="btn btn-square btn-round btn-danger">
+                            <img src={HangupImage} />
+                        </button>
+
+                        <button onClick={this.taggleWindowState} className="btn btn-square btn-round btn-success">
+                            <img src={ArrowUpImage} />
+                        </button>
                         
-                        <div className="target-video-holder" id="video-target">
+                    </div>
 
+                </div> 
+
+                <div className={mainClass}>
+                    
+                    <div className="row">
+
+                        <div className="offset-md-1 col-md-10 videos">
                             
+                            <div className="target-video-holder">
+
+                                <div className="avatar-holder">
+                                    <AvatarImage fileId={fileId} type={constant.AvatarUser} /><br />
+                                    {targetUser.name}
+                                </div>
+
+                                <div id="video-target">
+
+                                </div>
+
+                            </div>
+
+                            <div className="my-video-holder">
+                                
+                                <div className="avatar-holder">
+                                    <AvatarImage fileId={myFileId} type={constant.AvatarUser} /><br />
+                                    {user.userData.name}
+                                </div>
+                                
+                                <div id="video-mine">
+
+                                </div>
+                                
+                            </div>
+
+                            <div className="buttons-holder">
+
+                                {this.props.micOn ?
+                                <button onClick={this.props.mute} className="btn btn-square btn-round btn-success">
+                                    <img src={MicOnImage} />
+                                </button> : null }
+
+                                {!this.props.micOn ? 
+                                <button onClick={this.props.unmute} className="btn btn-square btn-round btn-danger">
+                                    <img src={MicOffImage} />
+                                </button> : null }
+
+                                {this.props.videoOn && this.props.callingMediaType == constant.CallMediaTypeVideo ?
+                                <button onClick={this.props.stopVideo} className="btn btn-square btn-round btn-success">
+                                    <img src={CamOnImage} />
+                                </button> : null }
+
+                                {!this.props.videoOn && this.props.callingMediaType == constant.CallMediaTypeVideo ?
+                                <button onClick={this.props.startVideo} className="btn btn-square btn-round btn-danger">
+                                    <img src={CamOffImage} />
+                                </button> : null }
+        
+                                <button onClick={this.props.finish} className="btn btn-square btn-round btn-danger">
+                                    <img src={HangupImage} />
+                                </button>
+
+                                <button onClick={this.taggleWindowState} className="btn btn-square btn-round btn-success">
+                                    <img src={ArrowDownImage} />
+                                </button>
+
+                            </div>  
 
                         </div>
-
-                        <div className="my-video-holder" id="video-mine">
-
-
-                            
-                        </div>
-
-                        <div className="buttons-holder">
-
-                            <button className="btn btn-square btn-round btn-success">
-                                <img src={MicOnImage} />
-                            </button>
-                            <button className="btn btn-square btn-round btn-danger">
-                                <img src={MicOffImage} />
-                            </button>
-                            <button className="btn btn-square btn-round btn-success">
-                                <img src={CamOnImage} />
-                            </button>
-                            <button className="btn btn-square btn-round btn-danger">
-                                <img src={CamOffImage} />
-                            </button>
-    
-                            <button className="btn btn-square btn-round btn-danger">
-                                <img src={HangupImage} />
-                            </button>
-
-                            <button className="btn btn-square btn-round btn-success">
-                                <img src={ArrowDownImage} />
-                            </button>
-
-                        </div>  
 
                     </div>
 
@@ -181,12 +308,21 @@ const mapStateToProps = (state) => {
         calling: state.call.calling,
         incomingCallUser: state.call.incomingCallUser,
         outgoingCallUser: state.call.outgoingCallUser,
-        callingMediaType: state.call.callingMediaType
+        callingMediaType: state.call.callingMediaType,
+        micOn: state.call.micOn,
+        videoOn: state.call.videoOn,
+        windowState: state.call.windowState
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        finish: () => dispatch(actions.call.callFinish()),
+        mute: () => dispatch(actions.call.callMute()),
+        unmute: () => dispatch(actions.call.callUnMute()),
+        startVideo: () => dispatch(actions.call.callStartVideo()),
+        stopVideo: () => dispatch(actions.call.callStopVideo()),
+        setWindowState: (state) => dispatch(actions.call.setWindowState(state))
     };
 };
 

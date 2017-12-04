@@ -100,6 +100,7 @@ export const CreateRoomCancel = 'CreateRoom/Cancel';
 
 // call
 export const CallIncoming = 'Call/Incoming';
+export const CallIncomingMediaReady = 'Call/IncomingMediaReady';
 export const CallIncomingClose = 'Call/IncomingClose';
 export const CallIncomingReject = 'Call/IncomingReject';
 export const CallIncomingAccept = 'Call/IncomingAccept';
@@ -110,3 +111,11 @@ export const CallOutgoingStatusChanged = 'Call/OutgoingStatusChanged';
 export const CallOutgoingConnect = 'Call/OutgoingConnect';
 export const CallOutgoingAnswered = 'Call/OutgoingAnswered';
 export const CallClose = 'Call/Close';
+export const CallFinish = 'Call/Finish';
+export const CallMute = 'Call/Mute';
+export const CallUnMute = 'Call/UnMute';
+export const CallStartVideo = 'Call/StartVideo';
+export const CallStopVideo = 'Call/StopVideo';
+export const CallChangeWindowState = 'Call/ChangeWindowState';
+
+

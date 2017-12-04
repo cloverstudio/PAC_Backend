@@ -17,8 +17,54 @@ let localstream = null;
 
 
 export function incomingCall(callData){
+
+    return (dispatch, getState) => {
+
+        dispatch({
+            type: types.CallIncoming,
+            call:callData
+        });
+
+        new Promise( (resolve,reject) => {
+
+            getUserMedia({video: (callData.mediaType == constant.CallMediaTypeVideo), audio: true}, (err, stream) => {
+                
+                localstream = stream;
+
+                setTimeout( () => {
+                    stream.stop();
+                },1000);
+
+
+                if(err){
+                    reject(err);
+                } else {
+                    resolve(stream);
+                }
+                
+            });
+            
+        })
+
+        .then( (stream) => {
+
+            dispatch(incomingCallMediaReady(callData));
+
+        })
+        
+        .catch( (err) => {
+
+            console.error(err);
+            dispatch(actions.notification.showToast(strings.CallFailedToInitizeDevice[user.lang]));
+
+        });
+
+    }
+}
+
+export function incomingCallMediaReady(callData){
     return {
-        type: types.CallIncoming,
+        type: types.CallIncomingMediaReady,
         call:callData
     }
 }
@@ -60,8 +106,12 @@ export function outgoingCall(callData){
                 
                 localstream = stream;
 
+                setTimeout( () => {
+                    stream.stop();
+                },1000);
+
                 if(err){
-                    reject(strings.CallOutgoingMediaError[user.lang]);
+                    reject(err);
                 } else {
                     resolve(stream);
                 }
@@ -149,5 +199,54 @@ export function callClose(){
     }
 
 }
+
+export function  callFinish(){
+
+    return {
+        type: types.CallFinish
+    }
+
+}
     
+export function  callMute(){
+
+    return {
+        type: types.CallMute
+    }
+
+}
     
+export function  callUnMute(){
+
+    return {
+        type: types.CallUnMute
+    }
+
+}
+
+export function  callStartVideo(){
+
+    return {
+        type: types.CallStartVideo
+    }
+
+}
+
+export function  callStopVideo(){
+
+    return {
+        type: types.CallStopVideo
+    }
+
+}
+
+export function  setWindowState(state){
+
+    return {
+        type: types.CallChangeWindowState,
+        state
+    }
+
+}
+
+

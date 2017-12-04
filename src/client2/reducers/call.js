@@ -73,7 +73,8 @@ const calling = (state = false, action) => {
             return true;
         case types.CallClose:
             return false;
-            
+        case types.CallFinish:
+            return false;
         default:
             return state;
     }
@@ -90,6 +91,41 @@ const callingMediaType = (state = constant.CallMediaTypeVideo, action) => {
     }
 };
 
+const videoOn = (state = true, action) => {
+    switch (action.type) {
+        case types.CallIncoming:
+            return action.call.mediaType == constant.CallMediaTypeVideo;
+        case types.CallOutgoing:
+            return action.call.mediaType == constant.CallMediaTypeVideo;
+        case types.CallStartVideo:
+            return true;
+        case types.CallStopVideo:
+            return false;
+        default:
+            return state;
+    }
+};
+
+const micOn = (state = true, action) => {
+    switch (action.type) {
+        case types.CallMute:
+            return false;
+        case types.CallUnMute:
+            return true;
+        default:
+            return state;
+    }
+};
+
+const windowState = (state = constant.CallWindowStateMax, action) => {
+    switch (action.type) {
+        case types.CallChangeWindowState:
+            return action.state;
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     calling,
     incomingcallRinging,
@@ -97,5 +133,8 @@ export default combineReducers({
     outgoingCallRinging,
     outgoingCallUser,
     outgoingStatus,
-    callingMediaType
+    callingMediaType,
+    videoOn,
+    micOn,
+    windowState
 });;
