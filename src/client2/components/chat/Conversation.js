@@ -201,7 +201,7 @@ class Conversation extends Component {
                                                 break;
                                             case constant.MessageTypeSticker:
                                                 messageClass = 'sticker-message';
-                                                messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)}src={'https://spika.chat'+message.message}/>;
+                                                messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)}src={config.mediaBaseURL + message.message}/>;
                                                 break;
                                             default:
                                                 messageContent = null;
@@ -236,7 +236,7 @@ class Conversation extends Component {
                                                     break;
                                                 case constant.MessageTypeSticker:
                                                     messageClass = 'sticker-message'
-                                                    messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)} src={'https://spika.chat'+message.message}/>;
+                                                    messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)} src={config.mediaBaseURL + message.message}/>;
                                                     break;
                                                 default:
                                                     messageContent = null;

@@ -166,6 +166,9 @@
                     img{
                         max-width:40px;
                     }
+                    &:hover{
+                        cursor:pointer;
+                    }
                 }
                 .tab-pane{
                     overflow-y:scroll;

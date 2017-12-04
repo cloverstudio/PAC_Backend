@@ -155,18 +155,13 @@ class SocketManager {
         //construct msg
         if (action.type === types.ChatSendMessage){
             
-            //common fields
             action.message = {
                 roomID: currentState.chat.chatId, 
                 userID: user.userData._id,
                 type: action.messageType,
                 localID: util.getRandomString(),
-                attributes: {"useclient":"web"}
-            }
-            
-            //user
-            if (action.messageType === constant.MessageTypeText || action.messageType === constant.MessageTypeFile){
-                action.message.user = user.userData
+                attributes: {"useclient":"web"},
+                user: user.userData
             }
             
             //message / file field
