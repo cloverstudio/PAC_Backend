@@ -155,15 +155,6 @@ class SocketManager {
         //construct msg
         if (action.type === types.ChatSendMessage){
             
-            action.message = {
-                roomID: currentState.chat.chatId, 
-                userID: user.userData._id,
-                type: action.messageType,
-                localID: util.getRandomString(),
-                attributes: {"useclient":"web"},
-                user: user.userData
-            }
-            
             //message / file field
             switch(action.messageType){
                 case constant.MessageTypeText:
