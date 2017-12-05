@@ -35,8 +35,9 @@ export function chatIdByRoom(room){
 export function getChatIdFromUrl(url){
 
     if(url)
-        return url.replace(config.BasePath + '/chat/','');
+        return url.replace(config.BasePath + '/chat','').replace('/','');
 
+    
     return url;
 }
 

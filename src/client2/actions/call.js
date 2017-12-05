@@ -14,9 +14,9 @@ import { setTimeout } from 'timers';
 // local scope stuff
 let localstream = null;
 
-
-
 export function incomingCall(callData){
+
+    let deviceWorks = false;
 
     return (dispatch, getState) => {
 
@@ -25,14 +25,29 @@ export function incomingCall(callData){
             call:callData
         });
 
+        dispatch(incomingCallStatusChanged(strings.CallInitializingDevice[user.lang]));
+
+        setTimeout( () => {
+
+            if(!deviceWorks){
+                dispatch(incomingCallStatusChanged(strings.CallFailedToInitizeDevice[user.lang]));
+                dispatch(incomingCallMediaFailed(callData));
+            }
+
+        },10000);
+
         new Promise( (resolve,reject) => {
 
             getUserMedia({video: (callData.mediaType == constant.CallMediaTypeVideo), audio: true}, (err, stream) => {
-                
+
+                deviceWorks = true;
                 localstream = stream;
 
                 setTimeout( () => {
-                    stream.stop();
+
+                    if(stream)
+                        stream.stop();
+
                 },1000);
 
 
@@ -55,18 +70,44 @@ export function incomingCall(callData){
         .catch( (err) => {
 
             console.error(err);
-            dispatch(actions.notification.showToast(strings.CallFailedToInitizeDevice[user.lang]));
+            dispatch(incomingCallStatusChanged(strings.CallFailedToInitizeDevice[user.lang]));
+            dispatch(incomingCallMediaFailed(callData));
 
         });
 
     }
 }
 
+export function incomingCallStatusChanged(message){
+    return {
+        type: types.CallIncomingStatusChanged,
+        message
+    }
+}
+
+
 export function incomingCallMediaReady(callData){
     return {
         type: types.CallIncomingMediaReady,
         call:callData
     }
+}
+
+export function incomingCallMediaFailed(callData){
+
+    return (dispatch, getState) => {
+
+        setTimeout( () => {
+            
+            dispatch({
+                type: types.CallIncomingMediaFailed,
+                call:callData
+            });
+
+        },5000);
+
+    }
+
 }
 
 export function incomingCallClose(){
@@ -107,7 +148,10 @@ export function outgoingCall(callData){
                 localstream = stream;
 
                 setTimeout( () => {
-                    stream.stop();
+
+                    if(stream)
+                        stream.stop();
+
                 },1000);
 
                 if(err){

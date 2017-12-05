@@ -117,5 +117,7 @@ export const CallUnMute = 'Call/UnMute';
 export const CallStartVideo = 'Call/StartVideo';
 export const CallStopVideo = 'Call/StopVideo';
 export const CallChangeWindowState = 'Call/ChangeWindowState';
+export const CallIncomingMediaFailed = 'Call/IncomingMediaFailed';
+export const CallIncomingStatusChanged = 'Call/IncomingStatusChanged';
 
 

@@ -217,6 +217,17 @@ class SocketManager {
             }
         }
 
+        if (action.type === types.CallIncomingMediaFailed) {
+            const user = store.getState().call.incomingCallUser;
+
+            if(user){
+                this.emit('call_reject',{
+                    userId : user._id,
+                    rejectType : constant.CallFailedUserNotSupport
+                });
+            }
+        }
+
         if (action.type === types.CallIncomingReject) {
             const user = store.getState().call.incomingCallUser;
 
