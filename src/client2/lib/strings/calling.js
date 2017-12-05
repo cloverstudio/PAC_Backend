@@ -41,5 +41,9 @@ export const CallFailedToInitizeDevice = {
     EN:"Failed to initialize device. Please check browser's settings."
 }
 
+export const CallInitializingDevice = {
+    EN:"Initializing devices..."
+}
+
 
 

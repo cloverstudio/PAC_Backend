@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 
 import * as constant from '../../lib/const';
 import * as actions from '../../actions';
+import * as string from '../../lib/strings';
+
+import user from '../../lib/user';
 
 import spikaLogin from '../../assets/img/spikaLogin.png';
 import loginPic from '../../assets/img/loginPic.jpg';
@@ -41,13 +44,22 @@ class IncomingCallDialog extends Component {
 
                                 <div className="media media-single">
                                     <AvatarImage fileId={fileId} type={constant.AvatarUser} />
-                                    <span className="title"><strong>{this.props.user.name}</strong> is calling.</span>
+                                    <span className="title">
+                                        <strong>{this.props.user.name}</strong> is calling. <br />
+                                        {!this.props.mediaReady ?
+                                            <div> {this.props.incomingStatus} </div> : null
+                                        }
+                                    </span>
                                 </div>
 
-                                <div className="modal-footer">
-                                    <button className="btn btn-w-md btn-danger" onClick={this.props.reject} >Reject</button>
-                                    <button className="btn btn-w-md btn-primary" onClick={this.props.accept} >Accept</button>
-                                </div>
+
+
+                                {this.props.mediaReady ?
+                                    <div className="modal-footer">
+                                        <button className="btn btn-w-md btn-danger" onClick={this.props.reject} >Reject</button>
+                                        <button className="btn btn-w-md btn-primary" onClick={this.props.accept} >Accept</button>
+                                    </div> : null
+                                }
 
                             </div>
                         </div>
@@ -66,7 +78,9 @@ const mapStateToProps = (state) => {
     return {
         showIncomingCall: state.call.incomingcallRinging,
         user: state.call.incomingCallUser,
-        calling: state.call.calling
+        calling: state.call.calling,
+        incomingStatus: state.call.incomingStatus,
+        mediaReady: state.call.incomingcallMediaReady
     };
 };
 

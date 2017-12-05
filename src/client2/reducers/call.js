@@ -13,6 +13,32 @@ const incomingcallRinging = (state = false, action) => {
             return false;
         case types.CallIncomingAccept:
             return false;
+        case types.CallIncomingMediaFailed:
+            return false;
+            
+        default:
+            return state;
+    }
+};
+
+const incomingStatus = (state = "", action) => {
+    switch (action.type) {
+        case types.CallIncomingStatusChanged:
+            return action.message;
+        default:
+            return state;
+    }
+};
+
+const incomingcallMediaReady = (state = false, action) => {
+    switch (action.type) {
+        case types.CallIncomingMediaReady:
+            return true;
+        case types.CallIncomingClose:
+            return false;
+        case types.CallIncomingReject:
+            return false;
+
         default:
             return state;
     }
@@ -129,7 +155,9 @@ const windowState = (state = constant.CallWindowStateMax, action) => {
 export default combineReducers({
     calling,
     incomingcallRinging,
+    incomingcallMediaReady,
     incomingCallUser,
+    incomingStatus,
     outgoingCallRinging,
     outgoingCallUser,
     outgoingStatus,

@@ -155,15 +155,6 @@ class SocketManager {
         //construct msg
         if (action.type === types.ChatSendMessage){
             
-            action.message = {
-                roomID: currentState.chat.chatId, 
-                userID: user.userData._id,
-                type: action.messageType,
-                localID: util.getRandomString(),
-                attributes: {"useclient":"web"},
-                user: user.userData
-            }
-            
             //message / file field
             switch(action.messageType){
                 case constant.MessageTypeText:
@@ -212,6 +203,17 @@ class SocketManager {
             if(user){
                 this.emit('call_received',{
                     userId : user._id,
+                });
+            }
+        }
+
+        if (action.type === types.CallIncomingMediaFailed) {
+            const user = store.getState().call.incomingCallUser;
+
+            if(user){
+                this.emit('call_reject',{
+                    userId : user._id,
+                    rejectType : constant.CallFailedUserNotSupport
                 });
             }
         }

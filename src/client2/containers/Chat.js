@@ -43,6 +43,10 @@ class Main extends Base {
     }
 
     componentDidMount() {
+
+        if(!user.userData)
+            return;
+            
         // location update
         const chatId = util.getChatIdFromUrl(this.props.location);
         

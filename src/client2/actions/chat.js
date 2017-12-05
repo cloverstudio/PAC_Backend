@@ -218,10 +218,25 @@ export function receiveMessage(message){
 }
 
 export function sendMessage(messageType, content){
-    return{
-        type: types.ChatSendMessage, 
-        messageType,
-        content
+
+    return (dispatch, getState) => {
+
+        const message = {
+            roomID: getState().chat.chatId, 
+            userID: user.userData._id,
+            type: messageType,
+            localID: utils.getRandomString(),
+            attributes: {"useclient":"web"},
+            user: user.userData
+        }
+        
+        dispatch({
+            type: types.ChatSendMessage, 
+            messageType,
+            content,
+            message
+        });
+
     }
 }
 

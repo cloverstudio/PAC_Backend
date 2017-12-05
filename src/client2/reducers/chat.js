@@ -4,6 +4,8 @@ import { combineReducers } from 'redux';
 import user from '../lib/user';
 import * as constant from '../lib/const';
 import * as types from '../actions/types';
+import * as utils from '../lib/utils';
+
 
 const initial = {
     chatAvatar: {

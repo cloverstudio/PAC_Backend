@@ -61,6 +61,10 @@ class Conversation extends Component {
         for(let i = 0 ; i < this.props.messageList.length ; i++){
 
             const message = this.props.messageList[i];
+
+            if(!message)
+                continue;
+            
             const currentUser = message.userID;
             const messageDate = new Date(message.created).getDate();
 
