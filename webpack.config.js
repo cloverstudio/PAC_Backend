@@ -20,7 +20,10 @@ module.exports = {
         contentBase: path.join(__dirname, "dist"),
         hot: true,
         port: 3000,
-        publicPath: 'http://localhost:3000/new/',
+        publicPath: basePath,
+        historyApiFallback: {
+            index: basePath + 'index.html'
+        }
     },
     output: {
         path: path.join(__dirname, '/dist/'),
