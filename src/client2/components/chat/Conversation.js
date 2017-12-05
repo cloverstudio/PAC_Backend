@@ -97,7 +97,8 @@ class Conversation extends Component {
 
             const message = this.props.messageList[i];
 
-            console.log('message',message);
+            if(!message)
+                continue;
             
             const currentUser = message.userID;
             const messageDate = new Date(message.created).getDate();
