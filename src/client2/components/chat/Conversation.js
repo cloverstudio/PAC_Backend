@@ -17,6 +17,7 @@ import AvatarImage from '../AvatarImage';
 import DateTime from '../DateTime';
 import Stickers from './Stickers';
 import ChatInput from './ChatInput';
+import ChatHeader from './ChatHeader';
 
 class Conversation extends Component {
     constructor(){
@@ -102,37 +103,9 @@ class Conversation extends Component {
                     </div> : null
                 }
 
-                <header className="flexbox align-items-center p-12 pr-20 bg-lighter bb-1 border-light">
-                    <div className="media align-items-center p-0">
+                <ChatHeader/>
 
-                        <AvatarImage 
-                            fileId={this.props.chatAvatar.fileId} 
-                            type={this.props.chatAvatar.type} />
-
-                        <div className="media-body">
-                            <h6>{this.props.chatAvatar.name}</h6>
-                            <small>{(()=>{
-                                const users = Object.values(this.props.UsersTyping);
-                                const len = users.length;
-                                
-                                if (len === 1){
-                                    return users[0]+' is typing...';
-                                }
-                                else if(len >= 2){
-                                    let typingStr = users.slice(0, len-1).join(', ');
-                                    typingStr+= ` and ${users[len-1]} are typing...`
-                                    return typingStr;
-                                }
-                                else{
-                                    return null;
-                                }
-                            })()}</small>
-                        </div>
-                        
-                    </div>
-                </header>
-
-                <div ref={ (scrollableConversation) => { 
+                 <div ref={ (scrollableConversation) => { 
                         this.scrollableConversation = scrollableConversation}
                     }
                     onScroll={ this.onScroll }
@@ -170,7 +143,10 @@ class Conversation extends Component {
                                                 break;
                                             case constant.MessageTypeSticker:
                                                 messageClass = 'sticker-message';
-                                                messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)}src={config.mediaBaseURL + message.message}/>;
+                                                messageContent = <img onLoad={()=> {
+                                                    if(this.scrollableConversation.scrollHeight - this.scrollableConversation.scrollTop - this.scrollableConversation.clientHeight < constant.scrollBoundary){
+                                                    util.scrollElemBottom(this.scrollableConversation)}
+                                                    }} src={config.mediaBaseURL + message.message}/>;
                                                 break;
                                             default:
                                                 messageContent = null;
@@ -205,7 +181,10 @@ class Conversation extends Component {
                                                     break;
                                                 case constant.MessageTypeSticker:
                                                     messageClass = 'sticker-message'
-                                                    messageContent = <img onLoad={()=>util.scrollElemBottom(this.scrollableConversation)} src={config.mediaBaseURL + message.message}/>;
+                                                    messageContent = <img onLoad={()=>{
+                                                        if(this.scrollableConversation.scrollHeight - this.scrollableConversation.scrollTop - this.scrollableConversation.clientHeight < constant.scrollBoundary){
+                                                        util.scrollElemBottom(this.scrollableConversation)}
+                                                        }} src={config.mediaBaseURL + message.message}/>;
                                                     break;
                                                 default:
                                                     messageContent = null;
@@ -222,7 +201,7 @@ class Conversation extends Component {
                                 </div> 
 
                     })}
-                </div>
+                </div> 
 
                 <ChatInput/>
 

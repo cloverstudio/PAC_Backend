@@ -152,11 +152,10 @@ class SocketManager {
 
         const currentState = store.getState();
         
-        //construct msg
         if (action.type === types.ChatSendMessage){
 
             this.emit('sendMessage', action.message);
-
+            
         }
 
         if(action.type === types.ChatSendStartTyping){
