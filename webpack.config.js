@@ -1,5 +1,7 @@
 'use strict';
 
+var basePath = "/new/";
+
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -9,15 +11,21 @@ module.exports = {
     devtool: 'eval-source-map',
     entry: [
         'babel-polyfill',
-        'webpack-dev-server/client?http://localhost:3000',
+        'webpack-dev-server/client?http://localhost:3000/',
         'webpack/hot/only-dev-server',
         'react-hot-loader/patch',
         path.join(__dirname, 'src/client2/index.js')
     ],
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        hot: true,
+        port: 3000,
+        publicPath: 'http://localhost:3000/new/',
+    },
     output: {
         path: path.join(__dirname, '/dist/'),
         filename: '[name].js',
-        publicPath: '/'
+        publicPath: basePath
     },
     plugins: [
         new HtmlWebpackPlugin({

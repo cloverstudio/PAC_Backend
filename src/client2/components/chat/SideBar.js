@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import * as strings from '../../lib/strings';
+import * as utils from '../../lib/utils';
 import * as actions from '../../actions';
 
 import user from '../../lib/user';
@@ -21,7 +22,7 @@ class SideBar extends Component {
             <aside className="sidebar sidebar-icons-right sidebar-expand-lg">
                 <header className="sidebar-header">
                     <span className="logo">
-                        <Link to={'/chat'}>
+                        <Link to={`${utils.url('/chat')}`}>
                             <img src={spikaLogoPic} alt="logo" />
                         </Link>
                     </span>
@@ -34,7 +35,7 @@ class SideBar extends Component {
                         <li className="menu-category">{strings.SidebarTitle1[user.lang]}</li>
 
                         <li className="menu-item hidden-sm-up">
-                            <Link className="menu-link" to={'/chat'}>
+                            <Link className="menu-link" to={`${utils.url('/chat')}`}>
                                 <span className="icon fa fa-comment"></span>
                                 <span className="title">{strings.SidebarChat[user.lang]}</span>
                             </Link>
@@ -55,7 +56,7 @@ class SideBar extends Component {
                         </li>
 
                         <li className="menu-item">
-                            <Link to={'/newroom'} className="menu-link">
+                            <Link to={`${utils.url('/newroom')}`} className="menu-link">
                                 <span className="icon fa fa fa-plus"></span>
                                 <span className="title">{strings.SidebarNewRoom[user.lang]}</span>
                             </Link>
@@ -101,7 +102,7 @@ class SideBar extends Component {
                         </li>
                 
                         <li className="menu-item">
-                            <Link to={'/logout'} className="menu-link">
+                            <Link to={`${utils.url('/logout')}`} className="menu-link">
                                 <span className="icon ion-log-out"></span>
                                 <span className="title">{strings.SidebarLogout[user.lang]}</span>
                             </Link>

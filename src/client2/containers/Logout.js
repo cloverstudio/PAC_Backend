@@ -8,6 +8,7 @@ import * as actions from '../actions';
 
 import * as constnat from '../lib/const';
 import * as strings from '../lib/strings';
+import * as utils from '../lib/utils';
 import user from '../lib/user';
 
 class Logout extends Component {
@@ -25,7 +26,7 @@ class Logout extends Component {
 
     render() {
 
-        return <Redirect to='/' />
+        return <Redirect to={`${utils.url('/')}`} />
     
     }
 

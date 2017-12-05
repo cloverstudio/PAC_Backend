@@ -139,13 +139,13 @@
     "url-loader": "^0.5.7",
     "vinyl-source-stream": "latest",
     "watchify": "latest",
-    "webpack": "^1.13.0",
+    "webpack": "^1.15.0",
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
     "build-js": "browserify src/client/js/main.js > public/js/bundle.js -d",
     "watch-js": "watchify src/client/js/main.js -o public/js/bundle.js -v -d ",
-    "start": "node server",
+    "start": "webpack-dev-server --inline",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors"
   },
   "browserify": {

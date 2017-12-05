@@ -64,7 +64,7 @@ export function save() {
                 room
             });
 
-            dispatch(push(`/chat/${chatId}`));
+            dispatch(push(`${utils.url('/chat/' + chatId)}`));
     
             dispatch({
                 type: types.ChatOpenByRoom,

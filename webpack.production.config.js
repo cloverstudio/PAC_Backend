@@ -1,5 +1,7 @@
 'use strict';
 
+var basePath = "/new";
+
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -17,7 +19,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, '/public/dist/'),
         filename: '[name]-[hash].min.js',
-        publicPath: '/'
+        publicPath: basePath
     },
     plugins: [
         // webpack gives your modules and chunks ids to identify them. Webpack can vary the

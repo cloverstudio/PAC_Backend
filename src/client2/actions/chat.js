@@ -132,7 +132,7 @@ export function openChatByUser(targetUser) {
 
         const chatId = utils.chatIdByUser(targetUser);
 
-        store.dispatch(push(`/chat/${chatId}`));
+        store.dispatch(push(`${utils.url('/chat/' + chatId)}`));
 
         dispatch({
             type: types.ChatOpenByUser,
@@ -150,7 +150,7 @@ export function openChatByGroup(group) {
         
         const chatId = utils.chatIdByGroup(group);
 
-        dispatch(push(`/chat/${chatId}`));
+        dispatch(push(`${utils.url('/chat/' + chatId)}`));
 
         dispatch({
             type: types.ChatOpenByGroup,
@@ -169,7 +169,7 @@ export function openChatByRoom(room) {
 
         const chatId = utils.chatIdByRoom(room);
 
-        dispatch(push(`/chat/${chatId}`));
+        dispatch(push(`${utils.url('/chat/' + chatId)}`));
 
         dispatch({
             type: types.ChatOpenByRoom,

@@ -5,6 +5,7 @@ import * as actions from '../actions';
 
 import {callLogin} from '../lib/api/';
 import * as strings from '../lib/strings';
+import * as util from '../lib/utils';
 import user from '../lib/user';
 
 import {store} from '../index';
@@ -30,7 +31,7 @@ export function onLoginClick(organization,username,password,remember) {
 
             user.signinSucceed(response,remember);
 
-            store.dispatch(push('/chat'));
+            store.dispatch(push(`${util.url('/chat')}`));
 
         }).catch( (err) => {
 

@@ -1,4 +1,6 @@
 
+
+import * as config from './config';
 import * as constant from './const';
 import user from './user';
 
@@ -32,10 +34,8 @@ export function chatIdByRoom(room){
 
 export function getChatIdFromUrl(url){
 
-    console.log(url);
-    
     if(url)
-        return url.replace('/chat/','');
+        return url.replace(config.BasePath + '/chat/','');
 
     return url;
 }
@@ -58,4 +58,8 @@ export function scrollElemBottom(element){
     if (element.scrollHeight > element.clientHeight){
         element.scrollTop = element.scrollHeight - element.clientHeight
     }
+}
+
+export function url(url){
+    return config.BasePath + url;
 }

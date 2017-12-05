@@ -9,6 +9,7 @@ import * as actions from '../actions';
 import spikaLogin from '../assets/img/spikaLogin.png';
 import loginPic from '../assets/img/loginPic.jpg';
 
+import * as util from '../lib/utils';
 import * as constnat from '../lib/const';
 import * as strings from '../lib/strings';
 import user from '../lib/user';
@@ -52,7 +53,7 @@ class Login extends Component {
     render() {
 
         if(user.token)
-            return <Redirect to='/chat' />
+            return <Redirect to={`${util.url('/chat')}`} />
 
         return (
             <div className="row no-gutters min-h-fullscreen bg-white">
