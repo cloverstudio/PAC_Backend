@@ -237,10 +237,10 @@ export function sendMessage(messageType, content){
                 message.message = Encryption.encryptText(content);
                 break;
             case constant.messageTypeFile:
-                message.file = action.content;
+                message.file = content;
                 break;
             case constant.MessageTypeSticker:
-                message.message = action.content;
+                message.message = content;
                 break;
             default:
                 return false;
