@@ -16,12 +16,12 @@ import Encryption from '../../lib/encryption/encryption';
 import AvatarImage from '../AvatarImage';
 import DateTime from '../DateTime';
 import Stickers from './Stickers';
+import ChatInput from './ChatInput';
 
 class Conversation extends Component {
     constructor(){
         super()
         
-        this.savedTextInputValues = {};
         this.todayDate = new Date().getDate();
         this.stickersLoaded = false;
     }
@@ -38,29 +38,8 @@ class Conversation extends Component {
     componentWillUpdate(nextProps){
         this.lastConversationHeight = this.scrollableConversation.scrollHeight
     }
-    
-    componentWillReceiveProps(nextProps){
-        if (this.props.currentChatId && this.props.currentChatId !== nextProps.currentChatId){
-            const newInputValues = {...this.savedTextInputValues}
-            newInputValues[this.props.currentChatId] = this.chatInputElement.value
-            this.savedTextInputValues = newInputValues
-            
-            this.props.sendStopTyping()
-        }
-    }
 
     componentDidUpdate(prevProps){
-            if (this.props.currentChatId !== prevProps.currentChatId){
-                if(this.savedTextInputValues[this.props.currentChatId]){
-                    this.chatInputElement.value = this.savedTextInputValues[this.props.currentChatId]
-                    
-                    this.props.sendStartTyping()
-                }
-                else {
-                    this.chatInputElement.value = ''
-                }
-            }
-
             if (this.props.messageList.length !== prevProps.messageList.length){
                 if (this.props.messageList.length - prevProps.messageList.length === 1){
                     util.scrollElemBottom(this.scrollableConversation); 
@@ -69,20 +48,6 @@ class Conversation extends Component {
                     this.scrollableConversation.scrollTop = this.scrollableConversation.scrollHeight - this.lastConversationHeight                                
                 }
         }
-    }
-
-    toggleStickersView = () => {
-        if(!this.props.stickersViewState){
-            this.props.showStickersView();
-
-            if(!this.stickersLoaded){
-                this.props.loadStickers();
-                this.stickersLoaded = true;
-            }
-
-        }
-        else
-            this.props.hideStickersView();
     }
     
     render() {
@@ -255,50 +220,7 @@ class Conversation extends Component {
                     })}
                 </div>
 
-                <footer className="publisher">
-                    <input 
-                        className="publisher-input" 
-                        rows="1" 
-                        placeholder="Write something" 
-                        ref={input => this.chatInputElement = input}
-                        onKeyPress={e => {
-                            if (e.key === 'Enter' && e.target.value){
-                                this.props.sendMessage(constant.MessageTypeText, e.target.value);
-                                this.savedTextInputValues[this.props.currentChatId] = '';
-                                this.chatInputElement.value = '';
-
-                                this.props.sendStopTyping();
-                            }
-                        }}
-                        onChange={e=> {
-                            if(e.target.value.length === 1) this.props.sendStartTyping()
-                            if(e.target.value.length === 0) this.props.sendStopTyping()
-                            }}
-                        />
-                    <div className="align-self-end gap-items">
-                        <span className="publisher-btn file-group">
-                            <i className="fa fa-paperclip file-browser"></i>
-                            <input type="file" />
-                        </span>
-                        <span 
-                            className="publisher-btn"
-                            onClick={this.toggleStickersView}>
-                            <i className="fa fa-smile-o"></i>
-                        </span>
-                        <span 
-                            className="publisher-btn" 
-                            onClick={e=> {
-                                this.props.sendMessage(constant.MessageTypeText, this.chatInputElement.value);
-                                this.savedTextInputValues[this.props.currentChatId] = '';
-                                this.chatInputElement.value = '';
-
-                                this.props.sendStopTyping();
-
-                            }}>
-                            <i className="fa fa-paper-plane"></i>
-                        </span>
-                    </div>
-                </footer>
+                <ChatInput/>
 
                 <Stickers/>
 
@@ -317,20 +239,13 @@ const mapStateToProps = (state) => {
         messageList: state.chat.messageList,
         user:user.userData,
         UsersTyping: state.chat.typing,
-        stickersViewState: state.chatUI.stickersViewState,
         infoViewState: state.chatUI.infoViewState
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadOldMessages: (chatID, lastMessage) => dispatch(actions.chat.loadOldMessages(chatID, lastMessage)), 
-        sendMessage : (messageType, content) => dispatch(actions.chat.sendMessage(messageType, content)),
-        showStickersView : () => dispatch(actions.chatUI.showStickersView()),
-        hideStickersView : () => dispatch(actions.chatUI.hideStickersView()),
-        loadStickers : () => dispatch(actions.stickers.loadStickers()),
-        sendStartTyping: () => dispatch(actions.chat.sendStartTyping()),
-        sendStopTyping: () => dispatch(actions.chat.sendStopTyping())
+        loadOldMessages: (chatID, lastMessage) => dispatch(actions.chat.loadOldMessages(chatID, lastMessage))
     };
 };
 

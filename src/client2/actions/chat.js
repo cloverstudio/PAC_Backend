@@ -240,14 +240,24 @@ export function stoppedTyping(userID){
     }
 }
 
-export function sendStartTyping(){
+export function sendStartTyping(chatId){
     return {
-        type: types.ChatSendStartTyping
+        type: types.ChatSendStartTyping,
+        chatId
     }
 }
 
-export function sendStopTyping(){
+export function sendStopTyping(chatId){
     return {
-        type: types.ChatSendStopTyping
+        type: types.ChatSendStopTyping,
+        chatId
+    }
+}
+
+export function changeInputValue(chatId, value){
+    return {
+        type: types.ChatChangeInputValue,
+        chatId,
+        value
     }
 }

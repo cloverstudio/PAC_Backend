@@ -70,6 +70,7 @@ export const ChatShowHistory = 'Chat/ShowHistory';
 export const ChatHideHistory = 'Chat/HideHistory';
 export const ChatShowInfoView = 'Chat/ShowInfoView';
 export const ChatHideInfoView = 'Chat/HideInfoView';
+export const ChatChangeInputValue = 'Chat/ChangeInputValue';
 
 // Info
 export const InfoViewLoadDone = 'InfoView/LoadDone';

@@ -189,7 +189,7 @@ class SocketManager {
         if(action.type === types.ChatSendStartTyping){
 
             this.emit('sendtyping', {
-                roomID:currentState.chat.chatId,
+                roomID: action.chatId,
                 type:1,
                 userID: user.userData._id,
                 userName: user.userData.name
@@ -198,9 +198,8 @@ class SocketManager {
         }
 
         if(action.type === types.ChatSendStopTyping){
-
             this.emit('sendtyping', {
-                roomID: currentState.chat.chatId,
+                roomID: action.chatId,
                 type:0,
                 userID: user.userData._id
             });

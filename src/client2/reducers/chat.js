@@ -16,8 +16,8 @@ const initial = {
     chatId: "",
     chatType: constant.ChatTypePrivate,
     typing: {},
-    timestampByChat: 0
-
+    timestampByChat: 0,
+    inputValues: {}
 }
 
 const timestampByChat = ( state = initial.timestampByChat, action ) => {
@@ -220,6 +220,17 @@ const typing = (state = initial.typing, action) => {
     }
 }
 
+const inputValues = ( state = initial.inputValues, action ) => {
+    switch(action.type){
+        case types.ChatChangeInputValue:
+            const newState = {...state};
+            newState[action.chatId] = action.value;
+            return newState;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     chatAvatar,
     isLoading,
@@ -227,5 +238,6 @@ export default combineReducers({
     chatId,
     chatType,
     typing,
-    timestampByChat
+    timestampByChat,
+    inputValues
 });
