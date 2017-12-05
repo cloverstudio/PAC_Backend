@@ -15,6 +15,7 @@ import * as strings from '../lib/strings';
 import user from '../lib/user';
 import * as utils from '../lib/utils';
 import * as constant from '../lib/const';
+import Encryption from "../lib/encryption/encryption";
 
 import {store} from '../index';
 
@@ -229,6 +230,24 @@ export function sendMessage(messageType, content){
             attributes: {"useclient":"web"},
             user: user.userData
         }
+    
+        //message / file field
+        switch(messageType){
+            case constant.MessageTypeText:
+                message.message = Encryption.encryptText(content);
+                break;
+            case constant.messageTypeFile:
+                message.file = content;
+                break;
+            case constant.MessageTypeSticker:
+                message.message = content;
+                break;
+            default:
+                return false;
+        }
+    
+        //add created field
+        message.created = new Date().getTime();
         
         dispatch({
             type: types.ChatSendMessage, 

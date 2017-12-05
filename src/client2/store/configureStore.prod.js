@@ -7,6 +7,8 @@ import thunkMiddleware from 'redux-thunk'
 export const history = createHistory();
 const middleware = routerMiddleware(history);
 
+import SocketManager from '../lib/SocketManager';
+
 const logger = store => next => action => {
     console.log('dispatching', action)
     let result = next(action)
@@ -18,6 +20,10 @@ export function configureStore(initialState) {
     return createStore(
         rootReducer,
         initialState,
-        applyMiddleware(middleware,logger,thunkMiddleware),
+        applyMiddleware(
+            middleware,
+            logger,
+            thunkMiddleware,
+            SocketManager.actionListener),
     );
 }
