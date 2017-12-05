@@ -154,26 +154,8 @@ class SocketManager {
         
         //construct msg
         if (action.type === types.ChatSendMessage){
-            
-            //message / file field
-            switch(action.messageType){
-                case constant.MessageTypeText:
-                    action.message.message = Encryption.encryptText(action.content);
-                    break;
-                case constant.messageTypeFile:
-                    action.message.file = action.content;
-                    break;
-                case constant.MessageTypeSticker:
-                    action.message.message = action.content;
-                    break;
-                default:
-                    return false;
-            }
 
             this.emit('sendMessage', action.message);
-
-            //add created field
-            action.message.created = new Date().getTime();
 
         }
 
