@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import * as actions from '../actions';
 
+import * as utils from '../lib/utils';
+
 import spikaLogin from '../assets/img/spikaLogin.png';
 import loginPic from '../assets/img/loginPic.jpg';
 
@@ -14,14 +16,13 @@ class ReLogin extends Component {
 
     componentWillMount() {
 
-        alert('sss');
 
     }
     
     render() {
         
         return (
-             <Redirect to='/' />
+             <Redirect to={`${utils.url('/')}`} />
         );
     }
 

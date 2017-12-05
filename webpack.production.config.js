@@ -1,6 +1,6 @@
 'use strict';
 
-var basePath = "/new";
+var basePath = "/new/";
 
 var path = require('path');
 var webpack = require('webpack');
