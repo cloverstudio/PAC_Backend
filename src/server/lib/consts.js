@@ -99,6 +99,13 @@
     Const.responsecodeSigninUserNotFound = 4000087;
     Const.responsecodeWrongUserContactId = 4000088;
     
+    Const.responsecodeAddUsersToRoomUserIsNotOwner = 4000089;
+    Const.responsecodeRemoveUsersFromRoomUserIsNotOwner = 4000090;
+
+    Const.resCodeSocketUpdateNoMessageID = 4000091;
+    Const.resCodeSocketUpdateNoUserID = 4000092;
+
+
     Const.httpCodeSucceed = 200;
     Const.httpCodeForbidden = 403;
     Const.httpCodeFileNotFound = 404;
@@ -244,7 +251,8 @@
         cannotUpdateRoom: "you can't update this room because you are not owner",
         cannotDeleteRoom: "you can't delete this room because you are not owner.",
         cannotUpdateMessage: "you can't update this message because you are not sender",
-        cannotDeleteMessage: "you can't delete this message because you are not sender."
+        cannotDeleteMessage: "you can't delete this message because you are not sender.",
+        wrongUserPermission: "User permission must be 1 (web client) or 3 (sub-admin)"
     }
 
     Const.webhookEventMessage = "message";

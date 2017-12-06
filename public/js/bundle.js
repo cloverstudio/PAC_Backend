@@ -73633,6 +73633,10 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"Add to favorite",{"name":"l10n","hash":{},"data":data}))
     + "\n            </a>\n        </li>";
 },"5":function(container,depth0,helpers,partials,data) {
+    return "        <li id=\"btn-updatemessage\">\n            <a href=\"javascript:void(0)\"><i class=\"fa fa-pencil\"></i> "
+    + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"Update Message",{"name":"l10n","hash":{},"data":data}))
+    + "</a>\n        </li>\n";
+},"7":function(container,depth0,helpers,partials,data) {
     return "        <h4>"
     + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"Users Seen",{"name":"l10n","hash":{},"data":data}))
     + "</h4>\n";
@@ -73651,7 +73655,9 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + ((stack1 = helpers.unless.call(alias1,(depth0 != null ? depth0.isFavorite : depth0),{"name":"unless","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n        \n        <li class=\"red-bg\" id=\"btn-deletemessage\">\n            <a href=\"javascript:void(0)\"><i class=\"fa fa-share\"></i> "
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"Delete Message",{"name":"l10n","hash":{},"data":data}))
-    + "</a>\n        </li>\n\n    </ul>\n    \n    <table class=\"table\">\n\n        <!-- <tr><td>"
+    + "</a>\n        </li>\n\n"
+    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),1,{"name":"condition","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n    </ul>\n    \n    <table class=\"table\">\n\n        <!-- <tr><td>"
     + alias3((helpers.l10n || (depth0 && depth0.l10n) || alias2).call(alias1,"MessageID",{"name":"l10n","hash":{},"data":data}))
     + "</td><td>"
     + ((stack1 = ((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper))) != null ? stack1 : "")
@@ -73664,7 +73670,7 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "</td><td>"
     + ((stack1 = (helpers.formatDate || (depth0 && depth0.formatDate) || alias2).call(alias1,(depth0 != null ? depth0.created : depth0),{"name":"formatDate","hash":{},"data":data})) != null ? stack1 : "")
     + "</td><td></td></tr>\n    \n    </table>\n\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.seenBy : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.seenBy : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    <table class=\"table users\" id=\"seenby-container\">\n        \n\n    \n    </table>\n\n</div>\n\n\n    ";
 },"useData":true});
 
@@ -73678,6 +73684,7 @@ var Utils = require('../../lib/utils');
 var UIUtils = require('../../lib/UIUtils');
 var Const = require('../../lib/consts');
 var Config = require('../../lib/init');
+var EncryptionManager = require('../../lib/EncryptionManager');
 
 var NotificationManager = require('../../lib/NotificationManager');
 var loginUserManager = require('../../lib/loginUserManager');
@@ -73754,7 +73761,9 @@ var MessageDetailView = Backbone.View.extend({
             
             });
 
-            $("#seenby-container").html(templateSeenBy({seenBy:self.seenByUsers}));
+            $("#seenby-container").html(templateSeenBy({
+                seenBy:self.seenByUsers,
+            }));
 
         },function(errCode){
 
@@ -73769,6 +73778,7 @@ var MessageDetailView = Backbone.View.extend({
         if(obj.deleted && obj.deleted != 0){
             $('.deltedalert').show();
             $('#btn-deletemessage').hide();  
+            $('#btn-updatemessage').hide();  
             $('#btn-removefromfavorite').hide();
             $('#btn-addtofavorite').hide();
             return;
@@ -73776,29 +73786,45 @@ var MessageDetailView = Backbone.View.extend({
 
         if(obj.userID == loginUserManager.user._id){
             $('#btn-deletemessage').show();
+            $('#btn-updatemessage').show();
         }else{
             $('#btn-deletemessage').hide();
+            $('#btn-updatemessage').hide();
         }
         
         if(!obj.deleted || obj.deleted == 0){
             $('.deltedalert').hide();
             $('#btn-addtofavorite').show();
             $('#btn-removefromfavorite').show();
-            
         }else{
-            
             $('.deltedalert').show();
             $('#btn-deletemessage').hide();  
+            $('#btn-updatemessage').hide();  
             $('#btn-removefromfavorite').hide();
             $('#btn-addtofavorite').hide();      
         }
 
         $('#btn-closeinfoview').unbind().on('click',function(){
-            
             $(self.el).removeclass('on');
+        });
+        
+        $('#btn-updatemessage').unbind().on('click',function(){
+            
+            var newMessage = '';
+
+            if(newMessage = prompt(localzationManager.get('Please input new message.'),EncryptionManager.decryptText(self.currentMessage.message))){
+                
+                socketIOManager.emit('updateMessage',{
+                    messageID: self.currentMessage._id,
+                    userID: loginUserManager.user._id,
+                    message: EncryptionManager.encryptText(newMessage)
+                });
+                
+            }
             
         });
         
+
         $('#btn-deletemessage').unbind().on('click',function(){
             
             if(confirm(localzationManager.get('Are you sure to delete this message ?'))){
@@ -73939,7 +73965,7 @@ var MessageDetailView = Backbone.View.extend({
 
 module.exports = MessageDetailView;
 
-},{"../../lib/APIClients/AddToFavoriteClient":239,"../../lib/APIClients/MessageSeenByClient":259,"../../lib/APIClients/RemoveFromFavoriteClient":264,"../../lib/APIClients/UserDetailClient":275,"../../lib/ChatManager":278,"../../lib/NotificationManager":281,"../../lib/SocketIOManager":286,"../../lib/UIUtils":288,"../../lib/consts":289,"../../lib/init":290,"../../lib/localzationManager":292,"../../lib/loginUserManager":293,"../../lib/utils":295,"../Modals/ForwardMessage/ForwardMessageDialog":190,"./MessageDetail.hbs":166,"./SeenBy.hbs":170,"backbone":7,"bootstrap-switch":11,"jquery":72,"lodash":75}],168:[function(require,module,exports){
+},{"../../lib/APIClients/AddToFavoriteClient":239,"../../lib/APIClients/MessageSeenByClient":259,"../../lib/APIClients/RemoveFromFavoriteClient":264,"../../lib/APIClients/UserDetailClient":275,"../../lib/ChatManager":278,"../../lib/EncryptionManager":279,"../../lib/NotificationManager":281,"../../lib/SocketIOManager":286,"../../lib/UIUtils":288,"../../lib/consts":289,"../../lib/init":290,"../../lib/localzationManager":292,"../../lib/loginUserManager":293,"../../lib/utils":295,"../Modals/ForwardMessage/ForwardMessageDialog":190,"./MessageDetail.hbs":166,"./SeenBy.hbs":170,"backbone":7,"bootstrap-switch":11,"jquery":72,"lodash":75}],168:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
@@ -77713,9 +77739,9 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + "\">\n            \n"
     + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),1,{"name":"condition","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " \n"
-    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),2,{"name":"condition","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),2,{"name":"condition","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "        \n"
-    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),3,{"name":"condition","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.condition || (depth0 && depth0.condition) || alias2).call(alias1,(depth0 != null ? depth0.chatType : depth0),3,{"name":"condition","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n            <div class=\"clearfix\"></div>\n        </div>\n        \n";
 },"2":function(container,depth0,helpers,partials,data) {
     return " unread ";
@@ -77728,48 +77754,82 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
     + ((stack1 = helpers["if"].call(alias2,((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.onlineStatus : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n\n                <div class=\"name\">\n                    "
     + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
-    + "\n                </div>\n                \n                <div class=\"lastmessage\">"
-    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),35,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n\n                <div class=\"lasttimestamp\">"
+    + "\n                </div>\n                \n                <div class=\"lastmessage\">\n                    "
+    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.currentUserIsSender : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " "
+    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),32,{"name":"strip","hash":{},"data":data}))
+    + "\n                </div>\n\n                <div class=\"lasttimestamp\">"
     + alias1((helpers.ufDate || (depth0 && depth0.ufDate) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.created : stack1),{"name":"ufDate","hash":{},"data":data}))
     + "</div>\n                \n                "
-    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n                \n            </div>\n            \n\n";
 },"5":function(container,depth0,helpers,partials,data) {
     return "  <img class=\"img-circle onlineicon\" src=\"/images/onlineIcon.png\" /> ";
 },"7":function(container,depth0,helpers,partials,data) {
+    return " <b>"
+    + container.escapeExpression((helpers.l10n || (depth0 && depth0.l10n) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"You",{"name":"l10n","hash":{},"data":data}))
+    + "</b>: ";
+},"9":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "<span class=\"badge\">"
     + container.escapeExpression(((helper = (helper = helpers.unreadCount || (depth0 != null ? depth0.unreadCount : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"unreadCount","hash":{},"data":data}) : helper)))
     + "</span>";
-},"9":function(container,depth0,helpers,partials,data) {
+},"11":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing;
 
   return "            \n            <div class=\"group\">\n\n                <div class=\"img-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/group/"
     + alias1(container.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n                </div>\n                \n                <div class=\"name\">"
     + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.group : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n                \n                <div class=\"lastmessage\">"
-    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),35,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n\n                <div class=\"lasttimestamp\">"
+    + "</div>\n                \n                <div class=\"lastmessage\">\n"
+    + ((stack1 = helpers["if"].call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.user : stack1),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(15, data, 0),"data":data})) != null ? stack1 : "")
+    + "                    "
+    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),20,{"name":"strip","hash":{},"data":data}))
+    + "\n                </div>\n\n                <div class=\"lasttimestamp\">"
     + alias1((helpers.ufDate || (depth0 && depth0.ufDate) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.created : stack1),{"name":"ufDate","hash":{},"data":data}))
     + "</div>\n\n                "
-    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n                \n            </div>\n            \n";
-},"11":function(container,depth0,helpers,partials,data) {
+},"12":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "                        "
+    + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.currentUserIsSender : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
+    + "\n";
+},"13":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return " <b>"
+    + container.escapeExpression((helpers.strip || (depth0 && depth0.strip) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = ((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.user : stack1)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
+    + "</b>: ";
+},"15":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return "                        "
+    + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.currentUserIsSender : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(16, data, 0),"data":data})) != null ? stack1 : "")
+    + "\n";
+},"16":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return " <b>"
+    + container.escapeExpression((helpers.strip || (depth0 && depth0.strip) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.lastUpdateUser : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
+    + "</b>: ";
+},"18":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing;
 
   return "\n            <div class=\"room\">\n\n                <div class=\"img-holder\">\n                    <img class=\"img-circle\" src=\"/api/v2/avatar/room/"
     + alias1(container.lambda(((stack1 = ((stack1 = ((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.avatar : stack1)) != null ? stack1.thumbnail : stack1)) != null ? stack1.nameOnServer : stack1), depth0))
     + "\" />\n                </div>\n                \n                <div class=\"name\">"
     + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.room : depth0)) != null ? stack1.name : stack1),15,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n                \n                <div class=\"lastmessage\">"
-    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),35,{"name":"strip","hash":{},"data":data}))
-    + "</div>\n\n                <div class=\"lasttimestamp\">"
+    + "</div>\n                \n                <div class=\"lastmessage\">\n"
+    + ((stack1 = helpers["if"].call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.user : stack1),{"name":"if","hash":{},"fn":container.program(12, data, 0),"inverse":container.program(15, data, 0),"data":data})) != null ? stack1 : "")
+    + "                    "
+    + alias1((helpers.strip || (depth0 && depth0.strip) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.message : stack1),20,{"name":"strip","hash":{},"data":data}))
+    + "\n                </div>\n\n                <div class=\"lasttimestamp\">"
     + alias1((helpers.ufDate || (depth0 && depth0.ufDate) || alias3).call(alias2,((stack1 = (depth0 != null ? depth0.lastMessage : depth0)) != null ? stack1.created : stack1),{"name":"ufDate","hash":{},"data":data}))
     + "</div>\n                \n                "
-    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias2,(depth0 != null ? depth0.unreadCount : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n                \n            </div>\n            \n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
@@ -78107,9 +78167,20 @@ var HistoryListView = Backbone.View.extend({
 
                 if(row.lastMessage.type == 5)
                     row.lastMessage.message = localzationManager.get("Sticker");
+        
+                if(row.lastMessage.user) {
+                    if (row.lastMessage.user._id.toString() == loginUserManager.user._id.toString())
+                        row.currentUserIsSender = 1
+                }
+                else {
+                    if (row.lastUpdateUser._id.toString() == loginUserManager.user._id.toString())
+                        row.currentUserIsSender = 1
+                }
+                
             }
             
             return row;
+
         });
 
         var html = templateContents({
@@ -81643,10 +81714,12 @@ var NotificationManager = {
 	},
     handleNewMessage: function(obj){
 
-        if(obj.muted){
+        if(obj.muted)
             return;
-        }
 
+        if (obj.mutedUsersGroupRoom && obj.mutedUsersGroupRoom.indexOf(loginUserManager.user._id.toString()) != -1)
+            return;
+        
         if(obj.roomID == loginUserManager.currentConversation)
             return;
         
@@ -81680,7 +81753,7 @@ var NotificationManager = {
                 
             NotificationManager.showNotification(
                 obj.group.name,
-                obj.user.name + ":" + obj.message,
+                obj.user.name + ": " + obj.message,
                 avatar);
             
         }
@@ -81694,7 +81767,7 @@ var NotificationManager = {
                 
             NotificationManager.showNotification(
                 obj.room.name,
-                obj.user.name + ":" + obj.message,
+                obj.user.name + ": " + obj.message,
                 avatar);
             
         }

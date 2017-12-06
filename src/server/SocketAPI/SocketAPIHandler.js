@@ -30,6 +30,7 @@ var SocketAPIHandler = {
             require('./KeepAliveActionHandler').attach(self.nsp,socket);
             require('./SendMessageActionHandler').attach(self.nsp,socket);
             require('./DeleteMessageActionHandler').attach(self.nsp,socket);
+            require('./UpdateMessageActionHandler').attach(self.nsp,socket);
             require('./SendTypingActionHandler').attach(self.nsp,socket);
             require('./OpenMessageActionHandler').attach(self.nsp,socket);
             

@@ -95,6 +95,25 @@ describe('API', () => {
                 });
         });
 
+        it('returns 422, if user permission is wrong', (done) => {
+            const name = 'user_' + global.getRandomStr();
+            const password = 'user_' + global.getRandomStr();                    
+            request(app)
+                .post('/api/v3/users/')
+                .set('apikey', global.apikey)
+                .set('access-token', global.user1.apiaccesstoken)
+                .field('name', name)
+                .field('userid', name)
+                .field('password', password)
+                .field('permission', "")
+                .expect(422)
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.error.text.should.equal(Const.errorMessage.wrongUserPermission);
+                    done();
+                });
+        });
+
         it('returns 422, if userid has smaller than the min length', (done) => {
             const userid = global.getRandomStr(Const.useridMinLength-1);
             const password = 'user_' + global.getRandomStr();            
@@ -105,6 +124,7 @@ describe('API', () => {
                 .field('name', userid)
                 .field('userid', userid)
                 .field('password', password)
+                .field('permission', 1)
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
@@ -123,6 +143,7 @@ describe('API', () => {
                 .field('name', userid)
                 .field('userid', userid)
                 .field('password', password)
+                .field('permission', 1)
                 .expect(422)
                 .end((err, res) => {
                     if (err) throw err;
@@ -141,7 +162,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', userid)
-                .field('password', userid)                
+                .field('password', userid)  
+                .field('permission', 1)                
                 .field('sortName', userid)                
                 .field('description', description)
                 .expect(422)
@@ -162,7 +184,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)    
-                .field('password', name)                
+                .field('password', name)
+                .field('permission', 1)                                
                 .field('sortName', sortName)                
                 .field('description', description)
                 .expect(422)
@@ -183,7 +206,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', userid)
-                .field('password', name)                
+                .field('password', name)
+                .field('permission', 1)                                
                 .field('sortName', name)                
                 .field('description', description)
                 .expect(422)
@@ -205,7 +229,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)
-                .field('password', password)                
+                .field('password', password)
+                .field('permission', 1)                                
                 .field('sortName', sortName)                
                 .field('description', description)
                 .expect(422)
@@ -226,7 +251,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)
-                .field('password', name)                
+                .field('password', name)  
+                .field('permission', 1)                                
                 .field('sortName', sortName)                
                 .field('description', description)
                 .expect(422)
@@ -244,7 +270,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', global.user2.name)
                 .field('userid', global.user2.userid)
-                .field('password', global.user2.password)                
+                .field('password', global.user2.password)   
+                .field('permission', 1)                                
                 .field('sortName', global.user2.name)                
                 .field('description', global.user2.name)
                 .expect(422)
@@ -264,7 +291,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)
-                .field('password', name)              
+                .field('password', name)    
+                .field('permission', 1)                                
                 .field('sortName', "")                
                 .field('description', description)
                 .field('status', "true")
@@ -286,7 +314,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)
-                .field('password', name)              
+                .field('password', name)    
+                .field('permission', 1)                                
                 .field('sortName', "")                
                 .field('description', description)
                 .field('status', "true")
@@ -308,7 +337,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)
-                .field('password', name)              
+                .field('password', name)     
+                .field('permission', 1)                                
                 .field('sortName', "")                
                 .field('description', description)
                 .field('status', 1)
@@ -344,7 +374,8 @@ describe('API', () => {
                 .set('access-token', global.user1.apiaccesstoken)
                 .field('name', name)
                 .field('userid', name)
-                .field('password', name)              
+                .field('password', name)    
+                .field('permission', 1)                                
                 .field('sortName', "")                
                 .field('description', description)
                 .field('status', 1)

@@ -111,6 +111,8 @@ AddUsersToRoomController.prototype.init = function(app){
         var userModel = UserModel.get();
         var users = request.body.users;
         
+        var user = request.user;
+
         if(!_.isArray(users)){
             self.successResponse(response,Const.responsecodeAddUsersToRoomWrongUserId);
             return; 
@@ -130,7 +132,10 @@ AddUsersToRoomController.prototype.init = function(app){
 		            	
 		            	return;
 	            	}
-	            	
+                    
+                    if (roomFindResult.owner != user._id.toString())
+                        return self.successResponse(response, Const.responsecodeAddUsersToRoomUserIsNotOwner);
+                    
 	            	result.targetRoom = roomFindResult.toObject();
 	            		            	
 	            	done(err,result);

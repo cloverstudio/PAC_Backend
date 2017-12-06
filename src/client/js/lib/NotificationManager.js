@@ -32,10 +32,12 @@ var NotificationManager = {
 	},
     handleNewMessage: function(obj){
 
-        if(obj.muted){
+        if(obj.muted)
             return;
-        }
 
+        if (obj.mutedUsersGroupRoom && obj.mutedUsersGroupRoom.indexOf(loginUserManager.user._id.toString()) != -1)
+            return;
+        
         if(obj.roomID == loginUserManager.currentConversation)
             return;
         
@@ -69,7 +71,7 @@ var NotificationManager = {
                 
             NotificationManager.showNotification(
                 obj.group.name,
-                obj.user.name + ":" + obj.message,
+                obj.user.name + ": " + obj.message,
                 avatar);
             
         }
@@ -83,7 +85,7 @@ var NotificationManager = {
                 
             NotificationManager.showNotification(
                 obj.room.name,
-                obj.user.name + ":" + obj.message,
+                obj.user.name + ": " + obj.message,
                 avatar);
             
         }

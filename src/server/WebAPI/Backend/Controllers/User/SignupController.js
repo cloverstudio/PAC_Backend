@@ -446,6 +446,8 @@ SignupController.prototype.init = function (app) {
 
         function saveUser(result, done) {
 
+            result.user.status = Const.userStatus.enabled;
+            
             result.user.save((err, saveResult) => {
 
                 result.user = saveResult.toObject();

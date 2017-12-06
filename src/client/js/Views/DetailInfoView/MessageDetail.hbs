@@ -29,6 +29,12 @@
             <a href="javascript:void(0)"><i class="fa fa-share"></i> {{l10n "Delete Message"}}</a>
         </li>
 
+        {{#condition type 1 }}
+        <li id="btn-updatemessage">
+            <a href="javascript:void(0)"><i class="fa fa-pencil"></i> {{l10n "Update Message"}}</a>
+        </li>
+        {{/condition}}
+
     </ul>
     
     <table class="table">

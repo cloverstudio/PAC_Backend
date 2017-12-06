@@ -76,13 +76,6 @@ LoginActionHandler.prototype.attach = function(io,socket){
                         
                         var groupId = group._id.toString();
 
-                        // exclude muted group
-                        if(_.isArray(result.user.muted)){
-                            if(result.user.muted.indexOf(groupId) != -1){
-                                return;
-                            }
-                        }
-
                         socket.join('2-' + groupId);
                          
                     });
@@ -105,13 +98,6 @@ LoginActionHandler.prototype.attach = function(io,socket){
                     _.forEach(groupFindResult,function(group){
 
                         var roomId = group._id.toString();
-
-                        // exclude muted group
-                        if(_.isArray(result.user.muted)){
-                            if(result.user.muted.indexOf(roomId) != -1){
-                                return;
-                            }
-                        }
 
                         socket.join('3-' + roomId);
                          
