@@ -33,7 +33,10 @@ export{
 
 export{
     callCreateRoom,
-    callRoomUserList
+    callRoomUserList,
+    callUpdateRoom,
+    callAddMemberToRoom,
+    ApiUrlRemoveUserFromRoom
 } from './room';
 
 export{

@@ -24,6 +24,9 @@ class NewRoom extends Base {
 
     constructor() {
         super();
+
+        this.roomId = "";
+
     }
 
     static propTypes = {
@@ -54,9 +57,40 @@ class NewRoom extends Base {
     onOpenFileSelect = (e) => {
         this.fileInput.click();
     }
+    
+    componentWillReceiveProps(nextProps) {
+        
+        if(this.props.editingRoomId != nextProps.editingRoomId){
+            
+            this.updateView();
+        }
+
+    }
+
+    componentDidMount() {
+        
+        this.updateView();
+
+    }
+    
+    updateView = () => {
+
+        if(this.props.editingRoomId != null){
+
+            this.props.initRoomEdit(this.props.editingRoomId);
+
+        } else {
+
+            this.props.typeName('');
+
+        }
+        
+    }
 
     render() {
         
+        const mode = this.props.editingRoomId != null ? constant.RoomModeEdit : constant.RoomModeCreate;
+
         return (
             <div className="pace-done sidebar-folded" onClick={this.globalClick}>
             
@@ -74,10 +108,25 @@ class NewRoom extends Base {
                             {this.props.saving ?
                                 <div className="spinner-linear">
                                     <div className="line"></div>
-                                </div> : null}
+                                </div> : null
+                            }
 
                             <div className="card">
-                            <h4 className="card-title"> {strings.CreateRoom[user.lang]} </h4>
+                            
+                            <h4 className="card-title"> 
+
+                                {mode == constant.RoomModeCreate ?
+                                    <span>{strings.CreateRoom[user.lang]}</span> : null
+                                }
+
+                                {mode == constant.RoomModeEdit ?
+                                    <span>
+                                        {strings.EditRoom[user.lang]}
+                                          &nbsp;&nbsp;<strong>{this.props.name}</strong>
+                                    </span> : null
+                                }
+                                
+                            </h4>
 
                             <div className="card-body p-20">
 
@@ -166,7 +215,7 @@ class NewRoom extends Base {
 
                                         <label>{strings.Description[user.lang]}</label>
                                         <div className="input-group">
-                                            <textarea type="text" className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }}>{this.props.description}</textarea>
+                                            <textarea type="text" value={this.props.description} className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }} />
                                         </div>
 
                                         <br />
@@ -232,18 +281,19 @@ class NewRoom extends Base {
 
 const mapStateToProps = (state) => {
     return {
-        isSearchLoading: state.createRoom.loading,
-        keyword: state.createRoom.keyword,
-        searchResult: state.createRoom.searchResult,
-        members: state.createRoom.members,
-        avatarImage: state.createRoom.avatarImage,
-        avatarImageUrl: state.createRoom.avatarImageUrl,
-        saving: state.createRoom.saving,
-        keyword: state.createRoom.keyword,
-        name: state.createRoom.name,
-        description: state.createRoom.description,
+        isSearchLoading: state.room.loading,
+        keyword: state.room.keyword,
+        searchResult: state.room.searchResult,
+        members: state.room.members,
+        avatarImage: state.room.avatarImage,
+        avatarImageUrl: state.room.avatarImageUrl,
+        saving: state.room.saving,
+        keyword: state.room.keyword,
+        name: state.room.name,
+        description: state.room.description,
         sidebarState: state.chatUI.sidebarState,
-        historyBarState: state.chatUI.historyBarState
+        historyBarState: state.chatUI.historyBarState,
+        editingRoomId: state.room.editingRoomId
     };
 };
 
@@ -252,19 +302,21 @@ const mapDispatchToProps = (dispatch) => {
         hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
         hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
-        searchUserList: (value) => dispatch(actions.createRoom.searchUserList(value)),
-        cancel: () => dispatch(actions.createRoom.cancel()),
-        save: () => dispatch(actions.createRoom.save()),
-        addMember: user => dispatch(actions.createRoom.addMember(user)),
-        deleteMember: user => dispatch(actions.createRoom.deleteMember(user)),
-        typeKeyword: keyword => dispatch(actions.createRoom.typeKeyword(keyword)),
-        typeName: name => dispatch(actions.createRoom.typeName(name)),
-        typeDescription: description => dispatch(actions.createRoom.typeDescription(description)),
-        selectFile: file => dispatch(actions.createRoom.selectFile(file)),
-        deleteFile: file => dispatch(actions.createRoom.deleteFile()),
+        searchUserList: (value) => dispatch(actions.room.searchUserList(value)),
+        cancel: () => dispatch(actions.room.cancel()),
+        save: () => dispatch(actions.room.save()),
+        addMember: user => dispatch(actions.room.addMember(user)),
+        deleteMember: user => dispatch(actions.room.deleteMember(user)),
+        typeKeyword: keyword => dispatch(actions.room.typeKeyword(keyword)),
+        typeName: name => dispatch(actions.room.typeName(name)),
+        typeDescription: description => dispatch(actions.room.typeDescription(description)),
+        selectFile: file => dispatch(actions.room.selectFile(file)),
+        deleteFile: file => dispatch(actions.room.deleteFile()),
         hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
+        initRoomEdit: (roomId) => dispatch(actions.room.initRoomEdit(roomId)),
+        
     };
 };
 

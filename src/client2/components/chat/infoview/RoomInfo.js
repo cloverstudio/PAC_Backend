@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import * as constant from '../../../lib/const';
 import * as actions from '../../../actions';
 import * as strings from '../../../lib/strings';
+import * as utils from '../../../lib/utils';
 import user from '../../../lib/user';
 
 import {
@@ -108,7 +109,7 @@ class RoomInfo extends Component {
         return (
             <div> 
                 
-                <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info">
+                <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info cursor-pointer">
                     <li className="nav-item" onClick={ () => {this.tabChange("options")}}>
                         <a className={cnTabGeneral}>{strings.InfoViewUserDetailOptions[user.lang]}</a>
                     </li>
@@ -124,8 +125,8 @@ class RoomInfo extends Component {
                     
                     <div className={cnTabContentGeneral}>
 
-                        <div className="media">
-                            <button className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</button>                    
+                        <div className="media">             
+                            <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
                         </div>
 
                         <div className="media">

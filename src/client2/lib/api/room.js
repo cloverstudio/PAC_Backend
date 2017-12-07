@@ -50,14 +50,115 @@ export function callCreateRoom(
     
 }
 
+export function callUpdateRoom(
+    roomId,
+    name,
+    description,
+    file){
+
+    const data = new FormData();
+
+    data.append('roomId',roomId);
+    data.append('name',name);
+    data.append('description',description);
+
+    if(file)
+        data.append('file', file);
+                            
+    const headers = {
+    }
+
+    if(user.token){
+        headers['access-token'] = user.token;
+    }
+
+    return fetch(config.APIEndpoint + constant.ApiUrlUpdateRoom, 
+    {   
+        method: 'POST', 
+        body: data,
+        mode: 'cors',
+        headers:headers
+    })
+    .then((res) => {
+        
+        if(res.status == 200){
+            return res.json();
+        }else{
+            return res.text();
+        }
+
+    }).then((response) => {
+
+        return Promise.resolve(response.data.room);
+
+    });
+    
+}
+
+
 export function callRoomUserList(roomId,page){
 
-    return api.get(constant.ApiUrlGetRoomUserList + '/' + roomId + '/' + page)
+    return api.get(constant.ApiUrlGetRoomUserList + roomId + '/' + page)
     
     .then( (response) => {
 
         if (!response.code || response.code != 1){
             return Promise.reject("Failed to get user list");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+    
+}
+
+
+export function callGetRoomDetail(roomId){
+
+    return api.get(constant.ApiUrlGetRoomDetail + roomId + '/' + page)
+    
+    .then( (response) => {
+
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to get room detail");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+    
+}
+
+
+export function callAddMemberToRoom(roomId,userIds){
+
+    return api.post(constant.ApiUrlAddUserToRoom,{
+        roomId:roomId,
+        users:userIds
+    })
+    .then( (response) => {
+
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to add users.");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+    
+}
+
+
+export function ApiUrlRemoveUserFromRoom(roomId,userIds){
+
+    return api.post(constant.ApiUrlRemoveUserFromRoom,{
+        roomId:roomId,
+        users:userIds
+    })
+    .then( (response) => {
+
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to remove users.");
         }
         else {
             return Promise.resolve(response.data);

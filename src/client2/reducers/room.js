@@ -3,14 +3,15 @@ import { combineReducers } from 'redux';
 import * as types from '../actions/types';
 import { isError } from 'util';
 
+import * as constant from '../lib/const';
 
 const keyword = (state = "", action) => {
     switch (action.type) {
-        case types.CreateRoomTypeKeyword:
+        case types.RoomTypeKeyword:
             return action.keyword;
-        case types.CreateRoomAddMember:
+        case types.RoomAddMember:
             return "";
-        case types.CreateRoomSaveSucceed:
+        case types.RoomSaveSucceed:
             return "";
         default:
             return state;
@@ -19,11 +20,11 @@ const keyword = (state = "", action) => {
 
 const loading = (state = false, action) => {
     switch (action.type) {
-        case types.CreateRoomSearchUserStart:
+        case types.RoomSearchUserStart:
             return true;
-        case types.CreateRoomSearchUserSucceed:
+        case types.RoomSearchUserSucceed:
             return false;
-        case types.CreateRoomSearchUserFailed:
+        case types.RoomSearchUserFailed:
             return false;
         default:
             return state;
@@ -32,7 +33,7 @@ const loading = (state = false, action) => {
 
 const searchResult = (state = [], action) => {
     switch (action.type) {
-        case types.CreateRoomSearchUserSucceed:
+        case types.RoomSearchUserSucceed:
             return action.data.list.filter( (user) => {
 
                 let isExists = false;
@@ -47,7 +48,7 @@ const searchResult = (state = [], action) => {
                 return !isExists;
 
             });
-        case types.CreateRoomSearchUserStart:
+        case types.RoomSearchUserStart:
             return [];
         default:
             return state;
@@ -56,15 +57,15 @@ const searchResult = (state = [], action) => {
 
 const members = (state = [], action) => {
     switch (action.type) {
-        case types.CreateRoomAddMember:
+        case types.RoomAddMember:
             return state.concat( action.user );
-        case types.CreateRoomDeleteMember:
+        case types.RoomDeleteMember:
             return state.filter ( (user) => {
                 return action.user._id != user._id
             });
-        case types.CreateRoomCancel:
+        case types.RoomCancel:
             return []
-        case types.CreateRoomSaveSucceed:
+        case types.RoomSaveSucceed:
             return [];
         default:
             return state;
@@ -74,9 +75,9 @@ const members = (state = [], action) => {
 
 const name = (state = "", action) => {
     switch (action.type) {
-        case types.CreateRoomTypeName:
+        case types.RoomTypeName:
             return action.name
-        case types.CreateRoomSaveSucceed:
+        case types.RoomSaveSucceed:
             return "";
         default:
             return state;
@@ -85,9 +86,9 @@ const name = (state = "", action) => {
 
 const description = (state = "", action) => {
     switch (action.type) {
-        case types.CreateRoomTypeDescription:
+        case types.RoomTypeDescription:
             return action.description;
-        case types.CreateRoomSaveSucceed:
+        case types.RoomSaveSucceed:
             return "";
         default:
             return state;
@@ -96,11 +97,13 @@ const description = (state = "", action) => {
 
 const avatarImage = (state = null, action) => {
     switch (action.type) {
-        case types.CreateRoomSelectFile:
+        case types.RoomSelectFile:
             return action.file
-        case types.CreateRoomDeleteFile:
+        case types.RoomDeleteFile:
             return null;
-        case types.CreateRoomSaveSucceed:
+        case types.RoomSelectFileByURL:
+            return {};
+        case types.RoomSaveSucceed:
             return null;
 
         default:
@@ -110,9 +113,11 @@ const avatarImage = (state = null, action) => {
 
 const avatarImageUrl = (state = "", action) => {
     switch (action.type) {
-        case types.CreateRoomSelectFile:
-            return action.fileUrl  
-        case types.CreateRoomDeleteFile:
+        case types.RoomSelectFile:
+            return action.fileUrl;
+        case types.RoomSelectFileByURL:
+            return action.url;
+        case types.RoomDeleteFile:
             return "";
         default:
             return state;
@@ -121,16 +126,55 @@ const avatarImageUrl = (state = "", action) => {
 
 const saving = (state = false, action) => {
     switch (action.type) {
-        case types.CreateRoomSaveStart:
+        case types.RoomSaveStart:
             return true
-        case types.CreateRoomSaveSucceed:
+        case types.RoomSaveSucceed:
             return false
-        case types.CreateRoomSaveFailed:
+        case types.RoomSaveFailed:
             return false
         default:
             return state;
     }
 }
+
+const editingRoomId = (state = null, action) => {
+
+    if(!action.payload)
+        return state;
+
+    const path = action.payload.pathname;
+
+    if(/editroom/.test(path)){
+    
+        const chanks = path.split('/');
+    
+        const roomId = chanks[chanks.length - 1];
+    
+        return roomId;
+
+    }
+    
+    if(/newroom/.test(path)){
+        return null;
+    }
+
+
+    return state;
+
+}
+
+
+const editingRoomData = (state = null, action) => {
+
+    switch (action.type) {
+        case types.RoomStartEditingRoom:
+            return action.room
+        default:
+            return state;
+    }
+
+}
+
 
 export default combineReducers({
     loading,
@@ -141,5 +185,7 @@ export default combineReducers({
     description,
     avatarImage,
     avatarImageUrl,
-    saving
+    saving,
+    editingRoomId,
+    editingRoomData
 });;

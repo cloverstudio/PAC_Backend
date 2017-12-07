@@ -83,21 +83,25 @@ export const StickersLoadStart = 'Stickers/LoadStart';
 export const StickersLoadSucceed = 'Stickers/LoadSucceed';
 export const StickersLoadFailed = 'Stickers/LoadFailed';
 
-// create room
-export const CreateRoomSearchUserStart = 'CreateRoom/SearchUserStart';
-export const CreateRoomSearchUserSucceed = 'CreateRoom/SearchUserSucceed';
-export const CreateRoomSearchUserFailed = 'CreateRoom/SearchUserFailed';
-export const CreateRoomAddMember = 'CreateRoom/AddMember';
-export const CreateRoomDeleteMember = 'CreateRoom/DeleteMember';
-export const CreateRoomTypeKeyword = 'CreateRoom/TypeKeyword';
-export const CreateRoomTypeName = 'CreateRoom/TypeName';
-export const CreateRoomTypeDescription = 'CreateRoom/TypeDescription';
-export const CreateRoomSelectFile = 'CreateRoom/SelectFile';
-export const CreateRoomDeleteFile = 'CreateRoom/DeleteFile';
-export const CreateRoomSaveStart = 'CreateRoom/SaveStart';
-export const CreateRoomSaveSucceed = 'CreateRoom/SaveSucceed';
-export const CreateRoomSaveFailed = 'CreateRoom/SaveFailed';
-export const CreateRoomCancel = 'CreateRoom/Cancel';
+// create room, edit room
+export const RoomSearchUserStart = 'Room/SearchUserStart';
+export const RoomSearchUserSucceed = 'Room/SearchUserSucceed';
+export const RoomSearchUserFailed = 'Room/SearchUserFailed';
+export const RoomAddMember = 'Room/AddMember';
+export const RoomDeleteMember = 'Room/DeleteMember';
+export const RoomTypeKeyword = 'Room/TypeKeyword';
+export const RoomTypeName = 'Room/TypeName';
+export const RoomTypeDescription = 'Room/TypeDescription';
+export const RoomSelectFile = 'Room/SelectFile';
+export const RoomDeleteFile = 'Room/DeleteFile';
+export const RoomSaveStart = 'Room/SaveStart';
+export const RoomSaveSucceed = 'Room/SaveSucceed';
+export const RoomSaveFailed = 'Room/SaveFailed';
+export const RoomCancel = 'Room/Cancel';
+export const RoomModeChanged = 'Room/ModeChanged';
+export const RoomSelectFileByURL = 'Room/SelectFileByURL';
+export const RoomStartEditingRoom = 'Room/StartEditingRoom';
+
 
 // call
 export const CallIncoming = 'Call/Incoming';

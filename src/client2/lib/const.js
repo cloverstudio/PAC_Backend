@@ -21,6 +21,9 @@ export const ApiUrlMute = "/user/mute";
 export const ApiUrlBlock = "/user/block";
 export const ApiUrlGetGroupUserList = "/group/users/";
 export const ApiUrlGetRoomUserList = "/room/users/";
+export const ApiUrlUpdateRoom = "/room/update";
+export const ApiUrlAddUserToRoom = "/room/users/add";
+export const ApiUrlRemoveUserFromRoom = "/room/users/remove";
 
 export const ErrorCodeInvalidToken = 4000007;
 
@@ -64,3 +67,6 @@ export const CallMediaTypeVideo = 2;
 
 export const CallWindowStateMax = 1;
 export const CallWindowStateMin = 2;
+
+export const RoomModeCreate = 1;
+export const RoomModeEdit = 2;

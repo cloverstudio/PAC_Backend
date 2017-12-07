@@ -10,7 +10,7 @@ import * as grouplist from './grouplist';
 import * as chat from './chat';
 import * as infoView from './infoView';
 import * as stickers from './stickers';
-import * as createRoom from './createRoom';
+import * as room from './room';
 import * as call from './call';
 
 export function filterTable(filter) {
@@ -30,7 +30,7 @@ export {
     userlist,
     chat,
     stickers,
-    createRoom,
+    room,
     infoView,
     call
 }

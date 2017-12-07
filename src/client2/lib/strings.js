@@ -63,8 +63,10 @@ export {
     AvatarImage,
     ChooseFile,
     UserNameHelp,
-    FailedToCreateRoom
-} from './strings/createRoom'
+    FailedToCreateRoom,
+    EditRoom,
+    FailedToUpdateRoom
+} from './strings/room'
 
 export {
     InfoViewUserDetailOptions,
