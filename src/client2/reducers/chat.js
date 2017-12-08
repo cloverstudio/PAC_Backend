@@ -6,7 +6,6 @@ import * as constant from '../lib/const';
 import * as types from '../actions/types';
 import * as utils from '../lib/utils';
 
-
 const initial = {
     chatAvatar: {
         type: null,

@@ -89,15 +89,23 @@ class NewRoom extends Base {
 
     render() {
         
+        let sideBarClass = "pace-done sidebar-folded";
+        if(this.props.sidebarState)
+            sideBarClass += " sidebar-open";
+
+        let asideBarHolderClass = "layout-chat";
+        if(this.props.historyBarState)
+            asideBarHolderClass += " aside-open";
+
         const mode = this.props.editingRoomId != null ? constant.RoomModeEdit : constant.RoomModeCreate;
 
         return (
-            <div className="pace-done sidebar-folded" onClick={this.globalClick}>
+            <div className={sideBarClass} onClick={this.globalClick}>
             
                 <SideBar />
                 <Header />
 
-                <main className="layout-chat">
+                <main className={asideBarHolderClass}>
                 
                     <History />
 

@@ -47,3 +47,8 @@ export{
     callBlock
 } from './block';
 
+
+export{
+    callSearchMessage,
+    callLoadFavorites
+} from './message';

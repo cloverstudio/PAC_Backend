@@ -119,3 +119,12 @@ export {
     CallInitializingDevice
 } from './strings/calling'
 
+export {
+    SearchTitle,
+    FailedToSearchMessage
+} from './strings/search'
+
+export {
+    FavoriteTitle,
+    FailedToLoadFavorites
+} from './strings/favorite'

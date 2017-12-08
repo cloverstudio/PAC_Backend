@@ -12,6 +12,8 @@ import * as infoView from './infoView';
 import * as stickers from './stickers';
 import * as room from './room';
 import * as call from './call';
+import * as searchMessage from './searchMessage';
+import * as favorites from './favorites';
 
 export function filterTable(filter) {
     return {
@@ -32,5 +34,7 @@ export {
     stickers,
     room,
     infoView,
-    call
+    call,
+    searchMessage,
+    favorites
 }

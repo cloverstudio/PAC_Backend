@@ -13,6 +13,8 @@ import infoView from './infoview';
 import stickers from './stickers';
 import room from './room';
 import call from './call';
+import searchMessage from './searchMessage';
+import favorites from './favorites';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -36,7 +38,9 @@ const rootReducer = combineReducers({
     infoView,
     stickers,
     room,
-    call
+    call,
+    searchMessage,
+    favorites
 });
 
 export default rootReducer;

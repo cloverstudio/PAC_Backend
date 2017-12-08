@@ -125,4 +125,12 @@ export const CallChangeWindowState = 'Call/ChangeWindowState';
 export const CallIncomingMediaFailed = 'Call/IncomingMediaFailed';
 export const CallIncomingStatusChanged = 'Call/IncomingStatusChanged';
 
+// Search Message
+export const SearchMessageStart = 'SearchMessage/Start';
+export const SearchMessageSuccess = 'SearchMessage/Success';
+export const SearchMessageFailed = 'SearchMessage/Failed';
 
+// Favorite
+export const FavoriteLoadMessageStart = 'Favorite/LoadMessageStart';
+export const FavoriteLoadMessageSuccess = 'Favorite/LoadMessageSuccess';
+export const FavoriteLoadMessageFailed = 'Favorite/LoadMessageFailed';
