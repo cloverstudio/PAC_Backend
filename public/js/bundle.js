@@ -76339,6 +76339,7 @@ var UpdateRoom = {
             
             self.ustb = new UsersSelectTextBox("#userselect",[loginUserManager.getUser()._id]);
             self.ustb.selectUsers(data.list);
+            self.roomObj.users = _.map(data.list, "_id");
             
         },function(errorCode){
             
@@ -76391,7 +76392,7 @@ var UpdateRoom = {
 
                 self.addUsers(function(errCode,response){
                     
-                    result.response2 = response;
+                    result.roomAddUsers = response;
                     self.$('.progress-bar').css('width',"90%");
                     done(errCode,result);
                      
@@ -76403,7 +76404,7 @@ var UpdateRoom = {
                 self.removeUsers(function(errCode,response){
                     
                     self.$('.progress-bar').css('width',"100%");
-                    result.response3 = response;
+                    result.roomRemoveUsers = response;
                     done(errCode,result);
                      
                 });
@@ -76445,7 +76446,8 @@ var UpdateRoom = {
                 self.$('').modal('hide');
                 
                 var room = response.data.room;
-                
+                room.users = result.roomRemoveUsers.room.users;
+
                 var url = "";
                 
                 if(room.avatar && room.avatar && room.avatar.thumbnail)
@@ -76454,7 +76456,7 @@ var UpdateRoom = {
                 loginUserManager.openChat({
                     room: room
                 });
-                
+
                 Backbone.trigger(Const.NotificationRefreshHistory);
 
                 Backbone.trigger(Const.NotificationUpdateHeader,{
