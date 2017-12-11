@@ -15,6 +15,7 @@ import * as call from './call';
 import * as searchMessage from './searchMessage';
 import * as favorites from './favorites';
 import * as profile from './profile';
+import * as password from './password';
 
 export function filterTable(filter) {
     return {
@@ -38,5 +39,6 @@ export {
     call,
     searchMessage,
     favorites,
-    profile
+    profile,
+    password
 }

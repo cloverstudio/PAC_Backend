@@ -110,6 +110,14 @@ export function save() {
 
         const state = getState();
         
+        if(state.profile.name.length < 1){
+            dispatch({
+                type: types.ProfileSaveValidationError,
+                error: strings.ProfileErrorNameRequired[user.lang]
+            });
+            return;
+        }
+
         dispatch({
             type: types.ProfileSaveStart
         });

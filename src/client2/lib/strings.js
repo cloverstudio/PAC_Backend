@@ -135,6 +135,16 @@ export {
     ProfileName,
     ProfileDescription,
     ProfileAvatar,
-    FailedToSaveProfile
+    FailedToSaveProfile,
+    ProfileErrorNameRequired
 } from './strings/profile'
+
+export {
+    PasswordTitle,
+    PasswordCurrentPassword,
+    PasswordNewPassword,
+    PasswordNewPasswordConfirm,
+    PasswordErrorPasswordValidation,
+    PasswordErrorConfirmFailed
+} from './strings/password'
 

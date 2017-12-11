@@ -21,4 +21,9 @@ export const FailedToSaveProfile = {
     EN:"Failed to update profile. Please try again a while after."
 }
 
+export const ProfileErrorNameRequired = {
+    EN:"Please input name."
+}
+
+
 

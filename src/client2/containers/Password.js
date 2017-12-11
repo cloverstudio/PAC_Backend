@@ -55,8 +55,8 @@ class Password extends Base {
 
                 <main className={asideBarHolderClass}>
                 
-                    {this.props.isLoading ?
-                        <div className="spinner-linear profile">
+                    {this.props.saving ?
+                        <div className="spinner-linear password">
                             <div className="line"></div>
                         </div> : null
                     }
@@ -66,7 +66,7 @@ class Password extends Base {
                     <header className="header bg-ui-general">
                         <div className="header-info form-type-line">
                             <h1 className="header-title">
-                                <strong>{strings.ProfileTitle[user.lang]}</strong>
+                                <strong>{strings.PasswordTitle[user.lang]}</strong>
                             </h1>
                         </div>
                     </header>
@@ -79,28 +79,25 @@ class Password extends Base {
 
                                 <div className="card-body p-20">
 
-                                    <label>{strings.ProfileName[user.lang]}</label>
-                                    <div className="input-group">
-                                        <input type="text" value="" className="form-control" placeholder={strings.RoomName[user.lang]} onChange={ e => { this.props.typeName ( e.target.value ) }}/>
+                                    <div className="form-group">
+                                        <label className="require">{strings.PasswordCurrentPassword[user.lang]}</label>
+                                        <input type="password" value={this.props.currentPassword} className="form-control" onChange={ e => { this.props.typeCurrentPassword ( e.target.value ) }}/>
+                                        <div className="invalid-feedback">{this.props.errorMessageCurrentPassword}</div>
                                     </div>
 
-                                    <br />
-
-                                    <label>{strings.ProfileDescription[user.lang]}</label>
-                                    <div className="input-group">
-                                        <textarea type="text" value="" className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }} />
+                                    <div className="form-group">
+                                        <label className="require">{strings.PasswordNewPassword[user.lang]}</label>
+                                        <input type="text" value={this.props.newPassword} className="form-control" onChange={ e => { this.props.typeNewPassword ( e.target.value ) }}/>
+                                        <div className="invalid-feedback">{this.props.errorMessageNewPassword}</div>
                                     </div>
 
-                                    <br />
-
-                                    <label>{strings.ProfileAvatar[user.lang]}</label>
-                                    <div className="input-group">
-                                        <input type="file" value="" className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }} />
+                                    <div className="form-group">
+                                        <label className="require">{strings.PasswordNewPasswordConfirm[user.lang]}</label>
+                                        <input type="text" value={this.props.confirmPassword} className="form-control" onChange={ e => { this.props.typeConfirmPassword ( e.target.value ) }}/>
+                                        <div className="invalid-feedback">{this.props.errorMessageConfirmPassword}</div>
                                     </div>
 
-                                    <br />
-
-                                    <div className="text-right">
+                                    <div className="text-right button-container">
                                             
                                         <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
                                         <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
@@ -130,6 +127,16 @@ const mapStateToProps = (state) => {
         isLoading: state.favorites.isLoading,
         sidebarState: state.chatUI.sidebarState,
         historyBarState: state.chatUI.historyBarState,
+
+        currentPassword: state.password.currentPassword,
+        newPassword: state.password.newPassword,
+        confirmPassword: state.password.confirmPassword,
+
+        errorMessageCurrentPassword: state.password.errorMessageCurrentPassword,
+        errorMessageNewPassword: state.password.errorMessageNewPassword,
+        errorMessageConfirmPassword: state.password.errorMessageConfirmPassword,
+
+        saving:state.password.saving
     };
 };
 
@@ -141,6 +148,13 @@ const mapDispatchToProps = (dispatch) => {
         hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
+
+        typeCurrentPassword: (val) => dispatch(actions.password.typeCurrentPassword(val)),
+        typeNewPassword: (val) => dispatch(actions.password.typeNewPassword(val)),
+        typeConfirmPassword: (val) => dispatch(actions.password.typeConfirmPassword(val)),
+        cancel: () => dispatch(actions.password.cancel()),
+        save: () => dispatch(actions.password.save()),
+
     };
 };
 

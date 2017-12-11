@@ -69,10 +69,25 @@ const saving = (state = false, action) => {
     }
 }
 
+const errorMessageName = (state = null, action) => {
+    switch (action.type) {
+        case types.ProfileSaveValidationError:
+            return action.error
+        case types.ProfileSaveSucceed:
+            return null
+        case types.ProfileSaveFailed:
+            return null
+        default:
+            return state;
+    }
+}
+
+
 export default combineReducers({
     name,
     description,
     avatarImage,
     avatarImageUrl,
     saving,
+    errorMessageName
 });;

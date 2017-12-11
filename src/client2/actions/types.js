@@ -146,3 +146,17 @@ export const ProfileDeleteFile = 'Profile/DeleteFile';
 export const ProfileSaveStart = 'Profile/SaveStart';
 export const ProfileSaveSucceed = 'Profile/SaveSucceed';
 export const ProfileSaveFailed = 'Profile/SaveFailed';
+export const ProfileSaveValidationError = 'Profile/SaveValidationError';
+
+
+// Password
+export const PasswordTypeCurrentPassword = 'Password/TypeCurrentPassword';
+export const PasswordTypeNewPassword = 'Password/TypeNewPasswor';
+export const PasswordTypeConfirmPassword = 'Password/TypeConfirmPassword';
+export const PasswordCancel = 'Password/Cancel';
+export const PasswordSave = 'Password/Save';
+export const PasswordSaveValidationError = 'Password/PasswordSaveValidationError';
+export const PasswordSaveStart = 'Password/SaveStart';
+export const PasswordSaveSucceed = 'Password/SaveSucceed';
+export const PasswordSaveFailed = 'Password/SaveFailed';
+

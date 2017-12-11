@@ -74,3 +74,6 @@ export const CallWindowStateMin = 2;
 
 export const RoomModeCreate = 1;
 export const RoomModeEdit = 2;
+
+export const CredentialsMinLength = 6;
+export const CredentialsRegex = /^[a-zA-Z0-9]+$/;

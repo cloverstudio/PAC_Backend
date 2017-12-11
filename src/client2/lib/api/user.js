@@ -43,3 +43,16 @@ export function callUpdateProfile(
     });
     
 }
+
+export function updatePassword(currentPassword,newPassword){
+
+    return api.post(constant.ApiUrlUpdatePassword,{
+        currentPassword: currentPassword,
+        newPassword: newPassword
+    }).then( (response) => {
+
+        return Promise.resolve(response.data);
+
+    });
+
+}

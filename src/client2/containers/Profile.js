@@ -82,12 +82,11 @@ class Profile extends Base {
 
                                 <div className="card-body p-20">
 
-                                    <label>{strings.ProfileName[user.lang]}</label>
-                                    <div className="input-group">
+                                    <div className="form-group">
+                                        <label className="require">{strings.ProfileName[user.lang]}</label>
                                         <input type="text" value={this.props.name} className="form-control" onChange={ e => { this.props.typeName ( e.target.value ) }}/>
+                                        <div className="invalid-feedback">{this.props.errorMessageName}</div>
                                     </div>
-
-                                    <br />
 
                                     <label>{strings.ProfileDescription[user.lang]}</label>
                                     <div className="input-group">
@@ -156,7 +155,8 @@ const mapStateToProps = (state) => {
         name: state.profile.name,
         description: state.profile.description,
         avatarImage: state.profile.avatarImage,
-        avatarImageUrl: state.profile.avatarImageUrl
+        avatarImageUrl: state.profile.avatarImageUrl,
+        errorMessageName: state.profile.errorMessageName
     };
 };
 
