@@ -25,6 +25,17 @@ const favorites = (state = [], action) => {
 
     }
 
+
+    if(action.type == types.FavoriteRemoveFavorite){
+
+        const messageId = action.messageId;
+
+        return state.filter( (message) => {
+            return message.messageId != messageId;
+        });
+
+    }
+    
     return state;
 
 };
@@ -52,9 +63,19 @@ const isLoading = (state = false, action) => {
     }
 };
 
+const removeConfirmMessageId = (state = null, action) => {
+    switch (action.type) {
+        case types.FavoriteStartRemoveFavorite:
+            return action.messageId
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     pagingReachesEnd,
     paging,
     favorites,
-    isLoading
+    isLoading,
+    removeConfirmMessageId
 });;

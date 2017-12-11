@@ -149,10 +149,17 @@ class Favotites extends Base {
 
                                 const messageHightlighted = message.message.replace(this.props.keyword,"<strong>" + this.props.keyword + "</strong>");
 
+                                let deleteIconClass = "ti-trash";
+                                if(message._id == this.props.removeConfirmMessageId)
+                                    deleteIconClass = "fa fa-check";
+
                                 return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}>
                                     <h6 className="code-title">
                                         <AvatarImage fileId={chatAvatarId} type={chatAvatarType} />
                                         {chatName}
+                                        <a onClick={ () => { this.props.startRemoveFavorite(message._id)}} href="javascript:void(0)">
+                                            <i className={deleteIconClass}></i>
+                                        </a>
                                     </h6>
 
                                         <div className="code-preview">
@@ -170,6 +177,7 @@ class Favotites extends Base {
                                                     <p className="text-right">
                                                         <DateTime timestamp={message.created} />
                                                     </p>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -197,7 +205,8 @@ const mapStateToProps = (state) => {
         sidebarState: state.chatUI.sidebarState,
         historyBarState: state.chatUI.historyBarState,
         favorites: state.favorites.favorites,
-        pagingReachesEnd: state.favorites.pagingReachesEnd
+        pagingReachesEnd: state.favorites.pagingReachesEnd,
+        removeConfirmMessageId: state.favorites.removeConfirmMessageId,
     };
 };
 
@@ -211,6 +220,7 @@ const mapDispatchToProps = (dispatch) => {
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
 
         loadMessages: (page) => dispatch(actions.favorites.loadMessages(page)),
+        startRemoveFavorite: (messageId) => dispatch(actions.favorites.startRemoveFavorite(messageId)),
     };
 };
 

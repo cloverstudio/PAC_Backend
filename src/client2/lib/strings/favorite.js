@@ -8,3 +8,8 @@ export const FavoriteTitle = {
 export const FailedToLoadFavorites = {
     EN:"Failed to load favorites. Please try again later."
 }
+
+export const FailedToRemoveFromFavorites = {
+    EN:"Failed to remove from favorites."
+}
+

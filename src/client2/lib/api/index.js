@@ -50,5 +50,6 @@ export{
 
 export{
     callSearchMessage,
-    callLoadFavorites
+    callLoadFavorites,
+    callRemoveFromFavorite
 } from './message';

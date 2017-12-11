@@ -126,5 +126,6 @@ export {
 
 export {
     FavoriteTitle,
-    FailedToLoadFavorites
+    FailedToLoadFavorites,
+    FailedToRemoveFromFavorites
 } from './strings/favorite'

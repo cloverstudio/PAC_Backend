@@ -39,5 +39,15 @@ export function callLoadFavorites(page){
 
 }
 
+export function callRemoveFromFavorite(messageId){
+
+    return api.post(constant.ApiUrlRemoveFromFavorite,{
+        messageId: messageId
+    }).then( (response) => {
+        return Promise.resolve(response.data);
+    });
+
+}
+
 
 

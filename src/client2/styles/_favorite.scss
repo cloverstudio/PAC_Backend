@@ -28,10 +28,6 @@
         .code{
             cursor: pointer;
             transition: all 0.5s ease;
-
-            &:hover{
-                transform: rotate(3deg);
-            }
             
         }
 
@@ -45,6 +41,16 @@
                 width: 20px;
                 margin-right: 20px;
                 height: 20px;
+            }
+
+            a{
+                float: right;
+                color: $gray-600;
+                font-size: 18px;
+            }
+
+            a:hover{
+                color: $black;
             }
         }
 

@@ -134,3 +134,6 @@ export const SearchMessageFailed = 'SearchMessage/Failed';
 export const FavoriteLoadMessageStart = 'Favorite/LoadMessageStart';
 export const FavoriteLoadMessageSuccess = 'Favorite/LoadMessageSuccess';
 export const FavoriteLoadMessageFailed = 'Favorite/LoadMessageFailed';
+export const FavoriteRemoveFavorite = 'Favorite/RemoveFavorite';
+export const FavoriteStartRemoveFavorite = 'Favorite/StartRemoveFavorite';
+
