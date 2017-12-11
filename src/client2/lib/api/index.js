@@ -53,3 +53,7 @@ export{
     callLoadFavorites,
     callRemoveFromFavorite
 } from './message';
+
+export{
+    callUpdateProfile
+} from './user';

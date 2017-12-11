@@ -137,3 +137,12 @@ export const FavoriteLoadMessageFailed = 'Favorite/LoadMessageFailed';
 export const FavoriteRemoveFavorite = 'Favorite/RemoveFavorite';
 export const FavoriteStartRemoveFavorite = 'Favorite/StartRemoveFavorite';
 
+// Proflie
+export const ProfileTypeName = 'Profile/TypeName';
+export const ProfileTypeDescription = 'Profile/TypeDescription';
+export const ProfileSelectFile = 'Profile/SelectFile';
+export const ProfileSelectFileByURL = 'Profile/SelectFileByURL';
+export const ProfileDeleteFile = 'Profile/DeleteFile';
+export const ProfileSaveStart = 'Profile/SaveStart';
+export const ProfileSaveSucceed = 'Profile/SaveSucceed';
+export const ProfileSaveFailed = 'Profile/SaveFailed';

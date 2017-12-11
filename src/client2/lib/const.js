@@ -27,6 +27,7 @@ export const ApiUrlRemoveUserFromRoom = "/room/users/remove";
 export const ApiUrlSearchMessage = "/message/search/";
 export const ApiUrlFavorites = "/message/favorite/list/";
 export const ApiUrlRemoveFromFavorite = "/message/favorite/remove";
+export const ApiUrlUpdateProfile = "/user/update";
 
 export const ErrorCodeInvalidToken = 4000007;
 

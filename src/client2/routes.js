@@ -10,6 +10,8 @@ import Chat from './containers/Chat';
 import Room from './containers/Room';
 import Search from './containers/Search';
 import Favorites from './containers/Favorites';
+import Profile from './containers/Profile';
+import Password from './containers/Password';
 import About from './components/About';
 
 export default (
@@ -24,6 +26,8 @@ export default (
 		<Route path={`${util.url('/chat/:chatId')}`} component={Chat} />
 		<Route path={`${util.url('/search')}`} component={Search} />
 		<Route path={`${util.url('/favorites')}`} component={Favorites} />
+		<Route path={`${util.url('/profile')}`} component={Profile} />
+		<Route path={`${util.url('/password')}`} component={Password} />
 		<Route path={`${util.url('/logout')}`} component={Logout} />
 	</Switch>
 );

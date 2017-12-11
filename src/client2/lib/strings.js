@@ -129,3 +129,12 @@ export {
     FailedToLoadFavorites,
     FailedToRemoveFromFavorites
 } from './strings/favorite'
+
+export {
+    ProfileTitle,
+    ProfileName,
+    ProfileDescription,
+    ProfileAvatar,
+    FailedToSaveProfile
+} from './strings/profile'
+

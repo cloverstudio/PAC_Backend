@@ -81,17 +81,17 @@ class SideBar extends Component {
                         <li className="menu-category">{strings.SidebarTitle2[user.lang]}</li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-edit"></span>
-                            <span className="title">{strings.SidebarProfile[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/profile')}`} className="menu-link">
+                                <span className="icon fa fa-edit"></span>
+                                <span className="title">{strings.SidebarProfile[user.lang]}</span>
+                            </Link>
                         </li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-key"></span>
-                            <span className="title">{strings.SidebarPassword[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/password')}`} className="menu-link">
+                            <span    className="icon fa fa-key"></span>
+                            <   span className="title">{strings.SidebarPassword[user.lang]}</span>
+                            </Link>
                         </li>
 
                         <li className="menu-item">

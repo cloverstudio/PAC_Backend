@@ -14,6 +14,7 @@ import * as room from './room';
 import * as call from './call';
 import * as searchMessage from './searchMessage';
 import * as favorites from './favorites';
+import * as profile from './profile';
 
 export function filterTable(filter) {
     return {
@@ -36,5 +37,6 @@ export {
     infoView,
     call,
     searchMessage,
-    favorites
+    favorites,
+    profile
 }

@@ -15,6 +15,7 @@ import room from './room';
 import call from './call';
 import searchMessage from './searchMessage';
 import favorites from './favorites';
+import profile from './profile';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
     room,
     call,
     searchMessage,
-    favorites
+    favorites,
+    profile
 });
 
 export default rootReducer;
