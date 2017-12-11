@@ -71690,7 +71690,12 @@ CellGenerator.prototype.generate = function(messageModel){
         }
 
         if(messageModel.type == Const.messageTypeSticker){
+
+            if (!flatData.downloadURL)
+                flatData.downloadURL = flatData.message;
+
             html = this.stickerTemplate(flatData);
+            
         }
         
 
@@ -72846,7 +72851,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + " </span>\n        <span class=\"time\"> "
     + alias4((helpers.formatTime || (depth0 && depth0.formatTime) || alias2).call(alias1,(depth0 != null ? depth0.created : depth0),{"name":"formatTime","hash":{},"data":data}))
     + " </span>        \n        \n    </div>\n    \n    <div class=\"message\">\n        <img src=\""
-    + ((stack1 = ((helper = (helper = helpers.message || (depth0 != null ? depth0.message : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"message","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = helpers.downloadURL || (depth0 != null ? depth0.downloadURL : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"downloadURL","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\" />\n    </div>\n    \n    <div class=\"clearfix\"></div>\n    \n</div>\n\n";
 },"useData":true});
 
@@ -78167,8 +78172,10 @@ var HistoryListView = Backbone.View.extend({
                 if(row.lastMessage.type == 4)
                     row.lastMessage.message = localzationManager.get("Contact");
 
-                if(row.lastMessage.type == 5)
+                if(row.lastMessage.type == 5) {
+                    row.lastMessage.downloadURL = row.lastMessage.message;                
                     row.lastMessage.message = localzationManager.get("Sticker");
+                }
         
                 if(row.lastMessage.user) {
                     if (row.lastMessage.user._id.toString() == loginUserManager.user._id.toString())

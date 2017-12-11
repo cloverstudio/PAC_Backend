@@ -100,7 +100,12 @@ CellGenerator.prototype.generate = function(messageModel){
         }
 
         if(messageModel.type == Const.messageTypeSticker){
+
+            if (!flatData.downloadURL)
+                flatData.downloadURL = flatData.message;
+
             html = this.stickerTemplate(flatData);
+            
         }
         
 
