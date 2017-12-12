@@ -52,11 +52,12 @@ class ChatInput extends Component {
 
     handleClickFileUpload = e => {
             
-            Array.from(e.target.files).forEach( file => {
-                const data = new FormData();
-                data.append('file', file);
-                this.props.startFileUpload(data);
-            });
+        Array.from(e.target.files).forEach( file => {
+            const data = new FormData();
+            data.append('file', file);
+            this.props.startFileUpload(data);
+        });
+        
     }
 
     render() {

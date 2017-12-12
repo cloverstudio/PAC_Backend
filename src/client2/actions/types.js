@@ -24,6 +24,7 @@ export const ChatHideImageView ='Chat/HideImageView';
 
 export const ChatShowStickersView = 'Chat/ShowStickersView';
 export const ChatHideStickersView = 'Chat/HideStickersView';
+export const ChatClearChat = 'Chat/ClearChat';
 
 // History
 export const HistoryLoadInitial = 'History/LoadInitial';
@@ -86,7 +87,9 @@ export const InfoViewLoadMuteState = 'InfoView/MuteState';
 export const InfoViewLoadBlockState = 'InfoView/BlockState';
 export const InfoViewLoadMembersSuccess = 'InfoView/LoadMembersSuccess';
 export const InfoViewLeaveRoomConfirm = 'InfoView/LeaveRoomConfirm';
-
+export const InfoViewLeaveRoomStart = 'InfoView/LeaveRoomStart';
+export const InfoViewLeaveRoomSucceed = 'InfoView/LeaveRoomSucceed';
+export const InfoViewLeaveRoomFailed = 'InfoView/LeaveRoomFailed';
 
 // Stickers
 export const StickersLoadStart = 'Stickers/LoadStart';

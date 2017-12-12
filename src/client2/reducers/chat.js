@@ -45,6 +45,8 @@ const chatId = ( state = initial.chatId, action ) => {
             return action.chatId;
         case types.ChatOpenByRoom:
             return action.chatId;
+        case types.ChatClearChat:
+            return ""
         default:
             return state;
     }
@@ -60,6 +62,9 @@ const chatType = ( state = initial.chatType, action ) => {
             return constant.ChatTypeGroup;
         case types.ChatOpenByRoom:
             return constant.ChatTypeRoom;
+        case types.ChatClearChat:
+            return initial.chatType;
+
         default:
             return state;
     }
@@ -75,6 +80,9 @@ const currentChatUser = ( state = initial.currentChatUser, action ) => {
             return null;
         case types.ChatOpenByRoom:
             return null;
+        case types.ChatClearChat:
+            return null;
+
         default:
             return state;
     }
@@ -127,6 +135,9 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
         newState.name = room.name;
 
     }
+
+    if(action.type == types.ChatClearChat)
+        return initial.chatAvatar;
 
     return Object.assign({}, newState);
 
@@ -221,6 +232,9 @@ const messageList = (state = initial.messageList, action) => {
                newState = oldState.filter((msg, i) => i !== myMessageIndex); 
             }    
     }
+
+    if(action.type == types.ChatClearChat)
+        return initial.messageList
 
     return newState;
 

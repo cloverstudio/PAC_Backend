@@ -47,6 +47,12 @@ export function loadNewChat(chatId){
 
 }
 
+export function clearChat(){
+    return {
+        type: types.ChatClearChat
+    }
+}
+
 export function openChatByChatId(chatId){
     
     return (dispatch, getState) => {
@@ -359,11 +365,15 @@ export function startFileUpload(file){
             dispatch(fileUploadProgress(progress, localFileId, originChatId));
         })
         .then( data => {
+
             dispatch(fileUploadSucceed(localFileId, originChatId));
+
             const currentChatId = getState().chat.chatId;
+
             if (originChatId === currentChatId){
                 dispatch(sendMessage(constant.MessageTypeFile, data, localFileId));                 
             }
+            
             else{
                 dispatch(sendMessageInBg(constant.MessageTypeFile, data, localFileId, originChatId));
             }

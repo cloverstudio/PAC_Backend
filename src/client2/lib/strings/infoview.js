@@ -80,3 +80,8 @@ export const InfoViewDeleteRoom = {
 export const InfoViewLeaveRoomConfirm = {
     EN:"Press Again to Proceed"
 }
+
+export const InfoViewFailedToLeave = {
+    EN:"Failed to leave room. Please try again while after."
+}
+
