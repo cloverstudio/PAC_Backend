@@ -63,8 +63,10 @@ export {
     AvatarImage,
     ChooseFile,
     UserNameHelp,
-    FailedToCreateRoom
-} from './strings/createRoom'
+    FailedToCreateRoom,
+    EditRoom,
+    FailedToUpdateRoom
+} from './strings/room'
 
 export {
     InfoViewUserDetailOptions,
@@ -83,7 +85,9 @@ export {
     InfoViewFailedToMute,
     InfoViewCreated,
     InfoViewUserDetailMembers,
-    InfoViewFailedToLoadUserList
+    InfoViewFailedToLoadUserList,
+    InfoViewLeaveRoom,
+    InfoViewDeleteRoom
 } from './strings/infoview'
 
 export {
@@ -116,4 +120,36 @@ export {
     CallFailedToInitizeDevice,
     CallInitializingDevice
 } from './strings/calling'
+
+export {
+    SearchTitle,
+    FailedToSearchMessage
+} from './strings/search'
+
+export {
+    FavoriteTitle,
+    FailedToLoadFavorites,
+    FailedToRemoveFromFavorites
+} from './strings/favorite'
+
+export {
+    ProfileTitle,
+    ProfileName,
+    ProfileDescription,
+    ProfileAvatar,
+    FailedToSaveProfile,
+    ProfileErrorNameRequired
+} from './strings/profile'
+
+export {
+    PasswordTitle,
+    PasswordCurrentPassword,
+    PasswordNewPassword,
+    PasswordNewPasswordConfirm,
+    PasswordErrorPasswordValidation,
+    PasswordErrorConfirmFailed,
+    PasswordFailedToUpdatePassword,
+    PasswordSucceedDialogTitle,
+    PasswordSucceedDialogMessage
+} from './strings/password'
 

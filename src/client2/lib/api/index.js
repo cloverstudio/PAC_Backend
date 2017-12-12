@@ -33,7 +33,11 @@ export{
 
 export{
     callCreateRoom,
-    callRoomUserList
+    callRoomUserList,
+    callUpdateRoom,
+    callAddMemberToRoom,
+    callRemoveUserFromRoom,
+    callLeaveRoom
 } from './room';
 
 export{
@@ -44,7 +48,21 @@ export{
     callBlock
 } from './block';
 
+<<<<<<< HEAD
 export {
     fileUploadWrapper
 } from './upload';
 
+=======
+
+export{
+    callSearchMessage,
+    callLoadFavorites,
+    callRemoveFromFavorite
+} from './message';
+
+export{
+    callUpdateProfile,
+    callUpdatePassword
+} from './user';
+>>>>>>> 095cf101051f40faf96867c028d52ec94baf1276

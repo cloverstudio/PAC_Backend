@@ -21,8 +21,20 @@ export const ApiUrlMute = "/user/mute";
 export const ApiUrlBlock = "/user/block";
 export const ApiUrlGetGroupUserList = "/group/users/";
 export const ApiUrlGetRoomUserList = "/room/users/";
+<<<<<<< HEAD
 export const ApiUrlFile = "/file/";
 export const ApiUrlFileUpload ="/file/upload";
+=======
+export const ApiUrlUpdateRoom = "/room/update";
+export const ApiUrlAddUserToRoom = "/room/users/add";
+export const ApiUrlRemoveUserFromRoom = "/room/users/remove";
+export const ApiUrlSearchMessage = "/message/search/";
+export const ApiUrlFavorites = "/message/favorite/list/";
+export const ApiUrlRemoveFromFavorite = "/message/favorite/remove";
+export const ApiUrlUpdateProfile = "/user/update";
+export const ApiUrlUpdatePassword = "/user/updatepassword";
+export const ApiUrlLeaveRoom = "/room/leave";
+>>>>>>> 095cf101051f40faf96867c028d52ec94baf1276
 
 export const ErrorCodeInvalidToken = 4000007;
 
@@ -67,8 +79,16 @@ export const CallMediaTypeVideo = 2;
 export const CallWindowStateMax = 1;
 export const CallWindowStateMin = 2;
 
+<<<<<<< HEAD
 export const imgMimeType = 'image';
 export const audioMimeType = 'audio';
 export const appMimeType = 'application';
 export const pdfMimeSubType = 'application/pdf';
 export const svgXmlMimeSubtype = 'svg+xml';
+=======
+export const RoomModeCreate = 1;
+export const RoomModeEdit = 2;
+
+export const CredentialsMinLength = 6;
+export const CredentialsRegex = /^[a-zA-Z0-9]+$/;
+>>>>>>> 095cf101051f40faf96867c028d52ec94baf1276

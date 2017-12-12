@@ -68,3 +68,11 @@ export const InfoViewUserDetailMembers = {
 export const InfoViewFailedToLoadUserList = {
     EN:"Failed to get users. Please try again while after."
 }
+
+export const InfoViewLeaveRoom = {
+    EN:"Leave Room"
+}
+
+export const InfoViewDeleteRoom = {
+    EN:"Delete Room"
+}

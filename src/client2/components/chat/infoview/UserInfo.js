@@ -144,7 +144,7 @@ class UserInfo extends Component {
             
             <div> 
                 
-                <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info">
+                <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info cursor-pointer">
                     <li className="nav-item" onClick={ () => {this.tabChange("options")}}  >
                         <a className={cnTabGeneral}>{strings.InfoViewUserDetailOptions[user.lang]}</a>
                     </li>

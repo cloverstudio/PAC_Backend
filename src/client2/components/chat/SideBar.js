@@ -34,14 +34,14 @@ class SideBar extends Component {
 
                         <li className="menu-category">{strings.SidebarTitle1[user.lang]}</li>
 
-                        <li className="menu-item hidden-sm-up">
+                        <li className="menu-item hidden-lg-up">
                             <Link className="menu-link" to={`${utils.url('/chat')}`}>
                                 <span className="icon fa fa-comment"></span>
                                 <span className="title">{strings.SidebarChat[user.lang]}</span>
                             </Link>
                         </li>
 
-                        <li className="menu-item hidden-sm-up">
+                        <li className="menu-item hidden-lg-up">
                             <a onClick={this.props.showHistory} className="menu-link" href="javascript:void(0)">
                                 <span className="icon fa fa-clock-o"></span>
                                 <span className="title history">{strings.SidebarHistory[user.lang]}</span>
@@ -49,10 +49,10 @@ class SideBar extends Component {
                         </li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="../dashboard/general.html">
-                            <span className="icon fa fa-search"></span>
-                            <span className="title">{strings.SidebarSearch[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/search')}`} className="menu-link">
+                                <span className="icon fa fa-search"></span>
+                                <span className="title">{strings.SidebarSearch[user.lang]}</span>
+                            </Link>
                         </li>
 
                         <li className="menu-item">
@@ -64,10 +64,10 @@ class SideBar extends Component {
 
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-heart-o"></span>
-                            <span className="title">{strings.SidebarFavorite[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/favorites')}`} className="menu-link">
+                                <span className="icon fa fa-heart-o"></span>
+                                <span className="title">{strings.SidebarFavorite[user.lang]}</span>
+                            </Link>
                         </li>
 
 
@@ -81,24 +81,24 @@ class SideBar extends Component {
                         <li className="menu-category">{strings.SidebarTitle2[user.lang]}</li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-edit"></span>
-                            <span className="title">{strings.SidebarProfile[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/profile')}`} className="menu-link">
+                                <span className="icon fa fa-edit"></span>
+                                <span className="title">{strings.SidebarProfile[user.lang]}</span>
+                            </Link>
                         </li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-key"></span>
-                            <span className="title">{strings.SidebarPassword[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/password')}`} className="menu-link">
+                            <span    className="icon fa fa-key"></span>
+                            <   span className="title">{strings.SidebarPassword[user.lang]}</span>
+                            </Link>
                         </li>
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-gear"></span>
-                            <span className="title">{strings.SidebarAdmin[user.lang]}</span>
-                            </a>
+                            <Link to={`${utils.url('/favorite')}`} className="menu-link">
+                                <span className="icon fa fa-gear"></span>
+                                <span className="title">{strings.SidebarAdmin[user.lang]}</span>
+                            </Link>
                         </li>
                 
                         <li className="menu-item">

@@ -29,15 +29,21 @@ class api {
         .then((res) => {
             
             if(res.status == 200){
+
                 return res.json();
+
             }else{
-                return res.text();
+
+                return Promise.reject(res.status);
+
             }
 
         }).then((response) => {
 
-
-            return Promise.resolve(response);
+            if(response.code == 1)
+                return Promise.resolve(response);
+            else
+                return Promise.reject(response.code);
 
         });
 
@@ -65,12 +71,15 @@ class api {
             if(res.status == 200){
                 return res.json();
             }else{
-                return res.text();
+                return Promise.reject(res.status);
             }
 
         }).then((response) => {
 
-            return Promise.resolve(response);
+            if(response.code == 1)
+                return Promise.resolve(response);
+            else
+                return Promise.reject(response.code);
 
         });
 

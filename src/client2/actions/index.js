@@ -10,8 +10,12 @@ import * as grouplist from './grouplist';
 import * as chat from './chat';
 import * as infoView from './infoView';
 import * as stickers from './stickers';
-import * as createRoom from './createRoom';
+import * as room from './room';
 import * as call from './call';
+import * as searchMessage from './searchMessage';
+import * as favorites from './favorites';
+import * as profile from './profile';
+import * as password from './password';
 
 export function filterTable(filter) {
     return {
@@ -30,7 +34,11 @@ export {
     userlist,
     chat,
     stickers,
-    createRoom,
+    room,
     infoView,
-    call
+    call,
+    searchMessage,
+    favorites,
+    profile,
+    password
 }

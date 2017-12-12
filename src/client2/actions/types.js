@@ -85,27 +85,33 @@ export const InfoViewLoadDone = 'InfoView/LoadDone';
 export const InfoViewLoadMuteState = 'InfoView/MuteState';
 export const InfoViewLoadBlockState = 'InfoView/BlockState';
 export const InfoViewLoadMembersSuccess = 'InfoView/LoadMembersSuccess';
+export const InfoViewDeleteRoomConfirm = 'InfoView/DeleteRoomConfirm';
+
 
 // Stickers
 export const StickersLoadStart = 'Stickers/LoadStart';
 export const StickersLoadSucceed = 'Stickers/LoadSucceed';
 export const StickersLoadFailed = 'Stickers/LoadFailed';
 
-// create room
-export const CreateRoomSearchUserStart = 'CreateRoom/SearchUserStart';
-export const CreateRoomSearchUserSucceed = 'CreateRoom/SearchUserSucceed';
-export const CreateRoomSearchUserFailed = 'CreateRoom/SearchUserFailed';
-export const CreateRoomAddMember = 'CreateRoom/AddMember';
-export const CreateRoomDeleteMember = 'CreateRoom/DeleteMember';
-export const CreateRoomTypeKeyword = 'CreateRoom/TypeKeyword';
-export const CreateRoomTypeName = 'CreateRoom/TypeName';
-export const CreateRoomTypeDescription = 'CreateRoom/TypeDescription';
-export const CreateRoomSelectFile = 'CreateRoom/SelectFile';
-export const CreateRoomDeleteFile = 'CreateRoom/DeleteFile';
-export const CreateRoomSaveStart = 'CreateRoom/SaveStart';
-export const CreateRoomSaveSucceed = 'CreateRoom/SaveSucceed';
-export const CreateRoomSaveFailed = 'CreateRoom/SaveFailed';
-export const CreateRoomCancel = 'CreateRoom/Cancel';
+// create room, edit room
+export const RoomSearchUserStart = 'Room/SearchUserStart';
+export const RoomSearchUserSucceed = 'Room/SearchUserSucceed';
+export const RoomSearchUserFailed = 'Room/SearchUserFailed';
+export const RoomAddMember = 'Room/AddMember';
+export const RoomDeleteMember = 'Room/DeleteMember';
+export const RoomTypeKeyword = 'Room/TypeKeyword';
+export const RoomTypeName = 'Room/TypeName';
+export const RoomTypeDescription = 'Room/TypeDescription';
+export const RoomSelectFile = 'Room/SelectFile';
+export const RoomDeleteFile = 'Room/DeleteFile';
+export const RoomSaveStart = 'Room/SaveStart';
+export const RoomSaveSucceed = 'Room/SaveSucceed';
+export const RoomSaveFailed = 'Room/SaveFailed';
+export const RoomCancel = 'Room/Cancel';
+export const RoomModeChanged = 'Room/ModeChanged';
+export const RoomSelectFileByURL = 'Room/SelectFileByURL';
+export const RoomStartEditingRoom = 'Room/StartEditingRoom';
+
 
 // call
 export const CallIncoming = 'Call/Incoming';
@@ -129,4 +135,38 @@ export const CallChangeWindowState = 'Call/ChangeWindowState';
 export const CallIncomingMediaFailed = 'Call/IncomingMediaFailed';
 export const CallIncomingStatusChanged = 'Call/IncomingStatusChanged';
 
+// Search Message
+export const SearchMessageStart = 'SearchMessage/Start';
+export const SearchMessageSuccess = 'SearchMessage/Success';
+export const SearchMessageFailed = 'SearchMessage/Failed';
 
+// Favorite
+export const FavoriteLoadMessageStart = 'Favorite/LoadMessageStart';
+export const FavoriteLoadMessageSuccess = 'Favorite/LoadMessageSuccess';
+export const FavoriteLoadMessageFailed = 'Favorite/LoadMessageFailed';
+export const FavoriteRemoveFavorite = 'Favorite/RemoveFavorite';
+export const FavoriteStartRemoveFavorite = 'Favorite/StartRemoveFavorite';
+
+// Proflie
+export const ProfileTypeName = 'Profile/TypeName';
+export const ProfileTypeDescription = 'Profile/TypeDescription';
+export const ProfileSelectFile = 'Profile/SelectFile';
+export const ProfileSelectFileByURL = 'Profile/SelectFileByURL';
+export const ProfileDeleteFile = 'Profile/DeleteFile';
+export const ProfileSaveStart = 'Profile/SaveStart';
+export const ProfileSaveSucceed = 'Profile/SaveSucceed';
+export const ProfileSaveFailed = 'Profile/SaveFailed';
+export const ProfileSaveValidationError = 'Profile/SaveValidationError';
+
+
+// Password
+export const PasswordTypeCurrentPassword = 'Password/TypeCurrentPassword';
+export const PasswordTypeNewPassword = 'Password/TypeNewPasswor';
+export const PasswordTypeConfirmPassword = 'Password/TypeConfirmPassword';
+export const PasswordCancel = 'Password/Cancel';
+export const PasswordSave = 'Password/Save';
+export const PasswordSaveValidationError = 'Password/PasswordSaveValidationError';
+export const PasswordSaveStart = 'Password/SaveStart';
+export const PasswordSaveSucceed = 'Password/SaveSucceed';
+export const PasswordSaveFailed = 'Password/SaveFailed';
+export const PasswordLogout = 'Password/Logout';

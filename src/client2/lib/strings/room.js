@@ -17,6 +17,11 @@ export const CreateRoom = {
     EN:"Create New room"
 }
 
+export const EditRoom = {
+    EN:"Edit Room"
+}
+
+
 export const UsersTitle = {
     EN:"Users"
 }
@@ -51,4 +56,12 @@ export const ChooseFile = {
 
 export const FailedToCreateRoom = {
     EN:"Failed to create new room. Please try while after."
+}
+
+export const FailedToGetRoomDetail = {
+    EN:"Failed to get room detail."
+}
+
+export const FailedToUpdateRoom = {
+    EN:"Failed to update room. Please try while after."
 }

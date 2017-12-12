@@ -7,9 +7,9 @@ class user{
         this.lang = constant.EN;
         this.userData = null;
 
-        const checkLocalStoraget = localStorage.getItem(constant.LocalStorageKeyAccessToken);
+        const checkLocalStorage = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
-        if(checkLocalStoraget){
+        if(checkLocalStorage){
             this.userData = JSON.parse(localStorage.getItem(constant.LocalStorageKeyUserData));
             this.token = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
@@ -33,6 +33,20 @@ class user{
             localStorage.removeItem(constant.LocalStorageKeyAccessToken);
             localStorage.removeItem(constant.LocalStorageKeyUserData);
         }
+    }
+
+    updateUserData(userData){
+        this.userData = userData;
+
+        const checkLocalStorage = localStorage.getItem(constant.LocalStorageKeyUserData);
+
+        if(checkLocalStorage){
+            const savedUserData = JSON.parse(checkLocalStorage);
+
+            if(savedUserData && savedUserData._id == userData._id)
+                localStorage.setItem(constant.LocalStorageKeyUserData, JSON.stringify(userData));
+        }
+
     }
 
     checkSavedToken(){
