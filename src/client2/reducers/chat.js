@@ -222,7 +222,7 @@ const messageList = (state = initial.messageList, action) => {
     if(action.type === types.ChatFileUploadSucceed){
         
             let myMessageIndex = -1;
-            for (let i = oldState.length-1; i>0; i--){
+            for (let i = oldState.length-1; i>-1; i--){
                 if (oldState[i].localID === action.localFileId){
                     myMessageIndex = i;
                     break;
