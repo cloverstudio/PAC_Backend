@@ -20,6 +20,7 @@ class ImageView extends Component {
         //     // </div>
 
         // );
+        return null;
     }
 
 }
