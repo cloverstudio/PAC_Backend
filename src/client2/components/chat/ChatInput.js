@@ -7,6 +7,7 @@ import * as actions from '../../actions';
 import * as constant from '../../lib/const';
 import * as config from '../../lib/config';
 
+// import {fileUpload} from '../../lib/api/upload';
 class ChatInput extends Component {
 
     static propTypes = {
@@ -49,6 +50,15 @@ class ChatInput extends Component {
         }
     }
 
+    handleClickFileUpload = e => {
+            
+            Array.from(e.target.files).forEach( file => {
+                const data = new FormData();
+                data.append('file', file);
+                this.props.startFileUpload(data);
+            });
+    }
+
     render() {
         return(
             <footer className="publisher">
@@ -71,25 +81,26 @@ class ChatInput extends Component {
                 <div className="align-self-end gap-items">
                     <span className="publisher-btn file-group">
                         <i className="fa fa-paperclip file-browser" onClick={e=> this.fileInputElement.click()}></i>
-                        <input type="file" ref={ input => this.fileInputElement = input}/>
+                        <input type="file" multiple ref={ input => this.fileInputElement = input} 
+                        onChange={this.handleClickFileUpload}/>
                     </span>
                     <span 
-                        className="publisher-btn"
-                        onClick={this.toggleStickersView}>
+                    className="publisher-btn"
+                    onClick={this.toggleStickersView}>
                         <i className="fa fa-smile-o"></i>
                     </span>
                     <span 
-                        className="publisher-btn" 
-                        onClick={e=> {
-                            const message = this.props.inputValues[this.props.currentChatId];
-                            
-                            if (message){
-                                this.props.sendMessage(constant.MessageTypeText, message);
-                                this.props.changeInputValue(this.props.currentChatId, '');
-                                this.props.sendStopTyping(this.props.currentChatId);
-                            }
+                    className="publisher-btn" 
+                    onClick={e=> {
+                        const message = this.props.inputValues[this.props.currentChatId];
+                        
+                        if (message){
+                            this.props.sendMessage(constant.MessageTypeText, message);
+                            this.props.changeInputValue(this.props.currentChatId, '');
+                            this.props.sendStopTyping(this.props.currentChatId);
+                        }
 
-                        }}>
+                    }}>
                         <i className="fa fa-paper-plane"></i>
                     </span>
                 </div>
@@ -115,7 +126,8 @@ const mapDispatchToProps = (dispatch) => {
         loadStickers : () => dispatch(actions.stickers.loadStickers()),
         sendStartTyping: chatId => dispatch(actions.chat.sendStartTyping(chatId)),
         sendStopTyping: chatId => dispatch(actions.chat.sendStopTyping(chatId)),
-        changeInputValue: (chatId, value) => dispatch(actions.chat.changeInputValue(chatId, value))  
+        changeInputValue: (chatId, value) => dispatch(actions.chat.changeInputValue(chatId, value)),
+        startFileUpload: file => dispatch(actions.chat.startFileUpload(file))
     };
 };
 

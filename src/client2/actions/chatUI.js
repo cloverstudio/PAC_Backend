@@ -128,3 +128,16 @@ export function hideInfoView(){
         type: types.ChatHideInfoView
     }
 }
+
+export function showImageView(imgId){
+    return {
+        type: types.ChatShowImageView,
+        imgId
+    }
+}
+
+export function hideImageView(){
+    return {
+        type: types.ChatHideImageView,
+    }
+}

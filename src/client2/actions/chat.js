@@ -9,6 +9,7 @@ import {
     callGetUserDetail,
     callGetGroupDetail,
     callGetRoomDetail,
+    fileUploadWrapper
 } from '../lib/api/';
 
 import * as strings from '../lib/strings';
@@ -218,15 +219,15 @@ export function receiveMessage(message){
     }
 }
 
-export function sendMessage(messageType, content){
+export function sendMessage(messageType, content, localID = utils.getRandomString()){
 
     return (dispatch, getState) => {
-
+        
         const message = {
             roomID: getState().chat.chatId, 
             userID: user.userData._id,
             type: messageType,
-            localID: utils.getRandomString(),
+            localID,
             attributes: {"useclient":"web"},
             user: user.userData
         }
@@ -236,7 +237,7 @@ export function sendMessage(messageType, content){
             case constant.MessageTypeText:
                 message.message = Encryption.encryptText(content);
                 break;
-            case constant.messageTypeFile:
+            case constant.MessageTypeFile:
                 message.file = content;
                 break;
             case constant.MessageTypeSticker:
@@ -256,6 +257,33 @@ export function sendMessage(messageType, content){
             message
         });
 
+    }
+}
+
+export function sendMessageInBg(messageType, content, localID, roomID){
+    return (dispatch, getState) => {
+        
+        const message = {
+            roomID,
+            userID: user.userData._id,
+            type: messageType,
+            localID,
+            attributes: {"useclient":"web"},
+            user: user.userData
+        };
+
+        switch(messageType){
+            case constant.MessageTypeFile:
+                message.file = content;
+                break;
+            default:
+                return false;
+        }
+        
+        dispatch({
+            type: types.ChatSendMessageInBg,
+            message
+        })
     }
 }
 
@@ -293,5 +321,57 @@ export function changeInputValue(chatId, value){
         type: types.ChatChangeInputValue,
         chatId,
         value
+    }
+}
+
+export function fileUploadProgress(progress, localFileId, chatId){
+    return {
+        type: types.ChatFileUploadProgress,
+        progress,
+        chatId,
+        localFileId
+    }
+}
+
+export function fileUploadSucceed(localFileId, chatId){
+    return {
+        type: types.ChatFileUploadSucceed,
+        chatId,
+        localFileId
+    }
+}
+
+export function startFileUpload(file){
+
+    return (dispatch, getState) => {
+
+        const localFileId = utils.getRandomString();        
+        const originChatId = getState().chat.chatId;
+        const fileUpload = fileUploadWrapper(localFileId, originChatId);
+
+        dispatch({
+            type: types.ChatStartFileUpload,
+            chatId:originChatId,
+            localFileId
+        });
+        
+        fileUpload(file, function(progress, localFileId, originChatId){
+            dispatch(fileUploadProgress(progress, localFileId, originChatId));
+        })
+        .then( data => {
+            dispatch(fileUploadSucceed(localFileId, originChatId));
+            const currentChatId = getState().chat.chatId;
+            if (originChatId === currentChatId){
+                dispatch(sendMessage(constant.MessageTypeFile, data, localFileId));                 
+            }
+            else{
+                dispatch(sendMessageInBg(constant.MessageTypeFile, data, localFileId, originChatId));
+            }
+        })
+        .catch( err => {
+            //todo: handle err
+            console.log(err);
+        })
+
     }
 }

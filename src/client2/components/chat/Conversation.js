@@ -18,6 +18,7 @@ import DateTime from '../DateTime';
 import Stickers from './Stickers';
 import ChatInput from './ChatInput';
 import ChatHeader from './ChatHeader';
+import Message from './Message';
 
 class Conversation extends Component {
     constructor(){
@@ -25,6 +26,7 @@ class Conversation extends Component {
         
         this.todayDate = new Date().getDate();
         this.stickersLoaded = false;
+        this.lockedForAutoScroll = false;
     }
 
     static propTypes = {
@@ -34,61 +36,144 @@ class Conversation extends Component {
         if (e.target.scrollTop === 0 && !this.props.isLoading){
             this.props.loadOldMessages(this.props.currentChatId, this.props.messageList[0]._id)
         }
+        
+        this.lockedForAutoScroll = util.getScrollBottom(this.scrollableConversation) > constant.scrollBoundary;
     }
 
     componentWillUpdate(nextProps){
-        this.lastConversationHeight = this.scrollableConversation.scrollHeight
+        this.lastConversationHeight = this.scrollableConversation.scrollHeight;
+        this.lastConversationScrollTop = this.scrollableConversation.scrollTop;
     }
 
     componentDidUpdate(prevProps){
-            if (this.props.messageList.length !== prevProps.messageList.length){
-                if (this.props.messageList.length - prevProps.messageList.length === 1){
-                    util.scrollElemBottom(this.scrollableConversation); 
+            if (this.lockedForAutoScroll){
+                this.scrollableConversation.scrollTop += this.scrollableConversation.scrollHeight - this.lastConversationHeight;
+            }
+            else{
+                if(this.scrollableConversation.scrollHeight !== this.lastConversationHeight){
+                    util.scrollElemBottom(this.scrollableConversation);
                 }
-                else{
-                    this.scrollableConversation.scrollTop = this.scrollableConversation.scrollHeight - this.lastConversationHeight                                
-                }
+            }
+    }
+
+    scrollCallback = e => {
+       if(!this.lockedForAutoScroll){
+            util.scrollElemBottom(this.scrollableConversation)
+        }
+    }
+
+    handleDragEnter = e => {
+        e.preventDefault();
+        if (e.target.classList.contains('chat-content')){
+            e.target.classList.add('dragging-over');
+            this.props.showDropNotification('Drop files now');
+
+        }
+    }
+
+    handleDrop = e => {
+    }
+
+    handleDragLeave = e => {
+        e.preventDefault();
+        if (e.target.classList.contains('chat-content')){
+            e.target.classList.remove('dragging-over');
+            this.props.hideDropNotification();
         }
     }
     
     render() {
-        
-        // combine messages from same user
-        const combinedMessages = [];
-        let currentUserMessages = [];
-        let lastUser = "";
-        let todayLimitSet = false;
-        
-        for(let i = 0 ; i < this.props.messageList.length ; i++){
 
-            const message = this.props.messageList[i];
+        var sortedMsgs = new Map();
 
-            if(!message)
-                continue;
+        if (this.props.messageList.length > 0){
+
+            let currUsr = this.props.messageList[0].userID;
+            let currDat = new Date(this.props.messageList[0].created).getDate();
+            let currMsgs = [];
             
-            const currentUser = message.userID;
-            const messageDate = new Date(message.created).getDate();
-
-            if(!todayLimitSet && this.todayDate === messageDate){
-                combinedMessages.push(currentUserMessages);                
-                combinedMessages.push('Today')
-                todayLimitSet = true;
-                currentUserMessages = [];
+            sortedMsgs.set(currDat, []);
+            
+            for (let msg of this.props.messageList){
+                let msgUsr = msg.userID;
+                let msgDat = new Date(msg.created).getDate();
+                
+                if (currDat !== msgDat){
+                    if (currMsgs.length > 0) sortedMsgs.get(currDat).push(currMsgs);
+                    currMsgs = [];
+                    sortedMsgs.set(msgDat, []);
+                }
+                
+                if (currUsr !== msgUsr){
+                    if (currMsgs.length > 0) sortedMsgs.get(currDat).push(currMsgs);
+                    currMsgs = [];
+                }
+                
+                currMsgs.push(msg);
+                currUsr = msgUsr;
+                currDat = msgDat;
             }
 
-            if(lastUser != "" && currentUser != lastUser && currentUserMessages.length > 0){
-                combinedMessages.push(currentUserMessages);
-                currentUserMessages = [];
-            }
-
-            currentUserMessages.push(message);
-            lastUser = currentUser;
-
+            sortedMsgs.get(currDat).push(currMsgs);
         }
+        
+        let conversationItems = [];
 
-        if(currentUserMessages.length > 0)
-            combinedMessages.push(currentUserMessages);
+        {sortedMsgs.forEach( (messagesByDate, date) => {
 
+            if (this.todayDate === date) {conversationItems.push(<div key={date} className='media media-meta-day'>Today</div>);}
+            if (this.todayDate-1 === date) {conversationItems.push(<div key={date} className='media media-meta-day'>Yesterday</div>);}
+            
+            messagesByDate.forEach( messagesByUser => {
+                
+                const firstMessage = messagesByUser[0];
+                const lastMessage = messagesByUser[messagesByUser.length-1];
+                const user = firstMessage.user;
+                const userId = user ? user._id : firstMessage.userID;
+
+                let groupedMessages;
+
+                if (userId === this.props.user._id){
+                    groupedMessages = (
+                    <div className='media media-chat mymessage' key={firstMessage._id || firstMessage.localID}>
+
+                        <div className='media-body'>
+                            
+                            {messagesByUser.map( message => <Message key={message._id || message.localID} messageData={message} scrollChat={this.scrollCallback}/>)}
+                            
+                            <p className="meta">
+                                <DateTime timestamp={lastMessage.created} />
+                            </p>
+
+                        </div>
+
+                    </div>)
+                }
+                else {
+                    groupedMessages = (
+                    <div className='media media-chat' key={firstMessage._id}>
+                        
+                        <AvatarImage type={constant.AvatarUser} user={user} />
+                        
+                        <div className='media-body'>
+                            
+                            {messagesByUser.map( message => <Message key={message._id} messageData={message} scrollChat={this.scrollCallback}/>)}
+                            
+                            <p className="meta">
+                                <DateTime timestamp={lastMessage.created} />
+                            </p>
+
+                        </div>
+
+                    </div>)
+                }
+
+                conversationItems.push(groupedMessages)
+
+            })
+                                    
+        })}
+        
         let chatContainerClass = "chat-container card card-bordered flex-column";
         if(this.props.infoViewState)
             chatContainerClass += " hide";
@@ -105,106 +190,18 @@ class Conversation extends Component {
 
                 <ChatHeader/>
 
-                 <div ref={ (scrollableConversation) => { 
-                        this.scrollableConversation = scrollableConversation}
-                    }
-                    onScroll={ this.onScroll }
-                    className="scrollable flex-grow chat-content">
+                <div ref={ (scrollableConversation) => { this.scrollableConversation = scrollableConversation}} 
+                onScroll={ this.onScroll }
+                onDragEnter={this.handleDragEnter}
+                onDrop={this.handleDrop} 
+                onDragLeave={this.handleDragLeave}                
+                className="scrollable flex-grow chat-content">
 
-                    {combinedMessages.map( (messagesFromSameUser) => {
-
-                        if(messagesFromSameUser === 'Today'){
-                            return <div key='todayLimit' className='media media-meta-day'>Today</div>
-                        }
-
-                        const firstMessage = messagesFromSameUser[0];
-
-                        if(!firstMessage)
-                            return null;
-                            
-                        const lastMessage = messagesFromSameUser[messagesFromSameUser.length - 1];
-                        const user = firstMessage.user;
-                        
-                        if(user._id == this.props.user._id){
-        
-                            return <div className="media media-chat mymessage" key={firstMessage._id || firstMessage.localID}>
-                                <div className="media-body">
-
-                                    {messagesFromSameUser.map( (message) => {
-                                        
-                                        let messageContent;
-                                        let messageClass = '';
-
-                                        switch(message.type){
-                                            case constant.MessageTypeText:
-                                                messageContent = Encryption.decryptText(message.message);
-                                                if (constant.urlRegularExpression.test(messageContent))
-                                                    messageContent = <a href={messageContent} target="_blank"><u>{messageContent}</u></a>
-                                                break;
-                                            case constant.MessageTypeSticker:
-                                                messageClass = 'sticker-message';
-                                                messageContent = <img onLoad={()=> {
-                                                    if(this.scrollableConversation.scrollHeight - this.scrollableConversation.scrollTop - this.scrollableConversation.clientHeight < constant.scrollBoundary){
-                                                    util.scrollElemBottom(this.scrollableConversation)}
-                                                    }} src={config.mediaBaseURL + message.message}/>;
-                                                break;
-                                            default:
-                                                messageContent = null;
-                                        }
-                                        messageClass += typeof message._id === 'undefined' ? ' unsent' : '';
-
-                                        return <p className={messageClass} key={message._id || message.localID}>{messageContent}</p>
-
-                                    })}
-
-                                    <p className="meta">
-                                        <DateTime timestamp={lastMessage.created} />
-                                    </p>
-
-                                </div>
-                            </div>
-                        }else
-                            return <div className="media media-chat" key={firstMessage._id}>
-                                <AvatarImage type={constant.AvatarUser} user={user} />
-                                <div className="media-body">
-    
-                                        {messagesFromSameUser.map( (message) => {
-
-                                            let messageContent;
-                                            let messageClass = '';
-
-                                            switch(message.type){
-                                                case constant.MessageTypeText:
-                                                    messageContent = Encryption.decryptText(message.message);
-                                                    if (constant.urlRegularExpression.test(messageContent))
-                                                        messageContent = <a href={messageContent} target="_blank"><u>{messageContent}</u></a>
-                                                    break;
-                                                case constant.MessageTypeSticker:
-                                                    messageClass = 'sticker-message'
-                                                    messageContent = <img onLoad={()=>{
-                                                        if(this.scrollableConversation.scrollHeight - this.scrollableConversation.scrollTop - this.scrollableConversation.clientHeight < constant.scrollBoundary){
-                                                        util.scrollElemBottom(this.scrollableConversation)}
-                                                        }} src={config.mediaBaseURL + message.message}/>;
-                                                    break;
-                                                default:
-                                                    messageContent = null;
-                                            }
-
-                                            return <p className={messageClass} key={message._id}>{messageContent}</p>
-                                        })}
-    
-                                        <p className="meta">
-                                            <DateTime timestamp={lastMessage.created} />
-                                        </p>
-    
-                                    </div>
-                                </div> 
-
-                    })}
+                    {conversationItems}
+                
                 </div> 
 
                 <ChatInput/>
-
                 <Stickers/>
 
             </div>
@@ -228,7 +225,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadOldMessages: (chatID, lastMessage) => dispatch(actions.chat.loadOldMessages(chatID, lastMessage))
+        loadOldMessages: (chatID, lastMessage) => dispatch(actions.chat.loadOldMessages(chatID, lastMessage)),
+        startFileUpload: file => dispatch(actions.chat.startFileUpload(file)),
+        showDropNotification: message => dispatch(actions.notification.showToast(message)),
+        hideDropNotification: () => dispatch(actions.notification.hideToast())
     };
 };
 

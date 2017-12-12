@@ -198,6 +198,30 @@ const messageList = (state = initial.messageList, action) => {
         }
     }
 
+    if(action.type === types.ChatStartFileUpload){
+
+        newState = oldState.concat({
+            localID: action.localFileId,
+            userID: user.userData._id,
+            created: new Date().getTime(),
+            type: constant.MessageTypeFile
+        })
+    }
+
+    if(action.type === types.ChatFileUploadSucceed){
+        
+            let myMessageIndex = -1;
+            for (let i = oldState.length-1; i>0; i--){
+                if (oldState[i].localID === action.localFileId){
+                    myMessageIndex = i;
+                    break;
+                }
+            }
+            if (myMessageIndex > -1){
+               newState = oldState.filter((msg, i) => i !== myMessageIndex); 
+            }    
+    }
+
     return newState;
 
 }

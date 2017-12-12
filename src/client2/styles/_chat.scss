@@ -91,6 +91,9 @@
         
                     .media-body{
                         max-width: 90%;
+                        display:flex;
+                        flex-direction: column;
+                        align-items: flex-start;
         
                         p{
                             img{
@@ -102,6 +105,17 @@
                             }
 
                         }
+                        .image-message{
+                            background:transparent;
+                            min-width:150px;
+                            img{
+                                cursor:pointer;
+                            }
+                        }
+                        .upload-progress{
+                            width:200px;
+                        }
+                        
                     }
                 }
             
@@ -111,6 +125,7 @@
                     
                     .media-body{
                         flex: none;
+                        align-items:flex-end;
                         
                         p{
                             background-color: $color-blue;
@@ -130,6 +145,7 @@
                                     color:white;
                                 }
                             }
+                            
                         }
 
                     }
@@ -141,7 +157,10 @@
                 }
             }
 
-            
+            .chat-content.dragging-over *{
+                pointer-events: none;
+            }
+                
             .stickers-container{
                 position:absolute;
                 bottom:20px;

@@ -39,8 +39,7 @@ class SocketManager {
         });
 
         this.ioNsp.on('typing', function(obj){
-            if(store.getState().chat.chatId === obj.roomID && 
-                obj.userID != user.userData._id){
+            if(store.getState().chat.chatId === obj.roomID){
                 if (obj.type === 1){
                     store.dispatch(actions.chat.startedTyping(obj.userID, obj.userName));
                 }
@@ -158,6 +157,10 @@ class SocketManager {
             
         }
 
+        if (action.type === types.ChatSendMessageInBg){
+            this.emit('sendMessage', action.message)
+        }
+        
         if(action.type === types.ChatSendStartTyping){
 
             this.emit('sendtyping', {

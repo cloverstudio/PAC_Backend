@@ -61,6 +61,10 @@ export function scrollElemBottom(element){
     }
 }
 
+export function getScrollBottom(element){
+    return element.scrollHeight - element.scrollTop - element.clientHeight
+}
+
 export function url(url){
     return config.BasePath + url;
 }
