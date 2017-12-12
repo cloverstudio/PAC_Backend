@@ -322,4 +322,19 @@
 
 }
 
+.image-view{
+    .modal-header{
+        justify-content: flex-end;
+    }
+    .modal-body{
+        text-align: center;
+        .spinner-linear{
+            margin-bottom:10px;
+        }
+        img{
+            max-height:80vh;
+        }
+    }
+}
+
 
