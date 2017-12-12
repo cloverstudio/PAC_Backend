@@ -10,7 +10,7 @@ import * as strings from '../lib/strings';
 import user from '../lib/user';
 
 import {
-    callUpdateProfile
+    callUpdatePassword
 } from '../lib/api/';
 
 import {store} from '../index';
@@ -57,6 +57,24 @@ export function cancel() {
 
 }
     
+
+export function logout() {
+
+    return (dispatch, getState) => {
+        
+        dispatch({
+            type: types.PasswordLogout
+        });
+
+        dispatch({
+            type: types.Logout
+        });
+
+        store.dispatch(push(`${utils.url('/logout')}`));
+
+    }
+    
+}
 
 export function save() {
     
@@ -138,6 +156,29 @@ export function save() {
 
         dispatch({
             type: types.PasswordSaveStart
+        });
+
+
+        callUpdatePassword(
+            state.password.currentPassword,
+            state.password.newPassword
+        ).then ( (savedUser) => {
+
+            dispatch({
+                type: types.PasswordSaveSucceed,
+                user
+            });
+
+        }).catch( (err) => {
+            
+            console.error(err);
+
+            dispatch(actions.notification.showToast(strings.PasswordFailedToUpdatePassword[user.lang]));
+            
+            dispatch({
+                type: types.PasswordSaveFailed
+            });
+
         });
                
     }

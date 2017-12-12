@@ -40,7 +40,10 @@ class api {
 
         }).then((response) => {
 
-            return Promise.resolve(response);
+            if(response.code == 1)
+                return Promise.resolve(response);
+            else
+                return Promise.reject(response.code);
 
         });
 
@@ -73,7 +76,10 @@ class api {
 
         }).then((response) => {
 
-            return Promise.resolve(response);
+            if(response.code == 1)
+                return Promise.resolve(response);
+            else
+                return Promise.reject(response.code);
 
         });
 

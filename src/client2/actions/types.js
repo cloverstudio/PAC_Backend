@@ -159,4 +159,4 @@ export const PasswordSaveValidationError = 'Password/PasswordSaveValidationError
 export const PasswordSaveStart = 'Password/SaveStart';
 export const PasswordSaveSucceed = 'Password/SaveSucceed';
 export const PasswordSaveFailed = 'Password/SaveFailed';
-
+export const PasswordLogout = 'Password/Logout';

@@ -46,6 +46,10 @@ class Password extends Base {
         if(this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
+        let modalClass = "modal fade";
+        if(this.props.success)
+            modalClass += " show";
+
         return (
 
             <div className={sideBarClass} onClick={this.globalClick}>
@@ -72,6 +76,24 @@ class Password extends Base {
                     </header>
 
                     <div className="main-content password">
+
+                        <div className={modalClass}>
+                            <div className="modal-dialog modal-sm">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                    <h4 className="modal-title">{strings.PasswordSucceedDialogTitle[user.lang]}</h4>
+                                    </div>
+                                    <div className="modal-body">
+                                    <p>
+                                        {strings.PasswordSucceedDialogMessage[user.lang]}
+                                    </p>
+                                    </div>
+                                    <div className="modal-footer">
+                                    <button onClick={this.props.logout} type="button" className="btn btn-bold btn-pure btn-primary">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="col-12 pt-15">
 
@@ -115,7 +137,7 @@ class Password extends Base {
                 </main>
                 
                 <Modals />
-                
+
             </div>
         );
     }
@@ -136,7 +158,8 @@ const mapStateToProps = (state) => {
         errorMessageNewPassword: state.password.errorMessageNewPassword,
         errorMessageConfirmPassword: state.password.errorMessageConfirmPassword,
 
-        saving:state.password.saving
+        saving:state.password.saving,
+        success: state.password.success
     };
 };
 
@@ -154,6 +177,7 @@ const mapDispatchToProps = (dispatch) => {
         typeConfirmPassword: (val) => dispatch(actions.password.typeConfirmPassword(val)),
         cancel: () => dispatch(actions.password.cancel()),
         save: () => dispatch(actions.password.save()),
+        logout: () => dispatch(actions.password.logout()),
 
     };
 };

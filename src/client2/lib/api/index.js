@@ -55,5 +55,6 @@ export{
 } from './message';
 
 export{
-    callUpdateProfile
+    callUpdateProfile,
+    callUpdatePassword
 } from './user';

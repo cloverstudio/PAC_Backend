@@ -1,3 +1,5 @@
+import sha1 from 'sha1';
+
 import api from './api'; 
 import * as config from '../config';
 import * as constant from '../const';
@@ -44,11 +46,28 @@ export function callUpdateProfile(
     
 }
 
-export function updatePassword(currentPassword,newPassword){
+export function callUpdatePassword(currentPassword,newPassword){
 
-    return api.post(constant.ApiUrlUpdatePassword,{
-        currentPassword: currentPassword,
-        newPassword: newPassword
+
+    return api.get(constant.ApiUrlTest).then( (response) => {
+
+        if(!response.time)
+            return Promise.reject("Failed to login");
+        
+        return Promise.resolve(response.time);
+
+    }).then( (time) => {
+
+        const tenSec = Math.floor(time / 1000 / 10) + '';
+        const key =  config.hashSalt + tenSec;
+        const secret = sha1(key);
+        const passwordHash = sha1(currentPassword + config.hashSalt);
+
+        return api.post(constant.ApiUrlUpdatePassword,{
+            currentPassword: passwordHash,
+            newPassword: newPassword
+        });
+
     }).then( (response) => {
 
         return Promise.resolve(response.data);

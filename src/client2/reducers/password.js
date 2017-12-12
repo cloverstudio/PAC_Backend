@@ -9,6 +9,11 @@ const currentPassword = (state = "", action) => {
     switch (action.type) {
         case types.PasswordTypeCurrentPassword:
             return action.password
+        case types.PasswordSaveSucceed:
+            return ""
+        case types.PasswordSaveFailed:
+            return ""
+
         default:
             return state;
     }
@@ -18,6 +23,11 @@ const newPassword = (state = "", action) => {
     switch (action.type) {
         case types.PasswordTypeNewPassword:
             return action.password
+        case types.PasswordSaveSucceed:
+            return ""
+        case types.PasswordSaveFailed:
+            return ""
+
         default:
             return state;
     }
@@ -27,22 +37,22 @@ const confirmPassword = (state = "", action) => {
     switch (action.type) {
         case types.PasswordTypeConfirmPassword:
             return action.password
+        case types.PasswordSaveSucceed:
+            return ""
+        case types.PasswordSaveFailed:
+            return ""
+
         default:
             return state;
     }
 }
 
-const avatarImage = (state = null, action) => {
+const success = (state = false, action) => {
     switch (action.type) {
-        case types.ProfileSelectFile:
-            return action.file
-        case types.ProfileDeleteFile:
-            return null;
-        case types.ProfileSaveSucceed:
-            return null;
-        case types.ProfileSelectFileByURL:
-            return {};
-            
+        case types.PasswordSaveSucceed:
+            return true
+        case types.PasswordLogout:
+            return false
         default:
             return state;
     }
@@ -52,7 +62,7 @@ const saving = (state = false, action) => {
     switch (action.type) {
         case types.PasswordSaveStart:
             return true
-        case types.PasswordSaveSuccess:
+        case types.PasswordSaveSucceed:
             return false
         case types.PasswordSaveFailed:
             return false
@@ -108,5 +118,6 @@ export default combineReducers({
     errorMessageCurrentPassword,
     errorMessageNewPassword,
     errorMessageConfirmPassword,
-    saving
+    saving,
+    success
 });;

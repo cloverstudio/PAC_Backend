@@ -145,6 +145,9 @@ export {
     PasswordNewPassword,
     PasswordNewPasswordConfirm,
     PasswordErrorPasswordValidation,
-    PasswordErrorConfirmFailed
+    PasswordErrorConfirmFailed,
+    PasswordFailedToUpdatePassword,
+    PasswordSucceedDialogTitle,
+    PasswordSucceedDialogMessage
 } from './strings/password'
 
