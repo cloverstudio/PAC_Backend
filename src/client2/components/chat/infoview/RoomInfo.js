@@ -103,7 +103,28 @@ class RoomInfo extends Component {
 
         const members = this.props.members;
         members.sort( (obj1,obj2) => {
+            
+            if(obj1._id == this.props.room.owner){
+                obj1.onlineStatus = 10;
+            }
+
+            if(obj2._id == this.props.room.owner){
+                obj2.onlineStatus = 10;
+            }
+
             return -1 * ( obj1.onlineStatus - obj2.onlineStatus );
+        });
+
+        const membersModified = members.map( (member) => {
+
+            member.isOwner = false;
+
+            if(member._id == this.props.room.owner){
+                member.isOwner = true;
+            }
+
+            return member;
+
         });
 
         return (
@@ -130,7 +151,16 @@ class RoomInfo extends Component {
                         </div>
 
                         <div className="media">
-                            <button className="btn btn-label btn-primary btn-danger btn-block"><label><i className="ti-close"></i></label>  Leave Room</button>                    
+
+                            {user.userData._id == this.props.room.owner ?
+                                <button onClick={() => { this.props.deleteRoomConfirm(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
+                                    <label><i className="ti-close"></i></label>{strings.InfoViewDeleteRoom[user.lang]}
+                                </button> 
+                                :
+                                <button onClick={() => { this.props.leaveRoomConfirm(this.props.room._id) }}className="btn btn-label btn-primary btn-danger btn-block">
+                                    <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoom[user.lang]}
+                                </button> 
+                            }
                         </div>
 
                         <div className="media">
@@ -179,22 +209,27 @@ class RoomInfo extends Component {
                             
                             <div className="media-list media-list-hover">
 
-                                {members.map( user => {
+                                {membersModified.map( member => {
 
                                     let fileId = null;
 
-                                    if (user.avatar && user.avatar.thumbnail)
-                                        fileId = user.avatar.thumbnail.nameOnServer;
+                                    if (member.avatar && member.avatar.thumbnail)
+                                        fileId = member.avatar.thumbnail.nameOnServer;
 
                                     let classname = " avatar ";
-                                    if(user.onlineStatus)
+                                    if(member.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={ () => { this.props.openChat(user) }} >
+                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={ () => { this.props.openChat(user) }} >
                                         <span className={classname}>
                                             <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                         </span>
-                                        <p className="title">{user.name} {user.onlineStatus}</p>
+                                        <p className="title">
+                                            {member.isOwner ?
+                                                <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> : 
+                                                <span>{member.name}</span>
+                                            }
+                                        </p>
                                         <a className="media-action" href="javascript:void(0)"><i className="fa fa-comment"></i></a>
                                     </div>
                                     
@@ -232,7 +267,11 @@ const mapDispatchToProps = (dispatch) => {
         showError: (err) => dispatch(actions.notification.showToast(err)),
         updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state,constant.ChatTypeRoom)),
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
-        openChat: user => dispatch(actions.chat.openChatByUser(user))
+        openChat: user => dispatch(actions.chat.openChatByUser(user)),
+        deleteRoomConfirm: roomId => dispatch(actions.infoView.deleteRoomConfirm(roomId)),
+        leaveRoomConfirm: roomId => dispatch(actions.infoView.leaveRoomConfirm(roomId)),
+        deleteRoom: roomId => dispatch(actions.infoView.deleteRoom(roomId)),
+        leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId))
     };
 };
 

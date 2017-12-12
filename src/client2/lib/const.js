@@ -29,7 +29,7 @@ export const ApiUrlFavorites = "/message/favorite/list/";
 export const ApiUrlRemoveFromFavorite = "/message/favorite/remove";
 export const ApiUrlUpdateProfile = "/user/update";
 export const ApiUrlUpdatePassword = "/user/updatepassword";
-
+export const ApiUrlLeaveRoom = "/room/leave";
 
 export const ErrorCodeInvalidToken = 4000007;
 

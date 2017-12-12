@@ -77,6 +77,8 @@ export const InfoViewLoadDone = 'InfoView/LoadDone';
 export const InfoViewLoadMuteState = 'InfoView/MuteState';
 export const InfoViewLoadBlockState = 'InfoView/BlockState';
 export const InfoViewLoadMembersSuccess = 'InfoView/LoadMembersSuccess';
+export const InfoViewDeleteRoomConfirm = 'InfoView/DeleteRoomConfirm';
+
 
 // Stickers
 export const StickersLoadStart = 'Stickers/LoadStart';

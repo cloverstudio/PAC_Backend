@@ -36,7 +36,8 @@ export{
     callRoomUserList,
     callUpdateRoom,
     callAddMemberToRoom,
-    ApiUrlRemoveUserFromRoom
+    callRemoveUserFromRoom,
+    callLeaveRoom
 } from './room';
 
 export{

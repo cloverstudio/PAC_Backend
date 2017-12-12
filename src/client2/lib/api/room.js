@@ -149,7 +149,7 @@ export function callAddMemberToRoom(roomId,userIds){
 }
 
 
-export function ApiUrlRemoveUserFromRoom(roomId,userIds){
+export function callRemoveUserFromRoom(roomId,userIds){
 
     return api.post(constant.ApiUrlRemoveUserFromRoom,{
         roomId:roomId,
@@ -167,3 +167,20 @@ export function ApiUrlRemoveUserFromRoom(roomId,userIds){
     
 }
 
+export function callLeaveRoom(roomId){
+
+    return api.post(constant.ApiUrlLeaveRoom,{
+        roomId:roomId
+    })
+    .then( (response) => {
+
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to leave room.");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+    
+}
+    

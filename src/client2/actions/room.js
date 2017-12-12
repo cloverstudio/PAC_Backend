@@ -15,7 +15,7 @@ import {
     callUpdateRoom,
     callGetRoomDetail,
     callAddMemberToRoom,
-    ApiUrlRemoveUserFromRoom
+    callRemoveUserFromRoom
 } from '../lib/api/';
 
 
@@ -178,7 +178,7 @@ export function save() {
             .then( (addUserResult) =>{
 
 
-                return ApiUrlRemoveUserFromRoom(
+                return callRemoveUserFromRoom(
                     editingRoomId,
                     usersDeleted
                 )

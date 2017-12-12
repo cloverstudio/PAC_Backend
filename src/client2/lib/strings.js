@@ -85,7 +85,9 @@ export {
     InfoViewFailedToMute,
     InfoViewCreated,
     InfoViewUserDetailMembers,
-    InfoViewFailedToLoadUserList
+    InfoViewFailedToLoadUserList,
+    InfoViewLeaveRoom,
+    InfoViewDeleteRoom
 } from './strings/infoview'
 
 export {
