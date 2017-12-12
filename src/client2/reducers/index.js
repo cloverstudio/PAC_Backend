@@ -41,7 +41,6 @@ const rootReducer = combineReducers({
     chat,
     infoView,
     stickers,
-    // createRoom,
     call,
     files,
     imageView,
