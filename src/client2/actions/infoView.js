@@ -214,7 +214,7 @@ export function loadMembers() {
 }
 
 export function deleteRoomConfirm(roomId){
-    return leaveRoomStart(roomId);
+    return leaveRoomConfirm(roomId);
 }
 
 export function leaveRoomConfirm(roomId){
@@ -222,15 +222,13 @@ export function leaveRoomConfirm(roomId){
     return (dispatch, getState) => {
 
         dispatch({
-            type: types.InfoViewDeleteRoomConfirm,
+            type: types.InfoViewLeaveRoomConfirm,
             roomId
         });
 
     }
 
 }
-
-
 
 export function deleteRoom(roomId){
     return leaveRoom(roomId);

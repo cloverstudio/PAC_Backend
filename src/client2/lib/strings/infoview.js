@@ -76,3 +76,7 @@ export const InfoViewLeaveRoom = {
 export const InfoViewDeleteRoom = {
     EN:"Delete Room"
 }
+
+export const InfoViewLeaveRoomConfirm = {
+    EN:"Press Again to Proceed"
+}

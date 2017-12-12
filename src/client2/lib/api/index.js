@@ -63,3 +63,4 @@ export{
     callUpdateProfile,
     callUpdatePassword
 } from './user';
+

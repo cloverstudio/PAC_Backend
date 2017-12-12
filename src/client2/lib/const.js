@@ -76,6 +76,11 @@ export const CallMediaTypeVideo = 2;
 export const CallWindowStateMax = 1;
 export const CallWindowStateMin = 2;
 
+export const imgMimeType = 'image';
+export const audioMimeType = 'audio';
+export const appMimeType = 'application';
+export const pdfMimeSubType = 'application/pdf';
+export const svgXmlMimeSubtype = 'svg+xml';
 export const RoomModeCreate = 1;
 export const RoomModeEdit = 2;
 
