@@ -48,12 +48,10 @@ export{
     callBlock
 } from './block';
 
-<<<<<<< HEAD
 export {
     fileUploadWrapper
 } from './upload';
 
-=======
 
 export{
     callSearchMessage,
@@ -65,4 +63,4 @@ export{
     callUpdateProfile,
     callUpdatePassword
 } from './user';
->>>>>>> 095cf101051f40faf96867c028d52ec94baf1276
+
