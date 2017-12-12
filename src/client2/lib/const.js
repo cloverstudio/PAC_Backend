@@ -21,6 +21,8 @@ export const ApiUrlMute = "/user/mute";
 export const ApiUrlBlock = "/user/block";
 export const ApiUrlGetGroupUserList = "/group/users/";
 export const ApiUrlGetRoomUserList = "/room/users/";
+export const ApiUrlFile = "/file/";
+export const ApiUrlFileUpload ="/file/upload";
 
 export const ErrorCodeInvalidToken = 4000007;
 
@@ -49,7 +51,7 @@ export const MessageFileUploading = 10000;
 
 export const ApiDefauleListItemCount = 20;
 
-export const urlRegularExpression = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})$/;
+export const urlRegularExpression = /\bhttps?:\/\/\S+/gi;
 
 export const CallFailedUserOffline = 1;
 export const CallFailedUserBusy = 2;
@@ -64,3 +66,9 @@ export const CallMediaTypeVideo = 2;
 
 export const CallWindowStateMax = 1;
 export const CallWindowStateMin = 2;
+
+export const imgMimeType = 'image';
+export const audioMimeType = 'audio';
+export const appMimeType = 'application';
+export const pdfMimeSubType = 'application/pdf';
+export const svgXmlMimeSubtype = 'svg+xml';

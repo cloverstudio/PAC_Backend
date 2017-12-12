@@ -44,3 +44,7 @@ export{
     callBlock
 } from './block';
 
+export {
+    fileUploadWrapper
+} from './upload';
+

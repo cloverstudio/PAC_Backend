@@ -113,6 +113,17 @@ const infoViewState = (state = false, action) => {
     }
 }
 
+const imageViewState = (state = false, action) => {
+    switch(action.type) {
+        case types.ChatShowImageView:
+            return true;
+        case types.ChatHideImageView:
+            return false;
+        default:
+            return state;
+    }
+}
+
 
 export default combineReducers({
     notificationState,
@@ -124,5 +135,6 @@ export default combineReducers({
     stickersViewState,
     sidebarState,
     historyBarState,
-    infoViewState
+    infoViewState,
+    imageViewState
 });;

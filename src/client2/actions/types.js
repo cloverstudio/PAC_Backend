@@ -19,6 +19,8 @@ export const ChatHideGroupsView = 'Chat/HideGroupsView';
 export const UserInfoTabChange = 'Chat/UserInfoTabChange';
 export const GroupInfoTabChange = 'Chat/GroupInfoTabChange';
 export const RoomInfoTabChange = 'Chat/RoomInfoTabChange';
+export const ChatShowImageView ='Chat/ShowImageView';
+export const ChatHideImageView ='Chat/HideImageView';
 
 export const ChatShowStickersView = 'Chat/ShowStickersView';
 export const ChatHideStickersView = 'Chat/HideStickersView';
@@ -59,6 +61,7 @@ export const ChatLoadOldMessagesSucceed = 'Chat/LoadOldMessagesSucceed';
 export const ChatLoadMessageSucceed = 'Chat/LoadMessageSucceed';
 export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';
 export const ChatSendMessage = 'Chat/SendMessage';
+export const ChatSendMessageInBg = 'Chat/SendMessageInBg';
 export const ChatReceiveMessage = 'Chat/ReceiveMessage';
 export const ChatStartedTyping = 'Chat/StartedTyping';
 export const ChatStoppedTyping = 'Chat/StoppedTyping';
@@ -71,6 +74,11 @@ export const ChatHideHistory = 'Chat/HideHistory';
 export const ChatShowInfoView = 'Chat/ShowInfoView';
 export const ChatHideInfoView = 'Chat/HideInfoView';
 export const ChatChangeInputValue = 'Chat/ChangeInputValue';
+
+export const ChatStartFileUpload = 'Chat/StartFileUpload';
+export const ChatFileUploadSucceed = 'Chat/FileUploadSucceed';
+export const ChatFileUploadFailed = 'Chat/FileUploadFailed';
+export const ChatFileUploadProgress = 'Chat/FileUploadProgress';
 
 // Info
 export const InfoViewLoadDone = 'InfoView/LoadDone';

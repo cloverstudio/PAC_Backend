@@ -13,6 +13,8 @@ import infoView from './infoview';
 import stickers from './stickers';
 import createRoom from './createRoom';
 import call from './call';
+import files from './files';
+import imageView from './imageView';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -36,7 +38,9 @@ const rootReducer = combineReducers({
     infoView,
     stickers,
     createRoom,
-    call
+    call,
+    files,
+    imageView
 });
 
 export default rootReducer;

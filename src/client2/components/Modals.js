@@ -11,6 +11,7 @@ import Toast from './Toast';
 import IncomingCallDialog from './call/IncomingCallDialog';
 import OutgoingCallDialog from './call/OutgoingCallDialog';
 import CallingDialog from './call/CallingDialog';
+import ImageView from './chat/ImageView';
 
 class Modals extends Component {
 
@@ -25,6 +26,7 @@ class Modals extends Component {
                 <IncomingCallDialog />
                 <OutgoingCallDialog />
                 <CallingDialog />
+                <ImageView/>
             </div>
         );
     }
