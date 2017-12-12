@@ -150,18 +150,35 @@ class RoomInfo extends Component {
                             <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
                         </div>
 
-                        <div className="media">
+                        {this.props.confirmRoomId == this.props.room._id ?
 
-                            {user.userData._id == this.props.room.owner ?
-                                <button onClick={() => { this.props.deleteRoomConfirm(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
-                                    <label><i className="ti-close"></i></label>{strings.InfoViewDeleteRoom[user.lang]}
-                                </button> 
-                                :
-                                <button onClick={() => { this.props.leaveRoomConfirm(this.props.room._id) }}className="btn btn-label btn-primary btn-danger btn-block">
-                                    <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoom[user.lang]}
-                                </button> 
-                            }
-                        </div>
+                            <div className="media">
+                                {user.userData._id == this.props.room.owner ?
+                                    <button onClick={() => { this.props.deleteRoom(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
+                                        <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoomConfirm[user.lang]}
+                                    </button> 
+                                    :
+                                    <button onClick={() => { this.props.leaveRoom(this.props.room._id) }}className="btn btn-label btn-primary btn-danger btn-block">
+                                        <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoomConfirm[user.lang]}
+                                    </button> 
+                                }
+                            </div>
+
+                            :
+
+                            <div className="media">
+                                {user.userData._id == this.props.room.owner ?
+                                    <button onClick={() => { this.props.deleteRoomConfirm(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
+                                        <label><i className="ti-close"></i></label>{strings.InfoViewDeleteRoom[user.lang]}
+                                    </button> 
+                                    :
+                                    <button onClick={() => { this.props.leaveRoomConfirm(this.props.room._id) }}className="btn btn-label btn-primary btn-danger btn-block">
+                                        <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoom[user.lang]}
+                                    </button> 
+                                }
+                            </div>
+                        }
+
 
                         <div className="media">
                             <div className="media-body">
@@ -255,7 +272,8 @@ const mapStateToProps = (state) => {
         room: state.infoView.room,
         timestampByChat: state.chat.timestampByChat,
         muted: state.infoView.muted,
-        members: state.infoView.members
+        members: state.infoView.members,
+        confirmRoomId: state.infoView.confirmRoomId
     };
 };
 

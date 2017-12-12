@@ -120,7 +120,15 @@ const members = (state = initial.members, action) => {
     }
 }
 
-
+const confirmRoomId = (state = null, action) => {
+    
+    switch (action.type) {
+        case types.InfoViewLeaveRoomConfirm:
+            return action.roomId;
+        default:
+            return state;
+    }
+}
 
 
 export default combineReducers({
@@ -130,5 +138,6 @@ export default combineReducers({
     isLoading,
     muted,
     blocked,
-    members
+    members,
+    confirmRoomId
 });
