@@ -12,16 +12,16 @@ import user from '../lib/user';
 import {store} from '../index';
 
 
-export function searchMessage(keyworkd) {
+export function searchMessage(keyword) {
 
     return (dispatch, getState) => {
 
         dispatch({
             type: types.SearchMessageStart,
-            keyworkd
+            keyword
         });
 
-        callSearchMessage(keyworkd).then( (data) => {
+        callSearchMessage(keyword).then( (data) => {
 
             dispatch({
                 type: types.SearchMessageSuccess,

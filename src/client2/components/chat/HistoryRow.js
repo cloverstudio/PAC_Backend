@@ -19,6 +19,15 @@ class HistoryRow extends Component {
         super();
     }
 
+    componentWillReceiveProps(nextProps){
+
+        if(this.props.history != nextProps.history){
+
+            console.log('aaaaaaaaaaaaaaaaaaa--------');
+            
+        }
+    }
+    
     selected = () => {
 
         if(this.props.history.chatType == constant.ChatTypePrivate){
