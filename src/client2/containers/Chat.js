@@ -38,6 +38,8 @@ class Main extends Base {
 
             if(chatId && chatId.length > 0)
                 this.props.loadNewChat(chatId);
+            else
+                this.props.clearChat();
 
         }
     }
@@ -112,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
         openChatByChatId: (chatId) => dispatch(actions.chat.openChatByChatId(chatId)),
         loadNewChat: (chatId) => dispatch(actions.chat.loadNewChat(chatId)),
+        clearChat: () => dispatch(actions.chat.clearChat()),
         hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),

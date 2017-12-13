@@ -84,6 +84,12 @@ const isLoading = (state = initial.isLoading, action) => {
             return true;
         case types.InfoViewLoadDone:
             return false;
+        case types.InfoViewLeaveRoomStart:
+            return true;
+        case types.InfoViewLeaveRoomSucceed:
+            return false;
+        case types.InfoViewLeaveRoomFailed:
+            return false;
         default:
             return state;
     }

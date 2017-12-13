@@ -1,20 +1,23 @@
-import { push } from 'react-router-redux'
+import { push,goBack } from 'react-router-redux'
 
 import * as types from './types';
 import * as actions from '../actions';
 import * as strings from '../lib/strings';
 import * as constant from '../lib/const';
+import * as utils from '../lib/utils';
 
 import {
     callGetHistory,
     callBlock,callMute,
     callGroupUserList,
-    callRoomUserList
+    callRoomUserList,
+    callLeaveRoom
 } from '../lib/api/';
 
 import user from '../lib/user';
 import {store} from '../index';
 
+import * as historyActions from './history';
 
 export function loadDone() {
     
@@ -238,8 +241,36 @@ export function leaveRoom(roomId){
     
     return (dispatch, getState) => {
 
+        const state = getState();
 
+        dispatch({
+            type: types.InfoViewLeaveRoomStart
+        });
 
+        callLeaveRoom(
+            state.infoView.confirmRoomId
+        ).then ( (result) => {
+
+            dispatch({
+                type:types.InfoViewLeaveRoomSucceed
+            })
+
+            //store.dispatch(push(`${utils.url('/chat')}`));
+            store.dispatch(goBack());
+
+            dispatch(historyActions.loadHistoryInitial());
+            
+        }).catch( (err) => {
+
+            console.error(err);
+
+            dispatch(actions.notification.showToast(strings.InfoViewFailedToLeave[user.lang]));
+
+            dispatch({
+                type:types.InfoViewLeaveRoomFailed
+            })
+
+        });
     }
 
 }
