@@ -64,6 +64,7 @@ class Conversation extends Component {
 
     handleDragEnter = e => {
         e.preventDefault();
+
         if (e.target.classList.contains('chat-content')){
             e.target.classList.add('dragging-over');
             this.props.showDropNotification('Drop files now');
@@ -72,6 +73,17 @@ class Conversation extends Component {
     }
 
     handleDrop = e => {
+        e.preventDefault();
+        Array.from(e.dataTransfer.files).forEach( file => {
+            const data = new FormData();
+            data.append('file', file);
+            this.props.startFileUpload(data);
+        });
+        if (e.target.classList.contains('chat-content')){
+            e.target.classList.remove('dragging-over');
+            this.props.hideDropNotification();
+        }
+       
     }
 
     handleDragLeave = e => {
@@ -80,6 +92,10 @@ class Conversation extends Component {
             e.target.classList.remove('dragging-over');
             this.props.hideDropNotification();
         }
+    }
+
+    handleDragOver = e => {
+        e.preventDefault();
     }
     
     render() {
@@ -203,7 +219,8 @@ class Conversation extends Component {
                 onScroll={ this.onScroll }
                 onDragEnter={this.handleDragEnter}
                 onDrop={this.handleDrop} 
-                onDragLeave={this.handleDragLeave}                
+                onDragLeave={this.handleDragLeave}
+                onDragOver={this.handleDragOver}                
                 className="scrollable flex-grow chat-content">
 
                     {conversationItems}
