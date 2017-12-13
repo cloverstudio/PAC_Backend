@@ -213,9 +213,9 @@ const messageList = (state = initial.messageList, action) => {
 
         newState = oldState.concat({
             localID: action.localFileId,
-            userID: user.userData._id,
-            created: new Date().getTime(),
-            type: constant.MessageTypeFile
+            userID: action.userID,
+            created: action.created,
+            type: action.MsgType
         })
     }
 

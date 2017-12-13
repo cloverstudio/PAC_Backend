@@ -357,8 +357,11 @@ export function startFileUpload(file){
 
         dispatch({
             type: types.ChatStartFileUpload,
-            chatId:originChatId,
-            localFileId
+            chatId: originChatId,
+            localFileId,
+            created: new Date().getTime(),
+            MsgType: constant.MessageTypeFile,
+            userID: user.userData._id
         });
         
         fileUpload(file, function(progress, localFileId, originChatId){

@@ -85,16 +85,25 @@ class Conversation extends Component {
     render() {
 
         var sortedMsgs = new Map();
+        let messageList = [...this.props.messageList];
 
-        if (this.props.messageList.length > 0){
+        if(typeof this.props.files[this.props.currentChatId] !== 'undefined'){
+        
+            let filesInProgress = Object.values(this.props.files[this.props.currentChatId]);
+            filesInProgress = filesInProgress.filter(file => this.props.messageList.find(msg => msg.localID === file.localID) === undefined )
 
-            let currUsr = this.props.messageList[0].userID;
-            let currDat = new Date(this.props.messageList[0].created).getDate();
+            messageList = messageList.concat(filesInProgress);
+        }
+        
+        if (messageList.length > 0){
+
+            let currUsr = messageList[0].userID;
+            let currDat = new Date(messageList[0].created).getDate();
             let currMsgs = [];
             
             sortedMsgs.set(currDat, []);
             
-            for (let msg of this.props.messageList){
+            for (let msg of messageList){
                 let msgUsr = msg.userID;
                 let msgDat = new Date(msg.created).getDate();
                 
@@ -117,9 +126,9 @@ class Conversation extends Component {
             sortedMsgs.get(currDat).push(currMsgs);
         }
         
-        let conversationItems = [];
+        let conversationItems = [];        
 
-        {sortedMsgs.forEach( (messagesByDate, date) => {
+        sortedMsgs.forEach( (messagesByDate, date) => {
 
             if (this.todayDate === date) {conversationItems.push(<div key={date} className='media media-meta-day'>Today</div>);}
             if (this.todayDate-1 === date) {conversationItems.push(<div key={date} className='media media-meta-day'>Yesterday</div>);}
@@ -172,7 +181,7 @@ class Conversation extends Component {
 
             })
                                     
-        })}
+        })
         
         let chatContainerClass = "chat-container card card-bordered flex-column";
         if(this.props.infoViewState)
@@ -219,7 +228,8 @@ const mapStateToProps = (state) => {
         messageList: state.chat.messageList,
         user:user.userData,
         UsersTyping: state.chat.typing,
-        infoViewState: state.chatUI.infoViewState
+        infoViewState: state.chatUI.infoViewState,
+        files: state.files
     };
 };
 
