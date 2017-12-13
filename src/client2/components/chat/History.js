@@ -36,6 +36,10 @@ class History extends Component {
 
     componentWillReceiveProps(nextProps){
 
+        if(this.props.historyList != nextProps.historyList){
+
+
+        }
     }
     
 	componentDidMount() {
@@ -67,7 +71,10 @@ class History extends Component {
                         <div className="history-list media-list-body">
 
                             {this.props.historyList.map( (history) => {
+
+                                history = Object.assign({},history);
                                 return <HistoryRow key={history._id} history={history} />
+                                
                             })}
 
                         </div>

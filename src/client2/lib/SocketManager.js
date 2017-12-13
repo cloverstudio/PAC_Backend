@@ -50,15 +50,17 @@ class SocketManager {
         });
 
         this.ioNsp.on('newmessage', function(obj){
-            if (store.getState().chat.chatId === obj.roomID){
-                
-                store.dispatch(actions.chat.receiveMessage(obj));
 
+            if (store.getState().chat.chatId === obj.roomID){
                 this.emit('openMessage', {
                     messageID: obj._id,
                     userID: user.userData._id
                 })
             }
+
+            console.log('ssss');
+            store.dispatch(actions.chat.receiveMessage(obj));
+
         });
             
         this.ioNsp.on('updatemessages', function(ary){

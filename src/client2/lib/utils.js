@@ -41,6 +41,23 @@ export function getChatIdFromUrl(url){
     return url;
 }
 
+export function getTargetUserIdFromRoomId(roomId){
+
+    const chunks = roomId.split('-');
+
+    if(chunks.length < 3)
+        return null;
+
+    const user1 = chunks[1];
+    const user2 = chunks[2];
+    
+    if(user1 == user.userData._id)
+        return user2;
+    else
+        return user1;
+}
+
+
 export function getRandomString(length){
 
     if(length == undefined)

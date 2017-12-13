@@ -5,7 +5,7 @@ import * as types from '../actions/types';
 const keyword = (state = "", action) => {
     switch (action.type) {
         case types.SearchMessageStart:
-            return action.keyworkd;
+            return action.keyword;
         default:
             return state;
     }
