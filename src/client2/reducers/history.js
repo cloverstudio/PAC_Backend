@@ -48,15 +48,9 @@ const historyList = (state = [], action) => {
 
         let isExists = false;
 
-        console.log('chatId',chatId);
-
         const newHistoryList =  state.map( (history) => {
 
-            console.log('history',history);
-
             if(history.chatId == chatId){
-
-                console.log('newMessage',newMessage);
 
                 isExists = true;
 
@@ -65,17 +59,45 @@ const historyList = (state = [], action) => {
                 history.lastMessage = newMessage;
                 history.lastUpdateUser = newMessage.user;
 
+                if(!action.currentChat)
+                    history.unreadCount = history.unreadCount + 1;
+
             }
 
             return history;
 
         });
 
-        return newHistoryList.sort( (obj1,obj2) => {
-            return -1 * ( obj1.lastUpdate - obj2.lastUpdate ) ;
-        });
+        if(isExists){
+            return newHistoryList.sort( (obj1,obj2) => {
+                return -1 * ( obj1.lastUpdate - obj2.lastUpdate ) ;
+            });
+        } else {
+            
+        }
 
     }
+
+    if(action.type == types.ChatOpenByUser ||
+        action.type == types.ChatOpenByGroup ||
+        action.type == types.ChatOpenByRoom){
+
+
+        const chunks = action.chatId.split('-');
+        let chatId = chunks[chunks.length - 1];
+
+        if(action.type == types.ChatOpenByUser)
+            chatId = utils.getTargetUserIdFromRoomId(action.chatId);
+
+        const newHistoryList =  state.map( (history) => {
+            history.unreadCount = 0;
+            return history;
+        });
+
+        return newHistoryList;
+
+    }
+
 
     return state;
 }

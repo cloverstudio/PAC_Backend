@@ -186,11 +186,14 @@ const messageList = (state = initial.messageList, action) => {
     }
 
     if(action.type === types.ChatSendMessage){
-        newState = oldState.concat(action.message)
+        newState = oldState.concat(action.message);
     }
 
     if(action.type === types.ChatReceiveMessage){
 
+        if(!action.currentChat)
+            return state;
+            
         if (action.message.userID === user.userData._id){
             let myMessageIndex = oldState.findIndex(message => message.localID === action.message.localID)
     

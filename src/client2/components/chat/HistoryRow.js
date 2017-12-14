@@ -23,7 +23,6 @@ class HistoryRow extends Component {
 
         if(this.props.history != nextProps.history){
 
-            console.log('aaaaaaaaaaaaaaaaaaa--------');
             
         }
     }

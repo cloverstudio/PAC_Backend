@@ -219,10 +219,48 @@ export function loadOldMessages(chatId, lastMessage){
 }
 
 export function receiveMessage(message){
-    return{
-        type: types.ChatReceiveMessage,
-        message
-    }
+
+    const roomID = message.roomID;
+
+    return (dispatch, getState) => {
+
+        if(getState().chat.chatId == roomID){
+            dispatch({
+                type: types.ChatReceiveMessage,
+                message,
+                currentChat:true
+            });
+        }else{
+            dispatch({
+                type: types.ChatReceiveMessage,
+                message,
+                currentChat:false
+            });
+        }
+
+        const historyList = getState().history.historyList;
+        const chunks = message.roomID.split('-');
+        let chatId = chunks[chunks.length - 1];
+        let chatType = chunks[0];
+
+        if(chatType == constant.ChatTypePrivate){
+            chatId = utils.getTargetUserIdFromRoomId(message.roomID);
+        }
+
+        let isExists = false;
+
+        historyList.forEach( (history) => {
+            if(history.chatId == chatId)
+                isExists = true;
+        });
+
+        if(!isExists){
+            // check history and if didn't exist refresh all history
+            dispatch(actions.history.loadHistoryInitial());
+        }
+        
+    };
+
 }
 
 export function sendMessage(messageType, content, localID = utils.getRandomString()){

@@ -64,6 +64,9 @@ export const ChatLoadMessageFailed = 'Chat/LoadMessageFailed';
 export const ChatSendMessage = 'Chat/SendMessage';
 export const ChatSendMessageInBg = 'Chat/SendMessageInBg';
 export const ChatReceiveMessage = 'Chat/ReceiveMessage';
+export const ChatReceiveMessageInChat = 'Chat/ReceiveMessageInChat';
+
+
 export const ChatStartedTyping = 'Chat/StartedTyping';
 export const ChatStoppedTyping = 'Chat/StoppedTyping';
 export const ChatSendStartTyping = 'Chat/SendStartTyping';
