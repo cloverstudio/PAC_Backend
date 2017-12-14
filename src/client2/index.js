@@ -27,6 +27,7 @@ if (module.hot) {
             document.getElementById('root')
         );
     });
+    
 }
 
 export const store = theStore;

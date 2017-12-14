@@ -82,7 +82,6 @@ const historyList = (state = [], action) => {
         action.type == types.ChatOpenByGroup ||
         action.type == types.ChatOpenByRoom){
 
-
         const chunks = action.chatId.split('-');
         let chatId = chunks[chunks.length - 1];
 
@@ -90,8 +89,12 @@ const historyList = (state = [], action) => {
             chatId = utils.getTargetUserIdFromRoomId(action.chatId);
 
         const newHistoryList =  state.map( (history) => {
-            history.unreadCount = 0;
+
+            if(history.chatId == chatId)
+                history.unreadCount = 0;
+
             return history;
+            
         });
 
         return newHistoryList;
