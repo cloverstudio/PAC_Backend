@@ -13,3 +13,7 @@ export const FailedToRemoveFromFavorites = {
     EN:"Failed to remove from favorites."
 }
 
+export const FailedToAddToFavorites = {
+    EN: "Failed to add to favorites."
+}
+

@@ -29,9 +29,11 @@ export const ApiUrlRemoveUserFromRoom = "/room/users/remove";
 export const ApiUrlSearchMessage = "/message/search/";
 export const ApiUrlFavorites = "/message/favorite/list/";
 export const ApiUrlRemoveFromFavorite = "/message/favorite/remove";
+export const ApiUrlAddToFavorite = "message/favorite/add";
 export const ApiUrlUpdateProfile = "/user/update";
 export const ApiUrlUpdatePassword = "/user/updatepassword";
 export const ApiUrlLeaveRoom = "/room/leave";
+export const ApiUrlGetMessageInfo = "/message/seenby/"
 
 export const ErrorCodeInvalidToken = 4000007;
 
@@ -60,7 +62,7 @@ export const MessageFileUploading = 10000;
 
 export const ApiDefauleListItemCount = 20;
 
-export const urlRegularExpression = /\bhttps?:\/\/\S+/gi;
+export const urlRegularExpression = /\bhttps?:\/\/\S+/i;
 
 export const CallFailedUserOffline = 1;
 export const CallFailedUserBusy = 2;

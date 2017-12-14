@@ -131,8 +131,13 @@ export {
 export {
     FavoriteTitle,
     FailedToLoadFavorites,
-    FailedToRemoveFromFavorites
+    FailedToRemoveFromFavorites,
+    FailedToAddToFavorites
 } from './strings/favorite'
+
+export {
+    FailedToLoadMessageInfo
+} from './strings/messageInfo'
 
 export {
     ProfileTitle,

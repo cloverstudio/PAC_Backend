@@ -56,7 +56,9 @@ export {
 export{
     callSearchMessage,
     callLoadFavorites,
-    callRemoveFromFavorite
+    callRemoveFromFavorite,
+    callAddToFavorite,
+    callGetMessageInfo
 } from './message';
 
 export{

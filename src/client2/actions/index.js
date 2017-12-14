@@ -16,6 +16,7 @@ import * as searchMessage from './searchMessage';
 import * as favorites from './favorites';
 import * as profile from './profile';
 import * as password from './password';
+import * as messageInfo from './messageInfo';
 
 export function filterTable(filter) {
     return {
@@ -40,5 +41,6 @@ export {
     searchMessage,
     favorites,
     profile,
-    password
+    password,
+    messageInfo
 }

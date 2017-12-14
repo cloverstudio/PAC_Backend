@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import * as actions from '../../../actions';
 
 import Encryption from '../../../lib/encryption/encryption';
 import * as constant from '../../../lib/const';
@@ -16,32 +17,23 @@ class MessageText extends Component {
 
     render() {
         const message = this.props.message;
-        let messageContent;
         const messageClass = typeof message._id === 'undefined' ? ' unsent' : '';
         
-        messageContent = Encryption.decryptText(message.message);
-        
-        let urls = messageContent.match(constant.urlRegularExpression);
- 
-        if (urls){    
-            let formatted = [];
-            let lastUrlPos = 0;
-            
-            for (let url of urls){
-                let urlIndex = messageContent.indexOf(url);
-                
-                formatted.push(messageContent.slice(lastUrlPos, urlIndex))
-                formatted.push(<a key={url} href={url}><u>{url}</u></a>)
-                lastUrlPos = urlIndex + url.length;
-            }
-            if (messageContent.length != lastUrlPos){
-                formatted.push(messageContent.slice(lastUrlPos));
-            }
-            messageContent = formatted;
+        const messageContent = Encryption.decryptText(message.message);
+
+        let formattedMessages;
+
+        if (messageContent.length === 0){
+            formattedMessages = 'This message is deleted';
         }
-        
+        else{
+            //todo: better way to mark links
+            formattedMessages = messageContent.split(/( |\n)/)
+            .map((word,i) => constant.urlRegularExpression.test(word) ? <a key={i} href={word} target="_blank"><u> {word} </u></a> : word)
+        }
+
         return(
-            <p className={messageClass}>{messageContent}</p>
+            <p className={messageClass} onClick={e => this.props.getMessageInfo(message._id)}>{formattedMessages}</p>
         );
     }
 
@@ -54,6 +46,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {  
+        getMessageInfo : messageId => dispatch(actions.messageInfo.getMessageInfo(messageId))
     };
 };
 

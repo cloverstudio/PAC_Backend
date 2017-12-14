@@ -18,48 +18,34 @@ class ImageView extends Component {
     static propTypes = {
     }
 
-    toggleImgLoading = () => {
+    setImgLoading = (val = false) => {
         this.setState({
-            isLoading : !this.state.isLoading
+            isLoading : val
         })
     }
-
+    
     render() {
-        const mainStyle = {
-            display: this.props.visibility ? 'block' : 'none'
-        }
+        
         return(
-        <div className="modal-open">
-            <div className="modal modal-center fade show image-view" id="modal-center" style={mainStyle}>
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                        <button type="button" className="close" data-dismiss="modal" 
+            <div className={this.props.visibility ? 'imageView imageView-opened': 'imageView'}>
+                    {this.props.visibility 
+                        ? <img className={this.state.isLoading ? 'imageView-img': 'imageView-img loaded'} 
+                        src={config.APIEndpoint + constant.ApiUrlFile + this.props.imgId}
+                        alt="image" onLoad={e=> this.setImgLoading()}/> 
+                        : null}
+
+                    {this.state.isLoading 
+                        ? <span>Loading...</span>
+                        : null}
+                    
+                    <span className="imageView-close" 
                         onClick={e => {
                             this.props.hideImageView(); 
-                            this.toggleImgLoading()
-                            }}>
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        </div>
-                        <div className="modal-body">
-                            {this.state.isLoading ?
-                            <span className="spinner-linear">
-                                <span className="line"></span>
-                            </span> : null}
-                            {this.props.visibility ? 
-                            <img src={config.APIEndpoint + constant.ApiUrlFile + this.props.imgId}
-                            alt="image"
-                            onLoad={e=> this.toggleImgLoading()}/> : null}
-                        </div>
-                
-                    </div>
-                </div>
+                            this.setImgLoading(true)
+                            }}><i className="ti-close"></i></span>
             </div>
-            {this.props.visibility ? <div className="modal-backdrop fade show"></div>:null } 
-        </div> )
+        )
     }
-
 }
 
 const mapStateToProps = (state) => {

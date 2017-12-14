@@ -141,3 +141,15 @@ export function hideImageView(){
         type: types.ChatHideImageView,
     }
 }
+
+export function showMessageInfoView(){
+    return {
+        type: types.ChatShowMessageInfoView
+    }
+}
+
+export function hideMessageInfoView(){
+    return {
+        type: types.ChatHideMessageInfoView
+    }
+}

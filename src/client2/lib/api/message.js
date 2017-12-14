@@ -49,5 +49,33 @@ export function callRemoveFromFavorite(messageId){
 
 }
 
+export function callAddToFavorite(messageId){
+
+    return api.post(constant.ApiUrlAddToFavorite,{
+        messageId
+    })
+    .then( (response) => {
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to add to favorites");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    });
+}
+
+export function callGetMessageInfo(messageId){
+
+    return api.get(constant.ApiUrlGetMessageInfo + messageId)
+    .then( response => {
+
+        if (!response.code || response.code != 1){
+            return Promise.reject("Failed to get message info");
+        }
+        else {
+            return Promise.resolve(response.data);
+        }
+    })
+}
 
 

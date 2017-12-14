@@ -21,6 +21,8 @@ export const GroupInfoTabChange = 'Chat/GroupInfoTabChange';
 export const RoomInfoTabChange = 'Chat/RoomInfoTabChange';
 export const ChatShowImageView ='Chat/ShowImageView';
 export const ChatHideImageView ='Chat/HideImageView';
+export const ChatShowMessageInfoView = 'Chat/ShowMessageInfoView';
+export const ChatHideMessageInfoView = 'Chat/HideMessageInfoView';
 
 export const ChatShowStickersView = 'Chat/ShowStickersView';
 export const ChatHideStickersView = 'Chat/HideStickersView';
@@ -152,6 +154,7 @@ export const FavoriteLoadMessageSuccess = 'Favorite/LoadMessageSuccess';
 export const FavoriteLoadMessageFailed = 'Favorite/LoadMessageFailed';
 export const FavoriteRemoveFavorite = 'Favorite/RemoveFavorite';
 export const FavoriteStartRemoveFavorite = 'Favorite/StartRemoveFavorite';
+export const FavoriteAddToFavorite = 'Favorite/AddFavorite';
 
 // Proflie
 export const ProfileTypeName = 'Profile/TypeName';
@@ -176,3 +179,8 @@ export const PasswordSaveStart = 'Password/SaveStart';
 export const PasswordSaveSucceed = 'Password/SaveSucceed';
 export const PasswordSaveFailed = 'Password/SaveFailed';
 export const PasswordLogout = 'Password/Logout';
+
+//message
+export const MessageInfoLoadStart = 'MessageInfo/LoadStart';
+export const MessageInfoLoadSucceed = 'MessageInfo/LoadSucceed';
+export const MessageInfoLoadFailed = 'MessageInfo/LoadFailed';
