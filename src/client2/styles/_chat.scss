@@ -208,6 +208,9 @@
                 .tab-content>.active{
                     display:flex;
                 }
+                .card-body{
+                    padding:0;
+                }
             }
             .stickers-visible{
                 display:block;
@@ -320,6 +323,21 @@
         background-color: $color-bg-light;
     }
 
+}
+
+.image-view{
+    .modal-header{
+        justify-content: flex-end;
+    }
+    .modal-body{
+        text-align: center;
+        .spinner-linear{
+            margin-bottom:10px;
+        }
+        img{
+            max-height:80vh;
+        }
+    }
 }
 
 
