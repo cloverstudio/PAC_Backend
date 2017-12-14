@@ -37,7 +37,7 @@ class Notification extends Component {
             toolbarIcon += ' has-new';
 
         return (
-            <li className="dropdown d-none d-md-block notification">
+            <li className="dropdown notification">
                 
                 <span className={toolbarIcon} onClick={this.toggleNotification}>
                     <i className="fa fa-bell-o"></i>
