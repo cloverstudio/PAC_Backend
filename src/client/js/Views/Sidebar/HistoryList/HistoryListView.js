@@ -317,8 +317,10 @@ var HistoryListView = Backbone.View.extend({
                 if(row.lastMessage.type == 4)
                     row.lastMessage.message = localzationManager.get("Contact");
 
-                if(row.lastMessage.type == 5)
+                if(row.lastMessage.type == 5) {
+                    row.lastMessage.downloadURL = row.lastMessage.message;                
                     row.lastMessage.message = localzationManager.get("Sticker");
+                }
         
                 if(row.lastMessage.user) {
                     if (row.lastMessage.user._id.toString() == loginUserManager.user._id.toString())

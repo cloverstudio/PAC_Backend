@@ -124,7 +124,7 @@ LeaveRoomController.prototype.init = function(app){
             }else{
                  
                 room.update({
-                    modifined: Utils.now(),
+                    modified: Utils.now(),
                     users:newUsersList
                 },{},function(err,updateResult){
                     

@@ -22,6 +22,8 @@ var UserModel = require( pathTop + 'Models/User');
 var RoomModel = require( pathTop + 'Models/Room');
 var tokenChecker = require( pathTop + 'lib/authApi');
 
+var SocketAPIHandler = require( pathTop + 'SocketAPI/SocketAPIHandler');
+
 var BackendBase = require('../BackendBase');
 
 var AddUsersToRoomController = function(){}
@@ -196,7 +198,17 @@ AddUsersToRoomController.prototype.init = function(app){
             	});
 
             },
-            
+            function (result,done){
+
+                done(null, result);
+                
+            	result.users.forEach((user) => {
+                    
+                    SocketAPIHandler.joinTo(user._id, Const.chatTypeRoom, roomId);
+                    
+                });
+
+            }
         ],
             function (err, result) {
                 
@@ -205,7 +217,7 @@ AddUsersToRoomController.prototype.init = function(app){
                     self.errorResponse(response,Const.httpCodeServerError);   
                                      
                 }else {
-                              
+                    
                     self.successResponse(response,Const.responsecodeSucceed,{
                         room : result.updatedData
                     });
