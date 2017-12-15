@@ -23,7 +23,6 @@ export const ChatShowImageView ='Chat/ShowImageView';
 export const ChatHideImageView ='Chat/HideImageView';
 export const ChatShowMessageInfoView = 'Chat/ShowMessageInfoView';
 export const ChatHideMessageInfoView = 'Chat/HideMessageInfoView';
-
 export const ChatShowStickersView = 'Chat/ShowStickersView';
 export const ChatHideStickersView = 'Chat/HideStickersView';
 export const ChatClearChat = 'Chat/ClearChat';
@@ -35,6 +34,9 @@ export const HistoryLoadInitialFailed = 'History/LoadInitialFailed';
 export const HistoryLoadStart = 'History/LoadStart';
 export const HistoryLoadSucceed = 'History/LoadSucceed';
 export const HistoryLoadFailed = 'History/LoadFailed';
+export const HistoryMarkAllStart = 'History/MarkAllStart';
+export const HistoryMarkAllSucceed = 'History/MarkAllSucceed';
+export const HistoryMarkAllFailed= 'History/MarkAllFailed';
 
 // UserList
 export const UserListLoadStart = 'UserList/LoadStart';

@@ -17,3 +17,17 @@ export function callGetHistory(page){
     });
     
 }
+
+export function callMarkAll(){
+
+    return api.post(constant.ApiUrlMarkAll).then( (response) => {
+
+        if(!response.code || response.code != 1){
+            return Promise.reject("Failed to mark all");
+        }else{
+            return Promise.resolve(response.data);
+        }
+
+    });
+    
+}

@@ -29,7 +29,8 @@ export {
 } from './strings/signup'
 
 export {
-    FailedToGetHistory
+    FailedToGetHistory,
+    FailedToMarkAll
 } from './strings/history'
 
 export {
@@ -160,3 +161,7 @@ export {
     PasswordSucceedDialogMessage
 } from './strings/password'
 
+export {
+    NotificationNoNotification,
+    NotificationReadAll
+} from './strings/notification'

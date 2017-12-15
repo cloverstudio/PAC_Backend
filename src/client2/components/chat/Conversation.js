@@ -206,29 +206,32 @@ class Conversation extends Component {
         return (
             
             <div className={chatContainerClass}>
-
-                {this.props.isLoading ?
-                    <div className="spinner-linear">
-                        <div className="line"></div>
-                    </div> : null
-                }
-
-                <ChatHeader/>
-
-                <div ref={ (scrollableConversation) => { this.scrollableConversation = scrollableConversation}} 
-                onScroll={ this.onScroll }
-                onDragEnter={this.handleDragEnter}
-                onDrop={this.handleDrop} 
-                onDragLeave={this.handleDragLeave}
-                onDragOver={this.handleDragOver}                
-                className="scrollable flex-grow chat-content">
-
-                    {conversationItems}
                 
-                </div> 
 
-                <ChatInput/>
-                <Stickers/>
+                    {this.props.isLoading ?
+                        <div className="spinner-linear">
+                            <div className="line"></div>
+                        </div> : null
+                    }
+
+                    <ChatHeader/>
+
+                    <div ref={ (scrollableConversation) => { this.scrollableConversation = scrollableConversation}} 
+                    onScroll={ this.onScroll }
+                    onDragEnter={this.handleDragEnter}
+                    onDrop={this.handleDrop} 
+                    onDragLeave={this.handleDragLeave}
+                    onDragOver={this.handleDragOver}                
+                    className="scrollable flex-grow chat-content">
+
+                        {conversationItems}
+                    
+                    </div> 
+
+                    <ChatInput/>
+                    <Stickers/>
+                
+
 
             </div>
 

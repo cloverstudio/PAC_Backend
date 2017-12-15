@@ -23,7 +23,9 @@ module.exports = {
         publicPath: basePath,
         historyApiFallback: {
             index: basePath + 'index.html'
-        }
+        },
+        host: "0.0.0.0",
+        disableHostCheck: true
     },
     output: {
         path: path.join(__dirname, '/dist/'),

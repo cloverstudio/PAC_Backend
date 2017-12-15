@@ -72,9 +72,9 @@ class SideBar extends Component {
 
 
                         <li className="menu-item">
-                            <a className="menu-link" href="#">
-                            <span className="icon fa fa-check"></span>
-                            <span className="title">{strings.SidebarMarkAll[user.lang]}</span>
+                            <a onClick={this.props.markAll} className="menu-link" href="javascript:void(0)">
+                                <span className="icon fa fa-check"></span>
+                                <span className="title">{strings.SidebarMarkAll[user.lang]}</span>
                             </a>
                         </li>
 
@@ -133,6 +133,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         showHistory: () => dispatch(actions.chatUI.showHistory()),
+        markAll: () => dispatch(actions.history.markAll()),
     };
 };
 

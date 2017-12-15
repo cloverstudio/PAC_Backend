@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import * as actions from '../../actions';
 import * as constant from '../../lib/const';
 import * as config from '../../lib/config';
+import * as strings from '../../lib/strings';
+import user from '../../lib/user';
 
 import AvatarImage from '../AvatarImage';
 import DateTime from '../DateTime';
@@ -28,7 +30,7 @@ class Notification extends Component {
 
     render() {
         
-        let notificationsMenuClass = "dropdown-menu dropdown-menu-right";
+        let notificationsMenuClass = "dropdown-menu ";
         if(this.props.notificationState)
             notificationsMenuClass += " show";
 
@@ -47,9 +49,19 @@ class Notification extends Component {
 
                     <div className="media-list media-list-hover media-list-divided media-list-xs">
 
+                        {this.props.notifications.length == 0 ?
+                            <a className="media" key="0">
+                                <div className="media-body">
+                                <p>
+                                    {strings.NotificationNoNotification[user.lang]}
+                                </p>
+                                </div>
+                            </a> : null
+                        }
+                        
                         {this.props.notifications.map( (message) => {
 
-                            const user = message.user;
+                            const targetUser = message.user;
                             const group = message.group;
                             const room = message.room;
                             let userClass = "avatar ";
@@ -76,44 +88,47 @@ class Notification extends Component {
 
                             }
 
-                            else if(user){
+                            else if(targetUser){
 
                                 avatarType = constant.AvatarUser;
 
-                                if(user.onlineStatus == 1)
+                                if(targetUser.onlineStatus == 1)
                                     userClass += " status-success";
 
-                                if(user.avatar && user.avatar.thumbnail){
-                                    fileId = user.avatar.thumbnail.nameOnServer;
+                                if(targetUser.avatar && targetUser.avatar.thumbnail){
+                                    fileId = targetUser.avatar.thumbnail.nameOnServer;
                                 }
                                 
                             }
 
                             return <a className="media" key={message._id}>
-                                <span className={userClass}>
-                                    <AvatarImage fileId={fileId} type={avatarType} />
-                                </span>
-                                <div className="media-body">
-                                <p>{message.user.name} : {message.message}</p>
-                                <DateTime timestamp={message.created} />
-                                </div>
-                            </a>
+                                    <span className={userClass}>
+                                        <AvatarImage fileId={fileId} type={avatarType} />
+                                    </span>
+                                    <div className="media-body">
+                                    <p>{message.user.name} : {message.message}</p>
+                                    <DateTime timestamp={message.created} />
+                                    </div>
+                                </a>
                         })}
 
                     </div>
 
-                    <div className="dropdown-footer">
-                        <div className="left">
-                            <a href="#">Read all notifications</a>
-                        </div>
+                    {this.props.notifications.length != 0 ?
+                    
+                        <div className="dropdown-footer">
+                            <div className="left">
+                                <a onClick={this.props.markAll} href="javascript:void(0)" >{strings.NotificationReadAll[user.lang]}</a>
+                            </div>
 
-                        <div className="right">
-                            <a href="javascript:void(0)" title="Mark all as read">
-                                <i className="fa fa-circle-o"></i>
-                            </a>
-                        </div>
+                            <div className="right">
+                                <a onClick={this.props.markAll} href="javascript:void(0)" title="Mark all as read">
+                                    <i className="fa fa-circle-o"></i>
+                                </a>
+                            </div>
+                        </div>: null
 
-                    </div>
+                    }
 
                 </div>
 
@@ -134,6 +149,7 @@ const mapDispatchToProps = (dispatch) => {
     return {       
         showNotifications: () => dispatch(actions.chatUI.showNotification()),
         hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
+        markAll: () => dispatch(actions.history.markAll()),
     };
 };
 
