@@ -7,6 +7,7 @@ var Utils = require('./utils');
 var loginUserManager = require('./loginUserManager');
 var soundManager = require('./SoundManager');
 var EncryptionManager = require('./EncryptionManager');
+var windowHandler = require('./windowManager');
 
 var NotificationManager = {
 
@@ -37,8 +38,8 @@ var NotificationManager = {
 
         if (obj.mutedUsersGroupRoom && obj.mutedUsersGroupRoom.indexOf(loginUserManager.user._id.toString()) != -1)
             return;
-        
-        if(obj.roomID == loginUserManager.currentConversation)
+
+        if(obj.roomID == loginUserManager.currentConversation && windowHandler.isActive)
             return;
         
         var notificationKey = "";
@@ -123,7 +124,7 @@ var NotificationManager = {
                 
                 n.close();
                 
-            },2000)();
+            },4000)();
             
         }
         

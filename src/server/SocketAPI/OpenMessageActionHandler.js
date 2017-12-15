@@ -70,6 +70,9 @@ OpenMessageActionHandler.prototype.attach = function(io,socket){
         },
         (result,done) => {
 
+            if (param.doNotUpdateSeenBy)
+                return done(null, result);
+            
             var seenByRow = { 
                         user:param.userID,
                         at:Utils.now(),
