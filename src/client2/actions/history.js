@@ -2,7 +2,12 @@ import { push } from 'react-router-redux'
 
 import * as types from './types';
 import * as actions from '../actions';
-import {callGetHistory} from '../lib/api/';
+
+import {
+    callGetHistory,
+    callMarkAll
+} from '../lib/api/';
+
 import * as strings from '../lib/strings';
 import user from '../lib/user';
 import {store} from '../index';
@@ -80,5 +85,35 @@ export function onLoadHistoryInitialFailed(err) {
         type: types.HistoryLoadInitialFailed,
         err
     };
+
+}
+
+export function markAll(){
+
+    return (dispatch, getState) => {
+
+        dispatch({
+            type:types.HistoryMarkAllStart
+        })
+        
+        callMarkAll().then( () => {
+
+            dispatch({
+                type:types.HistoryMarkAllSucceed
+            })
+
+            dispatch(loadHistoryInitial());
+
+        }).catch( (err) => {
+
+            dispatch(actions.notification.showToast(strings.FailedToMarkAll[user.lang]));
+
+            dispatch({
+                type:types.HistoryMarkAllFailed
+            })
+
+        });
+
+    }
 
 }

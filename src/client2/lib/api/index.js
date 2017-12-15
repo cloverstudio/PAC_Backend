@@ -3,7 +3,8 @@ export {
 } from './login';
 
 export {
-    callGetHistory
+    callGetHistory,
+    callMarkAll
 } from './history';
 
 export {

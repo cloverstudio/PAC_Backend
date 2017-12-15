@@ -22,6 +22,13 @@ const notifications = (state = [], action) => {
         });
 
     }
+
+    if(action.type == types.HistoryMarkAllStart){
+
+        return [];
+
+    }
+    
     
     return state;
 

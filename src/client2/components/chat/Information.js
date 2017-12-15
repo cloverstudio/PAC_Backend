@@ -28,6 +28,7 @@ class Information extends Component {
             
             <div className={infoContainerClass}> 
 
+
                 {this.props.isLoading ?
                     <div className="spinner-linear">
                         <div className="line"></div>

@@ -86,6 +86,8 @@ const sidebarState = (state = false, action) => {
             return false;
         case types.ChatHideHistory:
             return false;
+        case types.HistoryMarkAllStart:
+            return false;
         default:
             return state;
     }

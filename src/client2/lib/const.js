@@ -34,6 +34,8 @@ export const ApiUrlUpdateProfile = "/user/update";
 export const ApiUrlUpdatePassword = "/user/updatepassword";
 export const ApiUrlLeaveRoom = "/room/leave";
 export const ApiUrlGetMessageInfo = "/message/seenby/"
+export const ApiUrlMarkAll = "/user/history/markall"
+
 
 export const ErrorCodeInvalidToken = 4000007;
 
