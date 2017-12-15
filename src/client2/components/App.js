@@ -12,6 +12,9 @@ import Ecnryption from '../lib/encryption/encryption';
 import SocketManager from '../lib/SocketManager';
 import MediaStream from '../lib/MediaStream';
 
+// for saferi
+import WebRTCAdapter from 'webrtc-adapter';
+
 class App extends Component {
 
     componentWillMount = () => {

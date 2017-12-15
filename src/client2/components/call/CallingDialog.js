@@ -82,18 +82,7 @@ class CallingDialog extends Component {
 
             if(this.props.callingMediaType == constant.CallMediaTypeVideo){
                 media.video = { 
-                    "width": {
-                        "min": "480",
-                        "max": "480"
-                    },
-                    "height": {
-                        "min": "320",
-                        "max": "320"
-                    },
-                    "frameRate": {
-                        "min": "8",
-                        "max": "8"
-                    }
+
                 };    
             }
 
