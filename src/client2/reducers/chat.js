@@ -239,6 +239,38 @@ const messageList = (state = initial.messageList, action) => {
     if(action.type == types.ChatClearChat)
         return initial.messageList
 
+    if(action.type === types.MessageInfoDeleteMessage){
+        
+            let myMessageIndex = oldState.findIndex(message => action.messageID === message._id)
+
+            if (myMessageIndex > -1){
+                return oldState.map((msg, i) => {
+                    if (i === myMessageIndex && typeof msg.deleted === 'undefined') {
+                        let deleted = {...msg}
+                        deleted.message='';
+                        deleted.deleted = new Date().getTime();                        
+                        return deleted
+                    }
+                    return msg
+                })
+            }
+    }
+
+    // if(action.type === types.MessageInfoUpdateMessageSucceed){
+
+    //     let myMessageIndex = oldState.findIndex(message => action.messageID === message._id)
+
+    //     if (myMessageIndex > -1){
+    //         return oldState.map((msg, i) => {
+    //             if (i === myMessageIndex) {
+    //                 msg.message= Encry;
+    //             }
+    //             return msg
+    //         })
+    //     }
+
+    // }
+
     return newState;
 
 }

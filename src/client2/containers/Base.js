@@ -34,6 +34,9 @@ class Base extends Component {
 
         if(! /publisher-btn|fa-smile-o|nav-link|stickers-nav/.test(e.target.className))
             this.props.hideStickersView();
+            
+        if (! /^.*-message|btn-multiline/.test(e.target.className))
+            this.props.hideMessageInfoView();
 
     }
 

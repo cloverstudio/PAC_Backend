@@ -24,7 +24,8 @@ class Conversation extends Component {
     constructor(){
         super()
         
-        this.todayDate = new Date().getDate();
+        this.todayDateObject = new Date();
+        this.todayDate = `${this.todayDateObject.getFullYear()}-${this.todayDateObject.getMonth()}-${this.todayDateObject.getDate()}`
         this.stickersLoaded = false;
         this.lockedForAutoScroll = false;
     }
@@ -114,14 +115,18 @@ class Conversation extends Component {
         if (messageList.length > 0){
 
             let currUsr = messageList[0].userID;
-            let currDat = new Date(messageList[0].created).getDate();
+            let currDatObject = new Date(messageList[0].created);
+            //YYYY-MM-DD
+            let currDat = `${currDatObject.getFullYear()}-${currDatObject.getMonth()}-${currDatObject.getDate()}`
             let currMsgs = [];
             
             sortedMsgs.set(currDat, []);
             
             for (let msg of messageList){
                 let msgUsr = msg.userID;
-                let msgDat = new Date(msg.created).getDate();
+                let msgDatObject = new Date(msg.created);
+                //YYYY-MM-DD
+                let msgDat = `${msgDatObject.getFullYear()}-${msgDatObject.getMonth()}-${msgDatObject.getDate()}`
                 
                 if (currDat !== msgDat){
                     if (currMsgs.length > 0) sortedMsgs.get(currDat).push(currMsgs);
@@ -147,7 +152,6 @@ class Conversation extends Component {
         sortedMsgs.forEach( (messagesByDate, date) => {
 
             if (this.todayDate === date) {conversationItems.push(<div key={date} className='media media-meta-day'>Today</div>);}
-            if (this.todayDate-1 === date) {conversationItems.push(<div key={date} className='media media-meta-day'>Yesterday</div>);}
             
             messagesByDate.forEach( messagesByUser => {
                 

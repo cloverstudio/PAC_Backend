@@ -17,13 +17,14 @@ class MessageText extends Component {
 
     render() {
         const message = this.props.message;
-        const messageClass = typeof message._id === 'undefined' ? ' unsent' : '';
+        let messageClass = 'text-message'
+        messageClass += typeof message._id === 'undefined' ? ' unsent' : '';
         
         const messageContent = Encryption.decryptText(message.message);
 
         let formattedMessages;
-
-        if (messageContent.length === 0){
+        
+        if (messageContent.length === 0){            
             formattedMessages = 'This message is deleted';
         }
         else{
@@ -33,7 +34,7 @@ class MessageText extends Component {
         }
 
         return(
-            <p className={messageClass} onClick={e => this.props.getMessageInfo(message._id)}>{formattedMessages}</p>
+            <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>{formattedMessages}</p>
         );
     }
 
@@ -46,7 +47,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {  
-        getMessageInfo : messageId => dispatch(actions.messageInfo.getMessageInfo(messageId))
+        getMessageInfo : message => dispatch(actions.messageInfo.getMessageInfo(message))
     };
 };
 

@@ -20,6 +20,7 @@ import favorites from './favorites';
 import profile from './profile';
 import password from './password';
 import notification from './notification';
+import messageInfo from './messageInfo';
 
 const filter = (state = '', action) => {
     switch (action.type) {
@@ -51,7 +52,8 @@ const rootReducer = combineReducers({
     favorites,
     profile,
     password,
-    notification
+    notification,
+    messageInfo
 });
 
 export default rootReducer;
