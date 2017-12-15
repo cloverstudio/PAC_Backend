@@ -26,6 +26,8 @@ var RenderDirection = {
     allto: "allto"
 };
 
+var windowHandler = require('../../lib/windowManager');
+
 var ChatView = Backbone.View.extend({
     
     container : "",
@@ -86,6 +88,7 @@ var ChatView = Backbone.View.extend({
                     socketIOManager.emit('openMessage',{
                         messageID: message._id,
                         userID: loginUserManager.user._id,
+                        doNotUpdateSeenBy: !windowHandler.isActive
                     });
                     
                 }, 1000 * Math.random(), 'later');

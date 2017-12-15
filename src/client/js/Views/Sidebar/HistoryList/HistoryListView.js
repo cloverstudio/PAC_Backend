@@ -17,6 +17,8 @@ var MarkChatReadClient = require('../../../lib/APIClients/MarkChatAsReadClient')
 var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
 
+var windowHandler = require('../../../lib/windowManager');
+
 var HistoryListView = Backbone.View.extend({
     
     dataList: [],
@@ -69,10 +71,18 @@ var HistoryListView = Backbone.View.extend({
         });
 
         Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+
+            self.messageObj = obj;
+            self.isMessageSeen = false;
+
             self.updateListWithoutLoading(obj);
 
             // reset unread count instead of loading message
-            MarkChatReadClient.updateByMessage(obj);
+            if (windowHandler.isActive) {
+                self.isMessageSeen = true;
+                MarkChatReadClient.updateByMessage(obj);
+            }
+
         });
 
         Backbone.on(Const.NotificationRemoveRoom, function(obj){
@@ -118,8 +128,18 @@ var HistoryListView = Backbone.View.extend({
             
         });
 
+        $(window).focus(function () {
+
+            if (!self.messageObj || self.isMessageSeen)
+                return;
+                    
+            self.startChat(self.historyId);
+            self.isMessageSeen = true;
+            
+        });
+
         this.loadNext();
-        
+
     },
     updateList: function(){
 
@@ -288,7 +308,7 @@ var HistoryListView = Backbone.View.extend({
     
             }
 
-            if(loginUserManager.currentConversation == chatId){
+            if(loginUserManager.currentConversation == chatId && windowHandler.isActive){
 
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
@@ -345,9 +365,9 @@ var HistoryListView = Backbone.View.extend({
         
         $('#sidebar-historylist .chat-target').unbind().on('click',function(){
             
-            var historyId = $(this).attr('id');
-
-            self.startChat(historyId);
+            self.historyId = $(this).attr('id');
+            
+            self.startChat(self.historyId);
              
         });
         

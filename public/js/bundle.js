@@ -71811,6 +71811,8 @@ var RenderDirection = {
     allto: "allto"
 };
 
+var windowHandler = require('../../lib/windowManager');
+
 var ChatView = Backbone.View.extend({
     
     container : "",
@@ -71871,6 +71873,7 @@ var ChatView = Backbone.View.extend({
                     socketIOManager.emit('openMessage',{
                         messageID: message._id,
                         userID: loginUserManager.user._id,
+                        doNotUpdateSeenBy: !windowHandler.isActive
                     });
                     
                 }, 1000 * Math.random(), 'later');
@@ -72429,7 +72432,7 @@ var ChatView = Backbone.View.extend({
 
 module.exports = ChatView;
 
-},{"../../lib/APIClients/Messaging/LoadMessageClient":261,"../../lib/ChatManager":278,"../../lib/EncryptionManager":279,"../../lib/SocketIOManager":286,"../../lib/consts":289,"../../lib/init":290,"../../lib/loginUserManager":293,"../../lib/utils":295,"../SideMenu/SideMenu":214,"./CellGenerator":148,"./ChatView.hbs":149,"./FileUploader":151,"./StickerPanel/StickerPanelView":162,"backbone":7,"lodash":75}],151:[function(require,module,exports){
+},{"../../lib/APIClients/Messaging/LoadMessageClient":261,"../../lib/ChatManager":278,"../../lib/EncryptionManager":279,"../../lib/SocketIOManager":286,"../../lib/consts":289,"../../lib/init":290,"../../lib/loginUserManager":293,"../../lib/utils":295,"../../lib/windowManager":297,"../SideMenu/SideMenu":214,"./CellGenerator":148,"./ChatView.hbs":149,"./FileUploader":151,"./StickerPanel/StickerPanelView":162,"backbone":7,"lodash":75}],151:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('lodash');
 
@@ -77872,6 +77875,8 @@ var MarkChatReadClient = require('../../../lib/APIClients/MarkChatAsReadClient')
 var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
 
+var windowHandler = require('../../../lib/windowManager');
+
 var HistoryListView = Backbone.View.extend({
     
     dataList: [],
@@ -77924,10 +77929,18 @@ var HistoryListView = Backbone.View.extend({
         });
 
         Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+
+            self.messageObj = obj;
+            self.isMessageSeen = false;
+
             self.updateListWithoutLoading(obj);
 
             // reset unread count instead of loading message
-            MarkChatReadClient.updateByMessage(obj);
+            if (windowHandler.isActive) {
+                self.isMessageSeen = true;
+                MarkChatReadClient.updateByMessage(obj);
+            }
+
         });
 
         Backbone.on(Const.NotificationRemoveRoom, function(obj){
@@ -77973,8 +77986,18 @@ var HistoryListView = Backbone.View.extend({
             
         });
 
+        $(window).focus(function () {
+
+            if (!self.messageObj || self.isMessageSeen)
+                return;
+                    
+            self.startChat(self.historyId);
+            self.isMessageSeen = true;
+            
+        });
+
         this.loadNext();
-        
+
     },
     updateList: function(){
 
@@ -78143,7 +78166,7 @@ var HistoryListView = Backbone.View.extend({
     
             }
 
-            if(loginUserManager.currentConversation == chatId){
+            if(loginUserManager.currentConversation == chatId && windowHandler.isActive){
 
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
@@ -78200,9 +78223,9 @@ var HistoryListView = Backbone.View.extend({
         
         $('#sidebar-historylist .chat-target').unbind().on('click',function(){
             
-            var historyId = $(this).attr('id');
-
-            self.startChat(historyId);
+            self.historyId = $(this).attr('id');
+            
+            self.startChat(self.historyId);
              
         });
         
@@ -78245,7 +78268,7 @@ var HistoryListView = Backbone.View.extend({
 
 module.exports = HistoryListView;
 
-},{"../../../lib/APIClients/HistoryListClient":254,"../../../lib/APIClients/MarkChatAsReadClient":258,"../../../lib/ChatManager":278,"../../../lib/EncryptionManager":279,"../../../lib/UIUtils":288,"../../../lib/consts":289,"../../../lib/init":290,"../../../lib/localzationManager":292,"../../../lib/loginUserManager":293,"../../../lib/utils":295,"./HistoryListContents.hbs":221,"./HistoryListView.hbs":222,"backbone":7,"lodash":75}],224:[function(require,module,exports){
+},{"../../../lib/APIClients/HistoryListClient":254,"../../../lib/APIClients/MarkChatAsReadClient":258,"../../../lib/ChatManager":278,"../../../lib/EncryptionManager":279,"../../../lib/UIUtils":288,"../../../lib/consts":289,"../../../lib/init":290,"../../../lib/localzationManager":292,"../../../lib/loginUserManager":293,"../../../lib/utils":295,"../../../lib/windowManager":297,"./HistoryListContents.hbs":221,"./HistoryListView.hbs":222,"backbone":7,"lodash":75}],224:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -81698,6 +81721,7 @@ var Utils = require('./utils');
 var loginUserManager = require('./loginUserManager');
 var soundManager = require('./SoundManager');
 var EncryptionManager = require('./EncryptionManager');
+var windowHandler = require('./windowManager');
 
 var NotificationManager = {
 
@@ -81728,8 +81752,8 @@ var NotificationManager = {
 
         if (obj.mutedUsersGroupRoom && obj.mutedUsersGroupRoom.indexOf(loginUserManager.user._id.toString()) != -1)
             return;
-        
-        if(obj.roomID == loginUserManager.currentConversation)
+
+        if(obj.roomID == loginUserManager.currentConversation && windowHandler.isActive)
             return;
         
         var notificationKey = "";
@@ -81814,7 +81838,7 @@ var NotificationManager = {
                 
                 n.close();
                 
-            },2000)();
+            },4000)();
             
         }
         
@@ -81849,7 +81873,7 @@ var NotificationManager = {
 module["exports"] = NotificationManager;
 
 
-},{"./EncryptionManager":279,"./SoundManager":287,"./consts":289,"./init":290,"./loginUserManager":293,"./utils":295,"lodash":75}],282:[function(require,module,exports){
+},{"./EncryptionManager":279,"./SoundManager":287,"./consts":289,"./init":290,"./loginUserManager":293,"./utils":295,"./windowManager":297,"lodash":75}],282:[function(require,module,exports){
 var util = require('util');
 var webrtcSupport = require('webrtcsupport');
 var PeerConnection = require('rtcpeerconnection');
