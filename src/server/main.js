@@ -3,6 +3,7 @@
 /** Main of server side backend */
 var socket = require('socket.io');
 var express = require('express');
+var compression = require('compression')
 var http = require('http');
 var signaling = require('../../modules_customised/webrtcsignaling/sockets')
 var geoip = require('geoip-lite');
@@ -74,6 +75,8 @@ function startServer(){
             // starts process in valid directory (spika-enterpriese-server)
             process.chdir(path.resolve(__dirname, "../.."));
 
+            app.use(compression());
+
             app.all('*', function(req, res, next) {
                 res.header('Access-Control-Allow-Origin', '*');
                 res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
@@ -105,7 +108,11 @@ function startServer(){
                     layout: "Front/Views/FrontLayout"
                 };
 
-                response.status(404).render("Front/Views/NotFound/NotFound", defaultParameters);
+                if(/^\/new.+$/.test(request.originalUrl)){
+                    response.sendFile(path.resolve(__dirname, '../../public/new/index.html'));
+                }else{
+                    response.status(404).render("Front/Views/NotFound/NotFound", defaultParameters);
+                }
 
             });
 
