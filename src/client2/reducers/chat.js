@@ -245,7 +245,7 @@ const messageList = (state = initial.messageList, action) => {
 
             if (myMessageIndex > -1){
                 return oldState.map((msg, i) => {
-                    if (i === myMessageIndex) {
+                    if (i === myMessageIndex && typeof msg.deleted === 'undefined') {
                         let deleted = {...msg}
                         deleted.message='';
                         deleted.deleted = new Date().getTime();                        
