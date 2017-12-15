@@ -17,6 +17,7 @@
     "bootstrap-sass": "^3.3.5",
     "bootstrap-switch": "^3.3.2",
     "bowser": "1.0.0",
+    "compression": "^1.7.1",
     "connect": "^3.6.5",
     "connect-busboy": "0.0.2",
     "connect-redis": "^3.3.2",
