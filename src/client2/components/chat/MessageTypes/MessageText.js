@@ -23,9 +23,8 @@ class MessageText extends Component {
         const messageContent = Encryption.decryptText(message.message);
 
         let formattedMessages;
-        console.log(messageContent)
-        if (messageContent.length === 0){
-            
+        
+        if (messageContent.length === 0){            
             formattedMessages = 'This message is deleted';
         }
         else{
