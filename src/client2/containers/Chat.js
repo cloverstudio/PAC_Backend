@@ -22,6 +22,7 @@ import History from '../components/chat/History';
 import Conversation from '../components/chat/Conversation';
 import Information from '../components/chat/Information';
 import ReLogin from '../components/ReLogin';
+import MessageInfo from '../components/chat/MessageInfo';
 
 class Main extends Base {
 
@@ -86,6 +87,8 @@ class Main extends Base {
 
                     </div>
 
+                    <MessageInfo/>
+
                 </main>
                 
                 <Modals />
@@ -118,6 +121,7 @@ const mapDispatchToProps = (dispatch) => {
         hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
+        hideMessageInfoView: () => dispatch(actions.chatUI.hideMessageInfoView())
     };
 };
 

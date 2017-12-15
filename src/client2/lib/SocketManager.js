@@ -256,6 +256,17 @@ class SocketManager {
             }
         }
 
+        if (action.type === types.MessageInfoDeleteMessage) {
+            console.log({
+                messageID: action.messageID,
+                userId: user._id
+            })
+            this.emit('deleteMessage', {
+                messageID: action.messageID,
+                userID: user.userData._id
+            })
+        }
+
         next(action);
 
     }

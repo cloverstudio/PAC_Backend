@@ -96,6 +96,7 @@
                         align-items: flex-start;
         
                         p{
+                            cursor:pointer;
                             white-space: pre-wrap;
 
                             img{
@@ -291,7 +292,7 @@
     height: 100%;
 }
 
-.usersview,.groupsview{
+.usersview,.groupsview, .messageInfoView{
 
     height: 100vh;
     overflow-y: auto;
@@ -404,4 +405,10 @@
         }
     }
 
+}
+
+.messageInfoView{
+    .btn{
+        margin:10px;
+    }
 }

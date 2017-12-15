@@ -5,15 +5,20 @@ import * as strings from '../lib/strings';
 import user from '../lib/user';
 import {store} from '../index';
 
-export function getMessageInfo(messageId) {
+export function getMessageInfo(message) {
 
     return (dispatch, getState) => {
 
         dispatch({
-            type: types.MessageInfoLoadStart
+            type: types.MessageInfoLoadStart,
+            message
         });
 
-        callGetMessageInfo(messageId)
+        dispatch({
+            type: types.ChatShowMessageInfoView
+        })
+
+        callGetMessageInfo(message._id)
         .then( data => {
 
             dispatch({
@@ -34,6 +39,21 @@ export function getMessageInfo(messageId) {
 
     };
 
+}
+
+export function deleteMessage(messageID){
+    return({
+        type: types.MessageInfoDeleteMessage,
+        messageID
+    })
+}
+
+export function updateMessage(messageID, message){
+    return({
+        type: types.MessageInfoUpdateMessage,
+        messageID,
+        message
+    })
 }
 
 // export function addToFavorite(messageId){}

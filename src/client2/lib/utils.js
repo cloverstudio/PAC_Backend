@@ -85,3 +85,7 @@ export function getScrollBottom(element){
 export function url(url){
     return config.BasePath + url;
 }
+
+export function  getTimestamp(dateObj){
+    return `${dateObj.getFullYear()}-${dateObj.getMonth()}-${dateObj.getDate()} ${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`
+}

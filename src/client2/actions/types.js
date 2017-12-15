@@ -184,3 +184,6 @@ export const PasswordLogout = 'Password/Logout';
 export const MessageInfoLoadStart = 'MessageInfo/LoadStart';
 export const MessageInfoLoadSucceed = 'MessageInfo/LoadSucceed';
 export const MessageInfoLoadFailed = 'MessageInfo/LoadFailed';
+export const MessageInfoUpdateMessage = 'MessageInfo/UpdateMessage';
+export const MessageInfoDeleteMessage = 'MessageInfo/DeleteMessage';
+export const MessageInfoForwardMessage = 'MessageInfo/ForwardMessage'
