@@ -389,7 +389,7 @@ GroupsController.prototype.init = function(app) {
             (err, findResult) => {
               result.users = Utils.ApiV3StyleId(findResult);
 
-              done(err, result);
+              done(null, result);
             }
           );
         }
@@ -481,6 +481,28 @@ GroupsController.prototype.init = function(app) {
                 if (!err) result.groupDetail.users = result.newUsers;
 
                 done(err, result);
+              }
+            );
+          },
+          (result, done) => {
+            // check all user is valid
+            async.eachSeries(
+              userIds,
+              (userID, doneEach) => {
+                userModel.findOne({ _id: userID }, (err, findResult) => {
+                  if (err || !findResult) {
+                    doneEach("invalid user");
+                  } else doneEach(null);
+                });
+              },
+              err => {
+                if (err) {
+                  return response
+                    .status(Const.httpCodeBadParameter)
+                    .send(Const.errorMessage.wrongUserIds);
+                } else {
+                  done(null, result);
+                }
               }
             );
           },

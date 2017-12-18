@@ -201,6 +201,7 @@ const Group = {
     const groupModel = GroupModel.get();
     groupModel.findOne({ _id: groupId }, fields, (err, foundGroup) => {
       if (err && onError) return onError(err);
+      if (!foundGroup) return onError("no group");
       result = foundGroup.toObject();
       result.id = foundGroup._id;
       delete result._id;
