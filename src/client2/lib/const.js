@@ -29,12 +29,14 @@ export const ApiUrlRemoveUserFromRoom = "/room/users/remove";
 export const ApiUrlSearchMessage = "/message/search/";
 export const ApiUrlFavorites = "/message/favorite/list/";
 export const ApiUrlRemoveFromFavorite = "/message/favorite/remove";
-export const ApiUrlAddToFavorite = "message/favorite/add";
+export const ApiUrlAddToFavorite = "/message/favorite/add";
+export const ApiUrlForwardMessage = "/message/forward";
 export const ApiUrlUpdateProfile = "/user/update";
 export const ApiUrlUpdatePassword = "/user/updatepassword";
 export const ApiUrlLeaveRoom = "/room/leave";
 export const ApiUrlGetMessageInfo = "/message/seenby/";
 export const ApiUrlMarkAll = "/user/history/markall";
+export const ApiUrlSearchAll = "/search/all/";
 
 export const ErrorCodeInvalidToken = 4000007;
 

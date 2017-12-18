@@ -322,6 +322,19 @@
     }
 }
 
+.messageForward{
+    .modal-body{
+        max-height:45vh;
+        overflow-y:auto;
+    }
+    .media{
+        cursor: pointer;   
+    }
+    .media:hover{
+        background-color: $color-bg-light;
+    }
+}
+
 .info-container{
     height: calc(100vh - 64px);
     overflow-y: auto;
@@ -396,7 +409,7 @@
     
     .imageView-img {
         max-width: 100%;
-        max-height:85vh;
+        max-height:80vh;
         line-height: 0;
         border: 0;
         z-index: -1;

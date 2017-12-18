@@ -25,89 +25,91 @@ import ReLogin from "../components/ReLogin";
 import MessageInfo from "../components/chat/MessageInfo";
 
 class Main extends Base {
-  static propTypes = {};
+    static propTypes = {};
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      this.props.location != nextProps.location ||
-      this.props.timestampByChat != nextProps.timestampByChat
-    ) {
-      // location update
-      const chatId = util.getChatIdFromUrl(nextProps.location);
+    componentWillReceiveProps(nextProps) {
+        if (
+            this.props.location != nextProps.location ||
+            this.props.timestampByChat != nextProps.timestampByChat
+        ) {
+            // location update
+            const chatId = util.getChatIdFromUrl(nextProps.location);
 
-      if (chatId && chatId.length > 0) this.props.loadNewChat(chatId);
-      else this.props.clearChat();
+            if (chatId && chatId.length > 0) this.props.loadNewChat(chatId);
+            else this.props.clearChat();
+        }
     }
-  }
 
-  componentDidMount() {
-    if (!user.userData) return;
+    componentDidMount() {
+        if (!user.userData) return;
 
-    // location update
-    const chatId = util.getChatIdFromUrl(this.props.location);
+        // location update
+        const chatId = util.getChatIdFromUrl(this.props.location);
 
-    if (chatId && chatId.length > 0) this.props.openChatByChatId(chatId);
-  }
+        if (chatId && chatId.length > 0) this.props.openChatByChatId(chatId);
+    }
 
-  render() {
-    if (!user.token) return <ReLogin />;
+    render() {
+        if (!user.token) return <ReLogin />;
 
-    let sideBarClass = "pace-done sidebar-folded";
-    if (this.props.sidebarState) sideBarClass += " sidebar-open";
+        let sideBarClass = "pace-done sidebar-folded";
+        if (this.props.sidebarState) sideBarClass += " sidebar-open";
 
-    let asideBarHolderClass = "layout-chat";
-    if (this.props.historyBarState) asideBarHolderClass += " aside-open";
+        let asideBarHolderClass = "layout-chat";
+        if (this.props.historyBarState) asideBarHolderClass += " aside-open";
 
-    let globalCssClass = "main-content chat";
-    if (this.props.calling && this.props.callingWindowState)
-      globalCssClass += " calling";
+        let globalCssClass = "main-content chat";
+        if (this.props.calling && this.props.callingWindowState)
+            globalCssClass += " calling";
 
-    return (
-      <div className={sideBarClass} onClick={this.globalClick}>
-        <SideBar />
-        <Header />
+        return (
+            <div className={sideBarClass} onClick={this.globalClick}>
+                <SideBar />
+                <Header />
 
-        <main className={asideBarHolderClass}>
-          <History />
+                <main className={asideBarHolderClass}>
+                    <History />
 
-          <div className={globalCssClass}>
-            <Conversation />
-            <Information />
-          </div>
+                    <div className={globalCssClass}>
+                        <Conversation />
+                        <Information />
+                    </div>
 
-          <MessageInfo />
-        </main>
+                    <MessageInfo />
+                </main>
 
-        <Modals />
-      </div>
-    );
-  }
+                <Modals />
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = state => {
-  return {
-    location: state.routing.location.pathname,
-    timestampByChat: state.chat.timestampByChat,
-    sidebarState: state.chatUI.sidebarState,
-    historyBarState: state.chatUI.historyBarState,
-    calling: state.call.calling,
-    callingWindowState: state.call.windowState
-  };
+    return {
+        location: state.routing.location.pathname,
+        timestampByChat: state.chat.timestampByChat,
+        sidebarState: state.chatUI.sidebarState,
+        historyBarState: state.chatUI.historyBarState,
+        calling: state.call.calling,
+        callingWindowState: state.call.windowState
+    };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
-    hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
-    hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
-    openChatByChatId: chatId => dispatch(actions.chat.openChatByChatId(chatId)),
-    loadNewChat: chatId => dispatch(actions.chat.loadNewChat(chatId)),
-    clearChat: () => dispatch(actions.chat.clearChat()),
-    hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
-    hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
-    hideHistory: () => dispatch(actions.chatUI.hideHistory()),
-    hideMessageInfoView: () => dispatch(actions.chatUI.hideMessageInfoView())
-  };
+    return {
+        hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
+        hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
+        hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
+        openChatByChatId: chatId =>
+            dispatch(actions.chat.openChatByChatId(chatId)),
+        loadNewChat: chatId => dispatch(actions.chat.loadNewChat(chatId)),
+        clearChat: () => dispatch(actions.chat.clearChat()),
+        hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
+        hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
+        hideHistory: () => dispatch(actions.chatUI.hideHistory()),
+        hideMessageInfoView: () =>
+            dispatch(actions.chatUI.hideMessageInfoView())
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
