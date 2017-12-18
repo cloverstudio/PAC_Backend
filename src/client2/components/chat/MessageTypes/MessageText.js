@@ -1,57 +1,63 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import * as actions from '../../../actions';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import * as actions from "../../../actions";
 
-import Encryption from '../../../lib/encryption/encryption';
-import * as constant from '../../../lib/const';
+import Encryption from "../../../lib/encryption/encryption";
+import * as constant from "../../../lib/const";
 
 class MessageText extends Component {
+  static propTypes = {};
+  constructor() {
+    super();
+  }
 
-    static propTypes = {
+  render() {
+    const message = this.props.message;
+    let messageClass = "text-message";
+    messageClass += typeof message._id === "undefined" ? " unsent" : "";
+
+    const messageContent = Encryption.decryptText(message.message);
+
+    let formattedMessages;
+
+    if (messageContent.length === 0) {
+      formattedMessages = <i>This message is deleted.</i>;
+    } else {
+      //todo: better way to mark links
+      formattedMessages = messageContent.split(/( |\n)/).map(
+        (word, i) =>
+          constant.urlRegularExpression.test(word) ? (
+            <a key={i} href={word} target="_blank">
+              <u> {word} </u>
+            </a>
+          ) : (
+            word
+          )
+      );
     }
-    constructor(){
-        super();
-    }
 
-    render() {
-        const message = this.props.message;
-        let messageClass = 'text-message'
-        messageClass += typeof message._id === 'undefined' ? ' unsent' : '';
-        
-        const messageContent = Encryption.decryptText(message.message);
-
-        let formattedMessages;
-        
-        if (messageContent.length === 0){            
-            formattedMessages = 'This message is deleted';
-        }
-        else{
-            //todo: better way to mark links
-            formattedMessages = messageContent.split(/( |\n)/)
-            .map((word,i) => constant.urlRegularExpression.test(word) ? <a key={i} href={word} target="_blank"><u> {word} </u></a> : word)
-        }
-
-        return(
-            <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>{formattedMessages}</p>
-        );
-    }
-
+    return (
+      <p
+        className={messageClass}
+        onClick={e => this.props.getMessageInfo(message)}
+      >
+        {formattedMessages}
+      </p>
+    );
+  }
 }
 
-const mapStateToProps = (state) => {
-    return {       
-    };
+const mapStateToProps = state => {
+  return {};
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {  
-        getMessageInfo : message => dispatch(actions.messageInfo.getMessageInfo(message))
-    };
+const mapDispatchToProps = dispatch => {
+  return {
+    getMessageInfo: message =>
+      dispatch(actions.messageInfo.getMessageInfo(message))
+  };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MessageText);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageText);
