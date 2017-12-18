@@ -1,10 +1,10 @@
-import { routerReducer as routing } from 'react-router-redux';
-import { combineReducers } from 'redux';
+import { routerReducer as routing } from "react-router-redux";
+import { combineReducers } from "redux";
 
-import user from '../lib/user';
-import * as constant from '../lib/const';
-import * as types from '../actions/types';
-import * as utils from '../lib/utils';
+import user from "../lib/user";
+import * as constant from "../lib/const";
+import * as types from "../actions/types";
+import * as utils from "../lib/utils";
 
 const initial = {
     chatAvatar: {
@@ -19,42 +19,37 @@ const initial = {
     typing: {},
     timestampByChat: 0,
     inputValues: {}
-}
+};
 
-const timestampByChat = ( state = initial.timestampByChat, action ) => {
-
+const timestampByChat = (state = initial.timestampByChat, action) => {
     switch (action.type) {
         case types.ChatOpenByUser:
-            return (new Date()).getTime();
+            return new Date().getTime();
         case types.ChatOpenByGroup:
-            return (new Date()).getTime();
+            return new Date().getTime();
         case types.ChatOpenByRoom:
-            return (new Date()).getTime();
+            return new Date().getTime();
         default:
             return state;
     }
+};
 
-}
-
-const chatId = ( state = initial.chatId, action ) => {
-
+const chatId = (state = initial.chatId, action) => {
     switch (action.type) {
         case types.ChatOpenByUser:
             return action.chatId;
-         case types.ChatOpenByGroup:
+        case types.ChatOpenByGroup:
             return action.chatId;
         case types.ChatOpenByRoom:
             return action.chatId;
         case types.ChatClearChat:
-            return ""
+            return "";
         default:
             return state;
     }
+};
 
-}
-
-const chatType = ( state = initial.chatType, action ) => {
-
+const chatType = (state = initial.chatType, action) => {
     switch (action.type) {
         case types.ChatOpenByUser:
             return constant.ChatTypePrivate;
@@ -68,11 +63,9 @@ const chatType = ( state = initial.chatType, action ) => {
         default:
             return state;
     }
+};
 
-}
-
-const currentChatUser = ( state = initial.currentChatUser, action ) => {
-    
+const currentChatUser = (state = initial.currentChatUser, action) => {
     switch (action.type) {
         case types.ChatOpenByUser:
             return action.user;
@@ -86,69 +79,54 @@ const currentChatUser = ( state = initial.currentChatUser, action ) => {
         default:
             return state;
     }
-
-}
+};
 
 const chatAvatar = (state = initial.chatAvatar, action) => {
-
     const oldState = state;
     const newState = oldState;
 
-    if(action.type == types.ChatOpenByUser){
-
+    if (action.type == types.ChatOpenByUser) {
         const user = action.user;
 
         newState.type = constant.AvatarUser;
         newState.fileId = "";
 
-        if(user && user.avatar && user.avatar.thumbnail)
+        if (user && user.avatar && user.avatar.thumbnail)
             newState.fileId = user.avatar.thumbnail.nameOnServer;
-    
+
         newState.name = user.name;
-
-    }
-
-    else if(action.type == types.ChatOpenByGroup){
-
+    } else if (action.type == types.ChatOpenByGroup) {
         const group = action.group;
 
         newState.type = constant.AvatarGroup;
         newState.fileId = "";
 
-        if(group && group.avatar && group.avatar.thumbnail)
+        if (group && group.avatar && group.avatar.thumbnail)
             newState.fileId = group.avatar.thumbnail.nameOnServer;
-        
+
         newState.name = group.name;
-
-    }
-
-    else if(action.type == types.ChatOpenByRoom){
-
+    } else if (action.type == types.ChatOpenByRoom) {
         const room = action.room;
 
         newState.type = constant.AvatarRoom;
         newState.fileId = "";
 
-        if(room && room.avatar && room.avatar.thumbnail)
+        if (room && room.avatar && room.avatar.thumbnail)
             newState.fileId = room.avatar.thumbnail.nameOnServer;
-    
-        newState.name = room.name;
 
+        newState.name = room.name;
     }
 
-    if(action.type == types.ChatClearChat)
-        return initial.chatAvatar;
+    if (action.type == types.ChatClearChat) return initial.chatAvatar;
 
     return Object.assign({}, newState);
-
 };
 
 const isLoading = (state = initial.isLoading, action) => {
-    
     switch (action.type) {
         case types.ChatOpenByUser:
             return true;
-         case types.ChatOpenByGroup:
+        case types.ChatOpenByGroup:
             return true;
         case types.ChatOpenByRoom:
             return true;
@@ -163,147 +141,146 @@ const isLoading = (state = initial.isLoading, action) => {
         default:
             return state;
     }
-}
+};
 
 const messageList = (state = initial.messageList, action) => {
-    
     const oldState = state;
     let newState = oldState;
 
-    if(action.type == types.ChatOpenByUser
-        || action.type == types.ChatOpenByGroup
-        || action.type == types.ChatOpenByRoom){
-
-            newState = [];
+    if (
+        action.type == types.ChatOpenByUser ||
+        action.type == types.ChatOpenByGroup ||
+        action.type == types.ChatOpenByRoom
+    ) {
+        newState = [];
     }
 
-    if(action.type == types.ChatLoadMessageSucceed){
-            newState = action.messages;
+    if (action.type == types.ChatLoadMessageSucceed) {
+        newState = action.messages;
     }
 
-    if(action.type === types.ChatLoadOldMessagesSucceed){
-        newState = action.messages.reverse().concat(oldState) 
+    if (action.type === types.ChatLoadOldMessagesSucceed) {
+        newState = action.messages.reverse().concat(oldState);
     }
 
-    if(action.type === types.ChatSendMessage){
+    if (action.type === types.ChatSendMessage) {
         newState = oldState.concat(action.message);
     }
 
-    if(action.type === types.ChatReceiveMessage){
+    if (action.type === types.ChatReceiveMessage) {
+        if (!action.currentChat) return state;
 
-        if(!action.currentChat)
-            return state;
-            
-        if (action.message.userID === user.userData._id){
-            let myMessageIndex = oldState.findIndex(message => message.localID === action.message.localID)
-    
-            if (myMessageIndex > -1){
+        if (action.message.userID === user.userData._id) {
+            let myMessageIndex = oldState.findIndex(
+                message => message.localID === action.message.localID
+            );
+
+            if (myMessageIndex > -1) {
                 return oldState.map((msg, i) => {
                     if (i === myMessageIndex) {
-                        return action.message
-                    }
-                    else return msg
-                })
+                        return action.message;
+                    } else return msg;
+                });
             }
-        }
-
-        else {
-            newState = oldState.concat(action.message)
+        } else {
+            newState = oldState.concat(action.message);
         }
     }
 
-    if(action.type === types.ChatStartFileUpload){
-
+    if (action.type === types.ChatStartFileUpload) {
         newState = oldState.concat({
             localID: action.localFileId,
             userID: action.userID,
             created: action.created,
             type: action.MsgType
-        })
+        });
     }
 
-    if(action.type === types.ChatFileUploadSucceed){
-        
-            let myMessageIndex = -1;
-            for (let i = oldState.length-1; i>-1; i--){
-                if (oldState[i].localID === action.localFileId){
-                    myMessageIndex = i;
-                    break;
+    if (action.type === types.ChatFileUploadSucceed) {
+        let myMessageIndex = -1;
+        for (let i = oldState.length - 1; i > -1; i--) {
+            if (oldState[i].localID === action.localFileId) {
+                myMessageIndex = i;
+                break;
+            }
+        }
+        if (myMessageIndex > -1) {
+            newState = oldState.filter((msg, i) => i !== myMessageIndex);
+        }
+    }
+
+    if (action.type == types.ChatClearChat) return initial.messageList;
+
+    if (action.type === types.MessageInfoDeleteMessage) {
+        let myMessageIndex = oldState.findIndex(
+            message => action.messageID === message._id
+        );
+
+        if (myMessageIndex > -1) {
+            return oldState.map((msg, i) => {
+                if (
+                    i === myMessageIndex &&
+                    typeof msg.deleted === "undefined"
+                ) {
+                    let deleted = { ...msg };
+                    deleted.message = "";
+                    deleted.deleted = new Date().getTime();
+                    return deleted;
                 }
-            }
-            if (myMessageIndex > -1){
-               newState = oldState.filter((msg, i) => i !== myMessageIndex); 
-            }    
+                return msg;
+            });
+        }
     }
 
-    if(action.type == types.ChatClearChat)
-        return initial.messageList
+    if (action.type === types.FavoriteToggleFavorite) {
+        let myMessageIndex = oldState.findIndex(
+            message => action.messageId === message._id
+        );
 
-    if(action.type === types.MessageInfoDeleteMessage){
-        
-            let myMessageIndex = oldState.findIndex(message => action.messageID === message._id)
-
-            if (myMessageIndex > -1){
-                return oldState.map((msg, i) => {
-                    if (i === myMessageIndex && typeof msg.deleted === 'undefined') {
-                        let deleted = {...msg}
-                        deleted.message='';
-                        deleted.deleted = new Date().getTime();                        
-                        return deleted
-                    }
-                    return msg
-                })
-            }
+        if (myMessageIndex > -1) {
+            return oldState.map((msg, i) => {
+                if (i === myMessageIndex) {
+                    let targetMessage = { ...msg };
+                    targetMessage.isFavorite = action.isFavorite ? 0 : 1;
+                    return targetMessage;
+                }
+                return msg;
+            });
+        }
     }
-
-    // if(action.type === types.MessageInfoUpdateMessageSucceed){
-
-    //     let myMessageIndex = oldState.findIndex(message => action.messageID === message._id)
-
-    //     if (myMessageIndex > -1){
-    //         return oldState.map((msg, i) => {
-    //             if (i === myMessageIndex) {
-    //                 msg.message= Encry;
-    //             }
-    //             return msg
-    //         })
-    //     }
-
-    // }
 
     return newState;
-
-}
+};
 
 const typing = (state = initial.typing, action) => {
-    switch(action.type){
+    switch (action.type) {
         case types.ChatOpenByUser:
             return {};
         case types.ChatOpenByGroup:
-            return {};            
+            return {};
         case types.ChatOpenByRoom:
-            return {};            
+            return {};
         case types.ChatStartedTyping:
-            return {...state, [action.userID]:action.userName};
+            return { ...state, [action.userID]: action.userName };
         case types.ChatStoppedTyping:
-            const newState = {...state};
+            const newState = { ...state };
             delete newState[action.userID];
             return newState;
         default:
             return state;
     }
-}
+};
 
-const inputValues = ( state = initial.inputValues, action ) => {
-    switch(action.type){
+const inputValues = (state = initial.inputValues, action) => {
+    switch (action.type) {
         case types.ChatChangeInputValue:
-            const newState = {...state};
+            const newState = { ...state };
             newState[action.chatId] = action.value;
             return newState;
         default:
             return state;
     }
-}
+};
 
 export default combineReducers({
     chatAvatar,

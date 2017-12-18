@@ -1,6 +1,6 @@
-import { routerReducer as routing } from 'react-router-redux';
-import { combineReducers } from 'redux';
-import * as types from '../actions/types';
+import { routerReducer as routing } from "react-router-redux";
+import { combineReducers } from "redux";
+import * as types from "../actions/types";
 
 const notificationState = (state = false, action) => {
     switch (action.type) {
@@ -13,7 +13,6 @@ const notificationState = (state = false, action) => {
     }
 };
 
-
 const usersViewState = (state = false, action) => {
     switch (action.type) {
         case types.ChatShowUsersView:
@@ -24,7 +23,6 @@ const usersViewState = (state = false, action) => {
             return state;
     }
 };
-
 
 const groupsViewState = (state = false, action) => {
     switch (action.type) {
@@ -46,7 +44,6 @@ const userInfoTabState = (state = "options", action) => {
     }
 };
 
-
 const groupInfoTabState = (state = "options", action) => {
     switch (action.type) {
         case types.GroupInfoTabChange:
@@ -66,7 +63,7 @@ const roomInfoTabState = (state = "options", action) => {
 };
 
 const stickersViewState = (state = false, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.ChatShowStickersView:
             return true;
         case types.ChatHideStickersView:
@@ -74,10 +71,10 @@ const stickersViewState = (state = false, action) => {
         default:
             return state;
     }
-}
+};
 
 const sidebarState = (state = false, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.ChatShowSidebar:
             return true;
         case types.ChatHideSidebar:
@@ -91,10 +88,10 @@ const sidebarState = (state = false, action) => {
         default:
             return state;
     }
-}
+};
 
 const historyBarState = (state = false, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.ChatShowHistory:
             return true;
         case types.ChatHideHistory:
@@ -102,10 +99,10 @@ const historyBarState = (state = false, action) => {
         default:
             return state;
     }
-}
+};
 
 const infoViewState = (state = false, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.ChatShowInfoView:
             return true;
         case types.ChatHideInfoView:
@@ -113,10 +110,10 @@ const infoViewState = (state = false, action) => {
         default:
             return state;
     }
-}
+};
 
 const imageViewState = (state = false, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.ChatShowImageView:
             return true;
         case types.ChatHideImageView:
@@ -124,10 +121,10 @@ const imageViewState = (state = false, action) => {
         default:
             return state;
     }
-}
+};
 
-const messageInfoViewState = (state=false, action )=> {
-    switch(action.type){
+const messageInfoViewState = (state = false, action) => {
+    switch (action.type) {
         case types.ChatHideMessageInfoView:
             return false;
         case types.ChatShowMessageInfoView:
@@ -135,8 +132,18 @@ const messageInfoViewState = (state=false, action )=> {
         default:
             return state;
     }
-}
+};
 
+const messageForwardViewState = (state = false, action) => {
+    switch (action.type) {
+        case types.ChatHideMessageForwardView:
+            return false;
+        case types.ChatShowMessageForwardView:
+            return true;
+        default:
+            return state;
+    }
+};
 
 export default combineReducers({
     notificationState,
@@ -144,11 +151,12 @@ export default combineReducers({
     groupsViewState,
     userInfoTabState,
     groupInfoTabState,
-    roomInfoTabState, 
+    roomInfoTabState,
     stickersViewState,
     sidebarState,
     historyBarState,
     infoViewState,
     imageViewState,
-    messageInfoViewState
-});;
+    messageInfoViewState,
+    messageForwardViewState
+});

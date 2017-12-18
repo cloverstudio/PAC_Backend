@@ -1,8 +1,8 @@
-import { routerReducer as routing } from 'react-router-redux';
-import { combineReducers } from 'redux';
-import * as types from '../actions/types';
+import { routerReducer as routing } from "react-router-redux";
+import { combineReducers } from "redux";
+import * as types from "../actions/types";
 
-import user from '../lib/user';
+import user from "../lib/user";
 
 const loading = (state = false, action) => {
     switch (action.type) {
@@ -20,38 +20,38 @@ const loading = (state = false, action) => {
 const selectedMessage = (state = {}, action) => {
     switch (action.type) {
         case types.MessageInfoLoadStart:
-            return action.message
-        
-        case types.FavoriteAddToFavorite:
+            return action.message;
 
-            if (action.data.favorite._id === state._id){
-                const newState = JSON.stringify(JSON.parse(state))
-                newState.isFavorite = 1;
+        case types.FavoriteToggleFavorite:
+            if (action.messageId === state._id) {
+                console.log(state);
+                const newState = { ...state };
+                newState.isFavorite = action.isFavorite ? 0 : 1;
                 return newState;
             }
 
-            return newState
+            return newState;
 
         case types.MessageInfoDeleteMessage:
-            let newState = {...state}
+            let newState = { ...state };
             newState.deleted = new Date().getTime();
-            return newState
+            return newState;
         default:
             return state;
     }
-}
+};
 
 const seenBy = (state = [], action) => {
-    switch(action.type){
+    switch (action.type) {
         case types.MessageInfoLoadSucceed:
-            return action.data.seenBy
+            return action.data.seenBy;
         default:
             return state;
     }
-}
+};
 
 export default combineReducers({
     loading,
     selectedMessage,
     seenBy
-});;
+});
