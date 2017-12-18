@@ -10,5 +10,7 @@
     // Enable per-language
     "[javascript]": {
         "editor.formatOnSave": true
-    }
+    },
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
 }
