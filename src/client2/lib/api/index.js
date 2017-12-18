@@ -1,5 +1,4 @@
 export { callLogin, callLogout } from "./login";
-export { callLogin } from "./login";
 
 export { callGetHistory, callMarkAll } from "./history";
 
