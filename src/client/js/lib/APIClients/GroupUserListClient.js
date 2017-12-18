@@ -12,9 +12,7 @@ var GroupUserListClient = function(){};
 _.extend(GroupUserListClient.prototype,APIClientBase.prototype);
 
 GroupUserListClient.prototype.send = function(groupId,page,success,err){
-            
     this.getRequst("/group/users/" + groupId + "/" + page,success,err);
-    
 }
     
 // returns instance

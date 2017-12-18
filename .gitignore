@@ -6,6 +6,7 @@ modules_customised/spika/public/uploads
 public/uploads
 public/doc/JS
 public/doc/API
+public/dist
 hostid
 nohup.out
 out
@@ -14,3 +15,4 @@ out
 src/server/lib/init.js
 src/client/js/lib/init.js
 src/server/assets/certificates/**
+src/client2/.vscode/launch.json

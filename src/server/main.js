@@ -84,7 +84,6 @@ function startServer(){
 
                 // debug output
                 console.log('method :', req.method, 'url :', req.originalUrl);
-
                 next();
             });
 
