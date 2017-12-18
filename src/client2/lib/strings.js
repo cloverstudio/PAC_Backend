@@ -1,167 +1,157 @@
 export {
-    EnterTitle1,
-    EnterText1,
-    LoginTitle1,
-    LoginText2,
-    LoginFormPlaceholderOrganization,
-    LoginFormPlaceholderUsername,
-    LoginFormPlaceholderPassword,
-    LoginFormRemember,
-    LoginText3,
-    LoginLink1,
-    LoginButtonTitle,
-    LoginSucceed,
-    LoginFailed
-} from './strings/login'
+  EnterTitle1,
+  EnterText1,
+  LoginTitle1,
+  LoginText2,
+  LoginFormPlaceholderOrganization,
+  LoginFormPlaceholderUsername,
+  LoginFormPlaceholderPassword,
+  LoginFormRemember,
+  LoginText3,
+  LoginLink1,
+  LoginButtonTitle,
+  LoginSucceed,
+  LoginFailed
+} from "./strings/login";
+
+export { LogoutSucceed } from "./strings/logout";
 
 export {
-    LogoutSucceed
-} from './strings/logout'
+  SignupTitle1,
+  SignupFormPlaceholderUsername,
+  SignupFormPlaceholderPassword,
+  SignupFormPlaceholderRePassword,
+  SignUpButtonTitle,
+  SignUpLoginLink,
+  SignUpBackText
+} from "./strings/signup";
+
+export { FailedToGetHistory, FailedToMarkAll } from "./strings/history";
 
 export {
-    SignupTitle1,
-    SignupFormPlaceholderUsername,
-    SignupFormPlaceholderPassword,
-    SignupFormPlaceholderRePassword,
-    SignUpButtonTitle,
-    SignUpLoginLink,
-    SignUpBackText
-} from './strings/signup'
+  FailedToGetUserList,
+  FailedToSearchUserList
+} from "./strings/userlist";
 
 export {
-    FailedToGetHistory,
-    FailedToMarkAll
-} from './strings/history'
+  FailedToGetGroupList,
+  FailedToSearchGroupList
+} from "./strings/grouplist";
 
 export {
-    FailedToGetUserList, 
-    FailedToSearchUserList
-} from './strings/userlist'
+  FailedToLoatMessage,
+  ChatWelcomeTitle,
+  ChatWelcomeText
+} from "./strings/chat";
+
+export { FailedToGetStickers } from "./strings/stickers";
 
 export {
-    FailedToGetGroupList, 
-    FailedToSearchGroupList
-} from './strings/grouplist'
+  Save,
+  Cancel,
+  NoUserFound,
+  CreateRoom,
+  UsersTitle,
+  UserName,
+  SelectedUsers,
+  RoomName,
+  Description,
+  AvatarImage,
+  ChooseFile,
+  UserNameHelp,
+  FailedToCreateRoom,
+  EditRoom,
+  FailedToUpdateRoom
+} from "./strings/room";
 
 export {
-    FailedToLoatMessage
-} from './strings/chat'
+  InfoViewUserDetailOptions,
+  InfoViewUserDetailDetail,
+  InfoViewUserDetailBlock,
+  InfoViewUserDetailNotification,
+  InfoViewUserDetailDescription,
+  InfoViewUserDetailLastLogin,
+  InfoViewUserDetailName,
+  InfoViewUserDetailVideoCall,
+  InfoViewUserDetailVoiceCall,
+  InfoViewFailedToGetDetail,
+  InfoViewTextMutedExplanation,
+  InfoViewTextBlockedExplanation,
+  InfoViewFailedToBlock,
+  InfoViewFailedToMute,
+  InfoViewCreated,
+  InfoViewUserDetailMembers,
+  InfoViewFailedToLoadUserList,
+  InfoViewLeaveRoom,
+  InfoViewDeleteRoom,
+  InfoViewLeaveRoomConfirm,
+  InfoViewFailedToLeave
+} from "./strings/infoview";
 
 export {
-    FailedToGetStickers
-} from './strings/stickers'
+  SidebarTitle1,
+  SidebarTitle2,
+  SidebarTitle3,
+  SidebarChat,
+  SidebarFavorite,
+  SidebarHistory,
+  SidebarSearch,
+  SidebarNewRoom,
+  SidebarMarkAll,
+  SidebarProfile,
+  SidebarPassword,
+  SidebarAdmin,
+  SidebarLogout,
+  SidebarHelp
+} from "./strings/sidebar";
 
 export {
-    Save,
-    Cancel,
-    NoUserFound,
-    CreateRoom,
-    UsersTitle,
-    UserName,
-    SelectedUsers,
-    RoomName,
-    Description,
-    AvatarImage,
-    ChooseFile,
-    UserNameHelp,
-    FailedToCreateRoom,
-    EditRoom,
-    FailedToUpdateRoom
-} from './strings/room'
+  CallOutgoingFailedByOffile,
+  CallOutgoingFailedUnknown,
+  CallOutgoingFailedByUserBusy,
+  CallOutgoingFailedByReject,
+  CallOutgoingFailedByNotSupport,
+  CallOutgoingMediaError,
+  CallOutgoingStatusInitializingMedia,
+  CallOutgoingStatusConnecting,
+  CallOutgoingStatusRinging,
+  CallFailedToInitizeDevice,
+  CallInitializingDevice
+} from "./strings/calling";
+
+export { SearchTitle, FailedToSearchMessage } from "./strings/search";
 
 export {
-    InfoViewUserDetailOptions,
-    InfoViewUserDetailDetail,
-    InfoViewUserDetailBlock,
-    InfoViewUserDetailNotification,
-    InfoViewUserDetailDescription,
-    InfoViewUserDetailLastLogin,
-    InfoViewUserDetailName,
-    InfoViewUserDetailVideoCall,
-    InfoViewUserDetailVoiceCall,  
-    InfoViewFailedToGetDetail,
-    InfoViewTextMutedExplanation,
-    InfoViewTextBlockedExplanation,
-    InfoViewFailedToBlock,
-    InfoViewFailedToMute,
-    InfoViewCreated,
-    InfoViewUserDetailMembers,
-    InfoViewFailedToLoadUserList,
-    InfoViewLeaveRoom,
-    InfoViewDeleteRoom,
-    InfoViewLeaveRoomConfirm,
-    InfoViewFailedToLeave
-} from './strings/infoview'
+  FavoriteTitle,
+  FailedToLoadFavorites,
+  FailedToRemoveFromFavorites,
+  FailedToAddToFavorites
+} from "./strings/favorite";
+
+export { FailedToLoadMessageInfo } from "./strings/messageInfo";
 
 export {
-    SidebarTitle1,
-    SidebarTitle2,
-    SidebarTitle3,
-    SidebarChat,
-    SidebarFavorite,
-    SidebarHistory,
-    SidebarSearch,
-    SidebarNewRoom,
-    SidebarMarkAll,
-    SidebarProfile,  
-    SidebarPassword,
-    SidebarAdmin,
-    SidebarLogout,
-    SidebarHelp
-} from './strings/sidebar'
+  ProfileTitle,
+  ProfileName,
+  ProfileDescription,
+  ProfileAvatar,
+  FailedToSaveProfile,
+  ProfileErrorNameRequired
+} from "./strings/profile";
 
 export {
-    CallOutgoingFailedByOffile,
-    CallOutgoingFailedUnknown,
-    CallOutgoingFailedByUserBusy,
-    CallOutgoingFailedByReject,
-    CallOutgoingFailedByNotSupport,
-    CallOutgoingMediaError,
-    CallOutgoingStatusInitializingMedia,
-    CallOutgoingStatusConnecting,
-    CallOutgoingStatusRinging,
-    CallFailedToInitizeDevice,
-    CallInitializingDevice
-} from './strings/calling'
+  PasswordTitle,
+  PasswordCurrentPassword,
+  PasswordNewPassword,
+  PasswordNewPasswordConfirm,
+  PasswordErrorPasswordValidation,
+  PasswordErrorConfirmFailed,
+  PasswordFailedToUpdatePassword,
+  PasswordSucceedDialogTitle,
+  PasswordSucceedDialogMessage
+} from "./strings/password";
 
 export {
-    SearchTitle,
-    FailedToSearchMessage
-} from './strings/search'
-
-export {
-    FavoriteTitle,
-    FailedToLoadFavorites,
-    FailedToRemoveFromFavorites,
-    FailedToAddToFavorites
-} from './strings/favorite'
-
-export {
-    FailedToLoadMessageInfo
-} from './strings/messageInfo'
-
-export {
-    ProfileTitle,
-    ProfileName,
-    ProfileDescription,
-    ProfileAvatar,
-    FailedToSaveProfile,
-    ProfileErrorNameRequired
-} from './strings/profile'
-
-export {
-    PasswordTitle,
-    PasswordCurrentPassword,
-    PasswordNewPassword,
-    PasswordNewPasswordConfirm,
-    PasswordErrorPasswordValidation,
-    PasswordErrorConfirmFailed,
-    PasswordFailedToUpdatePassword,
-    PasswordSucceedDialogTitle,
-    PasswordSucceedDialogMessage
-} from './strings/password'
-
-export {
-    NotificationNoNotification,
-    NotificationReadAll
-} from './strings/notification'
+  NotificationNoNotification,
+  NotificationReadAll
+} from "./strings/notification";

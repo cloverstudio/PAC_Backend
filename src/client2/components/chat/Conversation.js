@@ -225,6 +225,13 @@ class Conversation extends Component {
 
     return (
       <div className={chatContainerClass}>
+        {!this.props.currentChatId ? (
+          <div className="callout callout-info" role="alert">
+            <h5>{strings.ChatWelcomeTitle[user.lang]}</h5>
+            <p>{strings.ChatWelcomeText[user.lang]}</p>
+          </div>
+        ) : null}
+
         {this.props.isLoading ? (
           <div className="spinner-linear">
             <div className="line" />
@@ -232,7 +239,6 @@ class Conversation extends Component {
         ) : null}
 
         <ChatHeader />
-
         <div
           ref={scrollableConversation => {
             this.scrollableConversation = scrollableConversation;

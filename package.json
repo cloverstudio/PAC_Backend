@@ -140,7 +140,8 @@
     "vinyl-source-stream": "latest",
     "watchify": "latest",
     "webpack": "^1.15.0",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webrtc-adapter": "^6.0.3"
   },
   "scripts": {
     "build-js": "browserify src/client/js/main.js > public/js/bundle.js -d",
