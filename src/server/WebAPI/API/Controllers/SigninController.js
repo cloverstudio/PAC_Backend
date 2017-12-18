@@ -28,7 +28,7 @@ SigninController.prototype.init = function(app) {
   var self = this;
 
   /**
-   * @api {post} /api/v3/user/signin
+   * @api {post} /api/v3/signin
    * @apiName Signin
    **/
 
