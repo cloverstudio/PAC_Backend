@@ -1,69 +1,46 @@
-export {
-    callLogin
-} from './login';
+export { callLogin, callLogout } from "./login";
+
+export { callGetHistory, callMarkAll } from "./history";
+
+export { callGetUserList, callSearchUserList } from "./userlist";
 
 export {
-    callGetHistory,
-    callMarkAll
-} from './history';
+  callGetGroupList,
+  callSearchGroupList,
+  callGroupUserList
+} from "./group";
+
+export { callGetMessageList } from "./chat";
 
 export {
-    callGetUserList,
-    callSearchUserList
-} from './userlist';
+  callGetUserDetail,
+  callGetGroupDetail,
+  callGetRoomDetail
+} from "./getDetail";
+
+export { callGetStickers } from "./stickers";
 
 export {
-    callGetGroupList, 
-    callSearchGroupList,
-    callGroupUserList
-} from './group';
+  callCreateRoom,
+  callRoomUserList,
+  callUpdateRoom,
+  callAddMemberToRoom,
+  callRemoveUserFromRoom,
+  callLeaveRoom
+} from "./room";
 
-export{
-    callGetMessageList
-} from './chat';
+export { callMute } from "./mute";
 
-export{
-    callGetUserDetail,
-    callGetGroupDetail,
-    callGetRoomDetail,
-} from './getDetail';
+export { callBlock } from "./block";
 
-export{
-    callGetStickers
-} from './stickers';
-
-export{
-    callCreateRoom,
-    callRoomUserList,
-    callUpdateRoom,
-    callAddMemberToRoom,
-    callRemoveUserFromRoom,
-    callLeaveRoom
-} from './room';
-
-export{
-    callMute
-} from './mute';
-
-export{
-    callBlock
-} from './block';
+export { fileUploadWrapper } from "./upload";
 
 export {
-    fileUploadWrapper
-} from './upload';
+  callSearchMessage,
+  callLoadFavorites,
+  callRemoveFromFavorite,
+  callAddToFavorite,
+  callGetMessageInfo
+} from "./message";
 
-
-export{
-    callSearchMessage,
-    callLoadFavorites,
-    callRemoveFromFavorite,
-    callAddToFavorite,
-    callGetMessageInfo
-} from './message';
-
-export{
-    callUpdateProfile,
-    callUpdatePassword
-} from './user';
-
+export { callUpdateProfile, callUpdatePassword } from "./user";

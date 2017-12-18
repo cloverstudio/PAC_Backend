@@ -14,7 +14,7 @@ export {
   LoginFailed
 } from "./strings/login";
 
-export { LogoutSucceed } from "./strings/logout";
+export { LogoutSucceed, LogoutFailed } from "./strings/logout";
 
 export {
   SignupTitle1,

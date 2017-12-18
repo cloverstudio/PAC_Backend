@@ -1,6 +1,10 @@
-import * as config from '../config';
-import {EN} from '../const';
+import * as config from "../config";
+import { EN } from "../const";
 
 export const LogoutSucceed = {
-    EN:"Logout Succeed"
-}
+  EN: "Logout Succeed"
+};
+
+export const LogoutFailed = {
+  EN: "Logout Failed"
+};
