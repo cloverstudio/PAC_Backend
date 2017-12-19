@@ -36,7 +36,7 @@ class MessageFileImage extends Component {
         : message.file.thumb.id 
         
         return(
-            <p className={messageClass}>
+            <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>
                 <span>
                     {this.state.isLoading ? 
                         <span className="spinner-linear">
@@ -66,7 +66,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        showImageView: imgId => dispatch(actions.chatUI.showImageView(imgId))        
+        showImageView: imgId => dispatch(actions.chatUI.showImageView(imgId)),
+        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))        
     };
 };
 

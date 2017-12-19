@@ -145,6 +145,17 @@ const messageForwardViewState = (state = false, action) => {
     }
 };
 
+const messageUpdateViewState = (state = false, action) => {
+    switch (action.type) {
+        case types.ChatHideMessageUpdateView:
+            return false;
+        case types.ChatShowMessageUpdateView:
+            return true;
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     notificationState,
     usersViewState,
@@ -158,5 +169,6 @@ export default combineReducers({
     infoViewState,
     imageViewState,
     messageInfoViewState,
-    messageForwardViewState
+    messageForwardViewState,
+    messageUpdateViewState
 });

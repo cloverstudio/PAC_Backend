@@ -144,3 +144,15 @@ export function hideMessageForwardView() {
         type: types.ChatHideMessageForwardView
     };
 }
+
+export function showMessageUpdateView() {
+    return {
+        type: types.ChatShowMessageUpdateView
+    };
+}
+
+export function hideMessageUpdateView() {
+    return {
+        type: types.ChatHideMessageUpdateView
+    };
+}

@@ -13,6 +13,7 @@ import OutgoingCallDialog from "./call/OutgoingCallDialog";
 import CallingDialog from "./call/CallingDialog";
 import ImageView from "./chat/ImageView";
 import MessageForward from "./chat/MessageForward";
+import MessageUpdate from "./chat/MessageUpdate";
 
 class Modals extends Component {
     static propTypes = {};
@@ -26,6 +27,7 @@ class Modals extends Component {
                 <CallingDialog />
                 <ImageView />
                 <MessageForward />
+                <MessageUpdate />
             </div>
         );
     }

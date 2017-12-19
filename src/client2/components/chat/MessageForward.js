@@ -49,8 +49,8 @@ class MessageForward extends Component {
 
                                 <h5 className="modal-title">Forward message</h5>
 
-                                <button type="button" className="close" onClick={e=> this.props.hideMessageForwardView()}>
-                                    <span aria-hidden="true">×</span>
+                                <button type="button" className="close msgInfo-dialog-close" onClick={e=> this.props.hideMessageForwardView()}>
+                                    <span className="msgInfo-dialog-close" aria-hidden="true">×</span>
                                 </button>
 
                             </div>

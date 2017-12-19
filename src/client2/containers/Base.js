@@ -35,7 +35,7 @@ class Base extends Component {
     )
       this.props.hideStickersView();
 
-    if (!/^.*-message|btn-multiline/.test(e.target.className)) {
+    if (!/^.*-message|btn-multiline|msg-target|msg-update|msgInfo-dialog-close/.test(e.target.className)) {
       if (this.props.hideMessageInfoView) this.props.hideMessageInfoView();
     }
   };

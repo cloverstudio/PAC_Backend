@@ -64,7 +64,7 @@ class SocketManager {
         });
             
         this.ioNsp.on('updatemessages', function(ary){
-
+            store.dispatch(actions.chat.updateMessages(ary));
         });
 
         this.ioNsp.on('spikaping', function(obj){
@@ -257,14 +257,21 @@ class SocketManager {
         }
 
         if (action.type === types.MessageInfoDeleteMessage) {
-            console.log({
-                messageID: action.messageID,
-                userId: user._id
-            })
+        
             this.emit('deleteMessage', {
                 messageID: action.messageID,
                 userID: user.userData._id
             })
+        }
+
+        if (action.type === types.MessageInfoUpdateMessage) {
+
+            this.emit('updateMessage', {
+                messageID: action.messageID,
+                userID: action.userID,
+                message: action.message
+            });
+
         }
 
         next(action);

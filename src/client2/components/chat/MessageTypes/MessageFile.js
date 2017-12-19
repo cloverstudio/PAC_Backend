@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as constant from '../../../lib/const';
 import * as config from '../../../lib/config';
+import * as actions from '../../../actions';
 
 class MessageFile extends Component {
 
@@ -20,8 +21,8 @@ class MessageFile extends Component {
         const messageClass = 'file-message';
         
         return(
-            <p className={messageClass}> 
-                <span className="media flex-column align-items-center text-center">
+            <p className={messageClass} onClick={e => {this.props.getMessageInfo(message)}}> 
+                <span className="media flex-column align-items-center text-center msg-target">
                     <i className="ti-zip text-secondary fs-45 mb-3"></i>
                     <span className="fw-600">{message.file.file.name}</span>
                     <em className="text-fader mb-3">{message.file.file.size / 1000 + 'kB'}</em>
@@ -39,7 +40,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {  
+    return {
+        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))  
     };
 };
 

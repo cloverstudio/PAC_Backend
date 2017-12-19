@@ -28,6 +28,8 @@ export const ChatHideStickersView = "Chat/HideStickersView";
 export const ChatClearChat = "Chat/ClearChat";
 export const ChatShowMessageForwardView = "Chat/ShowMessageForwardView";
 export const ChatHideMessageForwardView = "Chat/HideMessageForwardView";
+export const ChatShowMessageUpdateView = "Chat/ShowMessageUpdateView";
+export const ChatHideMessageUpdateView = "Chat/HideMessageUpdateView";
 
 // History
 export const HistoryLoadInitial = "History/LoadInitial";
@@ -73,7 +75,7 @@ export const ChatReceiveMessage = "Chat/ReceiveMessage";
 export const ChatReceiveMessageInChat = "Chat/ReceiveMessageInChat";
 export const ChatForwardMessage = "Chat/ForwardMessage";
 export const ChatForwardMessageFailed = "Chat/ForwardMessageFailed";
-export const ChatUpdateMessage = "Chat/UpdateMessage";
+export const ChatUpdateMessages = "Chat/UpdateMessages";
 
 export const ChatStartedTyping = "Chat/StartedTyping";
 export const ChatStoppedTyping = "Chat/StoppedTyping";

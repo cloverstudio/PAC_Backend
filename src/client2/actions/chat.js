@@ -419,3 +419,24 @@ export function forwardMessage(roomId) {
             });
     };
 }
+
+export function sendUpdateMessage(content) {
+    return (dispatch, getState) => {
+        const messageID = getState().messageInfo.selectedMessage._id;
+
+        dispatch({
+        type: types.MessageInfoUpdateMessage,
+        message: Encryption.encryptText(content),
+        userID: user.userData._id,
+        messageID
+    });
+     
+    }
+}
+
+export function updateMessages(updatedMessages) {
+    return {
+        type: types.ChatUpdateMessages,
+        updatedMessages
+    }
+}

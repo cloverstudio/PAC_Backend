@@ -69,24 +69,23 @@ class MessageInfo extends Component {
             );
 
             if (this.props.selectedMessage.userID === user.userData._id) {
-                messageInfoButtons.push(
-                    <button
-                        key="btn-upd"
-                        className="btn btn-w-sm btn-multiline btn-outline btn-warning"
-                    >
-                        <i className="ti-pencil" />
-                        <br />Update
-                    </button>
-                );
+                if (this.props.selectedMessage.type === constant.MessageTypeText) {
+                    messageInfoButtons.push(
+                        <button
+                            key="btn-upd"
+                            className="btn btn-w-sm btn-multiline btn-outline btn-warning"
+                            onClick={e => this.props.showMessageUpdateView()}
+                        >
+                            <i className="ti-pencil" />
+                            <br />Update
+                        </button>
+                    );
+                }
                 messageInfoButtons.push(
                     <button
                         key="btn-del"
                         className="btn btn-w-sm btn-multiline btn-outline btn-danger"
-                        onClick={e =>
-                            this.props.deleteMessage(
-                                this.props.selectedMessage._id
-                            )
-                        }
+                        onClick={e => this.props.deleteMessage(this.props.selectedMessage._id)}
                     >
                         <i className="ti-close" />
                         <br />Delete
@@ -203,7 +202,8 @@ const mapDispatchToProps = dispatch => {
             dispatch(actions.messageInfo.deleteMessage(messageID)),
         toggleFavorite: (messageId, isFavorite) =>
             dispatch(actions.favorites.toggleFavorite(messageId, isFavorite)),
-        showMessageForwardView: () => dispatch(actions.chatUI.showMessageForwardView())
+        showMessageForwardView: () => dispatch(actions.chatUI.showMessageForwardView()),
+        showMessageUpdateView: () => dispatch(actions.chatUI.showMessageUpdateView())
     };
 };
 

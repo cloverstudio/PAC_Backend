@@ -28,21 +28,16 @@ class MessageText extends Component {
       //todo: better way to mark links
       formattedMessages = messageContent.split(/( |\n)/).map(
         (word, i) =>
-          constant.urlRegularExpression.test(word) ? (
-            <a key={i} href={word} target="_blank">
+          constant.urlRegularExpression.test(word) 
+          ? <a key={i} href={word} target="_blank">
               <u> {word} </u>
             </a>
-          ) : (
-            word
-          )
+          : word
       );
     }
 
     return (
-      <p
-        className={messageClass}
-        onClick={e => this.props.getMessageInfo(message)}
-      >
+      <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>
         {formattedMessages}
       </p>
     );
@@ -55,8 +50,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getMessageInfo: message =>
-      dispatch(actions.messageInfo.getMessageInfo(message))
+    getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))
   };
 };
 
