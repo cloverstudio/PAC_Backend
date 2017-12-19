@@ -14,11 +14,11 @@ var UserModel = require('./User');
 
 var OldOpenSourceUser = require('./OldOpenSourceUser');
 
-var Message = function(){};
+var Message = function () { };
 
-_.extend(Message.prototype,BaseModel.prototype);
+_.extend(Message.prototype, BaseModel.prototype);
 
-Message.prototype.init = function(mongoose){
+Message.prototype.init = function (mongoose) {
 
     // Defining a schema
     this.schema = new mongoose.Schema({
@@ -33,21 +33,21 @@ Message.prototype.init = function(mongoose){
         file: {
             file: {
                 id: mongoose.Schema.Types.ObjectId,
-	            name: String,
-	            size: Number,
-	            mimeType: String
+                name: String,
+                size: Number,
+                mimeType: String
             },
             thumb: {
                 id: mongoose.Schema.Types.ObjectId,
-	            name: String,
-	            size: Number,
-	            mimeType: String
+                name: String,
+                size: Number,
+                mimeType: String
             }
         },
-        seenBy:[],
+        seenBy: [],
         location: {
-	            lat: Number,
-	            lng: Number
+            lat: Number,
+            lng: Number
         },
         deleted: Number,
         created: Number,
@@ -59,245 +59,245 @@ Message.prototype.init = function(mongoose){
 
 }
 
-Message.get = function(){
+Message.get = function () {
 
     return DatabaseManager.getModel('Message').model;
 
 }
 
-Message.findOldMessages = function(roomID,lastMessageID,limit,callBack){
+Message.findOldMessages = function (roomID, lastMessageID, limit, callBack) {
 
     var model = Message.get();
 
-    if(lastMessageID != 0){
-        
+    if (lastMessageID != 0) {
+
         var self = this;
-        
-        model.findOne({ _id: lastMessageID },function (err, message) {
+
+        model.findOne({ _id: lastMessageID }, function (err, message) {
 
             if (err) return console.error(err);
-            
+
             var lastCreated = message.created;
-            
+
             var query = model.find({
-                roomID:roomID,
-                created:{$lt:lastCreated}
-            }).sort({'created': 'desc'}).limit(limit);        
-            
-            query.exec(function(err,data){
-                
+                roomID: roomID,
+                created: { $lt: lastCreated }
+            }).sort({ 'created': 'desc' }).limit(limit);
+
+            query.exec(function (err, data) {
+
                 if (err)
                     console.error(err);
-                
-                if(callBack)
-                    callBack(err,data)
-                
-            });                
-                
-        
+
+                if (callBack)
+                    callBack(err, data)
+
+            });
+
+
         });
-        
-    }else{
-        
-        var query = model.find({roomID:roomID}).sort({'created': 'desc'}).limit(limit);        
-    
-        query.exec(function(err,data){
-            
+
+    } else {
+
+        var query = model.find({ roomID: roomID }).sort({ 'created': 'desc' }).limit(limit);
+
+        query.exec(function (err, data) {
+
             if (err) return console.error(err);
-            
-            if(callBack)
-                callBack(err,data)
-            
+
+            if (callBack)
+                callBack(err, data)
+
         });
-    
-    
+
+
     }
 
 }
 
-Message.findNewMessages = function(roomID,lastMessageID,limit,callBack){
+Message.findNewMessages = function (roomID, lastMessageID, limit, callBack) {
 
     var model = Message.get();
 
-    if(lastMessageID != 0){
-        
+    if (lastMessageID != 0) {
+
         var self = this;
-        
-        model.findOne({ _id: lastMessageID },function (err, message) {
+
+        model.findOne({ _id: lastMessageID }, function (err, message) {
 
             if (err) return console.error(err);
-            
+
             var lastCreated = message.created;
-            
+
             var query = model.find({
-                roomID:roomID,
-                created:{$gt:lastCreated}
-            }).sort({'created': 'asc'});        
-            
-            query.exec(function(err,data){
-                
+                roomID: roomID,
+                created: { $gt: lastCreated }
+            }).sort({ 'created': 'asc' });
+
+            query.exec(function (err, data) {
+
                 if (err)
                     console.error(err);
-                
-                if(callBack)
-                    callBack(err,data)
-                
-            });                
-                
-        
+
+                if (callBack)
+                    callBack(err, data)
+
+            });
+
+
         });
-        
-    }else{
-        
-        var query = model.find({roomID:roomID}).sort({'created': 'desc'}).limit(limit);        
-    
-        query.exec(function(err,data){
-            
+
+    } else {
+
+        var query = model.find({ roomID: roomID }).sort({ 'created': 'desc' }).limit(limit);
+
+        query.exec(function (err, data) {
+
             if (err) return console.error(err);
-            
+
             // re-sort to be asc
-            data = _.sortBy(data,(o) => {
+            data = _.sortBy(data, (o) => {
                 return o.created;
             });
 
-            if(callBack)
-                callBack(err,data)
-            
+            if (callBack)
+                callBack(err, data)
+
         });
-    
-    
+
+
     }
 
 }
 
-Message.findAllMessages = function(roomID,fromMessageID,callBack){
+Message.findAllMessages = function (roomID, fromMessageID, callBack) {
 
     var model = Message.get();
 
-    if(fromMessageID != 0){
-        
+    if (fromMessageID != 0) {
+
         var self = this;
-        
-        model.findOne({ _id: fromMessageID },function (err, message) {
+
+        model.findOne({ _id: fromMessageID }, function (err, message) {
 
             if (err) return console.error(err);
-            
-            var lastCreated = message.created;
-            
-            var query = model.find({
-                roomID:roomID,
-                created:{$gte:lastCreated}
-            }).sort({'created': 'asc'});        
-            
-            query.exec(function(err,data){
-                
-                if(data.length < Const.pagingLimit){
 
-                    self.findNewMessages(roomID,0,Const.pagingLimit,callBack);
+            var lastCreated = message.created;
+
+            var query = model.find({
+                roomID: roomID,
+                created: { $gte: lastCreated }
+            }).sort({ 'created': 'asc' });
+
+            query.exec(function (err, data) {
+
+                if (data.length < Const.pagingLimit) {
+
+                    self.findNewMessages(roomID, 0, Const.pagingLimit, callBack);
 
                     return;
-                    
+
                 }
 
                 if (err)
                     console.error(err);
-                
-                if(callBack)
-                    callBack(err,data)
-                
-            });                
-                
-        
+
+                if (callBack)
+                    callBack(err, data)
+
+            });
+
+
         });
-        
-    }else{
-        
-        var query = model.find({roomID:roomID}).sort({'created': 'desc'}).limit(limit);        
-    
-        query.exec(function(err,data){
-            
+
+    } else {
+
+        var query = model.find({ roomID: roomID }).sort({ 'created': 'desc' });
+
+        query.exec(function (err, data) {
+
             if (err) return console.error(err);
-            
+
             // re-sort to be asc
-            data = _.sortBy(data,(o) => {
+            data = _.sortBy(data, (o) => {
                 return o.created;
             });
 
-            if(callBack)
-                callBack(err,data)
-            
+            if (callBack)
+                callBack(err, data)
+
         });
-    
-    
+
+
     }
 
 }
 
 
 
-Message.populateMessages = function(messages,callBack){
-    
+Message.populateMessages = function (messages, callBack) {
+
     var model = Message.get();
     var modelUser = UserModel.get();
 
-    if(!_.isArray(messages)){
-        
+    if (!_.isArray(messages)) {
+
         messages = [messages];
-        
+
     }
-    
+
     // collect ids
     var ids = [];
     var oldIds = [];
 
     var newIds = []; // only user from
-    messages.forEach(function(row){
+    messages.forEach(function (row) {
 
         // get users for seeny too
-        _.forEach(row.seenBy,function(row2){
+        _.forEach(row.seenBy, function (row2) {
 
-            if(row2.version == 2){
-                ids.push(row2.user); 
-            }else{
-                if(Utils.isObjectId(row2.user))
+            if (row2.version == 2) {
+                ids.push(row2.user);
+            } else {
+                if (Utils.isObjectId(row2.user))
                     oldIds.push(row2.user.toString());
                 else
                     oldIds.push(row2.userID);
             }
 
         });
-        
+
         ids.push(row.userID);
-        newIds.push(row.userID); 
-        
+        newIds.push(row.userID);
+
     });
-    
+
     oldIds = _.uniq(oldIds);
 
-    if(ids.length == 0 && oldIds.length == 0){
-        callBack(null,messages);
+    if (ids.length == 0 && oldIds.length == 0) {
+        callBack(null, messages);
     }
 
     async.waterfall([(done) => {
 
-        if(oldIds.length == 0){
-            done(null,null);
+        if (oldIds.length == 0) {
+            done(null, null);
             return;
         }
-        
+
         // convert MF olduserid to spika for business user id
         var oldOpenSourceUser = OldOpenSourceUser.get();
 
-        var condition = _.map(oldIds,(value) => { return {user:value} } );
+        var condition = _.map(oldIds, (value) => { return { user: value } });
 
         var query = model.find({
-            $or : condition
-        }).sort({'created': 1}).limit(500).exec((err,data) => {    
-            
+            $or: condition
+        }).sort({ 'created': 1 }).limit(500).exec((err, data) => {
+
             var convTable = {};
 
-            if (err){
-                done(null,null);
+            if (err) {
+                done(null, null);
                 return;
             }
 
@@ -308,20 +308,20 @@ Message.populateMessages = function(messages,callBack){
 
             ids = _.uniq(ids);
 
-            messages.forEach(function(row){
-                
+            messages.forEach(function (row) {
+
                 var oldSeenBy = row.seenBy;
 
-                row.seenBy = _.map(row.seenBy,(obj) => {
+                row.seenBy = _.map(row.seenBy, (obj) => {
 
                     var newUserId = convTable[obj.user.toString()];
-                    if(!newUserId){
+                    if (!newUserId) {
                         return obj;
-                    }else{
+                    } else {
                         return {
                             user: newUserId.toString(),
                             at: obj.at,
-                            version:2
+                            version: 2
                         }
                     }
 
@@ -329,60 +329,60 @@ Message.populateMessages = function(messages,callBack){
                 });
 
                 // update to new seenby
-                model.update({ 
+                model.update({
                     _id: row._id
-                },{ 
-                    seenBy: row.seenBy
-                },(err,updateResult) => {
-                    if(err)
-                        console.log(err);
-                });
+                }, {
+                        seenBy: row.seenBy
+                    }, (err, updateResult) => {
+                        if (err)
+                            console.log(err);
+                    });
 
             });
 
-            done(null,null);
+            done(null, null);
 
-        }); 
+        });
 
-    },function(result,done){
+    }, function (result, done) {
 
         var resultAry = [];
 
-        modelUser.find({_id:{$in:newIds}},UserModel.defaultResponseFields,
-            
-            function(err,userResult){
-            
-            _.forEach(messages,function(messageElement,messageIndex,messagesEntity){
-                
-                var obj = messageElement.toObject();
-                
-                _.forEach(userResult,function(userElement,userIndex){
-                    
-                    if (!messageElement || !messageElement.userID || !userElement || !userElement._id)
-                        return;
-                        
-                    // replace user to userObj
-                    if(messageElement.userID.toString() == userElement._id.toString()){
-                        obj.user = userElement.toObject();
-                    }
+        modelUser.find({ _id: { $in: newIds } }, UserModel.defaultResponseFields,
 
-                }); 
-                
-                resultAry.push(obj);
-                
+            function (err, userResult) {
+
+                _.forEach(messages, function (messageElement, messageIndex, messagesEntity) {
+
+                    var obj = messageElement.toObject();
+
+                    _.forEach(userResult, function (userElement, userIndex) {
+
+                        if (!messageElement || !messageElement.userID || !userElement || !userElement._id)
+                            return;
+
+                        // replace user to userObj
+                        if (messageElement.userID.toString() == userElement._id.toString()) {
+                            obj.user = userElement.toObject();
+                        }
+
+                    });
+
+                    resultAry.push(obj);
+
+                });
+
+                done(null, resultAry)
+
+
             });
-            
-            done(null,resultAry)           
-            
-                                
-        });
-                    
+
     }],
-    function(err,resultAry){
+        function (err, resultAry) {
 
-        callBack(err,resultAry);
+            callBack(err, resultAry);
 
-    });
+        });
 }
 
 

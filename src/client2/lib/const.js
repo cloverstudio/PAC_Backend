@@ -91,3 +91,5 @@ export const RoomModeEdit = 2;
 
 export const CredentialsMinLength = 6;
 export const CredentialsRegex = /^[a-zA-Z0-9]+$/;
+
+export const KeepAliveInterval = 30 * 1000;
