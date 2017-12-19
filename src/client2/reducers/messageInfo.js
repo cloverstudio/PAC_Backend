@@ -45,6 +45,8 @@ const seenBy = (state = [], action) => {
     switch (action.type) {
         case types.MessageInfoLoadSucceed:
             return action.data.seenBy;
+        case types.MessageInfoLoadFailed:
+            return [];
         default:
             return state;
     }

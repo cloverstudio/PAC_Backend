@@ -250,25 +250,26 @@ const messageList = (state = initial.messageList, action) => {
     }
 
     if (action.type === types.ChatUpdateMessages) {
-
-        const currentChatId = oldState[0].roomID;
-        const currentChatUpdatedMsgs = action.updatedMessages.filter(msg => msg.roomID === currentChatId);
-        
-        if (currentChatUpdatedMsgs.length > 0){
+        if (oldState.length > 0) {
+            const currentChatId = oldState[0].roomID;
+            const currentChatUpdatedMsgs = action.updatedMessages.filter(msg => msg.roomID === currentChatId);
             
-            const currentChatUpdatedMsgsIndexes = currentChatUpdatedMsgs.map(msg => oldState.findIndex(oldMsg => oldMsg._id === msg._id))
+            if (currentChatUpdatedMsgs.length > 0){
+                
+                const currentChatUpdatedMsgsIndexes = currentChatUpdatedMsgs.map(msg => oldState.findIndex(oldMsg => oldMsg._id === msg._id))
 
-            return oldState.map((oldMsg,i) => {
-                let msgToReplaceIndex = currentChatUpdatedMsgsIndexes.indexOf(i)
-                if (msgToReplaceIndex > -1){
-                    return currentChatUpdatedMsgs[msgToReplaceIndex]
-                }
-                else{
-                    return oldMsg
-                }
-            })
+                return oldState.map((oldMsg,i) => {
+                    let msgToReplaceIndex = currentChatUpdatedMsgsIndexes.indexOf(i)
+                    if (msgToReplaceIndex > -1){
+                        return currentChatUpdatedMsgs[msgToReplaceIndex]
+                    }
+                    else{
+                        return oldMsg
+                    }
+                })
+            }
+            
         }
-        
     }
 
     return newState;

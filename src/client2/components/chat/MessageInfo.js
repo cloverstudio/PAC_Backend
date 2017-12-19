@@ -17,11 +17,23 @@ class MessageInfo extends Component {
 
     constructor() {
         super();
+        this.state = {
+            confirmDelete : false
+        }
     }
 
-    onScroll = e => {};
+    deleteConfirm = (value = true) => this.setState({confirmDelete: value})
 
-    componentWillReceiveProps(nextProps) {}
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.selectedMessage){
+            if (nextProps.selectedMessage._id !== this.props.selectedMessage._id){
+                this.deleteConfirm(false);
+            }
+        }
+        if (!nextProps.visible){
+            this.deleteConfirm(false);
+        }
+    }
 
     componentDidMount() {}
 
@@ -85,20 +97,23 @@ class MessageInfo extends Component {
                     <button
                         key="btn-del"
                         className="btn btn-w-sm btn-multiline btn-outline btn-danger"
-                        onClick={e => this.props.deleteMessage(this.props.selectedMessage._id)}
-                    >
+                        onClick={e => {
+                            if (this.state.confirmDelete){
+                                this.props.deleteMessage(this.props.selectedMessage._id);
+                                this.deleteConfirm(false);
+                            }
+                            else{
+                                this.deleteConfirm();
+                            }
+                        }}>
                         <i className="ti-close" />
-                        <br />Delete
+                        <br />{this.state.confirmDelete ? 'Confirm' : 'Delete'}
                     </button>
                 );
             }
         }
         return (
-            <div
-                className={
-                    this.props.visible ? "quickview reveal" : "quickview"
-                }
-            >
+            <div className={this.props.visible ? "quickview reveal" : "quickview"}>
                 <div className="messageInfoView">
                     <header className="quickview-header">
                         <p className="quickview-title lead"> Message detail </p>
@@ -106,7 +121,8 @@ class MessageInfo extends Component {
 
                     <div className="quickview-body ">
                         <div className="quickview-block">
-                            <div className="callout callout-success">
+                            {typeof this.props.selectedMessage._id !== "undefined"
+                            ? <div className="callout callout-success">
                                 <h6>sent</h6>
                                 <p>
                                     {util.getTimestamp(
@@ -118,6 +134,7 @@ class MessageInfo extends Component {
                                     {userName}
                                 </p>
                             </div>
+                            : null}
 
                             {typeof this.props.selectedMessage.deleted !==
                                 "undefined" &&
@@ -134,10 +151,13 @@ class MessageInfo extends Component {
                                 </div>
                             ) : null}
                         </div>
-
-                        <div className="quickview-block">
+                        
+                        {typeof this.props.selectedMessage._id !== "undefined" 
+                        ? <div className="quickview-block">
                             {messageInfoButtons}
                         </div>
+                        :null}
+                        
                     </div>
 
                     <header className="quickview-header">

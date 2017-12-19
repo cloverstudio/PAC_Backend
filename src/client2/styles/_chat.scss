@@ -115,13 +115,16 @@
                         p{
                             cursor:pointer;
                             white-space: pre-wrap;
-
+                            transition:0.35s all;
                             img{
                                 max-width: 150px;
                             }
 
                             &.sticker-message{
                                 background:transparent;
+                            }
+                            u{
+                                word-break: break-word;
                             }
 
                         }
@@ -166,7 +169,11 @@
                                     color:white;
                                 }
                             }
-                            
+                         
+                        }
+                        
+                        .image-message{
+                            padding:0 0 0 35px;                                
                         }
 
                     }

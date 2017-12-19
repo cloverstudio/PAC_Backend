@@ -17,8 +17,10 @@ class MessageText extends Component {
     const message = this.props.message;
     let messageClass = "text-message";
     messageClass += typeof message._id === "undefined" ? " unsent" : "";
-
+    
     const messageContent = Encryption.decryptText(message.message);
+    
+    messageClass += message.isFavorite && messageContent.length > 0 ?  " bg-pink" : "";
 
     let formattedMessages;
 

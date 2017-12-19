@@ -90,7 +90,9 @@ class MessageForward extends Component {
 
 
                                         return (
-                                            <div className="media align-items-center" key={resultItem._id} onClick={ () => this.props.forwardMessage(chatId)}>
+                                            <div className="media align-items-center" key={resultItem._id} onClick={ () => {
+                                                this.props.forwardMessage(chatId);
+                                                this.props.hideMessageForwardView()}}>
 
                                                 <span className="flexbox flex-grow gap-items text-truncate">
 
