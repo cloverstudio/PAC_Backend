@@ -18,331 +18,342 @@ var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
 
 var windowHandler = require('../../../lib/windowManager');
+var LoadMessageClient = require('../../../lib/APIClients/Messaging/LoadMessageClient');
 
 var HistoryListView = Backbone.View.extend({
-    
+
     dataList: [],
-    container : "",
-    currentPage : 1,
+    container: "",
+    currentPage: 1,
     isReachedToEnd: false,
-    lastUpdate : 0,
-    initialize: function(options) {
+    lastUpdate: 0,
+    initialize: function (options) {
         this.container = options.container;
         this.render();
     },
 
-    render: function() {
+    render: function () {
 
         $(this.container).html(template({
-            Config:Config
+            Config: Config
         }));
-        
+
         this.onLoad();
-        
+
         return this;
 
     },
 
-    onLoad: function(){
-        
+    onLoad: function () {
+
         var self = this;
-        
+
         this.dataList = [];
-        
-        $("#sidebar-historylist .listview").on('scroll',function() {
-            
-            if(self.isLoading)
+
+        $("#sidebar-historylist .listview").on('scroll', function () {
+
+            if (self.isLoading)
                 return;
 
 
             // check is bottom
-            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                
+            if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+
                 self.loadNext();
-                
+
             }
-            
+
         });
 
-        Backbone.on(Const.NotificationRefreshHistory, function(){
-            
+        Backbone.on(Const.NotificationRefreshHistory, function () {
+
             self.updateList();
-            
+
         });
 
-        Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+        Backbone.on(Const.NotificationRefreshHistoryLocally, function (obj) {
 
             self.messageObj = obj;
-            self.isMessageSeen = false;
 
             self.updateListWithoutLoading(obj);
 
             // reset unread count instead of loading message
             if (windowHandler.isActive) {
-                self.isMessageSeen = true;
+                self.messageObj = {};
                 MarkChatReadClient.updateByMessage(obj);
             }
 
         });
 
-        Backbone.on(Const.NotificationRemoveRoom, function(obj){
-            
-            var newDataList = _.filter(self.dataList,function(historyObj){
-	        	
-	        	if(!obj.room || !historyObj.room)
-	        		return true;
-				
-				if(obj.room._id == historyObj.room._id)
-					return false;
-				else
-					return true;
-	        	 
+        Backbone.on(Const.NotificationRemoveRoom, function (obj) {
+
+            var newDataList = _.filter(self.dataList, function (historyObj) {
+
+                if (!obj.room || !historyObj.room)
+                    return true;
+
+                if (obj.room._id == historyObj.room._id)
+                    return false;
+                else
+                    return true;
+
             });
-            
+
             self.dataList = newDataList;
             self.updateList();
-            
+
         });
-        
-        Backbone.on(Const.NotificationDeletedFromGroup, function(obj){
+
+        Backbone.on(Const.NotificationDeletedFromGroup, function (obj) {
 
             self.dataList = [];
             self.currentPage = 1;
             self.updateList();
-            
+
         });
 
-        Backbone.on(Const.NotificationRemoveRoom, function(obj){
+        Backbone.on(Const.NotificationRemoveRoom, function (obj) {
 
             self.dataList = [];
             self.currentPage = 1;
             self.updateList();
-            
+
         });
 
-        Backbone.on(Const.NotificationNewRoom, function(obj){
+        Backbone.on(Const.NotificationNewRoom, function (obj) {
 
             self.dataList = [];
             self.currentPage = 1;
             self.updateList();
-            
+
         });
 
         $(window).focus(function () {
 
-            if (!self.messageObj || self.isMessageSeen)
+            if (_.isEmpty(self.messageObj))
                 return;
-                    
-            self.startChat(self.historyId);
-            self.isMessageSeen = true;
-            
+
+            LoadMessageClient.send(loginUserManager.currentConversation, self.messageObj._id, "allto", function (res) {
+
+                self.updateListWithoutLoading(self.messageObj);
+
+                let totalUnreadCount = 0;
+                self.dataList.forEach(function (historyObj) {
+                    totalUnreadCount += historyObj.unreadCount;
+                });
+
+                Backbone.trigger(Const.NotificationUpdateUnreadCount, totalUnreadCount);
+                self.messageObj = {};
+
+            });
+
         });
 
         this.loadNext();
 
     },
-    updateList: function(){
+    updateList: function () {
 
         var self = this;
-        
+
         var lastUpdate = 0;
 
-        if(this.dataList.length > 0){
+        if (this.dataList.length > 0) {
 
-            var sortByLastUpdate = _.sortBy(this.dataList,function(historyObj){
-                
+            var sortByLastUpdate = _.sortBy(this.dataList, function (historyObj) {
+
                 return -1 * historyObj.lastUpdate;
-                
+
             });
-            
+
             lastUpdate = sortByLastUpdate[0].lastUpdate;
-            
+
         }
-        
-        HistoryListClient.sendUpdate(lastUpdate,function(data){
-            
+
+        HistoryListClient.sendUpdate(lastUpdate, function (data) {
+
             self.mergeData(data.list);
-            self.renderList(); 
-            
+            self.renderList();
+
             let totalUnreadCount = 0;
-            self.dataList.forEach( function(historyObj) {
+            self.dataList.forEach(function (historyObj) {
                 totalUnreadCount += historyObj.unreadCount;
             });
 
-            Backbone.trigger(Const.NotificationUpdateUnreadCount,totalUnreadCount);
-            
-        },function(errorCode){
-            
+            Backbone.trigger(Const.NotificationUpdateUnreadCount, totalUnreadCount);
+
+        }, function (errorCode) {
+
             UIUtils.handleAPIErrors(errorCode);
-            
+
         });
-        
+
     },
-    updateListWithoutLoading: function(messageObj){
+    updateListWithoutLoading: function (messageObj) {
 
         var self = this;
 
-        var historyObj = _.find(self.dataList,function(historyObj){
+        var historyObj = _.find(self.dataList, function (historyObj) {
 
             var roomID = historyObj.chatType + "-" + historyObj.chatId;
 
             // generate roomID by users
-            if(historyObj.chatType == Const.chatTypePrivate){
-                roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
+            if (historyObj.chatType == Const.chatTypePrivate) {
+                roomID = Utils.chatIdByUser(loginUserManager.user, historyObj.user);
             }
 
             return roomID == messageObj.roomID;
-            
+
         });
 
-        if(historyObj){
+        if (historyObj) {
 
             historyObj.lastUpdate = messageObj.created;
-            if(messageObj.type == Const.messageTypeText)
+            if (messageObj.type == Const.messageTypeText)
                 messageObj.message = EncryptionManager.decryptText(messageObj.message);
 
             historyObj.lastMessage = messageObj;
 
             self.mergeData([historyObj]);
-            self.renderList(); 
-            
+            self.renderList();
+
 
         }
 
     },
 
-    loadNext: function(){
-        
-        if(this.isReachedToEnd)
+    loadNext: function () {
+
+        if (this.isReachedToEnd)
             return;
-            
+
         var self = this;
 
-        HistoryListClient.send(this.currentPage,function(data){
-            
-            if(data.list.length == 0)
+        HistoryListClient.send(this.currentPage, function (data) {
+
+            if (data.list.length == 0)
                 self.isReachedToEnd = true;
-                
-            else{
-                
-                if(self.currentPage == 1){
+
+            else {
+
+                if (self.currentPage == 1) {
                     $("#sidebar-historylist .listview").html('');
                 }
-                
+
                 self.mergeData(data.list);
                 self.currentPage++;
-                self.renderList(); 
+                self.renderList();
 
             }
-            
-            Backbone.trigger(Const.NotificationUpdateUnreadCount,data.totalUnreadCount);
-            
-        },function(errorCode){
-            
+
+            Backbone.trigger(Const.NotificationUpdateUnreadCount, data.totalUnreadCount);
+
+        }, function (errorCode) {
+
             UIUtils.handleAPIErrors(errorCode);
-            
+
         });
-            
-        
+
+
     },
-    
-    mergeData : function(array){
-        
+
+    mergeData: function (array) {
+
         var self = this;
-        
-        _.forEach(array,function(updatedHistoryObj){
-            
+
+        _.forEach(array, function (updatedHistoryObj) {
+
             var isNew = false;
-            
-            var existedObj = _.find(self.dataList,function(historyObj){
-                
+
+            var existedObj = _.find(self.dataList, function (historyObj) {
+
                 return historyObj._id == updatedHistoryObj._id;
-                 
+
             });
-            
-            if(!existedObj)
+
+            if (!existedObj)
                 isNew = true;
-            
-            if(isNew){
+
+            if (isNew) {
 
                 self.dataList.push(updatedHistoryObj);
-                
-            }else{
-                
-                self.dataList = _.map(self.dataList,function(element){
-                    
-                    if(element._id == updatedHistoryObj._id)
+
+            } else {
+
+                self.dataList = _.map(self.dataList, function (element) {
+
+                    if (element._id == updatedHistoryObj._id)
                         return updatedHistoryObj;
                     else
                         return element;
-                     
+
                 });
-                
+
             }
-            
-            
+
+
         });
-        
-        this.dataList = _.sortBy(this.dataList,function(historyObj){
-            
+
+        this.dataList = _.sortBy(this.dataList, function (historyObj) {
+
             return -1 * historyObj.lastUpdate;
-             
+
         });
-        
+
         // make unread count to zero if user is opened the chat
-        this.dataList = _.map(this.dataList,function(historyObj){
-            
+        this.dataList = _.map(this.dataList, function (historyObj) {
+
             var chatId = "";
 
-            if(historyObj.chatType == Const.chatTypePrivate){
-                
-                chatId = Utils.chatIdByUser(historyObj.user,loginUserManager.user);
-                
-            }else if(historyObj.chatType == Const.chatTypeGroup){
-    
+            if (historyObj.chatType == Const.chatTypePrivate) {
+
+                chatId = Utils.chatIdByUser(historyObj.user, loginUserManager.user);
+
+            } else if (historyObj.chatType == Const.chatTypeGroup) {
+
                 chatId = Utils.chatIdByGroup(historyObj.group);
-                
-            }else if(historyObj.chatType == Const.chatTypeRoom){
-    
+
+            } else if (historyObj.chatType == Const.chatTypeRoom) {
+
                 chatId = Utils.chatIdByRoom(historyObj.room);
-    
+
             }
 
-            if(loginUserManager.currentConversation == chatId && windowHandler.isActive){
+            if (loginUserManager.currentConversation == chatId && windowHandler.isActive) {
 
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
-                
+
             }
-                
+
             return historyObj;
-             
+
         });
-        
+
     },
-    renderList: function(){
-        
+    renderList: function () {
+
         var self = this;
-        
-        this.dataList = _.map(this.dataList,function(row){
 
-            if(row.lastMessage){
+        this.dataList = _.map(this.dataList, function (row) {
 
-                if(row.lastMessage.type == 2)
+            if (row.lastMessage) {
+
+                if (row.lastMessage.type == 2)
                     row.lastMessage.message = localzationManager.get("File");
 
-                if(row.lastMessage.type == 3)
+                if (row.lastMessage.type == 3)
                     row.lastMessage.message = localzationManager.get("Location");
 
-                if(row.lastMessage.type == 4)
+                if (row.lastMessage.type == 4)
                     row.lastMessage.message = localzationManager.get("Contact");
 
-                if(row.lastMessage.type == 5) {
-                    row.lastMessage.downloadURL = row.lastMessage.message;                
+                if (row.lastMessage.type == 5) {
+                    row.lastMessage.downloadURL = row.lastMessage.message;
                     row.lastMessage.message = localzationManager.get("Sticker");
                 }
-        
-                if(row.lastMessage.user) {
+
+                if (row.lastMessage.user) {
                     if (row.lastMessage.user._id.toString() == loginUserManager.user._id.toString())
                         row.currentUserIsSender = 1
                 }
@@ -350,9 +361,9 @@ var HistoryListView = Backbone.View.extend({
                     if (row.lastUpdateUser._id.toString() == loginUserManager.user._id.toString())
                         row.currentUserIsSender = 1
                 }
-                
+
             }
-            
+
             return row;
 
         });
@@ -360,52 +371,52 @@ var HistoryListView = Backbone.View.extend({
         var html = templateContents({
             list: this.dataList
         });
-        
+
         $("#sidebar-historylist .listview").html(html);
-        
-        $('#sidebar-historylist .chat-target').unbind().on('click',function(){
-            
+
+        $('#sidebar-historylist .chat-target').unbind().on('click', function () {
+
             self.historyId = $(this).attr('id');
-            
+
             self.startChat(self.historyId);
-             
+
         });
-        
-        
+
+
     },
-    startChat: function(historyId){
-        
-        var historyObj = _.find(this.dataList,function(row){
+    startChat: function (historyId) {
+
+        var historyObj = _.find(this.dataList, function (row) {
             return row._id == historyId
         });
-        
-        if(!historyObj)
+
+        if (!historyObj)
             return;
-        
-        if(historyObj.chatType == Const.chatTypePrivate){
-            
+
+        if (historyObj.chatType == Const.chatTypePrivate) {
+
             ChatManager.openChatByUser(historyObj.user);
-            
-        }else if(historyObj.chatType == Const.chatTypeGroup){
+
+        } else if (historyObj.chatType == Const.chatTypeGroup) {
 
             ChatManager.openChatByGroup(historyObj.group);
-            
-        }else if(historyObj.chatType == Const.chatTypeRoom){
+
+        } else if (historyObj.chatType == Const.chatTypeRoom) {
 
             ChatManager.openChatByRoom(historyObj.room);
 
         }
 
     },
-    destroy: function(){
-        
+    destroy: function () {
+
         Backbone.off(Const.NotificationRefreshHistory);
         Backbone.off(Const.NotificationRefreshHistoryLocally);
         Backbone.off(Const.NotificationRemoveRoom);
-        
+
     }
-    
-    
+
+
 });
 
 module.exports = HistoryListView;

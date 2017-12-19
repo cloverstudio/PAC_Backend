@@ -71806,29 +71806,29 @@ var FileUplaoder = require('./FileUploader');
 var stickerPanelView = require('./StickerPanel/StickerPanelView');
 
 var RenderDirection = {
-    append:'new',
-    prepend:'old',
+    append: 'new',
+    prepend: 'old',
     allto: "allto"
 };
 
 var windowHandler = require('../../lib/windowManager');
 
 var ChatView = Backbone.View.extend({
-    
-    container : "",
-    views : [],
+
+    container: "",
+    views: [],
     currentRoomId: '',
     lastMessageId: 0,
     firstMessageId: 0,
     autoLoadMessageId: 0,
     loadedMessages: [],
-    initialTBHeight : 0,
-    initialTBContainerHeight : 0,
+    initialTBHeight: 0,
+    initialTBContainerHeight: 0,
     fileUploader: null,
     messagePool: [],
     lastTextLength: 0,
-    initialize: function(options) {
-        
+    initialize: function (options) {
+
         this.container = options.container;
         this.currentRoomId = options.roomId;
         this.autoLoadMessageId = options.autoLoadMessageId;
@@ -71840,104 +71840,104 @@ var ChatView = Backbone.View.extend({
 
     },
 
-    render: function() {
-        
+    render: function () {
+
         $(this.container).html(template({
-            Config:Config
+            Config: Config
         }));
-        
+
         this.onLoad();
-        
+
         this.handleKeyEvents();
 
         return this;
 
     },
 
-    onLoad: function(){
-        
+    onLoad: function () {
+
         var self = this;
 
-        this.initialTBHeight = $( "#text-message-box" ).height();
-        this.initialTBContainerHeight = $( "#text-message-box-container" ).height();
+        this.initialTBHeight = $("#text-message-box").height();
+        this.initialTBContainerHeight = $("#text-message-box-container").height();
 
-        Backbone.on(Const.NotificationNewMessage, function(message){
+        Backbone.on(Const.NotificationNewMessage, function (message) {
 
-            if(message.roomID == self.currentRoomId){
-            
-                self.renderMessages([message],RenderDirection.append);
+            if (message.roomID == self.currentRoomId) {
+
+                self.renderMessages([message], RenderDirection.append);
 
                 // prevent sending massive openMessage in same time to server
-                _.delay(function() {
-                    
-                    socketIOManager.emit('openMessage',{
+                _.delay(function () {
+
+                    socketIOManager.emit('openMessage', {
                         messageID: message._id,
                         userID: loginUserManager.user._id,
                         doNotUpdateSeenBy: !windowHandler.isActive
                     });
-                    
+
                 }, 1000 * Math.random(), 'later');
 
             }
 
         });
 
-        Backbone.on(Const.NotificationMessageUpdated, function(messages){
-            
-            if(messages.length > 0 && messages[0].roomID == self.currentRoomId) {
+        Backbone.on(Const.NotificationMessageUpdated, function (messages) {
+
+            if (messages.length > 0 && messages[0].roomID == self.currentRoomId) {
                 self.updateMessage(messages);
             }
 
         });
-        
-        Backbone.on(Const.NotificationTyping, function(param){
 
-            if(param.roomID != self.currentRoomId)
+        Backbone.on(Const.NotificationTyping, function (param) {
+
+            if (param.roomID != self.currentRoomId)
                 return;
 
             self.updateTyping(param);
-            
+
         });
 
         var lastPosition = 0;
-        
-        $( "#messages" ).scroll(function() {
+
+        $("#messages").scroll(function () {
 
             var scrollPosition = $('#messages').scrollTop();
 
             // scrolling to up
-            if(scrollPosition < lastPosition && scrollPosition == 0){
+            if (scrollPosition < lastPosition && scrollPosition == 0) {
                 self.loadNextMessage();
             }
-            
+
             lastPosition = scrollPosition;
-            
+
         });
 
-        $('#btn-fileupload').on('click',function(){
-            
+        $('#btn-fileupload').on('click', function () {
+
             self.fileUplaoder.handleClick();
-            
+
         });
 
-        $('#file-input').on('change',function(event){
-                        
+        $('#file-input').on('change', function (event) {
+
             self.fileUplaoder.startUploadingFile(event);
 
         });
-        
-        $('#btn-emoticons').on('click',function(){
+
+        $('#btn-emoticons').on('click', function () {
 
             var view = new stickerPanelView({
                 'el': "#main-container"
-            },function(selectedSticker){
-	            
-	            if(selectedSticker){
-		            
-	            }
-	            
-	            view = null;
-	            
+            }, function (selectedSticker) {
+
+                if (selectedSticker) {
+
+                }
+
+                view = null;
+
             });
 
         });
@@ -71946,44 +71946,44 @@ var ChatView = Backbone.View.extend({
 
         var da = document.getElementById('messages');
 
-        da.addEventListener('dragover', function(e){
-            e.preventDefault();  
+        da.addEventListener('dragover', function (e) {
+            e.preventDefault();
         });
 
-        da.addEventListener('dragenter', function(e){
-            e.preventDefault();  
+        da.addEventListener('dragenter', function (e) {
+            e.preventDefault();
             counter++;
             $('#messages').addClass('drag');
             $('#file-drop-indicator').addClass('drag');
 
         });
 
-        da.addEventListener('dragleave', function(e){
-            e.preventDefault();  
+        da.addEventListener('dragleave', function (e) {
+            e.preventDefault();
             counter--;
-            if (counter === 0) { 
+            if (counter === 0) {
                 $('#messages').removeClass('drag');
                 $('#file-drop-indicator').removeClass('drag');
             }
-            
+
         });
 
-        da.addEventListener('drop', function(e){
+        da.addEventListener('drop', function (e) {
 
-            e.preventDefault();  
+            e.preventDefault();
             e.stopPropagation();
-            
+
             counter = 0;
-            
+
             $('#messages').removeClass('drag');
             $('#file-drop-indicator').removeClass('drag');
-            
-            if(e.dataTransfer){
-                
+
+            if (e.dataTransfer) {
+
                 var dt = e.dataTransfer;
                 if (dt.items) {
                     // Use DataTransferItemList interface to access the file(s)
-                    for (var i=0; i < dt.items.length; i++) {
+                    for (var i = 0; i < dt.items.length; i++) {
 
                         if (dt.items[i].kind == "file") {
                             var f = dt.items[i].getAsFile();
@@ -71994,10 +71994,10 @@ var ChatView = Backbone.View.extend({
                     }
                 } else {
 
-                    for (var i=0; i < dt.files.length; i++) {
+                    for (var i = 0; i < dt.files.length; i++) {
                         var f = dt.files[i];
                         self.fileUplaoder.uploadFileHTML5(f);
-                    }  
+                    }
                 }
 
             }
@@ -72007,30 +72007,30 @@ var ChatView = Backbone.View.extend({
 
     },
 
-    loadLatestMessage: function(){
+    loadLatestMessage: function () {
 
         var self = this;
 
         var loadType = RenderDirection.append;
 
-        if(this.autoLoadMessageId){
+        if (this.autoLoadMessageId) {
             this.firstMessageId = this.autoLoadMessageId;
             loadType = RenderDirection.allto;
         }
 
-        LoadMessageClient.send(this.currentRoomId,this.firstMessageId,loadType,function(res){
-            
-            if(res.messages && res.messages.length > 0){
+        LoadMessageClient.send(this.currentRoomId, this.firstMessageId, loadType, function (res) {
 
-                if(self.lastMessageId == 0){
+            if (res.messages && res.messages.length > 0) {
+
+                if (self.lastMessageId == 0) {
                     Backbone.trigger(Const.NotificationChatLoaded);
                 }
 
                 self.lastMessageId = res.messages[0]._id;
                 self.firstMessageId = res.messages[res.messages.length - 1]._id;
-                self.renderMessages(res.messages,RenderDirection.append);
+                self.renderMessages(res.messages, RenderDirection.append);
 
-                if(self.autoLoadMessageId){
+                if (self.autoLoadMessageId) {
                     self.scrollToTop();
                 } else {
                     self.scrollToBottom();
@@ -72042,69 +72042,69 @@ var ChatView = Backbone.View.extend({
                 Backbone.trigger(Const.NotificationChatLoaded);
             }
 
-        },function(){
+        }, function () {
 
         });
 
     },
 
-    loadNextMessage: function(){
+    loadNextMessage: function () {
 
         var self = this;
 
         // keep scroll position
         var currentScrollPos = $('#messages')[0].scrollHeight
 
-        LoadMessageClient.send(this.currentRoomId,this.lastMessageId,RenderDirection.prepend,function(res){
+        LoadMessageClient.send(this.currentRoomId, this.lastMessageId, RenderDirection.prepend, function (res) {
 
-            if(res.messages && res.messages.length > 0){
+            if (res.messages && res.messages.length > 0) {
 
                 self.lastMessageId = res.messages[res.messages.length - 1]._id;
-                self.renderMessages(res.messages,RenderDirection.prepend);
+                self.renderMessages(res.messages, RenderDirection.prepend);
                 var newScrollPos = $('#messages')[0].scrollHeight
                 $('#messages').scrollTop(newScrollPos - currentScrollPos);
 
             }
 
-        },function(){
+        }, function () {
 
         });
 
     },
-    renderMessages: function(newMessages,renderDirection,isUpdate){
+    renderMessages: function (newMessages, renderDirection, isUpdate) {
 
         var html = "";
         var cellGenerator = new CellGenerator();
         var self = this;
 
-        newMessages.forEach(function(message){
+        newMessages.forEach(function (message) {
 
             // merge message arry
-            var isExist = _.find(self.messagePool,{'_id':message._id});
+            var isExist = _.find(self.messagePool, { '_id': message._id });
 
 
-            if(!isExist){
+            if (!isExist) {
                 self.messagePool.push(message);
-            }else{
-                self.messagePool = _.filter(self.messagePool,function(o){
+            } else {
+                self.messagePool = _.filter(self.messagePool, function (o) {
                     return o._id != message._id
                 });
                 self.messagePool.push(message);
             }
 
-            _.sortBy(self.messagePool,function(o){
+            _.sortBy(self.messagePool, function (o) {
                 return o.created;
             });
 
             var avatarFileId = "";
 
             // get AvatarURL
-            if(message.user && message.user.avatar && message.user.avatar.thumbnail){
+            if (message.user && message.user.avatar && message.user.avatar.thumbnail) {
                 avatarFileId = message.user.avatar.thumbnail.nameOnServer;
             }
 
             message.avatarFileId = avatarFileId;
-            
+
             var cellHtml = cellGenerator.generate(message);
 
             // check localId existed
@@ -72113,27 +72113,27 @@ var ChatView = Backbone.View.extend({
             // check id existed
             var idCell = $('[id="' + message._id + '"]')
 
-            if(message.localID && localIdCell.length > 0 ){
+            if (message.localID && localIdCell.length > 0) {
 
                 // swap temporary message
                 $(cellHtml).insertAfter(localIdCell);
                 localIdCell.remove();
 
-            } else if(idCell.length > 0){
+            } else if (idCell.length > 0) {
 
                 // swap temporary message
                 $(cellHtml).insertAfter(idCell);
                 idCell.remove();
 
-            } else if (!isUpdate){
+            } else if (!isUpdate) {
 
-                if(renderDirection == RenderDirection.append){
+                if (renderDirection == RenderDirection.append) {
 
                     html += cellHtml;
 
                 }
 
-                if(renderDirection == RenderDirection.prepend){
+                if (renderDirection == RenderDirection.prepend) {
 
                     html = cellHtml + html;
 
@@ -72143,156 +72143,157 @@ var ChatView = Backbone.View.extend({
 
         });
 
-        if(renderDirection == RenderDirection.append){
+        if (renderDirection == RenderDirection.append) {
 
             $('#messages').append(html);
 
-            if(!self.autoLoadMessageId){
-                $('img').on('load',function(){
+            if (!self.autoLoadMessageId) {
+                $('img').on('load', function () {
                     self.scrollToBottom();
                 });
             }
-            
+
         }
 
-        if(renderDirection == RenderDirection.prepend){
+        if (renderDirection == RenderDirection.prepend) {
 
             $('#messages').prepend(html);
 
         }
 
-        $('.spika-thumb').colorbox({photo:true,fixed:true,width:'80%',height:'80%%¥',
-            onOpen:function(evt){
+        $('.spika-thumb').colorbox({
+            photo: true, fixed: true, width: '80%', height: '80%%¥',
+            onOpen: function (evt) {
 
 
 
             }
         });
 
-        $('.message-cell').css('cursor','pointer');
-        $('.message-cell').unbind().on('click',function(){
-            
+        $('.message-cell').css('cursor', 'pointer');
+        $('.message-cell').unbind().on('click', function () {
+
             $('.message-cell.selected').removeClass('selected');
             $(this).addClass('selected');
-            
+
             var cellElm = this;
 
-            var message = _.find(self.messagePool,function(o){
+            var message = _.find(self.messagePool, function (o) {
                 return o._id == $(cellElm).attr('id');
             });
 
-            if(message._id != message.localID)
-                Backbone.trigger(Const.NotificationSelectMessage,{
+            if (message._id != message.localID)
+                Backbone.trigger(Const.NotificationSelectMessage, {
                     message: message
                 });
-        
+
         });
 
         Backbone.trigger(Const.NotificationUpdateWindowSize);
 
     },
-    destroy: function(){
-        
-        _.forEach(this.views,function(view){
-            
-            if(view.destroy)
+    destroy: function () {
+
+        _.forEach(this.views, function (view) {
+
+            if (view.destroy)
                 view.destroy();
-             
+
         });
 
         var param = {
             roomID: this.currentRoomId,
             userID: loginUserManager.user._id,
-            type:Const.typingOff
+            type: Const.typingOff
         };
 
-        socketIOManager.emit('sendtyping',param);
+        socketIOManager.emit('sendtyping', param);
 
         Backbone.off(Const.NotificationNewMessage);
         Backbone.off(Const.NotificationMessageUpdated);
         Backbone.off(Const.NotificationTyping);
-            
+
     },
-    handleKeyEvents: function(){
-        
+    handleKeyEvents: function () {
+
         var self = this;
 
-        $("#text-message-box").keypress(function(e) {
-            
+        $("#text-message-box").keypress(function (e) {
+
             var keycode = (e.keyCode ? e.keyCode : e.which);
             var shifted = e.shiftKey;
 
-            if(keycode == 13){
-                
-                if(shifted){
-                    
-                    var currentHeight = $( "#text-message-box-container" ).height();
-                    
-                    if(currentHeight < 100){
-                        $( "#text-message-box-container" ).height($( "#text-message-box-container" ).height() + self.initialTBHeight);
-                        $( "#text-message-box" ).height($( "#text-message-box" ).height() + self.initialTBHeight);
+            if (keycode == 13) {
+
+                if (shifted) {
+
+                    var currentHeight = $("#text-message-box-container").height();
+
+                    if (currentHeight < 100) {
+                        $("#text-message-box-container").height($("#text-message-box-container").height() + self.initialTBHeight);
+                        $("#text-message-box").height($("#text-message-box").height() + self.initialTBHeight);
                     }
-                    
-                }else{
+
+                } else {
 
                     // send
                     e.preventDefault();
 
-                    $( "#text-message-box-container" ).height(self.initialTBContainerHeight);
-                    $( "#text-message-box" ).height(self.initialTBHeight);
+                    $("#text-message-box-container").height(self.initialTBContainerHeight);
+                    $("#text-message-box").height(self.initialTBHeight);
 
-                    self.sendTextMessage(); 
+                    self.sendTextMessage();
 
                 }
-                
+
             }
-                        
+
         });
-        
-        $( "#text-message-box" ).on('change keyup paste',function(){
-            
+
+        $("#text-message-box").on('change keyup paste', function () {
+
             var length = $(this).val().length;
-            
-            if(self.lastTextLength == 0 && length > 0){
+
+            if (self.lastTextLength == 0 && length > 0) {
 
                 var param = {
                     roomID: self.currentRoomId,
                     userID: loginUserManager.user._id,
                     userName: loginUserManager.user.name,
-                    type:Const.typingOn
+                    type: Const.typingOn
                 };
 
-                socketIOManager.emit('sendtyping',param);
+                socketIOManager.emit('sendtyping', param);
 
             }
-            
-            if(self.lastTextLength > 0 && length == 0){
+
+            if (self.lastTextLength > 0 && length == 0) {
 
                 var param = {
                     roomID: self.currentRoomId,
                     userID: loginUserManager.user._id,
-                    type:Const.typingOff
+                    type: Const.typingOff
                 };
 
-                socketIOManager.emit('sendtyping',param);
-                
+                socketIOManager.emit('sendtyping', param);
+
             }
 
             self.lastTextLength = length;
- 
+
         });
 
     },
 
-    sendTextMessage: function(){
-        
-        var message = $( "#text-message-box" ).val();
-        
-        if(_.isEmpty(message))
+    sendTextMessage: function () {
+
+        var message = $("#text-message-box").val();
+
+        if (_.isEmpty(message))
             return;
-            
+
         var tempID = '_' + Utils.getRandomString();
-        
+
         // insert temp message
         var filteredMessage = encryptionManager.encryptText(message);
 
@@ -72305,20 +72306,20 @@ var ChatView = Backbone.View.extend({
             created: Utils.now(),
             user: loginUserManager.user
         };
-        
+
         // insert temp message
         this.insertTempMessage(message);
 
         this.scrollToBottom();
 
         // Emit data to server
-        socketIOManager.emit('sendMessage',{
+        socketIOManager.emit('sendMessage', {
             message: filteredMessage,
             roomID: this.currentRoomId,
             userID: loginUserManager.user._id,
             type: Const.messageTypeText,
             localID: tempID,
-            attributes:{
+            attributes: {
                 useclient: "web"
             },
             user: loginUserManager.user
@@ -72326,102 +72327,102 @@ var ChatView = Backbone.View.extend({
 
         // Clear message_area
         $('#message_area').val('');
-        $( "#text-message-box" ).val('');
-        
+        $("#text-message-box").val('');
+
     },
-    scrollToBottom: function(){
+    scrollToBottom: function () {
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
     },
-    scrollToTop: function(){
+    scrollToTop: function () {
         $('#messages').scrollTop(0);
     },
-    insertTempMessage:function(message){
-        this.renderMessages([message],RenderDirection.append);
+    insertTempMessage: function (message) {
+        this.renderMessages([message], RenderDirection.append);
     },
-    updateMessage:function(message){
+    updateMessage: function (message) {
 
-        if(_.isArray(message))
-            this.renderMessages(message,RenderDirection.append,true);
+        if (_.isArray(message))
+            this.renderMessages(message, RenderDirection.append, true);
         else
-            this.renderMessages([message],RenderDirection.append,true);
+            this.renderMessages([message], RenderDirection.append, true);
 
     },
-    removeTyping: function(userID){
+    removeTyping: function (userID) {
 
-        var userIDEscapted = encodeURIComponent(userID).replace("'","quote").replace("%","");
+        var userIDEscapted = encodeURIComponent(userID).replace("'", "quote").replace("%", "");
         var emlContainer = SS('#additional-notification-container');
-        
+
         SS('#' + userIDEscapted + "-typing").remove();
 
-       if(_.isEmpty(emlContainer.html())){
+        if (_.isEmpty(emlContainer.html())) {
             emlContainer.height(0);
             emlContainer.fadeOut();
             this.adjustSize();
         }
-                        
+
     },
-    addTyping: function(obj){
-        
+    addTyping: function (obj) {
+
         var emlContainer = SS('#additional-notification-container');
-        var userIDEscapted = encodeURIComponent(obj.userID).replace("'","quote").replace("%","");
+        var userIDEscapted = encodeURIComponent(obj.userID).replace("'", "quote").replace("%", "");
 
         var text = obj.user.name + " is typing...";
         var id = userIDEscapted + "-typing";
-        
+
         var html = '<span id="' + id + '">' + text + '</span>';
 
-        if($('#' + id).length > 0)
+        if ($('#' + id).length > 0)
             return;
 
-        if(_.isEmpty(emlContainer.html())){
+        if (_.isEmpty(emlContainer.html())) {
 
-             emlContainer.height(20);
-             emlContainer.fadeIn();
-             this.adjustSize();
+            emlContainer.height(20);
+            emlContainer.fadeIn();
+            this.adjustSize();
 
-            if(this.isScrollNearBottom())
-                this.scrollToBottom();  
+            if (this.isScrollNearBottom())
+                this.scrollToBottom();
 
         }
-        
-        if($('#' + id).length == 0)
-            emlContainer.html( emlContainer.html() + html );
+
+        if ($('#' + id).length == 0)
+            emlContainer.html(emlContainer.html() + html);
 
     },
 
-    updateTyping: function(param){
+    updateTyping: function (param) {
 
-        if(param.userID == loginUserManager.user._id)
+        if (param.userID == loginUserManager.user._id)
             return;
-            
+
         var emlContainer = $('#additional-notification-container');
 
         var text = param.userName + " is typing...";
         var id = param.userID + "-typing";
 
-        if(param.type == Const.typingOn){
+        if (param.type == Const.typingOn) {
 
-            if($('#' + id).length > 0)
+            if ($('#' + id).length > 0)
                 return;
-                
+
             var html = '<span id="' + id + '">' + text + '</span>';
-            
-            if(_.isEmpty(emlContainer.html())){
+
+            if (_.isEmpty(emlContainer.html())) {
                 emlContainer.fadeIn();
             }
-            
-            emlContainer.html( emlContainer.html() + html );
+
+            emlContainer.html(emlContainer.html() + html);
 
         }
 
-        if(param.type == Const.typingOff){
+        if (param.type == Const.typingOff) {
 
-            if($('#' + id).length == 0)
+            if ($('#' + id).length == 0)
                 return;
-            
+
             $('#' + id).remove();
 
-            if(_.isEmpty(emlContainer.html())){
+            if (_.isEmpty(emlContainer.html())) {
                 emlContainer.fadeOut();
             }
 
@@ -77876,331 +77877,342 @@ var template = require('./HistoryListView.hbs');
 var templateContents = require('./HistoryListContents.hbs');
 
 var windowHandler = require('../../../lib/windowManager');
+var LoadMessageClient = require('../../../lib/APIClients/Messaging/LoadMessageClient');
 
 var HistoryListView = Backbone.View.extend({
-    
+
     dataList: [],
-    container : "",
-    currentPage : 1,
+    container: "",
+    currentPage: 1,
     isReachedToEnd: false,
-    lastUpdate : 0,
-    initialize: function(options) {
+    lastUpdate: 0,
+    initialize: function (options) {
         this.container = options.container;
         this.render();
     },
 
-    render: function() {
+    render: function () {
 
         $(this.container).html(template({
-            Config:Config
+            Config: Config
         }));
-        
+
         this.onLoad();
-        
+
         return this;
 
     },
 
-    onLoad: function(){
-        
+    onLoad: function () {
+
         var self = this;
-        
+
         this.dataList = [];
-        
-        $("#sidebar-historylist .listview").on('scroll',function() {
-            
-            if(self.isLoading)
+
+        $("#sidebar-historylist .listview").on('scroll', function () {
+
+            if (self.isLoading)
                 return;
 
 
             // check is bottom
-            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                
+            if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+
                 self.loadNext();
-                
+
             }
-            
+
         });
 
-        Backbone.on(Const.NotificationRefreshHistory, function(){
-            
+        Backbone.on(Const.NotificationRefreshHistory, function () {
+
             self.updateList();
-            
+
         });
 
-        Backbone.on(Const.NotificationRefreshHistoryLocally, function(obj){
+        Backbone.on(Const.NotificationRefreshHistoryLocally, function (obj) {
 
             self.messageObj = obj;
-            self.isMessageSeen = false;
 
             self.updateListWithoutLoading(obj);
 
             // reset unread count instead of loading message
             if (windowHandler.isActive) {
-                self.isMessageSeen = true;
+                self.messageObj = {};
                 MarkChatReadClient.updateByMessage(obj);
             }
 
         });
 
-        Backbone.on(Const.NotificationRemoveRoom, function(obj){
-            
-            var newDataList = _.filter(self.dataList,function(historyObj){
-	        	
-	        	if(!obj.room || !historyObj.room)
-	        		return true;
-				
-				if(obj.room._id == historyObj.room._id)
-					return false;
-				else
-					return true;
-	        	 
+        Backbone.on(Const.NotificationRemoveRoom, function (obj) {
+
+            var newDataList = _.filter(self.dataList, function (historyObj) {
+
+                if (!obj.room || !historyObj.room)
+                    return true;
+
+                if (obj.room._id == historyObj.room._id)
+                    return false;
+                else
+                    return true;
+
             });
-            
+
             self.dataList = newDataList;
             self.updateList();
-            
+
         });
-        
-        Backbone.on(Const.NotificationDeletedFromGroup, function(obj){
+
+        Backbone.on(Const.NotificationDeletedFromGroup, function (obj) {
 
             self.dataList = [];
             self.currentPage = 1;
             self.updateList();
-            
+
         });
 
-        Backbone.on(Const.NotificationRemoveRoom, function(obj){
+        Backbone.on(Const.NotificationRemoveRoom, function (obj) {
 
             self.dataList = [];
             self.currentPage = 1;
             self.updateList();
-            
+
         });
 
-        Backbone.on(Const.NotificationNewRoom, function(obj){
+        Backbone.on(Const.NotificationNewRoom, function (obj) {
 
             self.dataList = [];
             self.currentPage = 1;
             self.updateList();
-            
+
         });
 
         $(window).focus(function () {
 
-            if (!self.messageObj || self.isMessageSeen)
+            if (_.isEmpty(self.messageObj))
                 return;
-                    
-            self.startChat(self.historyId);
-            self.isMessageSeen = true;
-            
+
+            LoadMessageClient.send(loginUserManager.currentConversation, self.messageObj._id, "allto", function (res) {
+
+                self.updateListWithoutLoading(self.messageObj);
+
+                let totalUnreadCount = 0;
+                self.dataList.forEach(function (historyObj) {
+                    totalUnreadCount += historyObj.unreadCount;
+                });
+
+                Backbone.trigger(Const.NotificationUpdateUnreadCount, totalUnreadCount);
+                self.messageObj = {};
+
+            });
+
         });
 
         this.loadNext();
 
     },
-    updateList: function(){
+    updateList: function () {
 
         var self = this;
-        
+
         var lastUpdate = 0;
 
-        if(this.dataList.length > 0){
+        if (this.dataList.length > 0) {
 
-            var sortByLastUpdate = _.sortBy(this.dataList,function(historyObj){
-                
+            var sortByLastUpdate = _.sortBy(this.dataList, function (historyObj) {
+
                 return -1 * historyObj.lastUpdate;
-                
+
             });
-            
+
             lastUpdate = sortByLastUpdate[0].lastUpdate;
-            
+
         }
-        
-        HistoryListClient.sendUpdate(lastUpdate,function(data){
-            
+
+        HistoryListClient.sendUpdate(lastUpdate, function (data) {
+
             self.mergeData(data.list);
-            self.renderList(); 
-            
+            self.renderList();
+
             let totalUnreadCount = 0;
-            self.dataList.forEach( function(historyObj) {
+            self.dataList.forEach(function (historyObj) {
                 totalUnreadCount += historyObj.unreadCount;
             });
 
-            Backbone.trigger(Const.NotificationUpdateUnreadCount,totalUnreadCount);
-            
-        },function(errorCode){
-            
+            Backbone.trigger(Const.NotificationUpdateUnreadCount, totalUnreadCount);
+
+        }, function (errorCode) {
+
             UIUtils.handleAPIErrors(errorCode);
-            
+
         });
-        
+
     },
-    updateListWithoutLoading: function(messageObj){
+    updateListWithoutLoading: function (messageObj) {
 
         var self = this;
 
-        var historyObj = _.find(self.dataList,function(historyObj){
+        var historyObj = _.find(self.dataList, function (historyObj) {
 
             var roomID = historyObj.chatType + "-" + historyObj.chatId;
 
             // generate roomID by users
-            if(historyObj.chatType == Const.chatTypePrivate){
-                roomID = Utils.chatIdByUser(loginUserManager.user,historyObj.user);
+            if (historyObj.chatType == Const.chatTypePrivate) {
+                roomID = Utils.chatIdByUser(loginUserManager.user, historyObj.user);
             }
 
             return roomID == messageObj.roomID;
-            
+
         });
 
-        if(historyObj){
+        if (historyObj) {
 
             historyObj.lastUpdate = messageObj.created;
-            if(messageObj.type == Const.messageTypeText)
+            if (messageObj.type == Const.messageTypeText)
                 messageObj.message = EncryptionManager.decryptText(messageObj.message);
 
             historyObj.lastMessage = messageObj;
 
             self.mergeData([historyObj]);
-            self.renderList(); 
-            
+            self.renderList();
+
 
         }
 
     },
 
-    loadNext: function(){
-        
-        if(this.isReachedToEnd)
+    loadNext: function () {
+
+        if (this.isReachedToEnd)
             return;
-            
+
         var self = this;
 
-        HistoryListClient.send(this.currentPage,function(data){
-            
-            if(data.list.length == 0)
+        HistoryListClient.send(this.currentPage, function (data) {
+
+            if (data.list.length == 0)
                 self.isReachedToEnd = true;
-                
-            else{
-                
-                if(self.currentPage == 1){
+
+            else {
+
+                if (self.currentPage == 1) {
                     $("#sidebar-historylist .listview").html('');
                 }
-                
+
                 self.mergeData(data.list);
                 self.currentPage++;
-                self.renderList(); 
+                self.renderList();
 
             }
-            
-            Backbone.trigger(Const.NotificationUpdateUnreadCount,data.totalUnreadCount);
-            
-        },function(errorCode){
-            
+
+            Backbone.trigger(Const.NotificationUpdateUnreadCount, data.totalUnreadCount);
+
+        }, function (errorCode) {
+
             UIUtils.handleAPIErrors(errorCode);
-            
+
         });
-            
-        
+
+
     },
-    
-    mergeData : function(array){
-        
+
+    mergeData: function (array) {
+
         var self = this;
-        
-        _.forEach(array,function(updatedHistoryObj){
-            
+
+        _.forEach(array, function (updatedHistoryObj) {
+
             var isNew = false;
-            
-            var existedObj = _.find(self.dataList,function(historyObj){
-                
+
+            var existedObj = _.find(self.dataList, function (historyObj) {
+
                 return historyObj._id == updatedHistoryObj._id;
-                 
+
             });
-            
-            if(!existedObj)
+
+            if (!existedObj)
                 isNew = true;
-            
-            if(isNew){
+
+            if (isNew) {
 
                 self.dataList.push(updatedHistoryObj);
-                
-            }else{
-                
-                self.dataList = _.map(self.dataList,function(element){
-                    
-                    if(element._id == updatedHistoryObj._id)
+
+            } else {
+
+                self.dataList = _.map(self.dataList, function (element) {
+
+                    if (element._id == updatedHistoryObj._id)
                         return updatedHistoryObj;
                     else
                         return element;
-                     
+
                 });
-                
+
             }
-            
-            
+
+
         });
-        
-        this.dataList = _.sortBy(this.dataList,function(historyObj){
-            
+
+        this.dataList = _.sortBy(this.dataList, function (historyObj) {
+
             return -1 * historyObj.lastUpdate;
-             
+
         });
-        
+
         // make unread count to zero if user is opened the chat
-        this.dataList = _.map(this.dataList,function(historyObj){
-            
+        this.dataList = _.map(this.dataList, function (historyObj) {
+
             var chatId = "";
 
-            if(historyObj.chatType == Const.chatTypePrivate){
-                
-                chatId = Utils.chatIdByUser(historyObj.user,loginUserManager.user);
-                
-            }else if(historyObj.chatType == Const.chatTypeGroup){
-    
+            if (historyObj.chatType == Const.chatTypePrivate) {
+
+                chatId = Utils.chatIdByUser(historyObj.user, loginUserManager.user);
+
+            } else if (historyObj.chatType == Const.chatTypeGroup) {
+
                 chatId = Utils.chatIdByGroup(historyObj.group);
-                
-            }else if(historyObj.chatType == Const.chatTypeRoom){
-    
+
+            } else if (historyObj.chatType == Const.chatTypeRoom) {
+
                 chatId = Utils.chatIdByRoom(historyObj.room);
-    
+
             }
 
-            if(loginUserManager.currentConversation == chatId && windowHandler.isActive){
+            if (loginUserManager.currentConversation == chatId && windowHandler.isActive) {
 
                 // force zero locally and update to server
                 historyObj.unreadCount = 0;
-                
+
             }
-                
+
             return historyObj;
-             
+
         });
-        
+
     },
-    renderList: function(){
-        
+    renderList: function () {
+
         var self = this;
-        
-        this.dataList = _.map(this.dataList,function(row){
 
-            if(row.lastMessage){
+        this.dataList = _.map(this.dataList, function (row) {
 
-                if(row.lastMessage.type == 2)
+            if (row.lastMessage) {
+
+                if (row.lastMessage.type == 2)
                     row.lastMessage.message = localzationManager.get("File");
 
-                if(row.lastMessage.type == 3)
+                if (row.lastMessage.type == 3)
                     row.lastMessage.message = localzationManager.get("Location");
 
-                if(row.lastMessage.type == 4)
+                if (row.lastMessage.type == 4)
                     row.lastMessage.message = localzationManager.get("Contact");
 
-                if(row.lastMessage.type == 5) {
-                    row.lastMessage.downloadURL = row.lastMessage.message;                
+                if (row.lastMessage.type == 5) {
+                    row.lastMessage.downloadURL = row.lastMessage.message;
                     row.lastMessage.message = localzationManager.get("Sticker");
                 }
-        
-                if(row.lastMessage.user) {
+
+                if (row.lastMessage.user) {
                     if (row.lastMessage.user._id.toString() == loginUserManager.user._id.toString())
                         row.currentUserIsSender = 1
                 }
@@ -78208,9 +78220,9 @@ var HistoryListView = Backbone.View.extend({
                     if (row.lastUpdateUser._id.toString() == loginUserManager.user._id.toString())
                         row.currentUserIsSender = 1
                 }
-                
+
             }
-            
+
             return row;
 
         });
@@ -78218,57 +78230,57 @@ var HistoryListView = Backbone.View.extend({
         var html = templateContents({
             list: this.dataList
         });
-        
+
         $("#sidebar-historylist .listview").html(html);
-        
-        $('#sidebar-historylist .chat-target').unbind().on('click',function(){
-            
+
+        $('#sidebar-historylist .chat-target').unbind().on('click', function () {
+
             self.historyId = $(this).attr('id');
-            
+
             self.startChat(self.historyId);
-             
+
         });
-        
-        
+
+
     },
-    startChat: function(historyId){
-        
-        var historyObj = _.find(this.dataList,function(row){
+    startChat: function (historyId) {
+
+        var historyObj = _.find(this.dataList, function (row) {
             return row._id == historyId
         });
-        
-        if(!historyObj)
+
+        if (!historyObj)
             return;
-        
-        if(historyObj.chatType == Const.chatTypePrivate){
-            
+
+        if (historyObj.chatType == Const.chatTypePrivate) {
+
             ChatManager.openChatByUser(historyObj.user);
-            
-        }else if(historyObj.chatType == Const.chatTypeGroup){
+
+        } else if (historyObj.chatType == Const.chatTypeGroup) {
 
             ChatManager.openChatByGroup(historyObj.group);
-            
-        }else if(historyObj.chatType == Const.chatTypeRoom){
+
+        } else if (historyObj.chatType == Const.chatTypeRoom) {
 
             ChatManager.openChatByRoom(historyObj.room);
 
         }
 
     },
-    destroy: function(){
-        
+    destroy: function () {
+
         Backbone.off(Const.NotificationRefreshHistory);
         Backbone.off(Const.NotificationRefreshHistoryLocally);
         Backbone.off(Const.NotificationRemoveRoom);
-        
+
     }
-    
-    
+
+
 });
 
 module.exports = HistoryListView;
 
-},{"../../../lib/APIClients/HistoryListClient":254,"../../../lib/APIClients/MarkChatAsReadClient":258,"../../../lib/ChatManager":278,"../../../lib/EncryptionManager":279,"../../../lib/UIUtils":288,"../../../lib/consts":289,"../../../lib/init":290,"../../../lib/localzationManager":292,"../../../lib/loginUserManager":293,"../../../lib/utils":295,"../../../lib/windowManager":297,"./HistoryListContents.hbs":221,"./HistoryListView.hbs":222,"backbone":7,"lodash":75}],224:[function(require,module,exports){
+},{"../../../lib/APIClients/HistoryListClient":254,"../../../lib/APIClients/MarkChatAsReadClient":258,"../../../lib/APIClients/Messaging/LoadMessageClient":261,"../../../lib/ChatManager":278,"../../../lib/EncryptionManager":279,"../../../lib/UIUtils":288,"../../../lib/consts":289,"../../../lib/init":290,"../../../lib/localzationManager":292,"../../../lib/loginUserManager":293,"../../../lib/utils":295,"../../../lib/windowManager":297,"./HistoryListContents.hbs":221,"./HistoryListView.hbs":222,"backbone":7,"lodash":75}],224:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -80522,14 +80534,14 @@ var Utils = require('../../utils');
 
 var APIClientBase = require('../ApiClientBase');
 
-var LoadMessageClient = function(){};
+var LoadMessageClient = function () { };
 
-_.extend(LoadMessageClient.prototype,APIClientBase.prototype);
+_.extend(LoadMessageClient.prototype, APIClientBase.prototype);
 
-LoadMessageClient.prototype.send = function(roomID,lastMessageId,direction,success,err){
+LoadMessageClient.prototype.send = function (roomID, lastMessageId, direction, success, err) {
 
-    this.getRequst("/message/list/" + roomID + "/" + lastMessageId + "/" + direction,success,err);
-    
+    this.getRequst("/message/list/" + roomID + "/" + lastMessageId + "/" + direction, success, err);
+
 }
 
 // returns instance
@@ -81252,112 +81264,112 @@ var socketIOManager = require('./SocketIOManager');
 var EncryptionManager = require('./EncryptionManager');
 
 var UIUtils = require('../lib/UIUtils');
-var ChatView = require('../Views/ChatView/ChatView.js'); 
+var ChatView = require('../Views/ChatView/ChatView.js');
 
 var ChatManager = {
-    
+
     isLoading: false,
     currentRoomId: null,
     chatView: null,
-    open: function(roomId,messageId){
-        
+    open: function (roomId, messageId) {
+
         var self = this;
-        
-        if(this.isLoading){
+
+        if (this.isLoading) {
             console.log('blocked');
             return;
         }
-        
+
         loginUserManager.currentConversation = roomId;
-        
+
         var me = loginUserManager.getUser();
-        
+
         var myAvatarURL = window.location.protocol + "//" + window.location.hostname;
         var port = location.port;
-        
-        if(port != 80){
+
+        if (port != 80) {
             myAvatarURL += ":" + port;
-        } 
-        
+        }
+
         myAvatarURL += "/api/v2/avatar/user/";
 
-        if(me.avatar && me.avatar.thumbnail)
+        if (me.avatar && me.avatar.thumbnail)
             myAvatarURL += me.avatar.thumbnail.nameOnServer;
-        
+
         Utils.goPage('main');
-        
+
         $('#main-container').addClass('chat');
-        
+
         $(document.body).addClass("loading");
-        
+
         this.isLoading = true;
-        
+
         var self = this;
-        setTimeout(function(){
+        setTimeout(function () {
             self.isLoading = false;
-        },10 * 1000);
+        }, 10 * 1000);
 
         this.currentRoomId = roomId;
 
-        if(this.chatView)
+        if (this.chatView)
             this.chatView.destroy();
 
         this.chatView = new ChatView({
-            container : "#main-container",
+            container: "#main-container",
             roomId: roomId,
             autoLoadMessageId: messageId
         });
 
-  
-        Backbone.on(Const.NotificationChatLoaded, function(param){                        
+
+        Backbone.on(Const.NotificationChatLoaded, function (param) {
             self.isLoading = false;
             $(document.body).removeClass("loading");
         });
 
     },
-    
-    openChatByUserId: function(userId,messageId){
+
+    openChatByUserId: function (userId, messageId) {
 
         var self = this;
 
-        UserDetailClient.send(userId,function(data){
+        UserDetailClient.send(userId, function (data) {
 
             self.openChatByUser(data.user);
 
         });
 
     },
-    openChatByUser: function(user,messageId){
+    openChatByUser: function (user, messageId) {
 
-        if(this.isLoading){
+        if (this.isLoading) {
             console.log('blocked');
             return;
         }
 
         var me = loginUserManager.getUser();
-        
-        if(!me)
+
+        if (!me)
             return;
-        
-        var chatId = Utils.chatIdByUser(me,user);
-        
-        ChatManager.open(chatId,messageId);
-        
+
+        var chatId = Utils.chatIdByUser(me, user);
+
+        ChatManager.open(chatId, messageId);
+
         var url = "";
-        
-        if(user.avatar && user.avatar && user.avatar.thumbnail)
+
+        if (user.avatar && user.avatar && user.avatar.thumbnail)
             url = "/api/v2/avatar/user/" + user.avatar.thumbnail.nameOnServer;
 
         loginUserManager.openChat({
             user: user
         });
 
-        Backbone.trigger(Const.NotificationOpenChat,{
-            chatId:chatId,
+        Backbone.trigger(Const.NotificationOpenChat, {
+            chatId: chatId,
             user: user
         });
-        
-        Backbone.trigger(Const.NotificationUpdateHeader,{
+
+        Backbone.trigger(Const.NotificationUpdateHeader, {
             online: user.onlineStatus,
             img: url,
             title: user.name,
@@ -81365,123 +81377,123 @@ var ChatManager = {
         });
 
     },
-    
-    openChatByGroup : function(group,messageId){
 
-        if(this.isLoading){
+    openChatByGroup: function (group, messageId) {
+
+        if (this.isLoading) {
             console.log('blocked');
             return;
         }
-        
+
         var roomId = Utils.chatIdByGroup(group);
-        
-        ChatManager.open(roomId,messageId);
+
+        ChatManager.open(roomId, messageId);
 
         var url = "/api/v2/avatar/group/";
-        
-        if(group.avatar && group.avatar && group.avatar.thumbnail)
+
+        if (group.avatar && group.avatar && group.avatar.thumbnail)
             url = "/api/v2/avatar/group/" + group.avatar.thumbnail.nameOnServer;
-        
+
         loginUserManager.openChat({
             group: group
         });
 
-        Backbone.trigger(Const.NotificationOpenChat,{
-            chatId:roomId,
+        Backbone.trigger(Const.NotificationOpenChat, {
+            chatId: roomId,
             group: group
         });
-        
-        Backbone.trigger(Const.NotificationUpdateHeader,{
+
+        Backbone.trigger(Const.NotificationUpdateHeader, {
             img: url,
             title: group.name,
             description: group.description
         });
-        
-    },
-    
-    openChatByRoom : function(room,messageId){
 
-        if(this.isLoading){
+    },
+
+    openChatByRoom: function (room, messageId) {
+
+        if (this.isLoading) {
             console.log('blocked');
             return;
         }
-        
+
         var roomId = Utils.chatIdByRoom(room);
 
-        ChatManager.open(roomId,messageId);
-        
+        ChatManager.open(roomId, messageId);
+
         var url = "/api/v2/avatar/room/";
-        
-        if(room.avatar && room.avatar && room.avatar.thumbnail)
+
+        if (room.avatar && room.avatar && room.avatar.thumbnail)
             url = "/api/v2/avatar/room/" + room.avatar.thumbnail.nameOnServer;
 
         loginUserManager.openChat({
             room: room
         });
 
-        Backbone.trigger(Const.NotificationOpenChat,{
+        Backbone.trigger(Const.NotificationOpenChat, {
             chatId: roomId,
             room: room
         });
-        
-        Backbone.trigger(Const.NotificationUpdateHeader,{
+
+        Backbone.trigger(Const.NotificationUpdateHeader, {
             img: url,
             title: room.name,
             description: room.description
         });
 
     },
-    
-    openChatByPrivateRoomId: function(roomId,messageId){
+
+    openChatByPrivateRoomId: function (roomId, messageId) {
 
         var self = this;
 
-        if(this.isLoading){
+        if (this.isLoading) {
             return;
         }
-        
+
         var chatId = roomId;
-        
+
         var roomIdSplitted = roomId.split('-');
-        
-        if(roomIdSplitted.length < 3)
+
+        if (roomIdSplitted.length < 3)
             return;
-            
+
         var user1 = roomIdSplitted[1];
         var user2 = roomIdSplitted[2];
-        
+
         var targetUserId = user1;
-        if(targetUserId == loginUserManager.user._id)
+        if (targetUserId == loginUserManager.user._id)
             targetUserId = user2;
-            
-        UserDetailClient.send(targetUserId,function(data){
-            
+
+        UserDetailClient.send(targetUserId, function (data) {
+
             var user = data.user;
             var url = "/api/v2/avatar/user/";
-            
 
-            if(user.avatar && user.avatar && user.avatar.thumbnail)
+
+            if (user.avatar && user.avatar && user.avatar.thumbnail)
                 url = "/api/v2/avatar/user/" + user.avatar.thumbnail.nameOnServer;
-            
-            self.openChatByUser(user,messageId);
-            
-            Backbone.trigger(Const.NotificationUpdateHeader,{
+
+            self.openChatByUser(user, messageId);
+
+            Backbone.trigger(Const.NotificationUpdateHeader, {
                 online: user.onlineStatus,
                 img: Utils.getBaseURL() + url,
                 title: user.name,
                 description: user.description
             });
-            
-        },function(errorCode){
-            
+
+        }, function (errorCode) {
+
             UIUtils.handleAPIErrors(errorCode);
-            
+
         });
-        
+
 
     },
-    
-    close:function(){
+
+    close: function () {
         $('#main-container').removeClass('chat');
         $('#main-container').html('');
 
@@ -81491,13 +81503,13 @@ var ChatManager = {
         $('#messages-tab-detail-panel').html('');
 
     },
-    closeIfOpened:function(roomId){
+    closeIfOpened: function (roomId) {
 
-        if(this.currentRoomId == roomId)
+        if (this.currentRoomId == roomId)
             this.close();
 
     }
-    
+
 }
 
 module["exports"] = ChatManager;
@@ -82844,171 +82856,171 @@ var loginUserManager = require('./loginUserManager');
 var NotificationManager = require('./NotificationManager');
 
 var socketIOManager = {
-    
-    io : null,
+
+    io: null,
     processId: null,
-    init:function(){
-        
+    init: function () {
+
         var self = this;
-                
+
         this.processId = Utils.getRandomString(16);
-        
+
         this.io = socket;
-        
+
         this.ioNsp = this.io(Config.socketUrl, {
-            transports: ['websocket'], 
+            transports: ['websocket'],
             upgrade: false
         });
 
-        this.ioNsp.on('connect',function(){
+        this.ioNsp.on('connect', function () {
 
-	        var userToken = loginUserManager.getToken();
-	
-	        if(userToken){
-	
-	            self.emit('login',{
-	                token : userToken,
-	                processId : self.processId
-	            });
-	
-	        }
-        
-        });
-        
-        this.ioNsp.on('reconnect',function(){
+            var userToken = loginUserManager.getToken();
 
-	        
+            if (userToken) {
+
+                self.emit('login', {
+                    token: userToken,
+                    processId: self.processId
+                });
+
+            }
+
         });
-        
-        this.ioNsp.on('socketerror', function(error){
-            
-            if(Const.ErrorCodes[error.code]){
+
+        this.ioNsp.on('reconnect', function () {
+
+
+        });
+
+        this.ioNsp.on('socketerror', function (error) {
+
+            if (Const.ErrorCodes[error.code]) {
                 var alertDialog = require('../Views/Modals/AlertDialog/AlertDialog');
                 var message = Utils.l10n(Const.ErrorCodes[error.code]);
-                alertDialog.show(Utils.l10n("Api Error"),message);
+                alertDialog.show(Utils.l10n("Api Error"), message);
             }
-            
+
         });
 
-        this.ioNsp.on('typing', function(obj){
-            
-            Backbone.trigger(Const.NotificationTyping,obj);
-            
+        this.ioNsp.on('typing', function (obj) {
+
+            Backbone.trigger(Const.NotificationTyping, obj);
+
         });
 
-        this.ioNsp.on('newmessage', function(obj){
-            
+        this.ioNsp.on('newmessage', function (obj) {
+
             // History is refreshed by ChatView when the chat is opened
-            if(loginUserManager.currentConversation != obj.roomID)
+            if (loginUserManager.currentConversation != obj.roomID)
                 Backbone.trigger(Const.NotificationRefreshHistory);
-            else{
-                Backbone.trigger(Const.NotificationRefreshHistoryLocally,obj);
+            else {
+                Backbone.trigger(Const.NotificationRefreshHistoryLocally, obj);
             }
 
-            Backbone.trigger(Const.NotificationNewMessage,obj);
+            Backbone.trigger(Const.NotificationNewMessage, obj);
 
-            if(loginUserManager.user._id != obj.userID)
+            if (loginUserManager.user._id != obj.userID)
                 NotificationManager.handleNewMessage(obj);
-            
-            
+
+
         });
-            
-        this.ioNsp.on('updatemessages', function(ary){
-            
-            Backbone.trigger(Const.NotificationMessageUpdated,ary);
+
+        this.ioNsp.on('updatemessages', function (ary) {
+
+            Backbone.trigger(Const.NotificationMessageUpdated, ary);
             Backbone.trigger(Const.NotificationRefreshHistory);
 
         });
 
-        this.ioNsp.on('spikaping', function(obj){
+        this.ioNsp.on('spikaping', function (obj) {
 
-            self.emit('pingok',{
-                userId : loginUserManager.getUser()._id,
-                processId : self.processId 
+            self.emit('pingok', {
+                userId: loginUserManager.getUser()._id,
+                processId: self.processId
             });
 
         });
-        
-        this.ioNsp.on('call_failed', function(obj){
 
-            Backbone.trigger(Const.NotificationCallFaild,obj);
+        this.ioNsp.on('call_failed', function (obj) {
+
+            Backbone.trigger(Const.NotificationCallFaild, obj);
+
+        });
+
+
+        this.ioNsp.on('call_request', function (obj) {
+
+            Backbone.trigger(Const.NotificationCallRequest, obj);
 
         });
 
+        this.ioNsp.on('call_received', function () {
 
-        this.ioNsp.on('call_request', function(obj){
-
-            Backbone.trigger(Const.NotificationCallRequest,obj);
-
-        });
- 
-         this.ioNsp.on('call_received', function(){
-			 
             Backbone.trigger(Const.NotificationCallReceived);
 
         });
-        
-        this.ioNsp.on('call_cancel', function(){
+
+        this.ioNsp.on('call_cancel', function () {
 
             Backbone.trigger(Const.NotificationCallCancel);
 
         });
 
-        this.ioNsp.on('call_reject_mine', function(){
+        this.ioNsp.on('call_reject_mine', function () {
 
             Backbone.trigger(Const.NotificationCallRejectMine);
 
         });
 
-        this.ioNsp.on('call_answer', function(){
+        this.ioNsp.on('call_answer', function () {
 
             Backbone.trigger(Const.NotificationCallAnswer);
 
         });
-        
-        this.ioNsp.on('call_close', function(){
+
+        this.ioNsp.on('call_close', function () {
 
             Backbone.trigger(Const.NotificationCallClose);
 
         });
-        
 
-        this.ioNsp.on('new_room', function(param){
 
-            Backbone.trigger(Const.NotificationNewRoom,param);
+        this.ioNsp.on('new_room', function (param) {
 
-        });
-
-        this.ioNsp.on('delete_room', function(param){
-
-            Backbone.trigger(Const.NotificationRemoveRoom,param.conversation);
+            Backbone.trigger(Const.NotificationNewRoom, param);
 
         });
 
-        this.ioNsp.on('delete_group', function(param){
+        this.ioNsp.on('delete_room', function (param) {
 
-            Backbone.trigger(Const.NotificationDeletedFromGroup,param);
+            Backbone.trigger(Const.NotificationRemoveRoom, param.conversation);
+
+        });
+
+        this.ioNsp.on('delete_group', function (param) {
+
+            Backbone.trigger(Const.NotificationDeletedFromGroup, param);
 
         });
 
     },
-    
-    emit:function(command,params){
+
+    emit: function (command, params) {
 
         var command = arguments[0];
         this.ioNsp.emit(command, params);
-        
+
     },
 
-    disconnect: function(){
+    disconnect: function () {
 
         //alert('send disconnect');
 
-        if(!this.ioNsp.disconnected)
+        if (!this.ioNsp.disconnected)
             this.ioNsp.disconnect();
 
     }
-        
+
 };
 
 // Exports ----------------------------------------------
