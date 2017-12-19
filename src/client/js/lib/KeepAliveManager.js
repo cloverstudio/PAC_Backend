@@ -13,15 +13,15 @@ var SocketIOManager = require('./SocketIOManager');
 
 var KeepAliveManager = {
 
-    init:function(){
+    init: function () {
 
-        setInterval(function(){
+        setInterval(function () {
 
-            SocketIOManager.emit("keepalive",{
+            SocketIOManager.emit("keepalive", {
                 userId: loginUserManager.getUser()._id
             });
 
-        },Const.keepAliveInterval);
+        }, Const.keepAliveInterval);
 
     }
 

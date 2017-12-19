@@ -72,3 +72,27 @@ export function url(url) {
 export function getTimestamp(dateObj) {
   return `${dateObj.getFullYear()}/${dateObj.getMonth()}/${dateObj.getDate()} ${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
 }
+
+let chatName = "";
+export function changeWindowTitle(newChatName) {
+  chatName = newChatName;
+  updateWindowTitle();
+}
+
+let unreadMessage = 0;
+export function unreadMessageToWindowTitle(count) {
+  unreadMessage = count;
+  updateWindowTitle();
+}
+
+function updateWindowTitle() {
+
+  document.title = config.AppTitle;
+
+  if (chatName)
+    document.title = chatName + " - " + document.title;
+
+  if (unreadMessage > 0)
+    document.title = "(" + unreadMessage + ") " + document.title;
+
+}

@@ -36,6 +36,6 @@ export function callLogin({ organization, username, password }) {
 
 export function callLogout() {
   return api.post(constant.ApiUrlSignOut).then(response => {
-    return Promise.resolve(response.time);
+    return Promise.resolve();
   });
 }

@@ -136,6 +136,8 @@ export function openChatByUser(targetUser) {
             user: targetUser,
             chatId
         });
+
+        utils.changeWindowTitle(targetUser.name)
     };
 }
 
@@ -150,6 +152,8 @@ export function openChatByGroup(group) {
             group,
             chatId
         });
+
+        utils.changeWindowTitle(group.name)
     };
 }
 
@@ -164,6 +168,8 @@ export function openChatByRoom(room) {
             room,
             chatId
         });
+
+        utils.changeWindowTitle(room.name)
     };
 }
 
@@ -373,7 +379,7 @@ export function startFileUpload(file) {
             userID: user.userData._id
         });
 
-        fileUpload(file, function(progress, localFileId, originChatId) {
+        fileUpload(file, function (progress, localFileId, originChatId) {
             dispatch(fileUploadProgress(progress, localFileId, originChatId));
         })
             .then(data => {
@@ -425,12 +431,12 @@ export function sendUpdateMessage(content) {
         const messageID = getState().messageInfo.selectedMessage._id;
 
         dispatch({
-        type: types.MessageInfoUpdateMessage,
-        message: Encryption.encryptText(content),
-        userID: user.userData._id,
-        messageID
-    });
-     
+            type: types.MessageInfoUpdateMessage,
+            message: Encryption.encryptText(content),
+            userID: user.userData._id,
+            messageID
+        });
+
     }
 }
 
