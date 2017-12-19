@@ -7,14 +7,14 @@ var Utils = require('../../utils');
 
 var APIClientBase = require('../ApiClientBase');
 
-var LoadMessageClient = function(){};
+var LoadMessageClient = function () { };
 
-_.extend(LoadMessageClient.prototype,APIClientBase.prototype);
+_.extend(LoadMessageClient.prototype, APIClientBase.prototype);
 
-LoadMessageClient.prototype.send = function(roomID,lastMessageId,direction,success,err){
+LoadMessageClient.prototype.send = function (roomID, lastMessageId, direction, success, err) {
 
-    this.getRequst("/message/list/" + roomID + "/" + lastMessageId + "/" + direction,success,err);
-    
+    this.getRequst("/message/list/" + roomID + "/" + lastMessageId + "/" + direction, success, err);
+
 }
 
 // returns instance
