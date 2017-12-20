@@ -209,7 +209,7 @@ class Conversation extends Component {
                 ))}
 
                 <p className="meta">
-                  <DateTime timestamp={lastMessage.created} />
+                  <DateTime timestamp={lastMessage.created} /><time> by: {user.name}</time>
                 </p>
               </div>
             </div>
