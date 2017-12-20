@@ -170,24 +170,24 @@ class CallingDialog extends Component {
             ) : null}
 
             {this.props.videoOn &&
-            this.props.callingMediaType == constant.CallMediaTypeVideo ? (
-              <button
-                onClick={this.props.stopVideo}
-                className="btn btn-square btn-round btn-success"
-              >
-                <img src={CamOnImage} />
-              </button>
-            ) : null}
+              this.props.callingMediaType == constant.CallMediaTypeVideo ? (
+                <button
+                  onClick={this.props.stopVideo}
+                  className="btn btn-square btn-round btn-success"
+                >
+                  <img src={CamOnImage} />
+                </button>
+              ) : null}
 
             {!this.props.videoOn &&
-            this.props.callingMediaType == constant.CallMediaTypeVideo ? (
-              <button
-                onClick={this.props.startVideo}
-                className="btn btn-square btn-round btn-danger"
-              >
-                <img src={CamOffImage} />
-              </button>
-            ) : null}
+              this.props.callingMediaType == constant.CallMediaTypeVideo ? (
+                <button
+                  onClick={this.props.startVideo}
+                  className="btn btn-square btn-round btn-danger"
+                >
+                  <img src={CamOffImage} />
+                </button>
+              ) : null}
 
             <button
               onClick={this.props.finish}
@@ -248,24 +248,24 @@ class CallingDialog extends Component {
                 ) : null}
 
                 {this.props.videoOn &&
-                this.props.callingMediaType == constant.CallMediaTypeVideo ? (
-                  <button
-                    onClick={this.props.stopVideo}
-                    className="btn btn-square btn-round btn-success"
-                  >
-                    <img src={CamOnImage} />
-                  </button>
-                ) : null}
+                  this.props.callingMediaType == constant.CallMediaTypeVideo ? (
+                    <button
+                      onClick={this.props.stopVideo}
+                      className="btn btn-square btn-round btn-success"
+                    >
+                      <img src={CamOnImage} />
+                    </button>
+                  ) : null}
 
                 {!this.props.videoOn &&
-                this.props.callingMediaType == constant.CallMediaTypeVideo ? (
-                  <button
-                    onClick={this.props.startVideo}
-                    className="btn btn-square btn-round btn-danger"
-                  >
-                    <img src={CamOffImage} />
-                  </button>
-                ) : null}
+                  this.props.callingMediaType == constant.CallMediaTypeVideo ? (
+                    <button
+                      onClick={this.props.startVideo}
+                      className="btn btn-square btn-round btn-danger"
+                    >
+                      <img src={CamOffImage} />
+                    </button>
+                  ) : null}
 
                 <button
                   onClick={this.props.finish}
