@@ -26,7 +26,15 @@ export {
   SignUpBackText
 } from "./strings/signup";
 
-export { FailedToGetHistory, FailedToMarkAll } from "./strings/history";
+export {
+  FailedToGetHistory,
+  FailedToMarkAll,
+  HistoryYou,
+  HistoryMessageTypeFile,
+  HistoryMessageTypeLocation,
+  HistoryMessageTypeSticker,
+  HistoryMessageTypeContact
+} from "./strings/history";
 
 export {
   FailedToGetUserList,

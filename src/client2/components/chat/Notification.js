@@ -17,30 +17,58 @@ class Notification extends Component {
     static propTypes = {
     }
 
-    constructor(){
+    constructor() {
         super();
     }
 
     toggleNotification = (e) => {
-        if(!this.props.notificationState)
+        if (!this.props.notificationState)
             this.props.showNotifications();
         else
             this.props.hideNotifications();
     }
 
+    click(messageId) {
+
+        const message = this.props.notifications.find((message) => {
+
+            return message._id == messageId;
+
+        });
+
+        const user = message.user;
+        const group = message.group;
+        const room = message.room;
+
+        if (user) {
+            this.props.openChatByUser(user);
+        }
+
+        if (group) {
+            this.props.openChatByGroup(group);
+        }
+
+        if (room) {
+            this.props.openChatByRoom(room);
+        }
+
+
+    }
+
     render() {
-        
+
         let notificationsMenuClass = "dropdown-menu ";
-        if(this.props.notificationState)
+        if (this.props.notificationState)
             notificationsMenuClass += " show";
 
         let toolbarIcon = "topbar-btn";
-        if(this.props.notifications.length > 0)
+        if (this.props.notifications.length > 0)
             toolbarIcon += ' has-new';
+
 
         return (
             <li className="dropdown notification">
-                
+
                 <span className={toolbarIcon} onClick={this.toggleNotification}>
                     <i className="fa fa-bell-o"></i>
                 </span>
@@ -52,14 +80,14 @@ class Notification extends Component {
                         {this.props.notifications.length == 0 ?
                             <a className="media" key="0">
                                 <div className="media-body">
-                                <p>
-                                    {strings.NotificationNoNotification[user.lang]}
-                                </p>
+                                    <p>
+                                        {strings.NotificationNoNotification[user.lang]}
+                                    </p>
                                 </div>
                             </a> : null
                         }
-                        
-                        {this.props.notifications.map( (message) => {
+
+                        {this.props.notifications.map((message) => {
 
                             const targetUser = message.user;
                             const group = message.group;
@@ -67,55 +95,68 @@ class Notification extends Component {
                             let userClass = "avatar ";
                             let fileId = "";
                             let avatarType = constant.AvatarUser;
-                            
-                            if(group){
+
+                            if (group) {
 
                                 avatarType = constant.AvatarGroup;
 
-                                if(group.avatar && group.avatar.thumbnail){
+                                if (group.avatar && group.avatar.thumbnail) {
                                     fileId = group.avatar.thumbnail.nameOnServer;
                                 }
 
                             }
 
-                            else if(room){
+                            else if (room) {
 
                                 avatarType = constant.AvatarRoom;
 
-                                if(room.avatar && room.avatar.thumbnail){
+                                if (room.avatar && room.avatar.thumbnail) {
                                     fileId = room.avatar.thumbnail.nameOnServer;
                                 }
 
                             }
 
-                            else if(targetUser){
+                            else if (targetUser) {
 
                                 avatarType = constant.AvatarUser;
 
-                                if(targetUser.onlineStatus == 1)
+                                if (targetUser.onlineStatus == 1)
                                     userClass += " status-success";
 
-                                if(targetUser.avatar && targetUser.avatar.thumbnail){
+                                if (targetUser.avatar && targetUser.avatar.thumbnail) {
                                     fileId = targetUser.avatar.thumbnail.nameOnServer;
                                 }
-                                
+
                             }
 
-                            return <a className="media" key={message._id}>
-                                    <span className={userClass}>
-                                        <AvatarImage fileId={fileId} type={avatarType} />
-                                    </span>
-                                    <div className="media-body">
-                                    <p>{message.user.name} : {message.message}</p>
+                            let messageText = "";
+
+                            if (message.type == constant.MessageTypeText)
+                                messageText = message.message;
+                            else if (message.type == constant.MessageTypeFile)
+                                messageText = strings.HistoryMessageTypeFile[user.lang];
+                            else if (message.type == constant.MessageTypeLocation)
+                                messageText = strings.HistoryMessageTypeLocation[user.lang];
+                            else if (message.type == constant.MessageTypeContact)
+                                messageText = strings.HistoryMessageTypeContact[user.lang];
+                            else if (message.type == constant.MessageTypeSticker)
+                                messageText = strings.HistoryMessageTypeSticker[user.lang];
+
+                            return <a onClick={() => { this.click(message._id) }} className="media cursor-pointer" key={message._id}>
+                                <span className={userClass}>
+                                    <AvatarImage fileId={fileId} type={avatarType} />
+                                </span>
+                                <div className="media-body">
+                                    <p>{message.user.name} : {messageText}</p>
                                     <DateTime timestamp={message.created} />
-                                    </div>
-                                </a>
+                                </div>
+                            </a>
                         })}
 
                     </div>
 
                     {this.props.notifications.length != 0 ?
-                    
+
                         <div className="dropdown-footer">
                             <div className="left">
                                 <a onClick={this.props.markAll} href="javascript:void(0)" >{strings.NotificationReadAll[user.lang]}</a>
@@ -126,7 +167,7 @@ class Notification extends Component {
                                     <i className="fa fa-circle-o"></i>
                                 </a>
                             </div>
-                        </div>: null
+                        </div> : null
 
                     }
 
@@ -140,16 +181,19 @@ class Notification extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        notificationState:state.chatUI.notificationState,
+        notificationState: state.chatUI.notificationState,
         notifications: state.notification.notifications
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {       
+    return {
         showNotifications: () => dispatch(actions.chatUI.showNotification()),
         hideNotifications: () => dispatch(actions.chatUI.hideNotification()),
         markAll: () => dispatch(actions.history.markAll()),
+        openChatByUser: user => dispatch(actions.chat.openChatByUser(user)),
+        openChatByGroup: group => dispatch(actions.chat.openChatByGroup(group)),
+        openChatByRoom: room => dispatch(actions.chat.openChatByRoom(room)),
     };
 };
 
