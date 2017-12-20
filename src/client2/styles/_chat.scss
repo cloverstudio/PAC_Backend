@@ -241,6 +241,20 @@
             .stickers-visible{
                 display:block;
             }
+
+            footer{
+                padding: 0;
+                textarea{
+                    border:none;
+                    resize:none;
+                    flex: 1;
+                    background-color: transparent;
+                    padding: 8px 10px;
+                }
+                .gap-items{
+                    margin: 0 10px 6px 10px;
+                }
+            }
         }
 
         .info-container{
@@ -257,6 +271,7 @@
                     .stickers-container{
                         width:100%;
                         right:0;
+                        bottom:10px;
 
                         .tab-pane{
 

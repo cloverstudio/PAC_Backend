@@ -15,6 +15,31 @@ class ChatInput extends Component {
     constructor(){
         super();
         this.stickersLoaded = false;
+        this.state = {
+            textAreaStyle : {
+                height: '40px'
+            }
+        }
+    }
+
+    modifyTextAreaHeight = e => {
+        let currHeight = parseInt(this.state.textAreaStyle.height.slice(0,-2));
+
+        if (currHeight < 120) {
+            currHeight+=20;
+        }
+
+        const newStyle = {...this.state.textAreaStyle, height: currHeight+'px'}
+        this.setState({
+            textAreaStyle: newStyle
+        })
+    }
+
+    resetTextAreaHeight = e => {
+
+        this.setState({
+            textAreaStyle: {...this.state.textAreaStyle, height: '40px'}
+        })
     }
 
     handleInputChange = e => {
@@ -63,7 +88,7 @@ class ChatInput extends Component {
     render() {
         return(
             <footer className="publisher">
-                <input 
+                {/* <input 
                     className="publisher-input" 
                     rows="1" 
                     placeholder="Write something" 
@@ -78,7 +103,35 @@ class ChatInput extends Component {
                         }
                     }}
                     onChange={this.handleInputChange}
-                    />
+                    /> */}
+
+                    <textarea
+                    placeholder="Write something"
+                    style={this.state.textAreaStyle}
+                    value={this.props.inputValues[this.props.currentChatId] || ''}
+                    onKeyPress={e => {
+                        const message = this.props.inputValues[this.props.currentChatId];
+
+                        if (e.key === 'Enter'){
+                            if (e.shiftKey){
+                                this.modifyTextAreaHeight();
+                            }
+                            else if(message){
+                                e.preventDefault();
+                                this.props.sendMessage(constant.MessageTypeText, message);
+                                this.props.changeInputValue(this.props.currentChatId, '');
+                                this.props.sendStopTyping(this.props.currentChatId);
+                                this.resetTextAreaHeight();
+                            }
+                            else{
+                                e.preventDefault();
+                            }
+                        }
+                    }}
+                    onChange={this.handleInputChange}
+                    >
+
+                    </textarea>
                 <div className="align-self-end gap-items">
                     <span className="publisher-btn file-group">
                         <i className="fa fa-paperclip file-browser" onClick={e=> this.fileInputElement.click()}></i>
