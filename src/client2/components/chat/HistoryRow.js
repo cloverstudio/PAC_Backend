@@ -89,9 +89,16 @@ class HistoryRow extends Component {
         if (history.unreadCount > 0)
             messageClass += " bold";
 
-        let lastUpdateUserName = history.lastUpdateUser.name;
-        if (history.lastUpdateUser._id == loginUser.userData._id)
-            lastUpdateUserName = strings.HistoryYou[loginUser.lang];
+        let lastUpdateUserName = "";
+
+        if (history.lastUpdateUser) {
+
+            lastUpdateUserName = history.lastUpdateUser.name;
+            if (history.lastUpdateUser._id == loginUser.userData._id)
+                lastUpdateUserName = strings.HistoryYou[loginUser.lang];
+
+            lastUpdateUserName += " : ";
+        }
 
         return (
             <div className="history-row" onClick={this.selected}>
@@ -111,7 +118,7 @@ class HistoryRow extends Component {
                                 }
                             </div>
                             <p className={messageClass}>
-                                {lastUpdateUserName} : {lastMessage}
+                                {lastUpdateUserName} {lastMessage}
                             </p>
                         </div>
                     </div> : null
@@ -132,7 +139,7 @@ class HistoryRow extends Component {
                                 }
                             </div>
                             <p className={messageClass}>
-                                {lastUpdateUserName} : {lastMessage}
+                                {lastUpdateUserName} {lastMessage}
                             </p>
                         </div>
                     </div> : null
@@ -153,7 +160,7 @@ class HistoryRow extends Component {
                                 }
                             </div>
                             <p className={messageClass}>
-                                {lastUpdateUserName} : {lastMessage}
+                                {lastUpdateUserName} {lastMessage}
                             </p>
                         </div>
                     </div> : null
