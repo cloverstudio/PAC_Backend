@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../actions';
 
+import * as config from '../lib/config';
 import * as constant from '../lib/const';
 import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
@@ -103,6 +104,10 @@ class Favotites extends Base {
 
                                 const message = favorite.messageModel;
 
+                                if (typeof message.deleted !== 'undefined' && message.deleted !== 0 ){
+                                    return null;
+                                }
+
                                 let chatName = "";
 
                                 if(message.userModelTarget){
@@ -147,7 +152,27 @@ class Favotites extends Base {
                                 if(message.user && message.user.avatar && message.user.avatar.thumbnail)
                                 userAvatarId = message.user.avatar.thumbnail.nameOnServer;
 
-                                const messageHightlighted = message.message.replace(this.props.keyword,"<strong>" + this.props.keyword + "</strong>");
+
+                                let messageContent;
+
+                                switch(message.type){
+                                    case constant.MessageTypeFile:
+                                        messageContent = (
+                                        <span>
+                                            <i className="ti-zip text-secondary fs-45 mb-3"></i>
+                                            <br/>
+                                            <span className="fw-600">{message.file.file.name}</span>
+                                        </span>)
+                                        break;
+                                    case constant.MessageTypeSticker:
+                                        messageContent = <img className="favorite-sticker" src={config.mediaBaseURL + message.message}/>
+                                        break;
+                                    case constant.MessageTypeText:
+                                        messageContent = message.message;
+                                        break;
+                                    default:
+                                        break;
+                                }
 
                                 let deleteIconClass = "ti-trash";
                                 if(message._id == this.props.removeConfirmMessageId)
@@ -171,7 +196,9 @@ class Favotites extends Base {
                                                     <p>
                                                         <strong>{userName}</strong> 
                                                     </p>
-                                                    <p className="messsage" dangerouslySetInnerHTML={{__html: messageHightlighted}}>
+                                                    
+                                                    <p className="messsage">
+                                                        {messageContent}
                                                     </p>
 
                                                     <p className="text-right">

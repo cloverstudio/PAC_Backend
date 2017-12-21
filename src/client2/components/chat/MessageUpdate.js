@@ -6,15 +6,38 @@ import { Link } from "react-router-dom";
 import * as constant from "../../lib/const";
 import * as actions from "../../actions";
 import * as util from "../../lib/utils";
+import Encryption from "../../lib/encryption/encryption";
 
 class MessageUpdate extends Component {
     static propTypes = {};
 
     constructor() {
         super();
-        this.lastSearchTimeout;
+        
+        this.state = {
+            textAreaValue : ''
+        }
     }
 
+    handleChange = value => {
+        this.setState({
+            textAreaValue : value
+        })
+    }
+
+    componentWillReceiveProps(nextProps){
+        if (nextProps.oldMessageValue.length > 0 && nextProps.oldMessageValue !== this.props.oldMessageValue){
+            const oldMsg = Encryption.decryptText(nextProps.oldMessageValue);
+            this.setState({
+                textAreaValue: oldMsg
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps){
+        if(!prevProps.visibility) this.textArea.select();
+    }
+    
     render() {
         
         const mainStyle = {
@@ -36,7 +59,7 @@ class MessageUpdate extends Component {
                         <div className="modal-content">
                             <div className="modal-header">
 
-                                <h5 className="modal-title">Update message</h5>
+                                <h5 className="modal-title">Edit message</h5>
 
                                 <button type="button" className="close msgInfo-dialog-close" onClick={e=> this.props.hideMessageUpdateView()}>
                                     <span className="msgInfo-dialog-close" aria-hidden="true">×</span>
@@ -45,7 +68,13 @@ class MessageUpdate extends Component {
                             </div>
                             
                             <div className="modal-body">
-                                <textarea ref={textArea => this.textArea = textArea} className="form-control msg-update" rows="6"></textarea>
+                                <textarea
+                                onChange={e=> this.handleChange(e.target.value)}
+                                ref={textArea => this.textArea = textArea} 
+                                className="form-control msg-update" 
+                                rows="6"
+                                value={this.state.textAreaValue}
+                                ></textarea>
                             </div>
 
                             <div className="modal-footer">
@@ -55,7 +84,7 @@ class MessageUpdate extends Component {
                                         this.textArea.value = "";
                                         this.props.hideMessageUpdateView();
                                     }
-                                }}>Update</button>
+                                }}>Edit</button>
                             </div>
                         </div>
                     </div>
@@ -72,6 +101,7 @@ class MessageUpdate extends Component {
 const mapStateToProps = state => {
     return {
         visibility: state.chatUI.messageUpdateViewState,
+        oldMessageValue: state.messageInfo.selectedMessage.message
     };
 };
 

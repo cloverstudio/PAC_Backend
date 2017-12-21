@@ -89,7 +89,7 @@ class MessageInfo extends Component {
                             onClick={e => this.props.showMessageUpdateView()}
                         >
                             <i className="ti-pencil" />
-                            <br />Update
+                            <br />Edit
                         </button>
                     );
                 }
@@ -179,7 +179,7 @@ class MessageInfo extends Component {
                                     className="media align-items-center"
                                     key={seenByItem.user._id}
                                     onClick={() =>
-                                        this.props.openChat(seenByItem.user._id)
+                                        seenByItem.user._id !== user.userData._id ? this.props.openChat(seenByItem.user._id) : false
                                     }
                                 >
                                     <span className="flexbox flex-grow gap-items text-truncate">

@@ -7,7 +7,6 @@ import * as actions from '../../actions';
 import * as constant from '../../lib/const';
 import * as config from '../../lib/config';
 
-// import {fileUpload} from '../../lib/api/upload';
 class ChatInput extends Component {
 
     static propTypes = {
@@ -88,23 +87,7 @@ class ChatInput extends Component {
     render() {
         return(
             <footer className="publisher">
-                {/* <input 
-                    className="publisher-input" 
-                    rows="1" 
-                    placeholder="Write something" 
-                    value={this.props.inputValues[this.props.currentChatId] || ''}
-                    onKeyPress={e => {
-                        const message = this.props.inputValues[this.props.currentChatId];
-
-                        if (e.key === 'Enter' && message){
-                            this.props.sendMessage(constant.MessageTypeText, message);
-                            this.props.changeInputValue(this.props.currentChatId, '');
-                            this.props.sendStopTyping(this.props.currentChatId);
-                        }
-                    }}
-                    onChange={this.handleInputChange}
-                    /> */}
-
+    
                     <textarea
                     placeholder="Write something"
                     style={this.state.textAreaStyle}
@@ -128,10 +111,9 @@ class ChatInput extends Component {
                             }
                         }
                     }}
-                    onChange={this.handleInputChange}
-                    >
-
+                    onChange={this.handleInputChange}>
                     </textarea>
+
                 <div className="align-self-end gap-items">
                     <span className="publisher-btn file-group">
                         <i className="fa fa-paperclip file-browser" onClick={e=> this.fileInputElement.click()}></i>
