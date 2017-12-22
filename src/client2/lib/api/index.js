@@ -1,6 +1,10 @@
 export { callLogin, callLogout } from "./login";
 
-export { callGetHistory, callMarkAll } from "./history";
+export {
+    callGetHistory,
+    callMarkAll,
+    callSearchHistory
+} from "./history";
 
 export { callGetUserList, callSearchUserList } from "./userlist";
 

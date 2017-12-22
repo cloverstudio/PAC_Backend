@@ -11,11 +11,11 @@ var Utils = require("../lib/utils");
 
 var BaseModel = require('./BaseModel');
 
-var History = function(){};
+var History = function () { };
 
-_.extend(History.prototype,BaseModel.prototype);
+_.extend(History.prototype, BaseModel.prototype);
 
-History.prototype.init = function(mongoose){
+History.prototype.init = function (mongoose) {
 
     this.schema = new mongoose.Schema({
         userId: { type: String, index: true },
@@ -25,23 +25,24 @@ History.prototype.init = function(mongoose){
         lastUpdateUnreadCount: Number,
         lastUpdateUser: {},
         lastMessage: {},
-        unreadCount : Number,
+        unreadCount: Number,
+        keyword: { type: String, index: true },
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "history", this.schema);
 
 }
 
-History.get = function(){
+History.get = function () {
 
     return DatabaseManager.getModel('History').model;
 
 }
 
-History.update = function(chatObj,type){
-    
-    
-        
+History.update = function (chatObj, type) {
+
+
+
 }
 
 module["exports"] = History;

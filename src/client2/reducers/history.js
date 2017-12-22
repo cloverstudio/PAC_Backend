@@ -21,7 +21,12 @@ const historyLoading = (state = false, action) => {
             return false;
         case types.HistoryLoadFailed:
             return false;
-
+        case types.HistorySearchStart:
+            return true;
+        case types.HistorySearchSucceed:
+            return false;
+        case types.HistorySearchFailed:
+            return false;
         default:
             return state;
     }
@@ -33,24 +38,26 @@ const historyList = (state = [], action) => {
             return action.data.list;
         case types.HistoryLoadSucceed:
             return state.concat(action.data.list);
+        case types.HistorySearchSucceed:
+            return action.data.list;
     }
 
-    if(action.type == types.ChatReceiveMessage){
+    if (action.type == types.ChatReceiveMessage) {
 
         const newMessage = action.message;
         const chunks = newMessage.roomID.split('-');
         let chatId = chunks[chunks.length - 1];
         let chatType = chunks[0];
 
-        if(chatType == constants.ChatTypePrivate){
+        if (chatType == constants.ChatTypePrivate) {
             chatId = utils.getTargetUserIdFromRoomId(newMessage.roomID);
         }
 
         let isExists = false;
 
-        const newHistoryList =  state.map( (history) => {
+        const newHistoryList = state.map((history) => {
 
-            if(history.chatId == chatId){
+            if (history.chatId == chatId) {
 
                 isExists = true;
 
@@ -59,7 +66,7 @@ const historyList = (state = [], action) => {
                 history.lastMessage = newMessage;
                 history.lastUpdateUser = newMessage.user;
 
-                if(!action.currentChat)
+                if (!action.currentChat)
                     history.unreadCount = history.unreadCount + 1;
 
             }
@@ -68,33 +75,33 @@ const historyList = (state = [], action) => {
 
         });
 
-        if(isExists){
-            return newHistoryList.sort( (obj1,obj2) => {
-                return -1 * ( obj1.lastUpdate - obj2.lastUpdate ) ;
+        if (isExists) {
+            return newHistoryList.sort((obj1, obj2) => {
+                return -1 * (obj1.lastUpdate - obj2.lastUpdate);
             });
         } else {
-            
+
         }
 
     }
 
-    if(action.type == types.ChatOpenByUser ||
+    if (action.type == types.ChatOpenByUser ||
         action.type == types.ChatOpenByGroup ||
-        action.type == types.ChatOpenByRoom){
+        action.type == types.ChatOpenByRoom) {
 
         const chunks = action.chatId.split('-');
         let chatId = chunks[chunks.length - 1];
 
-        if(action.type == types.ChatOpenByUser)
+        if (action.type == types.ChatOpenByUser)
             chatId = utils.getTargetUserIdFromRoomId(action.chatId);
 
-        const newHistoryList =  state.map( (history) => {
+        const newHistoryList = state.map((history) => {
 
-            if(history.chatId == chatId)
+            if (history.chatId == chatId)
                 history.unreadCount = 0;
 
             return history;
-            
+
         });
 
         return newHistoryList;

@@ -26,6 +26,7 @@ export function onLogout(data) {
         store.dispatch(push(`${util.url("/")}`));
       })
       .catch(err => {
+
         console.error(err);
 
         dispatch(
@@ -40,4 +41,15 @@ export function onLogout(data) {
         store.dispatch(push(`${util.url("/")}`));
       });
   };
+}
+
+export function forceLogout() {
+
+  store.dispatch({
+    type: types.Logout
+  });
+
+  user.logout();
+  store.dispatch(push(`${util.url("/")}`));
+
 }

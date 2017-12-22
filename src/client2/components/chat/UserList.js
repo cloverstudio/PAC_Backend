@@ -13,26 +13,26 @@ class UserList extends Component {
     static propTypes = {
     }
 
-    constructor(){
+    constructor() {
         super();
         this.currentPage = 1;
         this.lastSearchTimeout;
     }
 
     onScroll = (e) => {
-        
+
         const scrollPos = e.target.scrollTop + 0;
-        const realScrollPos = scrollPos +  e.target.clientHeight;
+        const realScrollPos = scrollPos + e.target.clientHeight;
         const scrollHeight = e.target.scrollHeight;
 
         // if scroll position is between 2px from bottom
-        if(Math.abs(realScrollPos - scrollHeight) < 1){
+        if (Math.abs(realScrollPos - scrollHeight) < 1) {
 
-            if(!this.props.isLoading){
+            if (!this.props.isLoading) {
                 this.currentPage++;
-                this.props.loadUserList(this.currentPage);  
-            } 
-            
+                this.props.loadUserList(this.currentPage);
+            }
+
         }
     }
 
@@ -41,19 +41,19 @@ class UserList extends Component {
 
         clearTimeout(this.lastSearchTimeout);
 
-        this.lastSearchTimeout = setTimeout(()=>{
+        this.lastSearchTimeout = setTimeout(() => {
             this.props.searchUserList(e.target.value)
         }, constant.SearchInputTimeout);
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
 
     }
 
-	componentDidMount() {
-        
+    componentDidMount() {
+
     }
-    
+
     render() {
 
         return (
@@ -61,7 +61,7 @@ class UserList extends Component {
                 {this.props.usersLoading ?
                     <div className="spinner-linear">
                         <div className="line"></div>
-                    </div>: null
+                    </div> : null
                 }
 
                 <div onScroll={this.onScroll} className="usersview">
@@ -71,18 +71,18 @@ class UserList extends Component {
                             <input onChange={this.onInputChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
                         </form>
                     </header>
-                    
+
                     <div className="media-list-body bg-white">
 
-                        {this.props.users.map( (user) => {
+                        {this.props.users.map((user) => {
 
                             let fileId = null;
-                            
-                            if(user.avatar && user.avatar.thumbnail)
+
+                            if (user.avatar && user.avatar.thumbnail)
                                 fileId = user.avatar.thumbnail.nameOnServer;
 
                             return (
-                                <div className="media align-items-center" key={user._id} onClick={ () => { this.props.openChat(user) }}>
+                                <div className="media align-items-center" key={user._id} onClick={() => { this.props.openChat(user) }}>
 
                                     <span className="flexbox flex-grow gap-items text-truncate">
 
@@ -104,7 +104,7 @@ class UserList extends Component {
 
 
                     </div>
-                    
+
                 </div>
             </div>
         );

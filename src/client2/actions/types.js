@@ -41,6 +41,9 @@ export const HistoryLoadFailed = "History/LoadFailed";
 export const HistoryMarkAllStart = "History/MarkAllStart";
 export const HistoryMarkAllSucceed = "History/MarkAllSucceed";
 export const HistoryMarkAllFailed = "History/MarkAllFailed";
+export const HistorySearchStart = "History/SearchStart";
+export const HistorySearchSucceed = "History/SearchSucceed";
+export const HistorySearchFailed = "History/SearchFailed";
 
 // UserList
 export const UserListLoadStart = "UserList/LoadStart";

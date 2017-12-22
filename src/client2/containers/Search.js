@@ -10,7 +10,7 @@ import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
 
 import user from '../lib/user';
-import {store} from '../index';
+import { store } from '../index';
 
 import Base from './Base';
 
@@ -34,33 +34,33 @@ class Search extends Base {
     onKeywordChange = (e) => {
         e.persist();
 
-        if(this.lastSearchTimeout)
+        if (this.lastSearchTimeout)
             clearTimeout(this.lastSearchTimeout);
 
-        this.lastSearchTimeout = setTimeout(()=>{
+        this.lastSearchTimeout = setTimeout(() => {
             this.props.searchMessage(e.target.value)
         }, constant.SearchInputTimeout);
     }
 
     render() {
-        
+
         let sideBarClass = "pace-done sidebar-folded";
-        if(this.props.sidebarState)
+        if (this.props.sidebarState)
             sideBarClass += " sidebar-open";
 
         let asideBarHolderClass = "layout-chat";
-        if(this.props.historyBarState)
+        if (this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
         return (
 
             <div className={sideBarClass} onClick={this.globalClick}>
-            
+
                 <SideBar />
                 <Header />
 
                 <main className={asideBarHolderClass}>
-                
+
                     <History />
 
                     <header className="header bg-ui-general">
@@ -69,8 +69,8 @@ class Search extends Base {
                                 <strong>{strings.SearchTitle[user.lang]}</strong>
                             </h1>
                             <div className="input-group">
-                            <span className="input-group-addon" id="basic-addon1">
-                                <i className="ti-search"></i></span>
+                                <span className="input-group-addon" id="basic-addon1">
+                                    <i className="ti-search"></i></span>
                                 <input onChange={this.onKeywordChange} type="text" className="form-control" />
                             </div>
                         </div>
@@ -81,58 +81,58 @@ class Search extends Base {
                             <div className="line"></div>
                         </div> : null
                     }
-                    
+
                     <div className="main-content search">
 
                         <div className="row">
 
-                            {this.props.searchResult.map( (message) => {
+                            {this.props.searchResult.map((message) => {
 
                                 let chatName = "";
 
-                                if(message.userModelTarget){
+                                if (message.userModelTarget) {
                                     chatName = message.userModelTarget.name;
                                 }
 
-                                else if(message.room){
+                                else if (message.room) {
                                     chatName = message.room.name;
                                 }
 
-                                else if(message.group){
+                                else if (message.group) {
                                     chatName = message.group.name;
                                 }
 
-                                else if(message.user){
+                                else if (message.user) {
                                     chatName = message.user.name;
                                 }
 
                                 let chatAvatarId = "";
                                 let chatAvatarType = "";
 
-                                if(message.userModelTarget && message.userModelTarget.avatar && message.userModelTarget.avatar.thumbnail){
+                                if (message.userModelTarget && message.userModelTarget.avatar && message.userModelTarget.avatar.thumbnail) {
                                     chatAvatarId = message.userModelTarget.avatar.thumbnail.nameOnServer;
                                     chatAvatarType = constant.AvatarUser;
                                 }
 
-                                if(message.room && message.room.avatar && message.room.avatar.thumbnail){
+                                if (message.room && message.room.avatar && message.room.avatar.thumbnail) {
                                     chatAvatarId = message.room.avatar.thumbnail.nameOnServer;
                                     chatAvatarType = constant.AvatarRoom;
                                 }
 
-                                if(message.group && message.group.avatar && message.group.avatar.thumbnail){
+                                if (message.group && message.group.avatar && message.group.avatar.thumbnail) {
                                     chatAvatarId = message.group.avatar.thumbnail.nameOnServer;
                                     chatAvatarType = constant.AvatarGroup;
                                 }
 
                                 let userName = "";
-                                if(message.user)
+                                if (message.user)
                                     userName = message.user.name;
 
                                 let userAvatarId = "";
-                                if(message.user && message.user.avatar && message.user.avatar.thumbnail)
-                                userAvatarId = message.user.avatar.thumbnail.nameOnServer;
+                                if (message.user && message.user.avatar && message.user.avatar.thumbnail)
+                                    userAvatarId = message.user.avatar.thumbnail.nameOnServer;
 
-                                const messageHightlighted = message.message.replace(this.props.keyword,"<strong>" + this.props.keyword + "</strong>");
+                                const messageHightlighted = message.message.replace(this.props.keyword, "<strong>" + this.props.keyword + "</strong>");
 
                                 return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}>
                                     <h6 className="code-title">
@@ -140,25 +140,25 @@ class Search extends Base {
                                         {chatName}
                                     </h6>
 
-                                        <div className="code-preview">
-                                            <div className="media">
-                                                <span className="avatar">
-                                                    <AvatarImage fileId={userAvatarId} type={constant.AvatarUser} />
-                                                </span>
-                                                <div className="media-body">
-                                                    <p>
-                                                        <strong>{userName}</strong> 
-                                                    </p>
-                                                    <p className="messsage" dangerouslySetInnerHTML={{__html: messageHightlighted}}>
-                                                    </p>
+                                    <div className="code-preview">
+                                        <div className="media">
+                                            <span className="avatar">
+                                                <AvatarImage fileId={userAvatarId} type={constant.AvatarUser} />
+                                            </span>
+                                            <div className="media-body">
+                                                <p>
+                                                    <strong>{userName}</strong>
+                                                </p>
+                                                <p className="messsage" dangerouslySetInnerHTML={{ __html: messageHightlighted }}>
+                                                </p>
 
-                                                    <p className="text-right">
-                                                        <DateTime timestamp={message.created} />
-                                                    </p>
-                                                </div>
+                                                <p className="text-right">
+                                                    <DateTime timestamp={message.created} />
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
                             })}
 
@@ -167,9 +167,9 @@ class Search extends Base {
                     </div>
 
                 </main>
-                
+
                 <Modals />
-                
+
             </div>
         );
     }

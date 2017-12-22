@@ -5,12 +5,13 @@ import * as actions from '../actions';
 
 import {
     callGetHistory,
-    callMarkAll
+    callMarkAll,
+    callSearchHistory
 } from '../lib/api/';
 
 import * as strings from '../lib/strings';
 import user from '../lib/user';
-import {store} from '../index';
+import { store } from '../index';
 
 export function loadHistoryInitial() {
 
@@ -20,14 +21,14 @@ export function loadHistoryInitial() {
             type: types.HistoryLoadInitial
         });
 
-        callGetHistory(1).then( (data) => {
+        callGetHistory(1).then((data) => {
 
             dispatch({
                 type: types.HistoryLoadInitialSucceed,
                 data
             });
 
-        }).catch( (err) => {
+        }).catch((err) => {
 
             dispatch(actions.notification.showToast(strings.FailedToGetHistory[user.lang]));
 
@@ -49,14 +50,14 @@ export function loadHistory(page) {
             type: types.HistoryLoadStart
         });
 
-        callGetHistory(page).then( (data) => {
+        callGetHistory(page).then((data) => {
 
             dispatch({
                 type: types.HistoryLoadSucceed,
                 data
             });
 
-        }).catch( (err) => {
+        }).catch((err) => {
 
             dispatch(actions.notification.showToast(strings.FailedToGetHistory[user.lang]));
 
@@ -71,7 +72,7 @@ export function loadHistory(page) {
 }
 
 export function onLoadHistoryInitialSucceed(data) {
-    
+
     return {
         type: types.HistoryLoadInitialSucceed,
         data
@@ -80,7 +81,7 @@ export function onLoadHistoryInitialSucceed(data) {
 }
 
 export function onLoadHistoryInitialFailed(err) {
-    
+
     return {
         type: types.HistoryLoadInitialFailed,
         err
@@ -88,28 +89,59 @@ export function onLoadHistoryInitialFailed(err) {
 
 }
 
-export function markAll(){
+
+export function searchHistory(keyword) {
 
     return (dispatch, getState) => {
 
         dispatch({
-            type:types.HistoryMarkAllStart
-        })
-        
-        callMarkAll().then( () => {
+            type: types.HistorySearchStart,
+            keyword
+        });
+
+        callSearchHistory(keyword).then((data) => {
 
             dispatch({
-                type:types.HistoryMarkAllSucceed
+                type: types.HistorySearchSucceed,
+                data
+            });
+
+        }).catch((err) => {
+
+            dispatch(actions.notification.showToast(strings.FailedToGetHistory[user.lang]));
+
+            dispatch({
+                type: types.HistorySearchFailed
+            });
+
+        });
+
+    };
+
+}
+
+export function markAll() {
+
+    return (dispatch, getState) => {
+
+        dispatch({
+            type: types.HistoryMarkAllStart
+        })
+
+        callMarkAll().then(() => {
+
+            dispatch({
+                type: types.HistoryMarkAllSucceed
             })
 
             dispatch(loadHistoryInitial());
 
-        }).catch( (err) => {
+        }).catch((err) => {
 
             dispatch(actions.notification.showToast(strings.FailedToMarkAll[user.lang]));
 
             dispatch({
-                type:types.HistoryMarkAllFailed
+                type: types.HistoryMarkAllFailed
             })
 
         });
