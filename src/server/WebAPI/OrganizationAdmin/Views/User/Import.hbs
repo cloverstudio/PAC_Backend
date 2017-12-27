@@ -1,42 +1,83 @@
-
 <ol class="breadcrumb">
-    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
-    <li><a href="/admin/user/list">{{l10n "User Management"}}</a></li>
-    <li class="active">{{l10n "Import"}}</li>
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="/admin/user/list">{{l10n "User Management"}}</a>
+    </li>
+    <li class=" breadcrumb-itemactive">{{l10n "Import"}}</li>
 </ol>
 
-<h1 style="max-width:50%">{{l10n "Import User"}}</h1>
-
-<hr>
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Import User"}}
+        </h1>
+    </div>
+</header>
 
 {{> alertMessage }}
 
 {{#if errorList}}
     <div class="alert alert-danger" role="alert">
-        <strong>{{l10n "Error is found in following lines."}}</strong><br /><br />
+        <strong>{{l10n "Error is found in following lines."}}</strong>
+        <br />
+        <br />
 
-    {{#each errorList}}
-        {{#if message}} #{{line}}: {{message}}<br />{{/if}}
-    {{/each}}
+        {{#each errorList}}
+            {{#if message}} #{{line}}: {{message}}
+                <br />
+            {{/if}}
+        {{/each}}
 
     </div>
 
 {{/if}}
 
+<div class="row">
 
-<form method="post" action="/admin/user/import" enctype="multipart/form-data">
+    <div class="col-12">
 
-    <div class="form-group">
-        <label for="input3">{{l10n "Please select file."}}</label><br/>
-        <input type="file" name="file" />
-        <p class="help-block">
-            <a href="/assets/admin/sample.csv">{{l10n "Download sample file"}}</a>
-        </p>
+        <div class="card">
+
+            <div class="card-body">
+
+                <form method="post" action="/admin/user/import" enctype="multipart/form-data">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="input-group file-group">
+                                <input type="text" class="form-control file-value" placeholder="{{l10n "Please select file."}}" readonly="" />
+                                <input type="file" name="file" accept=".csv" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-light file-browser" type="button">
+                                        <i class="fa fa-upload"></i>
+                                    </button>
+                                </span>
+                            </div>
+
+
+                            <p class="help-block">
+                                <a href="/assets/admin/sample.csv">{{l10n "Download sample file"}}</a>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-label btn-primary pull-right">
+                        <label>
+                            <i class="fa fa-floppy-o"></i>
+                        </label> {{l10n "Start Import"}}
+                    </button>
+
+
+                </form>
+
+
+            </div>
+        </div>
     </div>
-
-  <button type="submit" class="btnSend pull-right">
-      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
-      {{l10n "Start Import"}}
-  </button>
-  
-</form>
+</div>

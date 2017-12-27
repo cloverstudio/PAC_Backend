@@ -1,87 +1,108 @@
-
 <ol class="breadcrumb">
-    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
-    <li><a href="/admin/user/list">{{l10n "User Management"}}</a></li>
-    <li class="active">{{l10n "Device Management"}}</li>
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="/admin/user/list">{{l10n "User Management"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Device Management"}}</li>
 </ol>
 
-<h1 style="max-width:50%">{{l10n "Device Management"}}</h1>
-
-<hr>
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Device Management"}}
+        </h1>
+    </div>
+</header>
 
 {{> alertMessage }}
 
-<form method="post" action="/admin/user/devices/{{formValues._id}}" enctype="multipart/form-data">
+<div class="row">
 
+    <div class="col-12">
 
-<table class="table table-hover">
-    
-    <thead>
-        <tr>
-            <th width="45%">
-                {{l10n "UUID"}} / {{l10n "Token"}}  / {{l10n "Push Tokens"}}<br />
-            </th>
-            <th width="15%">{{l10n "Last Login"}}</th>
-            <th width="15%">{{l10n "Blocked"}}</th>
+        <div class="card">
 
-            <th width="25%"></th>
-        </tr>
-    </thead>
-    
-    <tbody>
+            <div class="card-body">
 
-    {{#each devices}}
+                <form method="post" action="/admin/user/devices/{{formValues._id}}" enctype="multipart/form-data">
 
-        <tr>
-            <td>
-                {{#if UUID}}
-                    {{UUID}}
-                {{else}}
-                    Web
-                {{/if}}
-                <br />
-                {{lastToken}}<br />
+                    <table class="table table-hover">
 
-                {{#each pushTokens}}
-                    {{truncate this}}<br />
-                {{/each}}
-                
-            </td>
-            <td>{{formatDateTime lastLogin}}</td>
-            <td>
-                {{#if blocked}}
-                    {{l10n "Blocked"}}
-                {{else}}
-                    {{l10n "Enabled"}}
-                {{/if}}  
+                        <thead>
+                            <tr>
+                                <th width="45%">
+                                    {{l10n "UUID"}} / {{l10n "Token"}} / {{l10n "Push Tokens"}}
+                                    <br />
+                                </th>
+                                <th width="15%">{{l10n "Last Login"}}</th>
+                                <th width="15%">{{l10n "Blocked"}}</th>
 
-            </td>
-            <td>
+                                <th width="25%"></th>
+                            </tr>
+                        </thead>
 
-                {{#if UUID}}
-                     <button type="button" class="buttonRedGhoust" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../userId}}/{{UUID}}' }">{{l10n "Delete"}}</button>
-                {{else}}
-                     <button type="button" class="buttonRedGhoust" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../userId}}/web' }">{{l10n "Delete"}}</button>
-                {{/if}}
+                        <tbody>
 
-                {{#if blocked}}
-                     <button type="button" class="buttonBlueGhoust" onclick='location.href="/admin/user/unblockDevice/{{../userId}}/{{UUID}}"'>{{l10n "Unblock"}}</button>
-                {{else}}
+                            {{#each devices}}
 
-                    {{#if UUID}}
-                        <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/user/blockDevice/{{../userId}}/{{UUID}}"'>{{l10n "Block"}}</button>
-                    {{/if}}
-                     
-                {{/if}}
+                                <tr>
+                                    <td>
+                                        {{#if UUID}}
+                                            {{UUID}}
+                                        {{else}}
+                                            Web
+                                        {{/if}}
+                                        <br /> {{lastToken}}
+                                        <br />
 
-            </td>
+                                        {{#each pushTokens}}
+                                            {{truncate this}}
+                                            <br />
+                                        {{/each}}
 
-        </tr>
+                                    </td>
+                                    <td>{{formatDateTime lastLogin}}</td>
+                                    <td>
+                                        {{#if blocked}}
+                                            {{l10n "Blocked"}}
+                                        {{else}}
+                                            {{l10n "Enabled"}}
+                                        {{/if}}
 
-    {{/each}}
+                                    </td>
+                                    <td>
 
-    </tbody>
+                                        {{#if UUID}}
+                                            <button type="button" class="btn btn-danger" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../userId}}/{{UUID}}' }">{{l10n "Delete"}}</button>
+                                        {{else}}
+                                            <button type="button" class="btn btn-danger" onclick="if(confirm('{{l10n "Please confirm to delete."}}')) { location.href='/admin/user/deleteDevice/{{../userId}}/web' }">{{l10n "Delete"}}</button>
+                                        {{/if}}
 
-</table>
+                                        {{#if blocked}}
+                                            <button type="button" class="btn btn-primary" onclick='location.href="/admin/user/unblockDevice/{{../userId}}/{{UUID}}"'>{{l10n "Unblock"}}</button>
+                                        {{else}}
 
-</form>
+                                            {{#if UUID}}
+                                                <button type="button" class="btn btn-danger " onclick='location.href="/admin/user/blockDevice/{{../userId}}/{{UUID}}"'>{{l10n "Block"}}</button>
+                                            {{/if}}
+
+                                        {{/if}}
+
+                                    </td>
+
+                                </tr>
+
+                            {{/each}}
+
+                        </tbody>
+
+                    </table>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

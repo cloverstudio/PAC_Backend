@@ -107,24 +107,21 @@
                             <td>{{groupNames}}</td>
                             <td>{{userid}}</td>
                             <td>{{formatDate created}}</td>
-                            <td colspan="2">
+                            <td class="text-right" colspan="2">
 
-                                <!-- Single button -->
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {{l10n "Action"}} <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        {{#if showEditDelete}}  <li><a href="/admin/user/edit/{{_id}}">{{l10n "Edit"}}</a></li>{{/if}}
-                                        {{#if showEditDelete}}
-                                            {{#unless (checkIfUserIsOrganizationAdmin permission)}}  
-                                                <li><a href="/admin/user/delete/{{_id}}">{{l10n "Delete"}}</a></li>
-                                            {{/unless}}    
-                                        {{/if}}
-                                        <li><a href="/admin/user/devices/{{_id}}">{{l10n "Devices"}}</a></li>
-                                    </ul>
+                                <span class="dropdown-toggle no-caret hover-primary" data-toggle="dropdown" aria-expanded="false">
+                                    <i class="ti-more-alt rotate-90"></i>
+                                </span>
+
+                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; top: 21px; left: 20px; will-change: top, left;">
+                                    {{#if showEditDelete}}  <a class="dropdown-item" href="/admin/user/edit/{{_id}}"><i class="ti-pencil"></i>{{l10n "Edit"}}</a>{{/if}}
+                                    {{#if showEditDelete}}
+                                        {{#unless (checkIfUserIsOrganizationAdmin permission)}}  
+                                            <a class="dropdown-item" href="/admin/user/delete/{{_id}}"><i class="ti-trash"></i>{{l10n "Delete"}}</a>
+                                        {{/unless}}    
+                                    {{/if}}
+                                    <a class="dropdown-item" href="/admin/user/devices/{{_id}}"><i class="ti-mobile"></i>{{l10n "Devices"}}</a>
                                 </div>
-                            
                             </td>
 
                         </tr>

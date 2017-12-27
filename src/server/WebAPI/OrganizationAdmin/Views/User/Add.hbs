@@ -1,132 +1,200 @@
-
 <ol class="breadcrumb">
-    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
-    <li><a href="/admin/user/list">{{l10n "User Management"}}</a></li>
-    <li class="active">{{l10n "Add New"}}</li>
+  <li class="breadcrumb-item">
+    <a href="/admin/home">{{l10n "Home"}}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="/admin/user/list">{{l10n "User Management"}}</a>
+  </li>
+  <li class="breadcrumb-item active">{{l10n "Add New"}}</li>
 </ol>
 
-<h1 style="max-width:50%">{{l10n "Add New User"}}</h1>
-
-<hr>
+<header class="header bg-ui-general">
+  <div class="header-info">
+    <h1 class="header-title">
+      {{l10n "Add New User"}}
+    </h1>
+  </div>
+</header>
 
 {{> alertMessage }}
 
-<form method="post" action="/admin/user/add" enctype="multipart/form-data">
+<div class="row">
 
-  {{!-- this line is to prevengroupst google-s autofill  --}}
-  <input style="display:none;" type="password" name="password" />
+  <div class="col-12">
 
-  <div class="form-group">
-    <label for="input1">{{l10n "User Name"}}</label>
-    <input type="text" name="name" class="form-control" id="input1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}" />
-  </div>
+    <div class="card">
+
+      <div class="card-body">
+
+        <form method="post" action="/admin/user/add" enctype="multipart/form-data">
+
+          {{!-- this line is to prevengroupst google-s autofill  --}}
+          <input style="display:none;" type="password" name="password" />
+
+          <div class="form-group">
+            <label for="input1">{{l10n "User Name"}}</label>
+            <input type="text" name="name" class="form-control" id="input1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="sortName">{{l10n "Sort User Name"}}</label>
+            <input type="text" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
+            <p class="help-block">{{l10n "This name will be used for sorting data."}}</p>
+          </div>
+
+          <div class="form-group">
+            <label for="input2">{{l10n "Description"}}</label>
+            <textarea rows="4" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="input3">{{l10n "User ID"}}</label>
+            <input type="text" name="userid" class="form-control" id="input2" placeholder="{{l10n "User ID"}}" value="{{formValues.userid}}"
+            />
+            <p class="help-block">{{l10n "User alphabet and numbers only. Must be more than 6 characters."}}</p>
+          </div>
+
+          <div class="form-group">
+            <label for="input4">{{l10n "Password"}}</label>
+            <input type="password" name="password" class="form-control" placeholder="{{l10n "Password"}}" value="{{formValues.password}}"
+            />
+            <p class="help-block">{{l10n "User alphabet and numbers only. Must be more than 6 characters."}}</p>
+          </div>
+
+          <div class="form-group">
+            <label for="input5">{{l10n "Status"}}</label>
+            <br/>
+
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="status" value="1" {{{checkedIfEqual formValues.status 1}}} />
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">{{l10n "Enabled"}}</span>
+            </label>
   
-  <div class="form-group">
-    <label for="sortName">{{l10n "Sort User Name"}}</label>
-    <input type="text" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
-    <p class="help-block">{{l10n "This name will be used for sorting data."}}</p>
-  </div>
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="status" value="0" {{{checkedIfEqual formValues.status 0}}} />
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">{{l10n "Disabled"}}</span>
+            </label>
+                
+          </div>
 
-  <div class="form-group">
-    <label for="input2">{{l10n "Description"}}</label>
-    <textarea rows="4" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
-  </div>
+          {{#if formValues.groupList}}
+            <div class="form-group">
+              <label for="input6">{{l10n "Groups"}}</label>
+              <br/>
 
-  <div class="form-group">
-    <label for="input3">{{l10n "User ID"}}</label>
-    <input type="text" name="userid" class="form-control" id="input2" placeholder="{{l10n "User ID"}}" value="{{formValues.userid}}" />
-    <p class="help-block">{{l10n "User alphabet and numbers only. Must be more than 6 characters."}}</p>
-  </div>
-  
-  <div class="form-group">
-    <label for="input4">{{l10n "Password"}}</label>
-    <input type="password" name="password" class="form-control" placeholder="{{l10n "Password"}}" value="{{formValues.password}}" />
-    <p class="help-block">{{l10n "User alphabet and numbers only. Must be more than 6 characters."}}</p>
-  </div>
+              {{#each formValues.groupList}}
 
-  <div class="form-group">
-    <label for="input5">{{l10n "Status"}}</label>
-    <br/>
-    <label class="radio-inline">
-      <input type="radio" name="status" id="status1" value="1" {{{checkedIfEqual formValues.status 1}}} /> {{l10n "Enabled"}}
-    </label>
-    <label class="radio-inline">
-      <input type="radio" name="status" id="status0" value="0" {{{checkedIfEqual formValues.status 0}}} /> {{l10n "Disabled"}}
-    </label>
-  </div>
+                <div class="form-check form-check-inline">
+                  <label class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" name="groups" value="{{_id}}" {{{checkIfExisted ../formValues.groups _id}}}>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">{{name}} </span>
+                  </label>
+                </div>
 
-  {{#if formValues.groupList}}
-    <div class="form-group">
-      <label for="input6">{{l10n "Groups"}}</label>
-      <br/>
+              {{/each}}
 
-      {{#each formValues.groupList}}
-        <label class="checkbox-inline">
-          <input type="checkbox" name="groups" value="{{_id}}" {{{checkIfExisted ../formValues.groups _id}}} />{{name}} 
-        </label>
-      {{/each}}
+            </div>
+          {{/if}}
+
+          {{#if formValues.departmentList}}
+            <div class="form-group">
+              <label for="input6">{{l10n "Departments"}}</label>
+              <br/>
+
+              {{#each formValues.departmentList}}
+
+                <div class="form-check form-check-inline">
+                  <label class="custom-control custom-checkbox">
+                    <input class="chk-departments custom-control-input" type="checkbox" name="groups" value="{{_id}}" {{{checkIfExisted ../formValues.groups _id}}}>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">{{name}} </span>
+                  </label>
+                </div>
+
+              {{/each}}
+
+            </div>
+
+            {{#if organizationAdmin}}
+              <div class="alert alert-warning" role="alert" id="msg-departments">{{l10n "If you save a user without department, the user will not see other users in web client and app."}}</div>
+            {{/if}}
+          {{/if}}
+
+          {{#if organizationAdmin}}
+            <div class="form-group">
+              <label for="input7">{{l10n "Permission"}}</label>
+              <br/>
+
+              <label class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" name="permission" value="1" {{{checkedIfEqual formValues.permission 1}}} />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">{{l10n "Web Client"}}</span>
+              </label>
+
+              <label class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" name="permission" value="3" {{{checkedIfEqual formValues.permission 3}}} />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">{{l10n "Sub-Admin"}}</span>
+              </label>
+              
+            </div>
+          {{/if}}
+
+          {{#if organizationAdmin}}
+
+            <div class="row">
+
+              <div class="col-md-6">
+              
+                <div class="form-group">
+
+                  <label for="input3">{{l10n "Avatar"}}</label><br/>
+
+                  <div class="input-group file-group">
+                    <input type="text" class="form-control file-value" placeholder="Choose file..." readonly="">
+                    <input type="file" name="file">
+                    <span class="input-group-btn">
+                      <button class="btn btn-light file-browser" type="button"><i class="fa fa-upload"></i></button>
+                    </span>
+                  </div>
+
+                  <p class="help-block">{{getImageNote}}</p>
+
+                </div>
+                
+              </div>
+
+            </div>
+            
+            {{/if}}
+            
+          <button type="submit" class="btn btn-label btn-primary pull-right">
+              <label><i class="fa fa-floppy-o"></i></label> {{l10n "Save"}}
+          </button>
+
+        </form>
+
+      </div>
 
     </div>
-  {{/if}}
 
-  {{#if formValues.departmentList}}
-    <div class="form-group">
-      <label for="input6">{{l10n "Departments"}}</label>
-      <br/>
+  </div>
 
-      {{#each formValues.departmentList}}
-        <label class="checkbox-inline">
-          <input type="checkbox" name="groups" class="chk-departments" value="{{_id}}" {{{checkIfExisted ../formValues.groups _id}}} {{{disableIfExisted ../formValues.defaultDepartments _id}}} />{{name}} 
-        </label>
-      {{/each}}
-
-    </div>
-
-    {{#if organizationAdmin}}
-      <div class="alert alert-warning" role="alert" id="msg-departments">{{l10n "If you save a user without department, the user will not see other users in web client and app."}}</div>
-    {{/if}}
-  {{/if}}
-
-  {{#if organizationAdmin}}
-    <div class="form-group">
-      <label for="input7">{{l10n "Permission"}}</label>
-      <br/>
-      <label class="radio-inline">
-        <input type="radio" name="permission" value="1" {{{checkedIfEqual formValues.permission 1}}} /> {{l10n "Web Client"}}
-      </label>
-      {{!-- <label class="radio-inline">
-        <input type="radio" name="permission" value="2" {{{checkedIfEqual formValues.permission 2}}} /> {{l10n "Organization Admin"}}
-      </label> --}}
-      <label class="radio-inline">
-        <input type="radio" name="permission" value="3" {{{checkedIfEqual formValues.permission 3}}} /> {{l10n "Sub-Admin"}}
-      </label>
-    </div>
-  {{/if}}
-
-  {{#if organizationAdmin}}
-    <div class="form-group">
-      <label for="input3">{{l10n "Avatar"}}</label>
-      <input type="file" name="file">
-      <p class="help-block">{{getImageNote}}</p>
-    </div>
-  {{/if}}
-
-  <button type="submit" class="btnSend pull-right">
-      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
-      {{l10n "Save"}}
-  </button>
-
-</form>
+</div>
 
 <script type="text/javascript">
-     
-  $(document).ready(function() {
+
+  $(document).ready(function () {
 
     checkDepartments();
 
   });
-  
-  $('.chk-departments').on('change', function() {
+
+  $('.chk-departments').on('change', function () {
 
     checkDepartments();
 
@@ -136,8 +204,8 @@
 
     var checked = false;
 
-    $('.chk-departments').each(function(index) {
-      
+    $('.chk-departments').each(function (index) {
+
       var department = $('.chk-departments')[index];
 
       if (department.checked) {
@@ -147,14 +215,14 @@
 
       };
 
-    });    
+    });
 
-    if (checked) 
+    if (checked)
 
       $("#msg-departments").hide();
-      
-    else 
-       
+
+    else
+
       $("#msg-departments").show();
 
   }
