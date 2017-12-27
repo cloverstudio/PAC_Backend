@@ -11,10 +11,10 @@ var init = require('../../lib/init.js');
 
 var OrganizationAdminMain = {
 
-    init: function(app) {
+    init: function (app) {
 
         var self = this;
-        
+
         router.use("/signin", require("./Controllers/SigninController").init(app));
         router.use("/home", require("./Controllers/HomeController").init(app));
         router.use("/user", require("./Controllers/UserController").init(app));
@@ -25,39 +25,41 @@ var OrganizationAdminMain = {
         router.use("/settings", require("./Controllers/SettingsController").init(app));
         router.use("/apikey", require("./Controllers/APIKeyController").init(app));
         router.use("/webhook", require("./Controllers/WebhookController").init(app));
-        
-        router.get('/file', function(request, response){
-            
+
+        router.get('/file', function (request, response) {
+
             var filePath = init.publicPath + "/assets/admin/images/nogroup.png";
             response.sendFile(filePath);
-            
+
         });
-        
-        router.get('/file/:fileID', function(request, response){
-            
+
+        router.get('/file/:fileID', function (request, response) {
+
             var fileID = request.params.fileID;
             var filePath = init.uploadPath + "/" + fileID;
-            
+
             fs.exists(filePath, function (exists) {
-                
-                if(!exists){
-                    
+
+                if (!exists) {
+
                     filePath = init.publicPath + "/assets/admin/images/nogroup.png";
                     response.sendFile(filePath);
-                    
+
                 } else {
-                    
+
                     response.sendFile(filePath);
-                    
+
                 }
-                
+
             });
-                    
-            
+
+
         });
-    
+
         return router;
+
     }
+
 }
 
 module["exports"] = OrganizationAdminMain;

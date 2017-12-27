@@ -48,13 +48,18 @@ BackendBaseController.prototype.render = function (request, response, template, 
     if (!lang)
         lang = 'en';
 
+    let avatarFileId = "";
+    if (request.session.user.avatar && request.session.user.thumbnail)
+        avatarFileId = request.session.user.thumbnail.nameOnServer
+
     var defaultParameters = {
         lang: lang,
         Config: Config,
         AssetURL: "/assets/admin2",
         layout: this.ViewTop + "/DefaultLayout",
         signInUserName: request.session.user.name,
-        signInOrganization: request.session.organization.name
+        signInOrganization: request.session.organization.name,
+        avatarFileId: avatarFileId
     };
 
     var templateParams = _.assign(defaultParameters, params);

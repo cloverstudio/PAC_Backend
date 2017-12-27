@@ -46,74 +46,68 @@
       <nav class="sidebar-navigation">
         <ul class="menu">
 
-          <li class="menu-category">Category 1</li>
-
-          <li class="menu-item active">
-            <a class="menu-link" href="../dashboard/general.html">
-              <span class="icon fa fa-home"></span>
-              <span class="title">Dashboard</span>
+          <li class="menu-item {{{printIfEqual page 'home' 'active'}}}">
+            <a class="menu-link" href="/admin/home">
+              <span class="icon fa fa-tachometer"></span>
+              <span class="title">{{l10n "Dashboard"}}</span>
             </a>
           </li>
+          
+          <li class="menu-category">{{l10n "Credentials & Permission"}}</li>
 
-          <li class="menu-item">
-            <a class="menu-link" href="#">
+          <li class="menu-item {{{printIfEqual page 'user-list' 'active'}}}">
+            <a class="menu-link" href="/admin/user/list">
               <span class="icon fa fa-user"></span>
-              <span class="title">Users</span>
-              <span class="arrow"></span>
+              <span class="title">{{l10n "Users"}}</span>
             </a>
-
-            <ul class="menu-submenu">
-              <li class="menu-item">
-                <a class="menu-link" href="#">
-                  <span class="dot"></span>
-                  <span class="title">Moderators</span>
-                </a>
-              </li>
-
-              <li class="menu-item">
-                <a class="menu-link" href="#">
-                  <span class="dot"></span>
-                  <span class="title">Customers</span>
-                </a>
-              </li>
-            </ul>
           </li>
 
-
-
-          <li class="menu-category">Category 2</li>
-
-
-          <li class="menu-item">
-            <a class="menu-link" href="#">
-              <span class="icon ti-layout"></span>
-              <span class="title">Layout</span>
-              <span class="arrow"></span>
+          <li class="menu-item {{{printIfEqual page 'group-list' 'active'}}}">
+            <a class="menu-link" href="/admin/group/list">
+              <span class="icon fa fa-users"></span>
+              <span class="title">{{l10n "Groups"}}</span>
             </a>
-
-            <ul class="menu-submenu">
-              <li class="menu-item">
-                <a class="menu-link" href="#">
-                  <span class="dot"></span>
-                  <span class="title">Sidebar</span>
-                </a>
-              </li>
-
-              <li class="menu-item">
-                <a class="menu-link" href="#">
-                  <span class="dot"></span>
-                  <span class="title">Header</span>
-                </a>
-              </li>
-
-              <li class="menu-item">
-                <a class="menu-link" href="#">
-                  <span class="dot"></span>
-                  <span class="title">Footer</span>
-                </a>
-              </li>
-            </ul>
           </li>
+
+          <li class="menu-item {{{printIfEqual page 'department-list' 'active'}}}">
+            <a class="menu-link" href="/admin/department/list">
+              <span class="icon fa fa-sitemap"></span>
+              <span class="title">{{l10n "Departments"}}</span>
+            </a>
+          </li>
+
+          <li class="menu-category">{{l10n "Integrations"}}</li>
+
+          <li class="menu-item {{{printIfEqual page 'api-list' 'active'}}}">
+            <a class="menu-link" href="/admin/apikey/list">
+              <span class="icon fa fa-key"></span>
+              <span class="title">{{l10n "API Keys"}}</span>
+            </a>
+          </li>
+
+          <li class="menu-item {{{printIfEqual page 'webhook-list' 'active'}}}">
+            <a class="menu-link" href="/admin/webhook/list">
+              <span class="icon fa fa-exchange"></span>
+              <span class="title">{{l10n "Webhooks"}}</span>
+            </a>
+          </li>
+
+          <li class="menu-category">{{l10n "Settings"}}</li>
+
+          <li class="menu-item {{{printIfEqual page 'sticker-list' 'active'}}}">
+            <a class="menu-link" href="/admin/sticker/list">
+              <span class="icon fa fa-smile-o"></span>
+              <span class="title">{{l10n "Stickers"}}</span>
+            </a>
+          </li>
+
+          <li class="menu-item {{{printIfEqual page 'settings' 'active'}}}">
+            <a class="menu-link" href="/admin/settings">
+              <span class="icon fa fa-cog"></span>
+              <span class="title">{{l10n "Settings"}}</span>
+            </a>
+          </li>
+
 
         </ul>
       </nav>
@@ -129,66 +123,30 @@
       </div>
 
       <div class="topbar-right">
+
         <ul class="topbar-btns">
+          <li class="dropdown">
+            <span class="topbar-btn" data-toggle="dropdown" aria-expanded="true">
+              <img class="avatar" src="/api/v2/avatar/user/{{avatarFileId}}" alt="..." />
+            </span>
+            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; top: 65px; left: -120px; will-change: top, left;">
+              <span class="dropdown-item"> 
+                
+                {{l10n "User:"}} <strong>{{signInUserName}}</strong><br />
+                {{l10n "Organization:"}} <strong>{{signInOrganization}}</strong>
 
-          <!-- Notifications -->
-          <li class="dropdown d-none d-md-block">
-            <span class="topbar-btn has-new" data-toggle="dropdown"><i class="ti-bell"></i></span>
-            <div class="dropdown-menu dropdown-menu-right">
-
-              <div class="media-list media-list-hover media-list-divided media-list-xs">
-                <a class="media media-new" href="#">
-                  <span class="avatar bg-success"><i class="ti-user"></i></span>
-                  <div class="media-body">
-                    <p>New user registered</p>
-                    <time datetime="2017-07-14 20:00">Just now</time>
-                  </div>
-                </a>
-
-                <a class="media" href="#">
-                  <span class="avatar bg-info"><i class="ti-shopping-cart"></i></span>
-                  <div class="media-body">
-                    <p>New order received</p>
-                    <time datetime="2017-07-14 20:00">2 min ago</time>
-                  </div>
-                </a>
-
-                <a class="media" href="#">
-                  <span class="avatar bg-warning"><i class="ti-face-sad"></i></span>
-                  <div class="media-body">
-                    <p>Refund request from <b>Ashlyn Culotta</b></p>
-                    <time datetime="2017-07-14 20:00">24 min ago</time>
-                  </div>
-                </a>
-
-                <a class="media" href="#">
-                  <span class="avatar bg-primary"><i class="ti-money"></i></span>
-                  <div class="media-body">
-                    <p>New payment has made through PayPal</p>
-                    <time datetime="2017-07-14 20:00">53 min ago</time>
-                  </div>
-                </a>
-              </div>
-
-              <div class="dropdown-footer">
-                <div class="left">
-                  <a href="#">Read all notifications</a>
-                </div>
-
-                <div class="right">
-                  <a href="#" data-provide="tooltip" title="Mark all as read"><i class="fa fa-circle-o"></i></a>
-                  <a href="#" data-provide="tooltip" title="Update"><i class="fa fa-repeat"></i></a>
-                  <a href="#" data-provide="tooltip" title="Settings"><i class="fa fa-gear"></i></a>
-                </div>
-              </div>
-
+              </span>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/admin/signout">
+                <i class="ti-power-off"></i>{{l10n "Logout"}}
+              </a>
             </div>
           </li>
-          <!-- END Notifications -->
 
         </ul>
 
       </div>
+
     </header>
     <!-- END Topbar -->
 
@@ -197,36 +155,36 @@
     <main class="main-container">
       <div class="main-content">
 
-
-        <div class="card">
-          <h4 class="card-title">Card title</h4>
-
-          <div class="card-body">
-
-          </div>
-        </div>
-
+        {{{body}}}
 
       </div><!--/.main-content -->
-
 
       <!-- Footer -->
       <footer class="site-footer">
         <div class="row">
           <div class="col-md-6">
-            <p class="text-center text-md-left">Copyright © 2017 <a href="http://thetheme.io/theadmin">TheAdmin</a>. All rights reserved.</p>
+            <p class="text-center text-md-left">Copyright © 2018 <a href="http://clover.studio">Clover Studio</a>. All rights reserved.</p>
           </div>
 
           <div class="col-md-6">
             <ul class="nav nav-primary nav-dotted nav-dot-separated justify-content-center justify-content-md-end">
+
+              <li class="nav-item">
+                <a class="nav-link" href="https://itunes.apple.com/jp/app/spika-for-business/id1143027894?mt=8" target="_blank">{{l10n "iOS App"}}</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="https://play.google.com/store/apps/details?id=com.clover_studio.spikaenterprisev2&hl=en" target="_blank">{{l10n "Android App"}}</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="/" target="_blank">{{l10n "WebClient"}}</a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" href="../help/articles.html">Documentation</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="../help/faq.html">FAQ</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="https://themeforest.net/item/theadmin-responsive-bootstrap-4-admin-dashboard-webapp-template/20475359?license=regular&amp;open_purchase_for_item_id=20475359&amp;purchasable=source&amp;ref=thethemeio">Purchase Now</a>
+                <a class="nav-link" href="../help/faq.html">Help</a>
               </li>
             </ul>
           </div>
@@ -255,198 +213,4 @@
     <script src="{{AssetURL}}/js/script.min.js"></script>
 
   </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>{{l10n "Spika For Business Admin"}}</title>
-    <link href="{{AssetURL}}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{AssetURL}}/css/simple-sidebar.css" rel="stylesheet">
-    <link href="{{AssetURL}}/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{AssetURL}}/css/styles.css" rel="stylesheet">
-    <link href="{{AssetURL}}/css/jquery.treegrid.css" rel="stylesheet">
-
-    <!-- jQuery -->
-    <script src="{{AssetURL}}/js/jquery-1.11.2.min.js"></script>
-    <script src="{{AssetURL}}/js/bootstrap.min.js"></script>
-    <script src="{{AssetURL}}/js/sidebar_menu.js"></script>
-    <script src="{{AssetURL}}/js/jquery.treegrid.js"></script>
-    <script src="{{AssetURL}}/js/jquery.treegrid.bootstrap3.js"></script>
-
-</head>
-
-<body>
-    <nav class="navbar navbar-default no-margin navbar-fixed-top">
-
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header fixed-brand">
-
-            <button class="navbar-toggle collapsed" type="button" data-toggle="dropdown" id="menu-toggle">
-                <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
-            </button>
-
-            <ul class="dropdown-menu pull-right">
-                <li>
-                    <a>{{l10n "User:"}} {{signInUserName}}</a>
-                </li>
-
-                <li>
-                    <a>{{l10n "Organization:"}} {{signInOrganization}}</a>
-                </li>
-
-                <li class="divider"></li>
-
-                <li>
-                    <a href="/admin/home"><span class="fa-stack fa-lg"><i class="fa fa-dashboard fa-stack"></i></span>{{l10n "Dashboard"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/user/list"><span class="fa-stack fa-lg"><i class="fa fa-user fa-stack"></i></span>{{l10n "Users"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/group/list"><span class="fa-stack fa-lg"><i class="fa fa-users fa-stack"></i></span>{{l10n "Groups"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/department/list"><span class="fa-stack fa-lg"><i class="fa fa-sitemap fa-stack"></i></span>{{l10n "Departments"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/sticker/list"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Stickers"}}</a>
-                </li>
-                <li>
-                    <a href="/admin/apikeys/list"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Settings"}}</a>
-                </li>
-                <li>
-                    <a href="/admin/settings"><span class="fa-stack fa-lg"><i class="fa fa-smile-o fa-stack"></i></span>{{l10n "Settings"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/signout"><span class="fa-stack fa-lg"><i class="fa fa-sign-out fa-stack"></i></span>{{l10n "Logout"}}</a>
-                </li>
-
-            </ul>
-
-            <a class="navbar-brand" href="#">{{l10n "Spika For Business Admin"}}</a>
-
-        </div>
-
-        <!-- navbar-header-->
-        <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
-            <div class="header-login-data">
-                <label>{{l10n "User:"}} {{signInUserName}}</label><label>{{l10n "Organization:"}} {{signInOrganization}}</label>
-            </div>
-        </div>  
-
-    </nav>
-    
-    <div id="wrapper">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            
-            <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
-                
-                <li {{{printIfEqual page 'home' 'class="active1"'}}}>
-                    <a href="/admin/home"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard fa-stack-1x"></i></span>{{l10n "Dashboard"}}</a>
-                </li>
-                
-                <li {{{printIfEqual page 'user-list' 'class="active1"'}}}>
-                    <a href="/admin/user/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-user fa-stack-1x"></i></span>{{l10n "Users"}}</a>
-                </li>
-
-                <li {{{printIfEqual page 'group-list' 'class="active1"'}}}>
-                    <a href="/admin/group/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x"></i></span>{{l10n "Groups"}}</a>
-                </li>
-                
-                <li {{{printIfEqual page 'department-list' 'class="active1"'}}}>
-                    <a href="/admin/department/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-sitemap fa-stack-1x"></i></span>{{l10n "Departments"}}</a>
-                </li>
-
-                <li {{{printIfEqual page 'sticker-list' 'class="active1"'}}}>
-                    <a href="/admin/sticker/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-smile-o fa-stack-1x"></i></span>{{l10n "Stickers"}}</a>
-                </li>
-
-                <li {{{printIfEqual page 'api-list' 'class="active1"'}}}>
-                    <a href="/admin/apikey/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-key fa-stack-1x"></i></span>{{l10n "API Keys"}}</a>
-                </li>
-
-                <li {{{printIfEqual page 'webhook-list' 'class="active1"'}}}>
-                    <a href="/admin/webhook/list"><span class="fa-stack fa-lg pull-left"><i class="fa fa-exchange fa-stack-1x"></i></span>{{l10n "Webhooks"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/settings"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cog fa-stack-1x"></i></span>{{l10n "Settings"}}</a>
-                </li>
-
-                <li>
-                    <a href="/admin/signout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-sign-out fa-stack-1x"></i></span>{{l10n "Logout"}}</a>
-                </li>
-                
-            </ul>
-
-        </div><!-- /#sidebar-wrapper -->
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid xyz">
-                <div class="row">
-                    <div class="col-lg-12">
-                        
-                        {{{body}}}
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /#page-content-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-    
-    <script type="text/javascript">
-        
-        $( document ).ready(function() {
-            
-            {{#if openMenu}}
-                $('#submanu-{{openMenu}}').show();
-            {{/if}}
-
-            $('.tree').treegrid({
-                expanderExpandedClass: 'glyphicon glyphicon-minus',
-                expanderCollapsedClass: 'glyphicon glyphicon-plus'
-            });
-
-        });
-
-    </script>
-    
-</body>
-
 </html>
