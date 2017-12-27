@@ -20,10 +20,11 @@ class MessageText extends Component {
     if (this.messageText.classList.contains('search-target')){
         if (!this.state.initiallyScrolledToSearchTarget){
 
-            const chatContentElement = this.messageText.parentElement.parentElement.parentElement;
+            // const chatContentElement = this.messageText.parentElement.parentElement.parentElement;
 
-            chatContentElement.scrollTop = 20;
-
+            // chatContentElement.scrollTop = 20;
+            this.messageText.scrollIntoView();
+            
             this.setState({
                 initiallyScrolledToSearchTarget: true
             })
