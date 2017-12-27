@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import * as actions from '../../actions';
 import * as constant from '../../lib/const';
 import * as config from '../../lib/config';
+import * as util from '../../lib/utils';
 
 class ChatInput extends Component {
 
@@ -105,6 +106,8 @@ class ChatInput extends Component {
                                 this.props.changeInputValue(this.props.currentChatId, '');
                                 this.props.sendStopTyping(this.props.currentChatId);
                                 this.resetTextAreaHeight();
+                                //chat container element
+                                util.scrollElemBottom(e.target.parentElement.previousElementSibling)
                             }
                             else{
                                 e.preventDefault();

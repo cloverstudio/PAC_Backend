@@ -33,13 +33,13 @@ class Conversation extends Component {
   static propTypes = {};
 
   onScroll = e => {
+      
     if (e.target.scrollTop === 0 && !this.props.isLoading) {
       this.props.loadOldMessages(
         this.props.currentChatId,
         this.props.messageList[0]._id
       );
     }
-
     this.lockedForAutoScroll =
       util.getScrollBottom(this.scrollableConversation) >
       constant.scrollBoundary;
@@ -47,20 +47,24 @@ class Conversation extends Component {
 
   componentWillUpdate(nextProps) {
     this.lastConversationHeight = this.scrollableConversation.scrollHeight;
-    this.lastConversationScrollTop = this.scrollableConversation.scrollTop;
   }
 
   componentDidUpdate(prevProps) {
-    if (this.lockedForAutoScroll) {
-      this.scrollableConversation.scrollTop +=
-        this.scrollableConversation.scrollHeight - this.lastConversationHeight;
-    } else {
-      if (
-        this.scrollableConversation.scrollHeight !== this.lastConversationHeight
-      ) {
-        util.scrollElemBottom(this.scrollableConversation);
-      }
-    }
+      
+      if (prevProps.loadingDirection !== constant.ChatDirectionAllTo){
+        if (this.lockedForAutoScroll) {
+            if(this.scrollableConversation.scrollHeight > this.lastConversationHeight && this.props.messageList.length - prevProps.messageList.length > 1){
+                this.scrollableConversation.scrollTop = this.scrollableConversation.scrollHeight - this.lastConversationHeight;
+            }
+        } 
+        else {
+            if (
+                this.scrollableConversation.scrollHeight !== this.lastConversationHeight
+            ) {
+                util.scrollElemBottom(this.scrollableConversation);
+            }
+        }
+}
   }
 
   scrollCallback = e => {
@@ -121,6 +125,14 @@ class Conversation extends Component {
     }
 
     if (messageList.length > 0) {
+        
+        if (this.props.searchTarget && this.props.searchKeyword){
+            let searchTargetIndex = messageList.findIndex(message => message._id === this.props.searchTarget)
+            if (searchTargetIndex > -1){
+                messageList[searchTargetIndex].searchTarget = true;
+            }
+        }
+
       let currUsr = messageList[0].userID;
       let currDatObject = new Date(messageList[0].created);
       //YYYY-MM-DD
@@ -269,7 +281,10 @@ const mapStateToProps = state => {
     user: user.userData,
     UsersTyping: state.chat.typing,
     infoViewState: state.chatUI.infoViewState,
-    files: state.files
+    files: state.files,
+    loadingDirection: state.chat.loadingDirection,
+    searchKeyword: state.searchMessage.keyword,
+    searchTarget: state.chat.loadAllToTarget
   };
 };
 

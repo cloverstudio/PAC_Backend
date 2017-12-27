@@ -20,9 +20,16 @@ import Encryption from "../lib/encryption/encryption";
 
 import { store } from "../index";
 
-export function loadNewChat(chatId) {
+export function loadNewChat(chatId, messageId = 0, direction = constant.ChatDirectionNew) {
     return (dispatch, getState) => {
-        callGetMessageList(chatId, 0, constant.ChatDirectionNew)
+
+        dispatch({
+            type: types.ChatLoadMessageStart,
+            loadingDirection: direction,
+            messageId
+        })
+
+        callGetMessageList(chatId, messageId, direction)
             .then(data => {
                 dispatch({
                     type: types.ChatLoadMessageSucceed,

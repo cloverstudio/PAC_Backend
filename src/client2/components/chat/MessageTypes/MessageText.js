@@ -11,6 +11,25 @@ class MessageText extends Component {
   static propTypes = {};
   constructor() {
     super();
+    this.state = ({
+        initiallyScrolledToSearchTarget: false
+    })
+  }
+
+  componentDidMount(){
+    if (this.messageText.classList.contains('search-target')){
+        if (!this.state.initiallyScrolledToSearchTarget){
+
+            const chatContentElement = this.messageText.parentElement.parentElement.parentElement;
+
+            chatContentElement.scrollTop = 20;
+
+            this.setState({
+                initiallyScrolledToSearchTarget: true
+            })
+        }
+ 
+    }
   }
 
   render() {
@@ -38,8 +57,12 @@ class MessageText extends Component {
       );
     }
 
+    if (this.props.searchKeyword && this.props.searchTarget === message._id) {
+        messageClass += ' search-target'
+    }
+
     return (
-      <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>
+      <p className={messageClass} ref={messageText => this.messageText = messageText} onClick={e => this.props.getMessageInfo(message)}>
         {formattedMessages}
       </p>
     );
@@ -47,7 +70,10 @@ class MessageText extends Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    searchKeyword: state.searchMessage.keyword,
+    searchTarget: state.chat.loadAllToTarget
+  };
 };
 
 const mapDispatchToProps = dispatch => {

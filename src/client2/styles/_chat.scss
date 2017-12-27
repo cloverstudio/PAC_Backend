@@ -105,6 +105,8 @@
             .chat-content{
         
                 overflow-x: hidden;
+                padding-top:20px;
+                padding-bottom:20px;
         
                 .media-chat{
                     padding-right: 12px;
@@ -133,6 +135,12 @@
                             }
 
                         }
+
+                        .search-target{
+                            background-color:#926dde;
+                            color:white;
+                        }
+
                         .image-message{
                             padding:0 35px 0 0;
                             background:transparent;
