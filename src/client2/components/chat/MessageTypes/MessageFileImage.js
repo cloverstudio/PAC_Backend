@@ -14,12 +14,30 @@ class MessageFileImage extends Component {
     constructor(){
         super();
         this.state = {
-            isLoading: true
+            isLoading: true,
+            initiallyScrolledToSearchTarget: false
         }
     }
 
+    componentDidMount(){
+        if (this.targetMessage.classList.contains('search-target')){
+            if (!this.state.initiallyScrolledToSearchTarget){
+    
+                this.props.lockForScroll();
+                this.targetMessage.scrollIntoView();
+    
+                this.setState({
+                    ...this.state, 
+                    initiallyScrolledToSearchTarget: true
+                })
+            }
+     
+        }
+      }
+
     toggleMessageLoading = () => {
         this.setState({
+            ...this.state, 
             isLoading : !this.state.isLoading
         })
     }
@@ -27,16 +45,22 @@ class MessageFileImage extends Component {
     render() {
         const message = this.props.message;
         let messageContent;
-        const messageClass = 'image-message';
+        let messageClass = 'image-message';
 
         const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
 
         const thumbId = fileMimeSubtype === constant.svgXmlMimeSubtype 
         ? message.file.file.id 
-        : message.file.thumb.id 
+        : message.file.thumb.id
+        
+        if (this.props.searchTarget === message._id) {
+            messageClass += ' search-target'
+        }
         
         return(
-            <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>
+            <p className={messageClass} 
+            ref={message => this.targetMessage = message}
+            onClick={e => this.props.getMessageInfo(message)}>
                 <span>
                     {this.state.isLoading ? 
                         <span className="spinner-linear">
@@ -60,7 +84,8 @@ class MessageFileImage extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {       
+    return {
+        searchTarget: state.chat.loadAllToTarget              
     };
 };
 

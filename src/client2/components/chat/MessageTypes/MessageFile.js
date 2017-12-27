@@ -13,15 +13,37 @@ class MessageFile extends Component {
     }
     constructor(){
         super();
+        this.state = ({
+            initiallyScrolledToSearchTarget: false
+        })   
     }
+
+    componentDidMount(){
+        if (this.targetMessage.classList.contains('search-target')){
+            if (!this.state.initiallyScrolledToSearchTarget){
+    
+                this.props.lockForScroll();
+                this.targetMessage.scrollIntoView();
+
+                this.setState({
+                    initiallyScrolledToSearchTarget: true
+                })
+            }
+     
+        }
+      }
 
     render() {
         const message = this.props.message;
         let messageContent;
-        const messageClass = 'file-message';
+        let messageClass = 'file-message';
+
+        if (this.props.searchTarget === message._id) {
+            messageClass += ' search-target'
+        }
         
         return(
-            <p className={messageClass} onClick={e => {this.props.getMessageInfo(message)}}> 
+            <p className={messageClass} ref={message => this.targetMessage = message} onClick={e => {this.props.getMessageInfo(message)}}> 
                 <span className="media flex-column align-items-center text-center msg-target">
                     <i className="ti-zip text-secondary fs-45 mb-3"></i>
                     <span className="fw-600">{message.file.file.name}</span>
@@ -35,7 +57,8 @@ class MessageFile extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {       
+    return {
+        searchTarget: state.chat.loadAllToTarget       
     };
 };
 

@@ -52,7 +52,7 @@ export const AvatarGroup = "group";
 export const AvatarRoom = "room";
 
 export const SearchInputTimeout = 300;
-export const scrollBoundary = 1000;
+export const scrollBoundary = 800;
 export const ChatDirectionNew = "new";
 export const ChatDirectionOld = "old";
 export const ChatDirectionAllTo = "allto";

@@ -37,7 +37,7 @@ class Search extends Base {
         const chatType = chatIdSplit[0];
 
         if (chatType == constant.ChatTypePrivate) {
-            this.props.openChatByUser(message.user);
+            this.props.openChatByUser(message.userModelTarget);
         }
         else if (chatType == constant.ChatTypeGroup) {
             this.props.openChatByGroup(message.group);

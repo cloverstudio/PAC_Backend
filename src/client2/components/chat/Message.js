@@ -26,10 +26,10 @@ class Message extends Component {
 
         switch(this.props.messageData.type){
             case constant.MessageTypeText:
-                return <MessageText message={this.props.messageData}/>
+                return <MessageText message={this.props.messageData} lockForScroll = {this.props.lockForScroll}/>
 
             case constant.MessageTypeSticker:
-                return <MessageSticker message={this.props.messageData} scrollChat={this.props.scrollChat}/>
+                return <MessageSticker message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll = {this.props.lockForScroll}/>
 
             case constant.MessageTypeFile:
                 if (typeof this.props.messageData._id !== 'undefined'){
@@ -39,10 +39,10 @@ class Message extends Component {
                         const [fileMimeType, fileMimeSubtype] = this.props.messageData.file.file.mimeType.split('/')
 
                         if (fileMimeType === constant.imgMimeType){
-                            return <MessageFileImage message={this.props.messageData} scrollChat={this.props.scrollChat}/>
+                            return <MessageFileImage message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll = {this.props.lockForScroll}/>
                         }
                         else{
-                            return <MessageFile message={this.props.messageData}/>
+                            return <MessageFile message={this.props.messageData} lockForScroll = {this.props.lockForScroll}/>
                         }
                     }
 

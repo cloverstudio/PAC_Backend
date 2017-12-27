@@ -17,10 +17,11 @@ class MessageText extends Component {
   }
 
   componentDidMount(){
-    if (this.messageText.classList.contains('search-target')){
+    if (this.targetMessage.classList.contains('search-target')){
         if (!this.state.initiallyScrolledToSearchTarget){
 
-            this.messageText.scrollIntoView();
+            this.props.lockForScroll();
+            this.targetMessage.scrollIntoView();
 
             this.setState({
                 initiallyScrolledToSearchTarget: true
@@ -37,7 +38,7 @@ class MessageText extends Component {
     
     const messageContent = Encryption.decryptText(message.message);
     
-    messageClass += message.isFavorite && messageContent.length > 0 ?  " bg-pink" : "";
+    messageClass += message.isFavorite && messageContent.length > 0 ?  " favorite-message" : "";
 
     let formattedMessages;
 
@@ -55,12 +56,12 @@ class MessageText extends Component {
       );
     }
 
-    if (this.props.searchKeyword && this.props.searchTarget === message._id) {
+    if (this.props.searchTarget === message._id) {
         messageClass += ' search-target'
     }
 
     return (
-      <p className={messageClass} ref={messageText => this.messageText = messageText} onClick={e => this.props.getMessageInfo(message)}>
+      <p className={messageClass} ref={message => this.targetMessage = message} onClick={e => this.props.getMessageInfo(message)}>
         {formattedMessages}
       </p>
     );
@@ -69,7 +70,6 @@ class MessageText extends Component {
 
 const mapStateToProps = state => {
   return {
-    searchKeyword: state.searchMessage.keyword,
     searchTarget: state.chat.loadAllToTarget
   };
 };

@@ -13,7 +13,25 @@ class MessageSticker extends Component {
     }
     constructor(){
         super();
+        this.state = ({
+            initiallyScrolledToSearchTarget: false
+        })
     }
+
+    componentDidMount(){
+        if (this.targetMessage.classList.contains('search-target')){
+            if (!this.state.initiallyScrolledToSearchTarget){
+    
+                this.props.lockForScroll();
+                this.targetMessage.scrollIntoView();
+    
+                this.setState({
+                    initiallyScrolledToSearchTarget: true
+                })
+            }
+     
+        }
+      }
 
     render() {
         const message = this.props.message;        
@@ -22,8 +40,14 @@ class MessageSticker extends Component {
         const isDeleted = message.message.length === 0;
         messageClass = isDeleted ?  'text-message' : messageClass;
 
+        if (this.props.searchTarget === message._id) {
+            messageClass += ' search-target'
+        }
+
         return(
-            <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>
+            <p className={messageClass} 
+            ref={message => this.targetMessage = message}
+            onClick={e => this.props.getMessageInfo(message)}>
                 {isDeleted 
                 ? <i>This message is deleted.</i>
                 : <img className={messageClass} onLoad={e => this.props.scrollChat()} src={config.mediaBaseURL + message.message}/>}
@@ -34,7 +58,8 @@ class MessageSticker extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {       
+    return {
+        searchTarget: state.chat.loadAllToTarget       
     };
 };
 
