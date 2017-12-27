@@ -14,8 +14,8 @@ var BaseController = require("../../BaseController");
 var UserModel = require('../../../Models/User');
 var GroupModel = require('../../../Models/Group');
 
-var BackendBaseController = function(){
-    
+var BackendBaseController = function () {
+
 }
 
 _.extend(BackendBaseController.prototype, BaseController.prototype);
@@ -23,52 +23,52 @@ BackendBaseController.prototype.loginUser = null;
 
 BackendBaseController.prototype.ViewTop = "OrganizationAdmin/Views";
 
-BackendBaseController.prototype.renderLogin = function(request,response,template,params){
+BackendBaseController.prototype.renderLogin = function (request, response, template, params) {
 
     var lang = request.cookies.lang;
-    if(!lang)
+    if (!lang)
         lang = 'en';
-        
+
     var defaultParameters = {
         lang: lang,
         Config: Config,
         AssetURL: "/assets/admin",
         layout: this.ViewTop + "/Login/SigninLayout"
     };
-    
-    var templateParams = _.assign(defaultParameters,params);
-    
-	response.render(this.ViewTop + template,templateParams);
-    
+
+    var templateParams = _.assign(defaultParameters, params);
+
+    response.render(this.ViewTop + template, templateParams);
+
 }
 
-BackendBaseController.prototype.render = function(request, response, template, params){
-      
+BackendBaseController.prototype.render = function (request, response, template, params) {
+
     var lang = request.cookies.lang;
-    if(!lang)
+    if (!lang)
         lang = 'en';
-        
+
     var defaultParameters = {
         lang: lang,
         Config: Config,
-        AssetURL: "/assets/admin",
+        AssetURL: "/assets/admin2",
         layout: this.ViewTop + "/DefaultLayout",
         signInUserName: request.session.user.name,
         signInOrganization: request.session.organization.name
     };
-    
+
     var templateParams = _.assign(defaultParameters, params);
-    
-	response.render(this.ViewTop + template, templateParams);
-    
+
+    response.render(this.ViewTop + template, templateParams);
+
 }
 
-BackendBaseController.prototype.getGroups = function(baseUser, groupModel, groupType, callback) {
-    
+BackendBaseController.prototype.getGroups = function (baseUser, groupModel, groupType, callback) {
+
     var model = groupModel.get();
 
     var query = {
-        organizationId: baseUser.organizationId, 
+        organizationId: baseUser.organizationId,
         type: groupType
     };
 
@@ -78,21 +78,21 @@ BackendBaseController.prototype.getGroups = function(baseUser, groupModel, group
 
     };
 
-    model.find(query, { name: true, parentId: true }).sort({ sortName: "asc" }).batchSize(Const.maxBatchSizeFindResult).exec(function(err, findResult) {
-        
+    model.find(query, { name: true, parentId: true }).sort({ sortName: "asc" }).batchSize(Const.maxBatchSizeFindResult).exec(function (err, findResult) {
+
         callback(err, findResult);
-        
+
     });
-    
+
 }
 
-BackendBaseController.prototype.addUserToGroup = function(groupId, userId, callback) {
-    
+BackendBaseController.prototype.addUserToGroup = function (groupId, userId, callback) {
+
     var userModel = UserModel.get();
     var groupModel = GroupModel.get();
 
     async.waterfall([
-            
+
         (done) => {
 
             userModel.findOne({ _id: userId }, { groups: 1 }, (err, findResult) => {
@@ -117,7 +117,7 @@ BackendBaseController.prototype.addUserToGroup = function(groupId, userId, callb
 
         },
         (done) => {
-                    
+
             groupModel.findOne({ _id: groupId }, { users: 1 }, (err, findResult) => {
 
                 if (err) {
@@ -137,15 +137,15 @@ BackendBaseController.prototype.addUserToGroup = function(groupId, userId, callb
                 });
 
             });
-            
+
         }
-    ], 
-    (err) => {
+    ],
+        (err) => {
 
-        callback(err);
+            callback(err);
 
-    });
-    
+        });
+
 }
 
 module["exports"] = BackendBaseController;
