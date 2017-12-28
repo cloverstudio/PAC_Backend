@@ -71,8 +71,8 @@ class Conversation extends Component {
         }
     };
 
-    setLockedForScrolling = () => {
-        this.lockedForAutoScroll = true;
+    setLockedForScrolling = (value=true) => {
+        this.lockedForAutoScroll = value;
     }
 
     handleDragEnter = e => {
@@ -270,7 +270,7 @@ class Conversation extends Component {
                     {conversationItems}
                 </div>
 
-                <ChatInput />
+                <ChatInput setLockedForScrolling={this.setLockedForScrolling}/>
                 <Stickers />
             </div>
         );

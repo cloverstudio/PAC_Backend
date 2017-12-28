@@ -42,7 +42,7 @@ class MessageText extends Component {
 
     let formattedMessages;
 
-    if (messageContent.length === 0) {
+    if (messageContent.length === 0 && typeof message.deleted !== 'undefined' && message.deleted !== 0 ) {
       formattedMessages = <i>This message is deleted.</i>;
     } else {
       //todo: better way to mark links

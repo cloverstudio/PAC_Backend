@@ -106,8 +106,7 @@ class ChatInput extends Component {
                                 this.props.changeInputValue(this.props.currentChatId, '');
                                 this.props.sendStopTyping(this.props.currentChatId);
                                 this.resetTextAreaHeight();
-                                //chat container element
-                                util.scrollElemBottom(e.target.parentElement.previousElementSibling)
+                                this.props.setLockedForScrolling(false);
                             }
                             else{
                                 e.preventDefault();

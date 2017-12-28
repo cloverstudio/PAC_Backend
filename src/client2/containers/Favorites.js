@@ -52,12 +52,15 @@ class Favotites extends Base {
             this.props.openChatByUser(message.userModelTarget);
         }
         else if (chatType == constant.ChatTypeGroup) {
-            this.props.openChatByGroup(message.group);
+            if (typeof message.group === 'undefined') return this.props.showToast('This group is deleted.') 
+            else this.props.openChatByGroup(message.group)
         }
         else if (chatType == constant.ChatTypeRoom) {
-            this.props.openChatByRoom(message.room);
+            if (typeof message.room === 'undefined') return this.props.showToast('This room is deleted.') 
+            else this.props.openChatByRoom(message.room)
         }
 
+        this.props.loadNewChat(message.roomID, message._id);
     }
 
     onScroll = (e) => {
@@ -195,11 +198,7 @@ class Favotites extends Base {
                                 if(message._id == this.props.removeConfirmMessageId)
                                     deleteIconClass = "fa fa-check";
 
-                                return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}
-                                    onClick={e=> {
-                                        this.selected(message);
-                                        this.props.loadNewChat(message.roomID, message._id);
-                                    }}>
+                                return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}>
                                     <h6 className="code-title">
                                         <AvatarImage fileId={chatAvatarId} type={chatAvatarType} />
                                         {chatName}
@@ -208,7 +207,7 @@ class Favotites extends Base {
                                         </a>
                                     </h6>
 
-                                        <div className="code-preview">
+                                        <div className="code-preview" onClick={e => this.selected(message)}>
                                             <div className="media">
                                                 <span className="avatar">
                                                     <AvatarImage fileId={userAvatarId} type={constant.AvatarUser} />
@@ -269,11 +268,12 @@ const mapDispatchToProps = (dispatch) => {
 
         loadMessages: (page) => dispatch(actions.favorites.loadMessages(page)),
         startRemoveFavorite: (messageId) => dispatch(actions.favorites.startRemoveFavorite(messageId)),
-        
+
         openChatByUser: (user) => dispatch(actions.chat.openChatByUser(user)),
         openChatByGroup: (group) => dispatch(actions.chat.openChatByGroup(group)),
         openChatByRoom: (room) => dispatch(actions.chat.openChatByRoom(room)),
-        loadNewChat: (roomId, messageId) => dispatch(actions.chat.loadNewChat(roomId, messageId, constant.ChatDirectionAllTo))
+        loadNewChat: (roomId, messageId) => dispatch(actions.chat.loadNewChat(roomId, messageId, constant.ChatDirectionAllTo)),
+        showToast: msg => dispatch(actions.notification.showToast(msg))
     };
 };
 
