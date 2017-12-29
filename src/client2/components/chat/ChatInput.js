@@ -136,6 +136,7 @@ class ChatInput extends Component {
                             this.props.sendMessage(constant.MessageTypeText, message);
                             this.props.changeInputValue(this.props.currentChatId, '');
                             this.props.sendStopTyping(this.props.currentChatId);
+                            this.props.setLockedForScrolling(false);
                         }
 
                     }}>
