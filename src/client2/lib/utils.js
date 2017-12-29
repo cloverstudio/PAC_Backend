@@ -70,7 +70,13 @@ export function url(url) {
 }
 
 export function getTimestamp(dateObj) {
-  return `${dateObj.getFullYear()}/${dateObj.getMonth()}/${dateObj.getDate()} ${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
+  return `${dateObj.getFullYear()}/${dateObj.getMonth()}/${dateObj.getDate()} ${
+        dateObj.getHours().toString().padLeft(2, '0')
+    }:${
+        dateObj.getMinutes().toString().padLeft(2, '0')
+    }:${
+        dateObj.getSeconds().toString().padLeft(2, '0')
+    }`;
 }
 
 let chatName = "";

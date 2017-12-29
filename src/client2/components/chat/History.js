@@ -51,6 +51,14 @@ class History extends Component {
 
     }
 
+    searchOnSubmit = e => {
+        e.preventDefault();
+
+        const inputElement = e.target.firstElementChild;
+
+        this.props.searchHistory(inputElement.value);
+    }
+
     componentWillReceiveProps(nextProps) {
 
         if (this.props.historyList != nextProps.historyList) {
@@ -80,7 +88,7 @@ class History extends Component {
                     <div onScroll={this.onScroll} className="media-list media-list-divided media-list-hover">
 
                         <header className="media-list-header b-0">
-                            <form className="lookup lookup-lg w-100 bb-1 border-light">
+                            <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
                                 <input onChange={this.onKeywordChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
                             </form>
                         </header>
