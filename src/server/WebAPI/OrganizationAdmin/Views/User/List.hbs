@@ -1,5 +1,7 @@
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/admin/home">{{l10n "Home"}}</a></li>
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
     <li class="breadcrumb-item active">{{l10n "User Management"}}</li>
 </ol>
 
@@ -7,11 +9,13 @@
     <div class="header-info">
         <h1 class="header-title">
             {{l10n "User Management"}}
-            <small>{{l10n "Number of users in organization:"}} <strong>{{numberOfUsers}}</strong> {{l10n "of max"}} <strong>{{maxUserNumber}}</strong></small>
+            <small>{{l10n "Number of users in organization:"}}
+                <strong>{{numberOfUsers}}</strong> {{l10n "of max"}}
+                <strong>{{maxUserNumber}}</strong>
+            </small>
         </h1>
     </div>
 </header>
-
 
 <header class="flexbox align-items-center media-list-header bg-transparent b-0 py-16 pl-20">
     <div class="flexbox align-items-center">
@@ -21,7 +25,8 @@
             {{#if organizationAdmin}}
                 <label class="custom-control custom-checkbox">
                     {{l10n "Show users without departments"}} &nbsp;
-                    <input type="checkbox" class="custom-control-input" name="showUsersWithoutDepartments" id="chk-showUsersWithoutDepartments" value="1" {{{checkedIfEqual showUsersWithoutDepartments 1}}} />
+                    <input type="checkbox" class="custom-control-input" name="showUsersWithoutDepartments" id="chk-showUsersWithoutDepartments"
+                        value="1" {{{checkedIfEqual showUsersWithoutDepartments 1}}} />
                     <span class="custom-control-indicator"></span>
                 </label>
 
@@ -109,19 +114,24 @@
                             <td>{{formatDate created}}</td>
                             <td class="text-right" colspan="2">
 
-                                <span class="dropdown-toggle no-caret hover-primary" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="ti-more-alt rotate-90"></i>
-                                </span>
+                                <div class="dropdown table-action">
 
-                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; top: 21px; left: 20px; will-change: top, left;">
-                                    {{#if showEditDelete}}  <a class="dropdown-item" href="/admin/user/edit/{{_id}}"><i class="ti-pencil"></i>{{l10n "Edit"}}</a>{{/if}}
-                                    {{#if showEditDelete}}
-                                        {{#unless (checkIfUserIsOrganizationAdmin permission)}}  
-                                            <a class="dropdown-item" href="/admin/user/delete/{{_id}}"><i class="ti-trash"></i>{{l10n "Delete"}}</a>
-                                        {{/unless}}    
-                                    {{/if}}
-                                    <a class="dropdown-item" href="/admin/user/devices/{{_id}}"><i class="ti-mobile"></i>{{l10n "Devices"}}</a>
+                                    <span class="dropdown-toggle no-caret hover-primary" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti-more-alt rotate-90"></i>
+                                    </span>
+
+                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; top: 21px; left: 20px; will-change: top, left;">
+                                        {{#if showEditDelete}}  <a class="dropdown-item" href="/admin/user/edit/{{_id}}"><i class="ti-pencil"></i>{{l10n "Edit"}}</a>{{/if}}
+                                        {{#if showEditDelete}}
+                                            {{#unless (checkIfUserIsOrganizationAdmin permission)}}  
+                                                <a class="dropdown-item" href="/admin/user/delete/{{_id}}"><i class="ti-trash"></i>{{l10n "Delete"}}</a>
+                                            {{/unless}}    
+                                        {{/if}}
+                                        <a class="dropdown-item" href="/admin/user/devices/{{_id}}"><i class="ti-mobile"></i>{{l10n "Devices"}}</a>
+                                    </div>
+
                                 </div>
+
                             </td>
 
                         </tr>
@@ -175,32 +185,32 @@
 </div>
 
 <script type="text/javascript">
-     
-    $(document).ready(function() {
 
-        $('#btn-clear').on('click',function(){
-            
-            $('#tb-keyword').val('');     
-            $('#searchform').submit();   
-         
+    $(document).ready(function () {
+
+        $('#btn-clear').on('click', function () {
+
+            $('#tb-keyword').val('');
+            $('#searchform').submit();
+
         });
 
-        $('#chk-showUsersWithoutDepartments').on('change', function() {
+        $('#chk-showUsersWithoutDepartments').on('change', function () {
 
-            $('#searchform').submit();    
+            $('#searchform').submit();
 
         });
 
     });
 
-    function openModal(id){
+    function openModal(id) {
 
-        $('#btnResetDevice').attr('href',"/admin/user/resetDevice/" + id);
+        $('#btnResetDevice').attr('href', "/admin/user/resetDevice/" + id);
 
         $('#myModal').modal({
             keyboard: false
         })
 
     }
-        
+
 </script>

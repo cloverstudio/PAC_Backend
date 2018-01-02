@@ -1,31 +1,59 @@
 <ol class="breadcrumb">
-    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
-    <li class="active">{{l10n "Settings"}}</li>
+  <li class="breadcrumb-item">
+    <a href="/admin/home">{{l10n "Home"}}</a>
+  </li>
+  <li class="breadcrumb-item active">{{l10n "Settings"}}</li>
 </ol>
 
-<h1 style="max-width:50%; display: inline-block;">{{l10n "Settings"}}</h1>
+<header class="header bg-ui-general">
+  <div class="header-info">
+    <h1 class="header-title">
+      {{l10n "Settings"}}
+    </h1>
+  </div>
+</header>
 
-<hr>
 
-{{> alertMessage }}
+<hr> {{> alertMessage }}
 
-<form method="post" action="/admin/settings">
+<div class="row">
 
-  <div class="form-group">
-    <label for="input5">{{l10n "Use multiple device"}}</label>
-    <br/>
-    <label class="radio-inline">
-      <input type="radio" name="allowMultipleDevices" id="status1" value="1" {{{checkedIfEqual formValues.allowMultipleDevices 1}}} /> {{l10n "Allow"}}
-    </label>
-    <label class="radio-inline">
-      <input type="radio" name="allowMultipleDevices" id="status0" value="0" {{{checkedIfEqual formValues.allowMultipleDevices 0}}} /> {{l10n "Refuse"}}
-    </label>
+  <div class="col-12">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <form method="post" action="/admin/settings">
+
+          <div class="form-group">
+            <label for="input5">{{l10n "Use multiple device"}}</label>
+            <br/>
+
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="allowMultipleDevices" id="status1" value="1" {{{checkedIfEqual formValues.allowMultipleDevices 1}}} /> 
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description"> {{l10n "Allow"}}</span>
+            </label>
+
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="allowMultipleDevices" id="status1" value="0" {{{checkedIfEqual formValues.allowMultipleDevices 0}}} /> 
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">{{l10n "Refuse"}}</span>
+            </label>
+
+          </div>
+
+          <button type="submit" class="btn btn-label btn-primary pull-right">
+              <label><i class="fa fa-floppy-o"></i></label> {{l10n "Save"}}
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+  
   </div>
 
-  
-  <button type="submit" class="btnSend pull-right">
-      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
-      {{l10n "Save"}}
-  </button>
-
-</form>
+</div>

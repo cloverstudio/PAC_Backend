@@ -1,93 +1,136 @@
 <ol class="breadcrumb">
-    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
-    <li><a href="/admin/department/list">{{l10n "Department Management"}}</a></li>
-    <li class="active">{{l10n "Department Members"}}</li>
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="/admin/department/list">{{l10n "Department Management"}}</a>
+    </li>
+    <li class="breadcrumb-item active">
+        {{l10n "Department Members"}}
+    </li>
 </ol>
 
-<h1 style="max-width:50%; display: inline-block;">{{l10n "Department Members"}}</h1>
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Department Members"}}
+            <small>{{departmentName}}</small>
+        </h1>
 
-<button type="button" class="btnAddNew pull-right" onClick="location.href = '/admin/department/userlist/add/{{departmentId}}';">
-    <i class="fa fa-plus" style="margin-right:10px;"></i>
-    {{l10n "Add New User"}}
-</button>
+    </div>
+</header>
 
-<br/>
+<header class="flexbox align-items-center media-list-header bg-transparent b-0 py-16 pl-20">
+    <div class="flexbox align-items-center">
 
-<button type="button" class="btnAddNew pull-right" onClick="location.href = '/admin/department/userlistadd/{{departmentId}}';">
-    <i class="fa fa-plus" style="margin-right:10px;"></i>
-    {{l10n "Add Department Members"}}
-</button>
+        <form method="post" action="/admin/department/userlist/search/{{departmentId}}" id="searchform" class="form-inline">
 
-<h3 style="margin-top:10px">{{departmentName}}</h3>
+            <div class="form-group">
+                <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+            </div>
 
-<hr />
+            {{#if keyword}}
+                <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger">{{l10n "Clear"}}</button>
+            {{/if}}
 
-{{> alertMessage }}
+            <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
 
-<div class="searchbar">
-    <form method="post" action="/admin/department/userlist/search/{{departmentId}}" id="searchform" class="form-inline">
-        <div class="form-group">
-            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+        </form>
+
+    </div>
+
+    <div>
+
+        <button class="btn btn-label btn-primary" onClick="location.href = '/admin/department/userlist/add/{{departmentId}}';">
+            <label>
+                <i class="fa fa-plus"></i>
+            </label> {{l10n "Add New User"}}
+        </button>
+
+        <button class="btn btn-label btn-primary" onClick="location.href = '/admin/department/userlistadd/{{departmentId}}';">
+            <label>
+                <i class="fa fa-plus"></i>
+            </label> {{l10n "Add Department Members"}}
+        </button>
+
+    </div>
+</header>
+
+<hr /> {{> alertMessage }}
+
+<div class="row">
+
+    {{> paginator }}
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th width="5%"></th>
+                            <th>
+                                {{l10n "Name"}}
+                                <br />
+                            </th>
+                            <th width="15%">{{l10n "User ID"}}</th>
+                            <th width="15%">{{l10n "Created At"}}</th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each list}}
+
+                            <tr>
+                                <td>
+                                    <img class="list-thumbnail img-rounded" src="/admin/file/{{avatar.thumbnail.nameOnServer}}" />
+                                </td>
+                                <td>
+                                    <strong>{{name}}</strong>
+                                    <br />
+                                    <span class="small">{{_id}}</span>
+                                </td>
+                                <td>{{userid}}</td>
+                                <td>{{formatDate created}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick='location.href="/admin/department/userlist/delete/{{../departmentId}}/{{_id}}"'>{{l10n "Delete"}}</button>
+                                </td>
+                            </tr>
+
+                        {{/each}}
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
-        
-        {{#if keyword}}
-            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
-        {{/if}}
 
-        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
-        
-    </form>
+    </div>
+
+    {{> paginator }}
+
 </div>
 
-{{> paginator }}
 
-<table class="table table-hover">
-    
-    <thead>
-        <tr>
-            <th width="5%"></th>
-            <th>
-                {{l10n "Name"}}<br />
-            </th>
-            <th width="15%">{{l10n "User ID"}}</th>
-            <th width="15%">{{l10n "Created At"}}</th>
-            <th width="5%"></th>
-        </tr>
-    </thead>
-    
-    <tbody>
-    {{#each list}}
-
-        <tr>
-            <td>
-                <img class="list-thumbnail img-rounded" src="/admin/file/{{avatar.thumbnail.nameOnServer}}" />
-            </td> 
-            <td><strong>{{name}}</strong><br /><span class="small">{{_id}}</span></td>
-            <td>{{userid}}</td>
-            <td>{{formatDate created}}</td>
-            <td>
-                <button type="button" class="buttonRedGhoust" onclick='location.href="/admin/department/userlist/delete/{{../departmentId}}/{{_id}}"'>{{l10n "Delete"}}</button>           
-            </td>
-        </tr> 
-        
-    {{/each}}
-    </tbody>
-    
-</table>
-    
-{{> paginator }}
 
 <script type="text/javascript">
-     
-    $(document).ready(function() {
 
-        $('#btn-clear').on('click',function(){
-            
-            $('#tb-keyword').val('');     
-            $('#searchform').submit();   
-         
+    $(document).ready(function () {
+
+        $('#btn-clear').on('click', function () {
+
+            $('#tb-keyword').val('');
+            $('#searchform').submit();
+
         });
-        
+
     });
-        
+
 </script>

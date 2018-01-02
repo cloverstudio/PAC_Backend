@@ -1,19 +1,49 @@
 <ol class="breadcrumb">
-    <li><a href="/admin/home">{{l10n "Home"}}</a></li>
-    <li class="active">{{l10n "Department Management"}}</li>
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Department Management"}}</li>
 </ol>
 
-<h1 style="max-width:50%; display: inline-block;">{{l10n "Department Management"}}</h1>
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Department Management"}}
+            <small>{{l10n "Number of users in organization:"}}
+                <strong>{{numberOfGroups}}</strong> {{l10n "of max"}}
+                <strong>{{maxGroupNumber}}</strong>
+            </small>
+        </h1>
+    </div>
+</header>
 
-<button type="button" class="btnAddNew pull-right" onClick="location.href = '/admin/department/add';">
-    <i class="fa fa-plus" style="margin-right:10px;"></i>
-    {{l10n "Add New"}}
-</button>
+<header class="text-right media-list-header bg-transparent b-0 py-16 pl-20">
 
-<h3 style="margin-top:10px">{{l10n "Number of groups/departments in organization:"}} <strong>{{numberOfGroups}}</strong> {{l10n "of max"}} <strong>{{maxGroupNumber}}</strong></h3>
+    <button class="btn btn-label btn-primary" onClick="location.href = '/admin/department/add';">
+        <label>
+            <i class="fa fa-plus"></i>
+        </label> {{l10n "Add New"}}
+    </button>
 
-<hr />
+</header>
 
-{{> alertMessage }}
+<hr /> {{> alertMessage }}
 
-{{{createTreeGridDepartment list}}}
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                {{{createTreeGridDepartment list}}}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -49,8 +49,8 @@ BackendBaseController.prototype.render = function (request, response, template, 
         lang = 'en';
 
     let avatarFileId = "";
-    if (request.session.user.avatar && request.session.user.thumbnail)
-        avatarFileId = request.session.user.thumbnail.nameOnServer
+    if (request.session.user.avatar && request.session.user.avatar.thumbnail)
+        avatarFileId = request.session.user.avatar.thumbnail.nameOnServer
 
     var defaultParameters = {
         lang: lang,
