@@ -55,7 +55,8 @@ class Search extends Base {
             clearTimeout(this.lastSearchTimeout);
 
         this.lastSearchTimeout = setTimeout(() => {
-            this.props.searchMessage(e.target.value)
+            if (e.target.value.trim().length > 0)
+                this.props.searchMessage(e.target.value)
         }, constant.SearchInputTimeout);
     }
 
@@ -149,7 +150,29 @@ class Search extends Base {
                                 if (message.user && message.user.avatar && message.user.avatar.thumbnail)
                                     userAvatarId = message.user.avatar.thumbnail.nameOnServer;
 
-                                const messageHightlighted = message.message.replace(this.props.keyword, "<strong>" + this.props.keyword + "</strong>");
+
+                                let messageContent;
+
+                                if (message.type === constant.MessageTypeText){
+                                    const messageHightlighted = message.message.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
+
+                                    const regEx = /(<strong>.*<\/strong>)/g;
+                                    const messageSplit = messageHightlighted.split(regEx)
+
+                                    if (messageSplit.length === 3){
+                                        messageSplit[1] = <strong key="keyword">{messageSplit[1].slice(8, -9)}</strong>
+                                    }
+                                    messageContent = messageSplit
+                                }
+                                else if(message.type === constant.MessageTypeFile){
+                                    const titleHighlighted = message.file.file.name.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
+                                    messageContent = (
+                                        <span>
+                                            <i className="ti-zip text-secondary fs-45 mb-3"></i>
+                                            <br/>
+                                            <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                        </span>)
+                                }
 
                                 return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id} 
                                     onClick={e=> {
@@ -170,7 +193,9 @@ class Search extends Base {
                                                 <p>
                                                     <strong>{userName}</strong>
                                                 </p>
-                                                <p className="messsage" dangerouslySetInnerHTML={{ __html: messageHightlighted }}>
+                                                
+                                                <p className="messsage">
+                                                    {messageContent}
                                                 </p>
 
                                                 <p className="text-right">

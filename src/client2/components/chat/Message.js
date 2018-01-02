@@ -13,6 +13,7 @@ import MessageSticker from './MessageTypes/MessageSticker';
 import MessageFile from './MessageTypes/MessageFile';
 import MessageFileUploading from './MessageTypes/MessageFileUploading';
 import MessageFileImage from './MessageTypes/MessageFileImage';
+import MessageFileDeleted from './MessageTypes/MessageFileDeleted';
 
 class Message extends Component {
 
@@ -34,8 +35,12 @@ class Message extends Component {
             case constant.MessageTypeFile:
                 if (typeof this.props.messageData._id !== 'undefined'){
 
-                    if(typeof this.props.messageData.file !== 'undefined' && this.props.messageData.file !== null){
+                    if (typeof this.props.messageData.file === 'undefined' || this.props.messageData.file === null){
+                        return <MessageFileDeleted message={this.props.messageData}/>
+                    }
 
+                    else{
+                        
                         const [fileMimeType, fileMimeSubtype] = this.props.messageData.file.file.mimeType.split('/')
 
                         if (fileMimeType === constant.imgMimeType){

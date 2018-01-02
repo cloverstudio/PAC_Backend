@@ -38,6 +38,8 @@ class MessageFile extends Component {
         let messageContent;
         let messageClass = 'file-message';
 
+        messageClass += message.isFavorite ?  " favorite-message" : "";
+
         if (this.props.searchTarget === message._id) {
             messageClass += ' search-target'
         }
