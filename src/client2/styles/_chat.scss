@@ -134,6 +134,7 @@
                             }
 
                         }
+
                         .favorite-message{
                             background-color:#f96197;
                             color:white;
@@ -148,9 +149,17 @@
                             padding:0 35px 0 0;
                             background:transparent;
                             min-width:150px;
-                            img{
-                                cursor:pointer;
+                            margin: 4px 0;
+                            border-radius: 3px;
+                            position: relative;
+                            .teaser{
+                                background:none;
+                                img{
+                                    cursor:pointer;
+                                    max-width:150px;
+                                }
                             }
+                            
                         }
                         .upload-progress{
                             width:200px;

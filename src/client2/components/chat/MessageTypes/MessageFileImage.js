@@ -58,30 +58,42 @@ class MessageFileImage extends Component {
         }
         
         return(
-            <p className={messageClass} 
-            ref={message => this.targetMessage = message}
-            onClick={e => this.props.getMessageInfo(message)}>
-                <span>
-                    {this.state.isLoading ? 
-                        <span className="spinner-linear">
-                            <span className="line"></span>
-                        </span> : null}
+            <div className={messageClass} 
+            ref={message => this.targetMessage = message}>
 
-                    <img 
-                        className='img-thumbnail'
+                {this.state.isLoading ? 
+                    <span className="spinner-linear">
+                        <span className="line"></span>
+                    </span> : null}
+
+                <figure className="teaser teaser-simple">
+                    <img className='img-thumbnail'
                         src={config.APIEndpoint + constant.ApiUrlFile + thumbId} 
                         onLoad={e=>{
                             this.toggleMessageLoading();
                             this.props.scrollChat();
                         }}
-                        onClick={e=> this.props.showImageView(message.file.file.id)}
-                        />
-                </span>
-            </p>
+                        alt="image message"
+                    />
+                    
+                    <figcaption>
+                        <span className="btn btn-round btn-square btn-info msg-target" 
+                        onClick={e => this.props.getMessageInfo(message)}>
+                            <i className="fa fa-info msg-target"></i>
+                        </span>
+                        <span className="btn btn-round btn-square btn-primary" 
+                        onClick={e=> this.props.showImageView(message.file.file.id)}>
+                            <i className="fa fa-eye"></i>
+                        </span>
+                    </figcaption>
+                </figure>
+
+            </div>
         );
     }
 
 }
+
 
 const mapStateToProps = (state) => {
     return {
