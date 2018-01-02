@@ -10,32 +10,32 @@ var Config = require("../../../lib/init");
 var DatabaseManager = require('../../../lib/DatabaseManager');
 var BaseController = require("../../BaseController");
 
-var BackendBaseController = function(){
-    
+var BackendBaseController = function () {
+
 }
 
-_.extend(BackendBaseController.prototype,BaseController.prototype);
+_.extend(BackendBaseController.prototype, BaseController.prototype);
 BackendBaseController.prototype.loginUser = null;
 
 BackendBaseController.prototype.ViewTop = "Front/Views";
 
-BackendBaseController.prototype.renderSignup = function(request,response,template,params){
+BackendBaseController.prototype.renderSignup = function (request, response, template, params) {
 
     var lang = request.cookies.lang;
-    if(!lang)
+    if (!lang)
         lang = 'en';
-        
+
     var defaultParameters = {
         Config: Config,
-        AssetURL: "/assets",
+        AssetURL: "/assets/admin2",
         layout: this.ViewTop + "/FrontLayout",
         lang: lang
     };
-    
+
     var templateParams = _.assign(defaultParameters, params);
-    
-	response.render(this.ViewTop + template, templateParams);
-    
+
+    response.render(this.ViewTop + template, templateParams);
+
 }
 
 module["exports"] = BackendBaseController;
