@@ -1,87 +1,136 @@
 <ol class="breadcrumb">
-    <li><a href="/owner/home">{{l10n "Home"}}</a></li>
-    <li class="active">{{l10n "Organization"}}</li>
+    <li class="breadcrumb-item">
+        <a href="/owner/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Organization Management"}}</li>
 </ol>
 
-<h1 style="max-width:50%; display: inline-block;">{{l10n "Organization Management"}}</h1>
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Organization Management"}}
+        </h1>
+    </div>
+</header>
 
-<button type="button" class="btnAddNew pull-right" onClick="location.href = '/owner/organization/add';">
-    <i class="fa fa-plus" style="margin-right:10px;"></i>
-    {{l10n "Add New"}}
-</button>
+<header class="flexbox align-items-center media-list-header bg-transparent b-0 py-16 pl-20">
+    <div class="flexbox align-items-center">
+
+        <form method="post" action="/owner/organization/search" id="searchform" class="form-inline">
+
+                <label class="custom-control custom-checkbox">
+                    {{l10n "Show disabled organizations"}} &nbsp;
+                    <input type="checkbox" class="custom-control-input" name="disabledStatus" id="chk-disabledStatus" value="1" {{{checkedIfEqual disabledStatus 1}}} />
+                    <span class="custom-control-indicator"></span>
+                </label>
+
+                <span class="divider-line mx-1"></span>
+
+
+            <div class="form-group">
+                <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+            </div>
+            
+            {{#if keyword}}
+                <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
+            {{/if}}
+
+            <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+            
+        </form>
+
+    </div>
+
+    <div>
+
+        <button type="button"class="btn btn-label btn-primary" onClick="location.href = '/owner/organization/add';">
+            <label><i class="fa fa-plus"></i></label> {{l10n "Add New"}}
+        </button>
+
+    </div>
+</header>
 
 <hr />
 
 {{> alertMessage }}
 
-<div class="searchbar">
-    <form method="post" action="/owner/organization/search" id="searchform" class="form-inline">
+<div class="row">
+        
+    {{> paginator }}
 
-        <label class="checkbox-inline checkbox-search">
-            <input type="checkbox" name="disabledStatus" id="chk-disabledStatus" value="1" {{{checkedIfEqual disabledStatus 1}}} />{{l10n "Show disabled organizations"}}
-        </label>
+    <div class="col-12">
 
-        <div class="form-group">
-            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+        <div class="card">
+
+            <div class="card-body">
+
+                <table class="table table-hover">
+                    
+                    <thead>
+                        <tr>
+                            <th width="5%"></th>
+                            <th>{{l10n "Name"}}</th>
+                            <th width="10%">{{l10n "Users"}}</th>
+                            <th width="15%">{{l10n "Groups / Departments"}}</th>
+                            <th width="10%">{{l10n "Rooms"}}</th>
+                            <th width="15%">{{l10n "Disk Quota (GB)"}}</th>
+                            <th width="15%">{{l10n "Organization ID"}}</th>
+                            <th width="10%">{{l10n "Created At"}}</th>
+                            <th width="10%">{{l10n "Status"}}</th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                    {{#each list}}
+                        <tr>
+                            <td>
+                                <img class="list-thumbnail img-rounded" src="/owner/file/{{logo.thumbnail.nameOnServer}}" />
+                            </td>
+                            <td class="list-edit-link">
+                                <a href="/owner/organization/edit/{{_id}}">
+                                    <strong>{{name}}</strong>
+                                </a>
+                                <br/>
+                                <span class="small">{{_id}}</span>
+                            </td>
+                            {{{formatTableData userCount maxUserNumber}}}
+                            {{{formatTableData groupCount maxGroupNumber}}}
+                            {{{formatTableData roomCount maxRoomNumber}}}
+                            {{{formatTableData disk.diskUsage disk.diskQuota}}}
+                            <td>{{organizationId}}</td>
+                            <td>{{formatDate created}}</td>
+                            <td>{{getStatusName status}}</td>
+                    
+                            <td class="text-right" colspan="2">
+                                <div class="dropdown table-action">
+                                    
+                                    <span class="dropdown-toggle no-caret hover-primary" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti-more-alt rotate-90"></i>
+                                    </span>
+
+                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; top: 21px; left: 20px; will-change: top, left;">
+                                        <a class="dropdown-item" href="/owner/organization/edit/{{_id}}"><i class="ti-pencil"></i>{{l10n "Edit"}}</a>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                    
+                </table>
+    
+
+            </div>
+
         </div>
-        
-        {{#if keyword}}
-            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
-        {{/if}}
 
-        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
-        
-    </form>
+    </div>
+
 </div>
 
-{{> paginator }}
-
-<table class="table table-hover">
-    
-    <thead>
-        <tr>
-            <th width="5%"></th>
-            <th>{{l10n "Name"}}</th>
-            <th width="10%">{{l10n "Users"}}</th>
-            <th width="15%">{{l10n "Groups / Departments"}}</th>
-            <th width="10%">{{l10n "Rooms"}}</th>
-            <th width="15%">{{l10n "Disk Quota (GB)"}}</th>
-            <th width="15%">{{l10n "Organization ID"}}</th>
-            <th width="10%">{{l10n "Created At"}}</th>
-            <th width="10%">{{l10n "Status"}}</th>
-            <th width="5%"></th>
-        </tr>
-    </thead>
-    
-    <tbody>
-    {{#each list}}
-        <tr>
-            <td>
-                <img class="list-thumbnail img-rounded" src="/owner/file/{{logo.thumbnail.nameOnServer}}" />
-            </td>
-            <td class="list-edit-link">
-                <a href="/owner/organization/edit/{{_id}}">
-                    <strong>{{name}}</strong>
-                </a>
-                <br/>
-                <span class="small">{{_id}}</span>
-            </td>
-            {{{formatTableData userCount maxUserNumber}}}
-            {{{formatTableData groupCount maxGroupNumber}}}
-            {{{formatTableData roomCount maxRoomNumber}}}
-            {{{formatTableData disk.diskUsage disk.diskQuota}}}
-            <td>{{organizationId}}</td>
-            <td>{{formatDate created}}</td>
-            <td>{{getStatusName status}}</td>
-            <td>
-                <button type="button" class="buttonGreenGhoust" onclick='location.href="/owner/organization/edit/{{_id}}"'>{{l10n "Edit"}}</button>
-            </td>
-        </tr>
-    {{/each}}
-    </tbody>
-    
-</table>
-    
 {{> paginator }}
 
 <script type="text/javascript">

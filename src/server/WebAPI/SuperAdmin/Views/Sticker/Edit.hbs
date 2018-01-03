@@ -1,61 +1,130 @@
-
 <ol class="breadcrumb">
-    <li><a href="/owner/home">{{l10n "Home"}}</a></li>
-    <li><a href="/owner/sticker/list">{{l10n "Sticker Management"}}</a></li>
-    <li class="active">{{l10n "Edit"}}</li>
+  <li class="breadcrumb-item">
+    <a href="/owner/home">{{l10n "Home"}}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="/owner/sticker/list">{{l10n "Sticker Management"}}</a>
+  </li>
+  <li class="breadcrumb-item active">{{l10n "Edit"}}</li>
 </ol>
 
-<h1 style="max-width:50%">{{l10n "Editing Sticker Collection"}}</h1>
-<h3 style="margin-top:10px">{{formValues.name}}</h3>
-
-<hr>
-
-{{> alertMessage }}
-
-<form method="post" action="/owner/sticker/edit/{{formValues._id}}" enctype="multipart/form-data">
-  <input type="hidden" name="_id" class="form-control" id="input1" value="{{formValues._id}}">
-  
-  <div class="form-group">
-    <label for="input1">{{l10n "Sticker Collection Name"}}</label>
-    <input type="text" name="name" class="form-control" id="text1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">
+<header class="header bg-ui-general">
+  <div class="header-info">
+    <h1 class="header-title">
+      {{l10n "Edit Sticker Collection"}}
+      <small> {{formValues.name}} </small>
+    </h1>
   </div>
-  
-  <div class="form-group">
-    <label for="sortName">{{l10n "Sort Sticker Collection Name"}}</label>
-    <input type="text" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
-    <p class="help-block">{{l10n "This name will be used for sorting data."}}</p>
-  </div>
-  
-  <div class="form-group">
-    <label for="input2">{{l10n "Description"}}</label>
-    <textarea rows="4" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
-  </div>
+</header>
 
-  <div class="form-group">
-    <label for="input3">{{l10n "Files"}}</label>
-    <div class="row">
+<hr> {{> alertMessage }}
 
-      {{#each formValues.pictures}}
-        <div class="avatar-container col-md-2">
-          <img class="edit-thumbnail img-rounded" src="/owner/file/{{thumbnail.nameOnServer}}" />
-          <label class="radio-inline">
-            <input type="radio" name="main" value="{{thumbnail.nameOnServer}}" {{{checkedIfEqual main true}}} />{{l10n "Main Sticker"}}
-          </label>
+<div class="row">
+
+  <div class="col-12">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <form method="post" action="/owner/sticker/edit/{{formValues._id}}" enctype="multipart/form-data">
+          <input type="hidden" name="_id" class="form-control" id="input1" value="{{formValues._id}}">
+
+          <div class="form-group">
+            <label for="input1">{{l10n "Sticker Collection Name"}}</label>
+            <input type="text" name="name" class="form-control" id="text1" placeholder="{{l10n "Name"}}" value="{{formValues.name}}">
+          </div>
+
+          <div class="form-group">
+            <label for="sortName">{{l10n "Sort Sticker Collection Name"}}</label>
+            <input type="text" name="sortName" class="form-control" id="sortName" placeholder="{{l10n "Sort Name"}}" value="{{formValues.sortName}}">
+            <p class="help-block">{{l10n "This name will be used for sorting data."}}</p>
+          </div>
+
+          <div class="form-group">
+            <label for="input2">{{l10n "Description"}}</label>
+            <textarea rows="4" name="description" class="form-control" placeholder="{{l10n "Description"}}">{{formValues.description}}</textarea>
+          </div>
+
+          <div class="form-group">
+
+            <label for="input3">{{l10n "Files"}}</label>
+
+            <div class="row">
+
+              {{#each formValues.pictures}}
+                <div class="col-md-6 col-lg-4">
+
+                  <div class="card {{#if main}} card-inverse card-primary {{/if}}">
+
+                    <header class="card-header">
+                      {{picture.originalName}}
+                    </header>
+
+                    <div class="card-body text-center">
+
+                      <p>
+                        <img class="img-fluid" src="/owner/file/{{picture.nameOnServer}}" />
+                      </p>
+
+                    </div>
+
+                    <footer class="card-footer flexbox">
+                      <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" name="main" value="{{thumbnail.nameOnServer}}" {{{checkedIfEqual main true}}} />
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description">{{l10n "Main Sticker"}}</span>
+                        </label>
+  
+                      </footer>
+                    </div>
+  
+                  </div>
+                {{/each}}
+  
+              </div>
+  
+            </div>
+      
+            <div class="row">
+
+              <div class="col-md-6">
+              
+                <div class="form-group">
+
+                  <label for="input3">{{l10n "Update stickers"}}</label><br/>
+
+                  <div class="input-group file-group">
+                    <input type="text" class="form-control file-value" placeholder="Choose file..." readonly="">
+                    <input type="file" name="file">
+                    <span class="input-group-btn">
+                      <button class="btn btn-light file-browser" type="button"><i class="fa fa-upload"></i></button>
+                    </span>
+                  </div>
+
+                  <p class="help-block">
+                    {{getStickerNote}}
+                    <br/>
+                    {{getImageNote}}
+                  </p>
+
+                </div>
+                
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-label btn-primary pull-right">
+                <label><i class="fa fa-floppy-o"></i></label> {{l10n "Save"}}
+            </button>
+
+
+          </form>
+  
         </div>
-      {{/each}}
-
+  
+      </div>
+  
     </div>
-    <input type="file" name="file" />
-    <p class="help-block">
-      {{getStickerNote}}
-      <br/>
-      {{getImageNote}}
-    </p>
+  
   </div>
-
-  <button  type="submit" class="btnSend pull-right">
-      <i class="fa fa-floppy-o" style="margin-right:10px;"></i>
-      {{l10n "Save"}}
-  </button>
-
-</form>

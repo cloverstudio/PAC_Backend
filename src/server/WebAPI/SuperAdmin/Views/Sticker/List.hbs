@@ -1,92 +1,125 @@
 <ol class="breadcrumb">
-    <li><a href="/owner/home">{{l10n "Home"}}</a></li>
-    <li class="active">{{l10n "Sticker Management"}}</li>
+    <li class="breadcrumb-item">
+        <a href="/owner/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Sticker Management"}}</li>
 </ol>
 
-<h1 style="max-width:50%; display: inline-block;">{{l10n "Sticker Management"}}</h1>
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Sticker Management"}}
+        </h1>
+    </div>
+</header>
 
-<button type="button" class="btnAddNew pull-right" onClick="location.href = '/owner/sticker/add';">
-    <i class="fa fa-plus" style="margin-right:10px;"></i>
-    {{l10n "Add New"}}
-</button>
+<header class="flexbox align-items-center media-list-header bg-transparent b-0 py-16 pl-20">
+    <div class="flexbox align-items-center">
 
-<hr />
+        <form method="post" action="/owner/sticker/search" id="searchform" class="form-inline">
 
-{{> alertMessage }}
+            <div class="form-group">
+                <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+            </div>
 
-<div class="searchbar">
-    <form method="post" action="/owner/sticker/search" id="searchform" class="form-inline">
-        <div class="form-group">
-            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+            {{#if keyword}}
+                <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger">{{l10n "Clear"}}</button>
+            {{/if}}
+
+            <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+
+        </form>
+
+    </div>
+
+    <div>
+
+        <button class="btn btn-label btn-primary" onClick="location.href = '/owner/sticker/add';">
+            <label>
+                <i class="fa fa-plus"></i>
+            </label> {{l10n "Add New"}}
+        </button>
+
+    </div>
+</header>
+
+<hr /> {{> alertMessage }}
+
+
+<div class="row">
+
+    {{> paginator }}
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th width="5%"></th>
+                            <th>{{l10n "Name"}}</th>
+                            <th width="15%">{{l10n "Description"}}</th>
+                            <th width="15%">{{l10n "Created At"}}</th>
+                            <th width="5%"></th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each list}}
+
+                            <tr>
+                                <td>
+                                    <img class="list-thumbnail img-rounded" src="/owner/file/{{getMainPicture pictures}}" />
+                                </td>
+                                <td class="list-edit-link">
+                                    <a href="/owner/sticker/edit/{{_id}}">
+                                        <strong>{{name}}</strong>
+                                    </a>
+                                    <br/>
+                                    <span class="small">{{_id}}</span>
+                                </td>
+                                <td>{{description}}</td>
+                                <td>{{formatDate created}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" onclick='location.href="/owner/sticker/edit/{{_id}}"'>{{l10n "Edit"}}</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick='location.href="/owner/sticker/delete/{{_id}}"'>{{l10n "Delete"}}</button>
+                                </td>
+                            </tr>
+
+                        {{/each}}
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
-        
-        {{#if keyword}}
-            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger" >{{l10n "Clear"}}</button>
-        {{/if}}
 
-        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
-        
-        
-    </form>
+    </div>
+
+    {{> paginator }}
+
 </div>
 
-{{> paginator }}
-
-<table class="table table-hover">
-    
-    <thead>
-        <tr>
-            <th width="5%"></th>
-            <th>{{l10n "Name"}}</th>
-            <th width="15%">{{l10n "Description"}}</th>
-            <th width="15%">{{l10n "Created At"}}</th>
-            <th width="5%"></th>
-            <th width="5%"></th>
-        </tr>
-    </thead>
-    
-    <tbody>
-    {{#each list}}
-
-        <tr>
-            <td>
-                <img class="list-thumbnail img-rounded" src="/owner/file/{{getMainPicture pictures}}" />
-            </td>
-            <td class="list-edit-link">
-                <a href="/owner/sticker/edit/{{_id}}">
-                    <strong>{{name}}</strong>
-                </a>
-                <br/>
-                <span class="small">{{_id}}</span>
-            </td>
-            <td>{{description}}</td>
-            <td>{{formatDate created}}</td>
-            <td>
-                <button type="button" class="buttonGreenGhoust" onclick='location.href="/owner/sticker/edit/{{_id}}"'>{{l10n "Edit"}}</button>
-            </td>
-            <td>
-                <button type="button" class="buttonRedGhoust" onclick='location.href="/owner/sticker/delete/{{_id}}"'>{{l10n "Delete"}}</button>
-            </td>
-        </tr>
-
-    {{/each}}
-    </tbody>
-    
-</table>
-    
-{{> paginator }}
 
 <script type="text/javascript">
-     
-    $(document).ready(function() {
 
-        $('#btn-clear').on('click',function(){
-            
-            $('#tb-keyword').val('');     
-            $('#searchform').submit();   
-         
+    $(document).ready(function () {
+
+        $('#btn-clear').on('click', function () {
+
+            $('#tb-keyword').val('');
+            $('#searchform').submit();
+
         });
-        
+
     });
-        
+
 </script>

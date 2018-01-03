@@ -47,7 +47,7 @@ BackendBaseController.prototype.render = function(request,response,template,para
     var defaultParameters = {
         lang: lang,
         Config:Config,
-        AssetURL:"/assets/admin",
+        AssetURL:"/assets/admin2",
         layout: this.ViewTop + "/DefaultLayout"
     };
     
