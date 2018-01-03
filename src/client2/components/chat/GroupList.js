@@ -13,25 +13,25 @@ class GroupList extends Component {
     static propTypes = {
     }
 
-    constructor(){
+    constructor() {
         super();
         this.currentPage = 1;
         this.lastSearchTimeout;
     }
 
     onScroll = (e) => {
-        
+
         const scrollPos = e.target.scrollTop + 0;
-        const realScrollPos = scrollPos +  e.target.clientHeight;
+        const realScrollPos = scrollPos + e.target.clientHeight;
         const scrollHeight = e.target.scrollHeight;
 
         // if scroll position is between 2px from bottom
-        if(Math.abs(realScrollPos - scrollHeight) < 1){
+        if (Math.abs(realScrollPos - scrollHeight) < 1) {
 
-            if(!this.props.isLoading){
+            if (!this.props.isLoading) {
                 this.currentPage++;
-                this.props.loadGroupList(this.currentPage);  
-            } 
+                this.props.loadGroupList(this.currentPage);
+            }
         }
     }
 
@@ -40,9 +40,9 @@ class GroupList extends Component {
 
         clearTimeout(this.lastSearchTimeout);
 
-        this.lastSearchTimeout = setTimeout(()=>{
+        this.lastSearchTimeout = setTimeout(() => {
             this.props.searchGroupList(e.target.value)
-            
+
         }, constant.SearchInputTimeout);
     }
 
@@ -57,49 +57,51 @@ class GroupList extends Component {
     render() {
 
         return (
-            <div> 
+            <div>
                 {this.props.groupsLoading ?
                     <div className="spinner-linear">
                         <div className="line"></div>
-                    </div>: null
+                    </div> : null
                 }
 
                 <div onScroll={this.onScroll} className="groupsview">
-                    
+
                     <header className="media-list-header b-0">
                         <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
                             <input onChange={this.onInputChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
                         </form>
                     </header>
-                    
+
                     <div className="media-list-body bg-white">
-                       
-                        {this.props.groups.map( group => {
-                            
+
+                        {this.props.groups.map(group => {
+
                             let fileId = null;
 
                             if (group.avatar && group.avatar.thumbnail)
                                 fileId = group.avatar.thumbnail.nameOnServer;
-                            
+                            else
+                                fileId = group._id;
+
                             return (
-                                <div className="media align-items-center" key={group._id} onClick={ () => { this.props.openChat(group) }} >
+                                <div className="media align-items-center" key={group._id} onClick={() => { this.props.openChat(group) }} >
                                     <span className="flexbox flex-grow gap-items text-truncate">
-                                       
+
                                         <AvatarImage fileId={fileId} type={constant.AvatarGroup} />
-                                       
+
                                         <div className="media-body text-truncate">
                                             <h6>{group.name}</h6>
                                             <small>
                                                 <span>{group.description}</span>
                                             </small>
                                         </div>
-                                    
+
                                     </span>
                                 </div>
                             )
 
                         })}
-        
+
                     </div>
                 </div>
             </div>
@@ -110,7 +112,7 @@ class GroupList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        groupsLoading: state.grouplist.loading, 
+        groupsLoading: state.grouplist.loading,
         groups: state.grouplist.groups
     };
 };

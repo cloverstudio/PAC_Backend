@@ -95,6 +95,8 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
 
         if (user && user.avatar && user.avatar.thumbnail)
             newState.fileId = user.avatar.thumbnail.nameOnServer;
+        else if (user)
+            newState.fileId = user._id;
 
         newState.name = user.name;
     } else if (action.type == types.ChatOpenByGroup) {
@@ -105,6 +107,8 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
 
         if (group && group.avatar && group.avatar.thumbnail)
             newState.fileId = group.avatar.thumbnail.nameOnServer;
+        else if (group)
+            newState.fileId = group._id;
 
         newState.name = group.name;
     } else if (action.type == types.ChatOpenByRoom) {
@@ -115,6 +119,8 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
 
         if (room && room.avatar && room.avatar.thumbnail)
             newState.fileId = room.avatar.thumbnail.nameOnServer;
+        else if (room)
+            newState.fileId = room._id;
 
         newState.name = room.name;
     }
@@ -257,22 +263,22 @@ const messageList = (state = initial.messageList, action) => {
         if (oldState.length > 0) {
             const currentChatId = oldState[0].roomID;
             const currentChatUpdatedMsgs = action.updatedMessages.filter(msg => msg.roomID === currentChatId);
-            
-            if (currentChatUpdatedMsgs.length > 0){
-                
+
+            if (currentChatUpdatedMsgs.length > 0) {
+
                 const currentChatUpdatedMsgsIndexes = currentChatUpdatedMsgs.map(msg => oldState.findIndex(oldMsg => oldMsg._id === msg._id))
 
-                return oldState.map((oldMsg,i) => {
+                return oldState.map((oldMsg, i) => {
                     let msgToReplaceIndex = currentChatUpdatedMsgsIndexes.indexOf(i)
-                    if (msgToReplaceIndex > -1){
+                    if (msgToReplaceIndex > -1) {
                         return currentChatUpdatedMsgs[msgToReplaceIndex]
                     }
-                    else{
+                    else {
                         return oldMsg
                     }
                 })
             }
-            
+
         }
     }
 
