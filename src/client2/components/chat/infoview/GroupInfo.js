@@ -24,23 +24,23 @@ class GroupInfo extends Component {
         this.props.tabChange(tabName);
     }
 
-    componentDidMount(nextProps){
+    componentDidMount(nextProps) {
         this.updateSwitches();
         this.props.loadMembers();
     }
-    
-    componentWillReceiveProps(nextProps){
-        if(this.props.timestampByChat != nextProps.timestampByChat){
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.timestampByChat != nextProps.timestampByChat) {
             this.updateSwitches();
             this.props.loadMembers();
         }
     }
-    
-    updateSwitches = () =>{
 
-        callGetUserDetail(user.userData._id).then( (data) => {
-            
-            if(!this.props.group)
+    updateSwitches = () => {
+
+        callGetUserDetail(user.userData._id).then((data) => {
+
+            if (!this.props.group)
                 return;
 
             const groupId = this.props.group._id;
@@ -48,14 +48,14 @@ class GroupInfo extends Component {
             this.props.loadDone();
 
             const mutedChat = data.user.muted;
-            
-            if(mutedChat.indexOf(groupId) != -1){
+
+            if (mutedChat.indexOf(groupId) != -1) {
                 this.props.loadMuteState(true);
-            }else{
+            } else {
                 this.props.loadMuteState(false);
             }
-            
-        }).catch( (err) => {
+
+        }).catch((err) => {
 
             console.error(err);
             this.props.showError(strings.InfoViewFailedToGetDetail[user.lang]);
@@ -79,52 +79,52 @@ class GroupInfo extends Component {
         let cnTabContentDetail = "tab-pane fade show bg-white";
         let cnTabContentMembers = "tab-pane fade show bg-white";
 
-        if(this.props.tabState == 'options'){
+        if (this.props.tabState == 'options') {
             cnTabGeneral += " active";
             cnTabContentGeneral += " active";
         }
 
-        if(this.props.tabState == 'detail'){
+        if (this.props.tabState == 'detail') {
             cnTabDetail += " active";
             cnTabContentDetail += " active";
         }
 
-        if(this.props.tabState == 'members'){
+        if (this.props.tabState == 'members') {
             cnTabMembers += " active";
             cnTabContentMembers += " active";
         }
 
         const members = this.props.members;
-        members.sort( (obj1,obj2) => {
-            return -1 * ( obj1.onlineStatus - obj2.onlineStatus );
+        members.sort((obj1, obj2) => {
+            return -1 * (obj1.onlineStatus - obj2.onlineStatus);
         });
 
         return (
-            <div> 
+            <div>
 
                 <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info cursor-pointer">
 
-                    <li className="nav-item" onClick={ () => {this.tabChange("options")}}>
+                    <li className="nav-item" onClick={() => { this.tabChange("options") }}>
                         <a className={cnTabGeneral}>{strings.InfoViewUserDetailOptions[user.lang]}</a>
                     </li>
-                    <li className="nav-item" onClick={ () => {this.tabChange("detail")}}>
+                    <li className="nav-item" onClick={() => { this.tabChange("detail") }}>
                         <a className={cnTabDetail}>{strings.InfoViewUserDetailDetail[user.lang]}</a>
                     </li>
-                    <li className="nav-item" onClick={ () => {this.tabChange("members")}}>
+                    <li className="nav-item" onClick={() => { this.tabChange("members") }}>
                         <a className={cnTabMembers}>{strings.InfoViewUserDetailMembers[user.lang]}</a>
                     </li>
 
                 </ul>
-                
+
                 <div className="tab-content">
-                    
+
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
 
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
-                                {this.props.muted ? 
+                                {this.props.muted ?
                                     <p>{strings.InfoViewTextMutedExplanation[user.lang]}</p> : null
                                 }
                             </div>
@@ -141,12 +141,12 @@ class GroupInfo extends Component {
                     <div className={cnTabContentDetail}>
 
                         <div className="quickview-block form-type-material">
-                        
+
                             <div className="form-group do-float">
                                 <span className="form-control">{this.props.group.name}</span>
                                 <label>{strings.InfoViewUserDetailName[user.lang]}</label>
                             </div>
-                
+
                             <div className="form-group do-float">
                                 <span className="form-control">{this.props.group.description}&nbsp;</span>
                                 <label>{strings.InfoViewUserDetailDescription[user.lang]}</label>
@@ -166,21 +166,23 @@ class GroupInfo extends Component {
                     <div className={cnTabContentMembers}>
 
                         <div className="quickview-block form-type-material">
-                            
+
                             <div className="media-list media-list-hover">
 
-                                {members.map( user => {
+                                {members.map(user => {
 
                                     let fileId = null;
 
                                     if (user.avatar && user.avatar.thumbnail)
                                         fileId = user.avatar.thumbnail.nameOnServer;
+                                    else
+                                        fileId = user._id;
 
                                     let classname = " avatar ";
-                                    if(user.onlineStatus)
+                                    if (user.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={ () => { this.props.openChat(user) }} >
+                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={() => { this.props.openChat(user) }} >
                                         <span className={classname}>
                                             <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                         </span>
@@ -195,7 +197,7 @@ class GroupInfo extends Component {
                         </div>
 
                     </div>
-                    
+
                 </div>
 
             </div>
@@ -220,7 +222,7 @@ const mapDispatchToProps = (dispatch) => {
         loadDone: () => dispatch(actions.infoView.loadDone()),
         loadMuteState: (state) => dispatch(actions.infoView.loadMuteState(state)),
         showError: (err) => dispatch(actions.notification.showToast(err)),
-        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state,constant.ChatTypeGroup)),
+        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeGroup)),
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
         openChat: user => dispatch(actions.chat.openChatByUser(user))
     };

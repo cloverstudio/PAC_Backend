@@ -80,6 +80,8 @@ class UserList extends Component {
 
                             if (user.avatar && user.avatar.thumbnail)
                                 fileId = user.avatar.thumbnail.nameOnServer;
+                            else
+                                fileId = user._id;
 
                             return (
                                 <div className="media align-items-center" key={user._id} onClick={() => { this.props.openChat(user) }}>

@@ -1,90 +1,81 @@
+<div class="row no-gutters min-h-fullscreen bg-white">
+    <div class="col-md-6 col-lg-7 col-xl-8 d-none d-md-block bg-img" style="background-image: url({{AssetURL}}/img/forest.jpg)"
+        data-overlay="5">
 
-<div id="view-signup">
-
-    <div class="col-md-6 col-sm-12 finish fixscreenbase">
-         
-         <div class="logo-container">
-            
-            <img src="/images/UI/logo.png" />
-            
-            <div class="thankyou">
-                <div class="title">{{l10n "Thank you for signin up to Spika !"}}</div>
-                <div class="text">{{l10n "Your Spika team!"}}</div>
+        <div class="row h-100 pl-50">
+            <div class="col-md-10 col-lg-8 align-self-end">
+                <img src="{{AssetURL}}/img/logo-lg-user-signup.svg" alt="...">
+                <br>
+                <br>
+                <br>
+                <h4 class="text-white">{{l10n "FAST AND SECURE ENTERPRISE MESSAGING"}}</h4>
+                <p class="text-white">
+                    {{l10n "Spika is a most flexible enterprise messaging app. You can customise it, change it, integrate with any other service. Spika will fits all your business demands for all business phases."}}
+                </p>
+                <br>
+                <br>
             </div>
-            
-         </div>
-         
-         <img id="teamimage" src="/assets/front/images/team.png" />
-
-         <div class="follow">{{l10n "Follow next steps to continue!"}}</div>
-         
-    </div>
-     
-    <div class="col-md-6 hidden-sm tutorial fixscreen">
-
-        <div id="slider">
-            <ul>
-                <li>
-                    <div class="textsmall">{{l10n "Step 1:"}}</div>
-                    <div class="textbig">{{l10n "Create User Accounts"}}</div>
-
-                    <img src="/assets/front/images/add_user.gif" />
-                </li>
-                <li>
-                    <div class="textsmall">{{l10n "Step 2:"}}</div>
-                    <div class="textbig">{{l10n "Copy URL to employees"}}</div>
-
-                    <img src="/assets/front/images/copy_url.gif" />
-
-                    <div class="signupurl">
-                        <span>{{l10n "Copy URL:"}}</span>
-                        <input type="text" class="url" value="{{copyURL}}" readonly="readonly" />
-                    </div>
-                </li>
-                <li>
-                    <div class="textsmall">{{l10n "Step 3:"}}</div>
-                    <div class="textbig">{{l10n "Download spika for business"}}</div>
-
-                    <div class="download">
-                        <a href="#">
-                            <img src="/assets/front/images/app_store.png" />
-                        </a>
-                        <br/>                 
-                        <a href="https://spika.chat/downloads">
-                            <img src="/assets/front/images/google_play.png" />                   
-                        </a>  
-                        <br/>                                                     
-                        <a href="https://spika.chat/downloads">
-                            <img src="/assets/front/images/web_client.png" />                    
-                        </a>                 
-                        <br/>                 
-                        <a href="{{adminURL}}">
-                            <img src="/assets/front/images/admin.png" />
-                        </a>                 
-                    </div>
-                </li>
-            </ul>  
-              
-        </div>  
-
-
-        <div class="btn-holder">
-            <button type="button" id="nextStep" class="btn btn-step btn-lg outline btn-block">{{l10n "Next step"}}</button>
-            <div class="textbig" id="lastStep">{{l10n "Enjoy using Spika! ;)"}}</div>
         </div>
-
-        <div id="slider-dots">
-            <ul>
-                <li id="dot1"></li>
-                <li id="dot2"></li>
-                <li id="dot3"></li>
-            </ul>
-        </div>
-            
-        <span class="trademark">
-            &copy; 2016 Clover Studio Ltd. All rights reserved 
-        </span>
 
     </div>
 
+    <div class="col-md-6 col-lg-5 col-xl-4 align-self-center">
+        <div class="px-80 py-30">
+
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">{{l10n "Thank you !"}}</h4>
+                <p>
+                    {{l10n "Thank you for signin up to Spika !"}}
+                    <br /> {{l10n "Your Spika team!"}}
+                </p>
+            </div>
+
+            <div class="callout callout-success" role="alert">
+                <h5>{{l10n "Step 1"}}</h5>
+                <p>{{l10n "Create User Accounts"}}</p>
+            </div>
+
+            <img class="img-fluid" src="/assets/front/images/add_user.gif" />
+
+            <div class="callout callout-success" role="alert">
+                <h5>{{l10n "Step 2"}}</h5>
+                <p>{{l10n "Send URL to employees"}}</p>
+                <strong>{{copyURL}}</strong>
+            </div>
+
+            <div class="callout callout-success" role="alert">
+                <h5>{{l10n "Step 3"}}</h5>
+                <p>{{l10n "Download Apps"}}</p>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+
+                    <a class="btn btn-w-md btn-multiline btn-primary" href="https://itunes.apple.com/jp/app/spika-for-business/id1143027894?mt=8">
+                        <i class="ti-apple fs-20"></i>
+                        <br>{{l10n "iOS App"}}</a>
+                </div>
+                <div class="col-6">
+                    <a class="btn btn-w-md btn-multiline btn-primary" href="https://play.google.com/store/apps/details?id=com.clover_studio.spikaenterprisev2&hl=en">
+                        <i class="ti-android fs-20"></i>
+                        <br>{{l10n "Android App"}}</a>
+                </div>
+                <div class="col-6">
+                    <a class="btn btn-w-md btn-multiline btn-primary" href="/">
+                        <i class="ti-desktop fs-20"></i>
+                        <br>{{l10n "Web Client"}}</a>
+                </div>
+                <div class="col-6">
+                    <a class="btn btn-w-md btn-multiline btn-primary" href="/admin">
+                        <i class="ti-desktop fs-20"></i>
+                        <br>{{l10n "Admin"}}</a>
+                </div>
+
+            </div>
+
+
+            <p>{{l10n "Enjoy using Spika! ;)"}}</p>
+
+        </div>
+    </div>
 </div>

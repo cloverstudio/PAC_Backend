@@ -1,105 +1,129 @@
+<div class="row no-gutters min-h-fullscreen bg-white">
+    <div class="col-md-6 col-lg-7 col-xl-8 d-none d-md-block bg-img" style="background-image: url({{AssetURL}}/img/forest.jpg)"
+        data-overlay="5">
 
-    <div class="container">
-        <div class="col-md-6 col-md-offset-2">
-            <div class="login col-md-12"> 
-                <img class="spikaLoginImg" src="{{AssetURL}}/images/spikaLogo.svg">
-                <div class="clearfix"></div>
-                <p>{{l10n "Welcome to"}}</p>
-                <h2>{{l10n "Spika for Business: Admin"}}</h2> 
+        <div class="row h-100 pl-50">
+            <div class="col-md-10 col-lg-8 align-self-end">
+                <img src="{{AssetURL}}/img/logo-light-lg.svg" alt="...">
                 <br>
-                
-                
-                <div class="col-md-12">
-                    
-                    <form id="mainform" method="post" onsubmit="return onSubmit()">
-                        
-                        {{> alertMessage }}
-                        
-                        <input class="form-control" name="organizationId" id="text-organizationId" type="text" placeholder="{{l10n "Enter organization ID..."}}" value="{{organizationId}}" autofocus="autofocus">
-                        <br/>
-                        <input class="form-control" name="username" id="text-name" type="text" placeholder="{{l10n "Enter user name..."}}" value="{{username}}">
-                        <br/>
-                        <input class="form-control" name="password" id="text-password" type="password" placeholder="{{l10n "Password"}}" value="{{password}}">
-                        
-                        <button type="submit" class="Loginbutton" id="btn-login">{{l10n "Login"}}</button>
-                        
-                        <div class="checkbox" style="margin-top:10px">
-
-                        	<label class="checkbox-inline"> <input type="checkbox" id="chkbox-remember">{{l10n "Remember password"}}</label>
-
-                        </div>
-                        {{!-- <div class="pull-right  col-sm-6" style="margin-top:10px">
-                            <a href="#">{{l10n "Forgot password?"}}</a>
-                        </div> --}}
-                        <div class="container-fluid signUp"> 
-                            <p> {{l10n "Not allready a member?"}}</p>
-                            <button type="submit" class="btn signUpBtn" name="signup" value="1">{{l10n "Sign up"}}</button>
-                        </div>
-                        
-                    </form>
-                </div>                
+                <br>
+                <br>
+                <h4 class="text-white">{{l10n "FAST AND SECURE ENTERPRISE MESSAGING"}}</h4>
+                <p class="text-white">
+                    {{l10n "Spika is a most flexible enterprise messaging app. You can customise it, change it, integrate with any other service. Spika will fits all your business demands for all business phases."}}
+                </p>
+                <br>
+                <br>
             </div>
         </div>
+
     </div>
-    
-    <script type="text/javascript">
-    	
-		$(function() {
 
-            var savedOrganizationId = localStorage.getItem("admin-organizationId");
-			var savedUserName = localStorage.getItem("admin-loginname");
-			var savedPassword = localStorage.getItem("admin-loginpassword");
+    <div class="col-md-6 col-lg-5 col-xl-4 align-self-center">
+        <div class="px-80 py-30">
+            <h4>{{l10n "Spika for Business: Admin"}}</h4>
+            <p>
+                <small>{{l10n "Sign into your account"}}</small>
+            </p>
+            <br> {{> alertMessage }}
 
-            var organizationIdEnabled = false;
-			var nameEnabled = false;
-			var passwordEnabled = false;
-            
-            if (savedOrganizationId && savedOrganizationId != "") {            
-                if (!$('#text-organizationId').val()) {
-                    $('#text-organizationId').val(savedOrganizationId);
-                    organizationIdEnabled = true;
-                };
-            }
+            <form id="mainform" method="post" class="form-type-material" onsubmit="return onSubmit()">
 
-            if (savedPassword && savedPassword != "") {
-                if (!$('#text-name').val()) {
-                    $('#text-password').val(savedPassword);
-                    passwordEnabled = true;
-                };
-            }
+                <div class="form-group">
+                    <input type="text" class="form-control" name="organizationId" id="text-organizationId" type="text" value="{{organizationId}}"
+                        placeholder="{{l10n "Organization ID"}}">
+                </div>
 
-            if (savedUserName && savedUserName != "") {
-                if (!$('#text-name').val()) {
-                    $('#text-name').val(savedUserName);
-                    nameEnabled = true;                    
-                };
-            }
-            
-			if (organizationIdEnabled && nameEnabled && passwordEnabled) 
-                $("#chkbox-remember").attr('checked','checked');	
-				
-		});
-		
-    	function onSubmit() {
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username" id="text-name" type="text" value="{{username}}" placeholder="{{l10n "Username"}}">
+                </div>
 
-	        if(typeof(Storage) === "undefined")
-	            return false;
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password" id="text-password" type="password" value="{{password}}" placeholder="{{l10n "Password"}}">
+                </div>
 
-			if($("#chkbox-remember").is(':checked')){
-				
-                localStorage.setItem("admin-organizationId", $('#text-organizationId').val());
-				localStorage.setItem("admin-loginname", $('#text-name').val());
-                localStorage.setItem("admin-loginpassword", $('#text-password').val());
+                <div class="form-group flexbox">
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="chkbox-remember">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">{{l10n "Remember password"}}</span>
+                    </label>
 
-			}else{
-				
-                localStorage.setItem("admin-organizationId", "");
-				localStorage.setItem("admin-loginname", "");
-                localStorage.setItem("admin-loginpassword", "");
-				
-			}
+                    <!-- <a class="text-muted hover-primary fs-13" href="#">Forgot password?</a> -->
+                </div>
 
-    		return true;
-    	}
-    	
-    </script>
+                <div class="form-group">
+                    <button class="btn btn-bold btn-block btn-primary" type="submit">{{l10n "Login"}}</button>
+                </div>
+
+                <p class="text-center text-muted fs-13 mt-20">{{l10n "Not allready a member?"}}
+                    <a class="text-primary fw-500" href="/signup/">{{l10n "Sign up"}}</a>
+                </p>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        var savedOrganizationId = localStorage.getItem("admin-organizationId");
+        var savedUserName = localStorage.getItem("admin-loginname");
+        var savedPassword = localStorage.getItem("admin-loginpassword");
+
+        var organizationIdEnabled = false;
+        var nameEnabled = false;
+        var passwordEnabled = false;
+
+        if (savedOrganizationId && savedOrganizationId != "") {
+            if (!$('#text-organizationId').val()) {
+                $('#text-organizationId').val(savedOrganizationId);
+                organizationIdEnabled = true;
+            };
+        }
+
+        if (savedPassword && savedPassword != "") {
+            if (!$('#text-name').val()) {
+                $('#text-password').val(savedPassword);
+                passwordEnabled = true;
+            };
+        }
+
+        if (savedUserName && savedUserName != "") {
+            if (!$('#text-name').val()) {
+                $('#text-name').val(savedUserName);
+                nameEnabled = true;
+            };
+        }
+
+        if (organizationIdEnabled && nameEnabled && passwordEnabled)
+            $("#chkbox-remember").attr('checked', 'checked');
+
+    });
+
+    function onSubmit() {
+
+        if (typeof (Storage) === "undefined")
+            return false;
+
+        if ($("#chkbox-remember").is(':checked')) {
+
+            localStorage.setItem("admin-organizationId", $('#text-organizationId').val());
+            localStorage.setItem("admin-loginname", $('#text-name').val());
+            localStorage.setItem("admin-loginpassword", $('#text-password').val());
+
+        } else {
+
+            localStorage.setItem("admin-organizationId", "");
+            localStorage.setItem("admin-loginname", "");
+            localStorage.setItem("admin-loginpassword", "");
+
+        }
+
+        return true;
+    }
+
+</script>

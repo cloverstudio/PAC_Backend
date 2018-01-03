@@ -54,7 +54,7 @@ function startServer() {
   io.adapter(redis(Conf.redis));
   io.set("transports", ["websocket"]);
 
-  DatabaseManager.init(function(success) {
+  DatabaseManager.init(function (success) {
     if (!success) {
       console.log("Failed to connect DB");
       process.exit(1);
@@ -64,7 +64,7 @@ function startServer() {
 
       app.use(compression());
 
-      app.all("*", function(req, res, next) {
+      app.all("*", function (req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header(
           "Access-Control-Allow-Methods",
@@ -92,10 +92,10 @@ function startServer() {
       signaling(io, Conf.webRTCConfig);
 
       // not found URL error handle
-      app.get("*", function(request, response) {
+      app.get("*", function (request, response) {
         var defaultParameters = {
           Config: Conf,
-          AssetURL: "/assets",
+          AssetURL: "/assets/admin2",
           layout: "Front/Views/FrontLayout"
         };
 
@@ -110,7 +110,7 @@ function startServer() {
         }
       });
 
-      server.on("connection", function(socket) {
+      server.on("connection", function (socket) {
         socket.setTimeout(120000);
       });
 
@@ -121,11 +121,11 @@ function startServer() {
         });
         */
 
-      server.listen(Conf.port, function() {
+      server.listen(Conf.port, function () {
         console.log("Server listening on port " + Conf.port + "!");
       });
 
-      process.on("uncaughtException", function(err) {
+      process.on("uncaughtException", function (err) {
         console.log("Caught exception: " + err);
       });
     }

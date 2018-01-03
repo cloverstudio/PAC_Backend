@@ -56,16 +56,21 @@ class HistoryRow extends Component {
 
         if (user && user.avatar && user.avatar.thumbnail) {
             fileId = user.avatar.thumbnail.nameOnServer;
-        }
+        } else if (user)
+            fileId = user._id;
 
         if (user && user.onlineStatus == 1)
             userClass += " status-success";
 
-        if (group && group.avatar && group.avatar.thumbnail)
+        if (group && group.avatar && group.avatar.thumbnail) {
             fileId = group.avatar.thumbnail.nameOnServer;
+        } else if (group)
+            fileId = group._id;
 
-        if (room && room.avatar && room.avatar.thumbnail)
+        if (room && room.avatar && room.avatar.thumbnail) {
             fileId = room.avatar.thumbnail.nameOnServer;
+        } else if (room)
+            fileId = room._id;
 
         let lastMessage = "";
 
