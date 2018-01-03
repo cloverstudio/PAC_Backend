@@ -1,10 +1,10 @@
-    <div class="row no-gutters min-h-fullscreen bg-white">
+<div class="row no-gutters min-h-fullscreen bg-white">
     <div class="col-md-6 col-lg-7 col-xl-8 d-none d-md-block bg-img" style="background-image: url({{AssetURL}}/img/forest.jpg)"
         data-overlay="5">
 
         <div class="row h-100 pl-50">
             <div class="col-md-10 col-lg-8 align-self-end">
-                <img src="{{AssetURL}}/img/logo-light-lg.svg" alt="...">
+                <img src="{{AssetURL}}/img/logo-light-lg-owner.svg" alt="...">
                 <br>
                 <br>
                 <br>
@@ -55,50 +55,50 @@
         </div>
     </div>
 </div>
-    
-    <script type="text/javascript">
-    	
-		$(function() {
 
-			var savedUserName = localStorage.getItem("spadmin-loginname");
-			var savedPassword = localStorage.getItem("spadmin-loginpassword");
+<script type="text/javascript">
 
-			var nameEnabled = false;
-			var passwordEnabled = false;
+    $(function () {
 
-			if(savedUserName && savedUserName != ""){
-				$('#text-name').val(savedUserName);
-				nameEnabled = true;
-			}
+        var savedUserName = localStorage.getItem("spadmin-loginname");
+        var savedPassword = localStorage.getItem("spadmin-loginpassword");
 
-			if(savedPassword && savedPassword != ""){
-				$('#text-password').val(savedPassword);
-				passwordEnabled = true;
-			}
-			
-			if(nameEnabled && passwordEnabled)
-				$("#chkbox-remember").attr('checked','checked');	
-				
-		});
-		
-    	function onSubmit() {
+        var nameEnabled = false;
+        var passwordEnabled = false;
 
-	        if(typeof(Storage) === "undefined")
-	            return false;
+        if (savedUserName && savedUserName != "") {
+            $('#text-name').val(savedUserName);
+            nameEnabled = true;
+        }
 
-			if($("#chkbox-remember").is(':checked')){
-				
-				localStorage.setItem("spadmin-loginname", $('#text-name').val());
-				localStorage.setItem("spadmin-loginpassword", $('#text-password').val());
+        if (savedPassword && savedPassword != "") {
+            $('#text-password').val(savedPassword);
+            passwordEnabled = true;
+        }
 
-			}else{
-				
-				localStorage.setItem("spadmin-loginname", "");
-				localStorage.setItem("spadmin-loginpassword", "");
-				
-			}
+        if (nameEnabled && passwordEnabled)
+            $("#chkbox-remember").attr('checked', 'checked');
 
-    		return true;
-    	}
-    	
-    </script>
+    });
+
+    function onSubmit() {
+
+        if (typeof (Storage) === "undefined")
+            return false;
+
+        if ($("#chkbox-remember").is(':checked')) {
+
+            localStorage.setItem("spadmin-loginname", $('#text-name').val());
+            localStorage.setItem("spadmin-loginpassword", $('#text-password').val());
+
+        } else {
+
+            localStorage.setItem("spadmin-loginname", "");
+            localStorage.setItem("spadmin-loginpassword", "");
+
+        }
+
+        return true;
+    }
+
+</script>
