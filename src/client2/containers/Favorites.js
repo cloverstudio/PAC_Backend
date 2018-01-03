@@ -177,12 +177,24 @@ class Favotites extends Base {
 
                                 switch(message.type){
                                     case constant.MessageTypeFile:
-                                        messageContent = (
-                                        <span>
-                                            <i className="ti-zip text-secondary fs-45 mb-3"></i>
-                                            <br/>
-                                            <span className="fw-600">{message.file.file.name}</span>
-                                        </span>)
+                                        const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
+
+                                        if (fileMimeType === constant.imgMimeType){
+                                            messageContent = (
+                                               <span className="image-message">
+                                                   <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}/>
+                                                   <br/>
+                                                   <span className="fw-600">{message.file.file.name}</span>
+                                               </span>)
+                                       }
+                                       else {
+                                            messageContent = (
+                                                <span>
+                                                    <i className="ti-zip text-secondary fs-45 mb-3"></i>
+                                                    <br/>
+                                                    <span className="fw-600">{message.file.file.name}</span>
+                                                </span>)
+                                        }
                                         break;
                                     case constant.MessageTypeSticker:
                                         messageContent = <img className="favorite-sticker" src={config.mediaBaseURL + message.message}/>

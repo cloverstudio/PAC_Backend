@@ -8,6 +8,7 @@ import * as actions from '../actions';
 import * as constant from '../lib/const';
 import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
+import * as config from '../lib/config';
 
 import user from '../lib/user';
 import { store } from '../index';
@@ -45,6 +46,8 @@ class Search extends Base {
         else if (chatType == constant.ChatTypeRoom) {
             this.props.openChatByRoom(message.room);
         }
+
+        this.props.loadNewChat(message.roomID, message._id);
 
     }
 
@@ -165,20 +168,30 @@ class Search extends Base {
                                     messageContent = messageSplit
                                 }
                                 else if(message.type === constant.MessageTypeFile){
+
                                     const titleHighlighted = message.file.file.name.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
-                                    messageContent = (
-                                        <span>
-                                            <i className="ti-zip text-secondary fs-45 mb-3"></i>
-                                            <br/>
-                                            <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
-                                        </span>)
+                                    const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
+
+                                    if (fileMimeType === constant.imgMimeType){
+                                         messageContent = (
+                                            <span className="image-message">
+                                                <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}/>
+                                                <br/>
+                                                <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                            </span>)
+                                    }
+                                    else{
+                                        messageContent = (
+                                            <span>
+                                                <i className="ti-zip text-secondary fs-45 mb-3"></i>
+                                                <br/>
+                                                <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                            </span>)
+                                    }
                                 }
 
                                 return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id} 
-                                    onClick={e=> {
-                                        this.selected(message);
-                                        this.props.loadNewChat(message.roomID, message._id);
-                                    }}>
+                                    onClick={e=> this.selected(message)}>
                                     <h6 className="code-title">
                                         <AvatarImage fileId={chatAvatarId} type={chatAvatarType} />
                                         {chatName}
