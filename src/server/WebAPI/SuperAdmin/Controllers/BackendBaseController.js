@@ -28,7 +28,7 @@ BackendBaseController.prototype.renderLogin = function(request,response,template
     var defaultParameters = {
         lang: lang,
         Config:Config,
-        AssetURL:"/assets/admin",
+        AssetURL:"/assets/admin2",
         layout: this.ViewTop + "/Login/SigninLayout"
     };
     
