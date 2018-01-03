@@ -26,26 +26,26 @@ class RoomInfo extends Component {
     }
 
 
-    componentDidMount(nextProps){
+    componentDidMount(nextProps) {
         this.updateSwitches();
         this.props.loadMembers();
     }
-    
 
-    componentWillReceiveProps(nextProps){
 
-        if(this.props.timestampByChat != nextProps.timestampByChat){
+    componentWillReceiveProps(nextProps) {
+
+        if (this.props.timestampByChat != nextProps.timestampByChat) {
             this.updateSwitches();
             this.props.loadMembers();
         }
 
     }
-    
-    updateSwitches = () =>{
 
-        callGetUserDetail(user.userData._id).then( (data) => {
-            
-            if(!this.props.room)
+    updateSwitches = () => {
+
+        callGetUserDetail(user.userData._id).then((data) => {
+
+            if (!this.props.room)
                 return;
 
             const roomId = this.props.room._id;
@@ -53,14 +53,14 @@ class RoomInfo extends Component {
             this.props.loadDone();
 
             const mutedChat = data.user.muted;
-            
-            if(mutedChat.indexOf(roomId) != -1){
+
+            if (mutedChat.indexOf(roomId) != -1) {
                 this.props.loadMuteState(true);
-            }else{
+            } else {
                 this.props.loadMuteState(false);
             }
-            
-        }).catch( (err) => {
+
+        }).catch((err) => {
 
             console.error(err);
             this.props.showError(strings.InfoViewFailedToGetDetail[user.lang]);
@@ -70,12 +70,12 @@ class RoomInfo extends Component {
     }
 
     tuggleMute = () => {
-        
+
         this.props.updateMuteState(!this.props.muted);
         this.props.loadMuteState(!this.props.muted);
 
     }
-    
+
     render() {
 
         let cnTabGeneral = "nav-link ";
@@ -86,40 +86,40 @@ class RoomInfo extends Component {
         let cnTabContentDetail = "tab-pane fade show bg-white";
         let cnTabContentMembers = "tab-pane fade show bg-white";
 
-        if(this.props.tabState == 'options'){
+        if (this.props.tabState == 'options') {
             cnTabGeneral += " active";
             cnTabContentGeneral += " active";
         }
 
-        if(this.props.tabState == 'detail'){
+        if (this.props.tabState == 'detail') {
             cnTabDetail += " active";
             cnTabContentDetail += " active";
         }
 
-        if(this.props.tabState == 'members'){
+        if (this.props.tabState == 'members') {
             cnTabMembers += " active";
             cnTabContentMembers += " active";
         }
 
         const members = this.props.members;
-        members.sort( (obj1,obj2) => {
-            
-            if(obj1._id == this.props.room.owner){
+        members.sort((obj1, obj2) => {
+
+            if (obj1._id == this.props.room.owner) {
                 obj1.onlineStatus = 10;
             }
 
-            if(obj2._id == this.props.room.owner){
+            if (obj2._id == this.props.room.owner) {
                 obj2.onlineStatus = 10;
             }
 
-            return -1 * ( obj1.onlineStatus - obj2.onlineStatus );
+            return -1 * (obj1.onlineStatus - obj2.onlineStatus);
         });
 
-        const membersModified = members.map( (member) => {
+        const membersModified = members.map((member) => {
 
             member.isOwner = false;
 
-            if(member._id == this.props.room.owner){
+            if (member._id == this.props.room.owner) {
                 member.isOwner = true;
             }
 
@@ -128,25 +128,25 @@ class RoomInfo extends Component {
         });
 
         return (
-            <div> 
-                
+            <div>
+
                 <ul className="quickview-header nav nav-tabs nav-justified nav-tabs-info cursor-pointer">
-                    <li className="nav-item" onClick={ () => {this.tabChange("options")}}>
+                    <li className="nav-item" onClick={() => { this.tabChange("options") }}>
                         <a className={cnTabGeneral}>{strings.InfoViewUserDetailOptions[user.lang]}</a>
                     </li>
-                    <li className="nav-item" onClick={ () => {this.tabChange("detail")}}>
+                    <li className="nav-item" onClick={() => { this.tabChange("detail") }}>
                         <a className={cnTabDetail}>{strings.InfoViewUserDetailDetail[user.lang]}</a>
                     </li>
-                    <li className="nav-item" onClick={ () => {this.tabChange("members")}}>
+                    <li className="nav-item" onClick={() => { this.tabChange("members") }}>
                         <a className={cnTabMembers}>{strings.InfoViewUserDetailMembers[user.lang]}</a>
                     </li>
                 </ul>
-                
+
                 <div className="tab-content">
-                    
+
                     <div className={cnTabContentGeneral}>
 
-                        <div className="media">             
+                        <div className="media">
                             <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
                         </div>
 
@@ -156,11 +156,11 @@ class RoomInfo extends Component {
                                 {user.userData._id == this.props.room.owner ?
                                     <button onClick={() => { this.props.deleteRoom(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
                                         <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoomConfirm[user.lang]}
-                                    </button> 
+                                    </button>
                                     :
-                                    <button onClick={() => { this.props.leaveRoom(this.props.room._id) }}className="btn btn-label btn-primary btn-danger btn-block">
+                                    <button onClick={() => { this.props.leaveRoom(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
                                         <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoomConfirm[user.lang]}
-                                    </button> 
+                                    </button>
                                 }
                             </div>
 
@@ -170,11 +170,11 @@ class RoomInfo extends Component {
                                 {user.userData._id == this.props.room.owner ?
                                     <button onClick={() => { this.props.deleteRoomConfirm(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
                                         <label><i className="ti-close"></i></label>{strings.InfoViewDeleteRoom[user.lang]}
-                                    </button> 
+                                    </button>
                                     :
-                                    <button onClick={() => { this.props.leaveRoomConfirm(this.props.room._id) }}className="btn btn-label btn-primary btn-danger btn-block">
+                                    <button onClick={() => { this.props.leaveRoomConfirm(this.props.room._id) }} className="btn btn-label btn-primary btn-danger btn-block">
                                         <label><i className="ti-close"></i></label>{strings.InfoViewLeaveRoom[user.lang]}
-                                    </button> 
+                                    </button>
                                 }
                             </div>
                         }
@@ -183,7 +183,7 @@ class RoomInfo extends Component {
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
-                                {this.props.muted ? 
+                                {this.props.muted ?
                                     <p>{strings.InfoViewTextMutedExplanation[user.lang]}</p> : null
                                 }
                             </div>
@@ -203,7 +203,7 @@ class RoomInfo extends Component {
                                 <span className="form-control">{this.props.room.name}</span>
                                 <label>{strings.InfoViewUserDetailName[user.lang]}</label>
                             </div>
-                
+
                             <div className="form-group do-float">
                                 <span className="form-control">{this.props.room.description}&nbsp;</span>
                                 <label>{strings.InfoViewUserDetailDescription[user.lang]}</label>
@@ -223,33 +223,35 @@ class RoomInfo extends Component {
                     <div className={cnTabContentMembers}>
 
                         <div className="quickview-block form-type-material">
-                            
+
                             <div className="media-list media-list-hover">
 
-                                {membersModified.map( member => {
+                                {membersModified.map(member => {
 
                                     let fileId = null;
 
                                     if (member.avatar && member.avatar.thumbnail)
                                         fileId = member.avatar.thumbnail.nameOnServer;
+                                    else
+                                        fileId = member._id;
 
                                     let classname = " avatar ";
-                                    if(member.onlineStatus)
+                                    if (member.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={ () => { this.props.openChat(user) }} >
+                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={() => { this.props.openChat(user) }} >
                                         <span className={classname}>
                                             <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                         </span>
                                         <p className="title">
                                             {member.isOwner ?
-                                                <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> : 
+                                                <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> :
                                                 <span>{member.name}</span>
                                             }
                                         </p>
                                         <a className="media-action" href="javascript:void(0)"><i className="fa fa-comment"></i></a>
                                     </div>
-                                    
+
                                 })}
 
                             </div>
@@ -257,7 +259,7 @@ class RoomInfo extends Component {
                         </div>
 
                     </div>
-                    
+
                 </div>
 
             </div>
@@ -283,7 +285,7 @@ const mapDispatchToProps = (dispatch) => {
         loadDone: () => dispatch(actions.infoView.loadDone()),
         loadMuteState: (state) => dispatch(actions.infoView.loadMuteState(state)),
         showError: (err) => dispatch(actions.notification.showToast(err)),
-        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state,constant.ChatTypeRoom)),
+        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeRoom)),
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
         openChat: user => dispatch(actions.chat.openChatByUser(user)),
         deleteRoomConfirm: roomId => dispatch(actions.infoView.deleteRoomConfirm(roomId)),
