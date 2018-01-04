@@ -57,7 +57,7 @@ class Notification extends Component {
 
     render() {
 
-        let notificationsMenuClass = "dropdown-menu ";
+        let notificationsMenuClass = "dropdown-menu dropdown-menu-right ";
         if (this.props.notificationState)
             notificationsMenuClass += " show";
 
