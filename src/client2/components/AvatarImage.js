@@ -13,37 +13,39 @@ class AvatarImage extends Component {
     }
 
     render() {
-        
-        if(!this.props.type)
-            return null;
-            
-        let fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
-        
-        if(this.props.type == constant.AvatarUser){
 
-            if(!this.props.fileId){
-                
+        if (!this.props.type)
+            return null;
+
+        let fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
+
+        if (this.props.type == constant.AvatarUser) {
+
+            if (!this.props.fileId) {
+
                 const user = this.props.user;
-                if(user && user.avatar &&  user.avatar.thumbnail){
+                if (user && user.avatar && user.avatar.thumbnail) {
                     fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + user.avatar.thumbnail.nameOnServer;
+                } else if (user) {
+                    fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + user._id;
                 }
 
-            }else{
+            } else {
                 fileUrl = config.APIEndpoint + constant.ApiUrlGetUserAvatar + this.props.fileId;
             }
-            
+
         }
 
-        if(this.props.type == constant.AvatarGroup)
+        if (this.props.type == constant.AvatarGroup)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetGroupAvatar + this.props.fileId;
-            
-        if(this.props.type == constant.AvatarRoom)
+
+        if (this.props.type == constant.AvatarRoom)
             fileUrl = config.APIEndpoint + constant.ApiUrlGetRoomAvatar + this.props.fileId;
 
         let classname = "avatar ";
-        if(this.props.className)
+        if (this.props.className)
             classname += this.props.className;
-        
+
         return (
             <img className={classname} src={fileUrl} alt={this.props.type + ' avatar'} />
         );

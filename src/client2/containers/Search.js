@@ -8,6 +8,7 @@ import * as actions from '../actions';
 import * as constant from '../lib/const';
 import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
+import * as config from '../lib/config';
 
 import user from '../lib/user';
 import { store } from '../index';
@@ -31,6 +32,25 @@ class Search extends Base {
     static propTypes = {
     }
 
+    selected = (message) => {
+
+        const chatIdSplit = message.roomID.split("-");
+        const chatType = chatIdSplit[0];
+
+        if (chatType == constant.ChatTypePrivate) {
+            this.props.openChatByUser(message.userModelTarget);
+        }
+        else if (chatType == constant.ChatTypeGroup) {
+            this.props.openChatByGroup(message.group);
+        }
+        else if (chatType == constant.ChatTypeRoom) {
+            this.props.openChatByRoom(message.room);
+        }
+
+        this.props.loadNewChat(message.roomID, message._id);
+
+    }
+
     onKeywordChange = (e) => {
         e.persist();
 
@@ -38,7 +58,8 @@ class Search extends Base {
             clearTimeout(this.lastSearchTimeout);
 
         this.lastSearchTimeout = setTimeout(() => {
-            this.props.searchMessage(e.target.value)
+            if (e.target.value.trim().length > 0)
+                this.props.searchMessage(e.target.value)
         }, constant.SearchInputTimeout);
     }
 
@@ -132,9 +153,45 @@ class Search extends Base {
                                 if (message.user && message.user.avatar && message.user.avatar.thumbnail)
                                     userAvatarId = message.user.avatar.thumbnail.nameOnServer;
 
-                                const messageHightlighted = message.message.replace(this.props.keyword, "<strong>" + this.props.keyword + "</strong>");
 
-                                return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}>
+                                let messageContent;
+
+                                if (message.type === constant.MessageTypeText){
+                                    const messageHightlighted = message.message.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
+
+                                    const regEx = /(<strong>.*<\/strong>)/g;
+                                    const messageSplit = messageHightlighted.split(regEx)
+
+                                    if (messageSplit.length === 3){
+                                        messageSplit[1] = <strong key="keyword">{messageSplit[1].slice(8, -9)}</strong>
+                                    }
+                                    messageContent = messageSplit
+                                }
+                                else if(message.type === constant.MessageTypeFile){
+
+                                    const titleHighlighted = message.file.file.name.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
+                                    const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
+
+                                    if (fileMimeType === constant.imgMimeType){
+                                         messageContent = (
+                                            <span className="image-message">
+                                                <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}/>
+                                                <br/>
+                                                <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                            </span>)
+                                    }
+                                    else{
+                                        messageContent = (
+                                            <span>
+                                                <i className="ti-zip text-secondary fs-45 mb-3"></i>
+                                                <br/>
+                                                <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                            </span>)
+                                    }
+                                }
+
+                                return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id} 
+                                    onClick={e=> this.selected(message)}>
                                     <h6 className="code-title">
                                         <AvatarImage fileId={chatAvatarId} type={chatAvatarType} />
                                         {chatName}
@@ -149,7 +206,9 @@ class Search extends Base {
                                                 <p>
                                                     <strong>{userName}</strong>
                                                 </p>
-                                                <p className="messsage" dangerouslySetInnerHTML={{ __html: messageHightlighted }}>
+                                                
+                                                <p className="messsage">
+                                                    {messageContent}
                                                 </p>
 
                                                 <p className="text-right">
@@ -196,6 +255,10 @@ const mapDispatchToProps = (dispatch) => {
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
 
         searchMessage: (keyword) => dispatch(actions.searchMessage.searchMessage(keyword)),
+        openChatByUser: (user) => dispatch(actions.chat.openChatByUser(user)),
+        openChatByGroup: (group) => dispatch(actions.chat.openChatByGroup(group)),
+        openChatByRoom: (room) => dispatch(actions.chat.openChatByRoom(room)),
+        loadNewChat: (roomId, messageId) => dispatch(actions.chat.loadNewChat(roomId, messageId, constant.ChatDirectionAllTo))
     };
 };
 

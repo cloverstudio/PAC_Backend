@@ -18,7 +18,9 @@ const initial = {
     chatType: constant.ChatTypePrivate,
     typing: {},
     timestampByChat: 0,
-    inputValues: {}
+    inputValues: {},
+    loadingDirection: null,
+    loadAllToTarget: null
 };
 
 const timestampByChat = (state = initial.timestampByChat, action) => {
@@ -130,11 +132,13 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
 
 const isLoading = (state = initial.isLoading, action) => {
     switch (action.type) {
-        case types.ChatOpenByUser:
-            return true;
-        case types.ChatOpenByGroup:
-            return true;
-        case types.ChatOpenByRoom:
+        // case types.ChatOpenByUser:
+        //     return true;
+        // case types.ChatOpenByGroup:
+        //     return true;
+        // case types.ChatOpenByRoom:
+        //     return true;
+        case types.ChatLoadMessageStart:
             return true;
         case types.ChatLoadMessageSucceed:
             return false;
@@ -311,6 +315,33 @@ const inputValues = (state = initial.inputValues, action) => {
     }
 };
 
+const loadingDirection = (state = initial.loadingDirection, action) => {
+    switch (action.type) {
+        case types.ChatLoadMessageStart:
+            return action.loadingDirection;
+        case types.ChatLoadOldMessagesSucceed:
+            return constant.ChatDirectionOld;
+        case types.ChatLoadMessageSucceed:
+            return null;
+        default:
+            return state;
+    }
+}
+
+const loadAllToTarget = (state = initial.loadAllToTarget, action) => {
+    switch(action.type) {
+        case types.ChatLoadMessageStart:
+            if (action.loadingDirection === constant.ChatDirectionAllTo){
+                return action.messageId
+            }
+            else {
+                return null;
+            }
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     chatAvatar,
     isLoading,
@@ -319,5 +350,7 @@ export default combineReducers({
     chatType,
     typing,
     timestampByChat,
-    inputValues
+    inputValues,
+    loadingDirection,
+    loadAllToTarget
 });

@@ -26,11 +26,17 @@ class MessageUpdate extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        if (nextProps.oldMessageValue.length > 0 && nextProps.oldMessageValue !== this.props.oldMessageValue){
+        
+        if (typeof nextProps.oldMessageValue !== 'undefined' 
+        && nextProps.oldMessageValue.length > 0 
+        && nextProps.oldMessageValue !== this.props.oldMessageValue){
+
             const oldMsg = Encryption.decryptText(nextProps.oldMessageValue);
+            
             this.setState({
                 textAreaValue: oldMsg
-            })
+            });
+
         }
     }
 
@@ -52,7 +58,7 @@ class MessageUpdate extends Component {
                 <div
                     className="modal modal-center fade show"
                     id="modal-center"
-                    tabindex="-1"
+                    tabIndex="-1"
                     style={mainStyle}
                 >
                     <div className="modal-dialog messageUpdate">

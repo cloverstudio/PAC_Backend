@@ -28,15 +28,20 @@ class Main extends Base {
     static propTypes = {};
 
     componentWillReceiveProps(nextProps) {
-        if (
-            this.props.location != nextProps.location ||
-            this.props.timestampByChat != nextProps.timestampByChat
-        ) {
-            // location update
-            const chatId = util.getChatIdFromUrl(nextProps.location);
 
-            if (chatId && chatId.length > 0) this.props.loadNewChat(chatId);
-            else this.props.clearChat();
+        if (!this.props.isChatLoading){
+            if (
+                this.props.location != nextProps.location ||
+                this.props.timestampByChat != nextProps.timestampByChat
+            ) {
+                // location update
+                const chatId = util.getChatIdFromUrl(nextProps.location);
+
+                if (chatId && chatId.length > 0) {this.props.loadNewChat(chatId);
+                    
+                }
+                else this.props.clearChat();
+            }
         }
     }
 
@@ -44,9 +49,13 @@ class Main extends Base {
         if (!user.userData) return;
 
         // location update
-        const chatId = util.getChatIdFromUrl(this.props.location);
+        if (this.props.loadingDirection != constant.ChatDirectionAllTo){
+            const chatId = util.getChatIdFromUrl(this.props.location);
 
-        if (chatId && chatId.length > 0) this.props.openChatByChatId(chatId);
+            if (chatId && chatId.length > 0) {
+                this.props.openChatByChatId(chatId);
+            }
+        }
     }
 
     render() {
@@ -91,7 +100,9 @@ const mapStateToProps = state => {
         sidebarState: state.chatUI.sidebarState,
         historyBarState: state.chatUI.historyBarState,
         calling: state.call.calling,
-        callingWindowState: state.call.windowState
+        callingWindowState: state.call.windowState,
+        loadingDirection: state.chat.loadingDirection,
+        isChatLoading: state.chat.isLoading
     };
 };
 

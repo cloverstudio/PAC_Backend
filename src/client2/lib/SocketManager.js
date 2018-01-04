@@ -12,6 +12,7 @@ import user from './user';
 import Encryption from "./encryption/encryption";
 import { store } from '../index';
 import { chat } from '../actions';
+import WindowNotificationManager from './WindowNotificationManager';
 
 class SocketManager {
 
@@ -61,6 +62,8 @@ class SocketManager {
 
             store.dispatch(actions.chat.receiveMessage(obj));
 
+            WindowNotificationManager.handleMessage(obj);
+            
         });
 
         this.ioNsp.on('updatemessages', function (ary) {

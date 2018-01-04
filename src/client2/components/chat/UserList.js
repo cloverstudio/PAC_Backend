@@ -46,12 +46,12 @@ class UserList extends Component {
         }, constant.SearchInputTimeout);
     }
 
-    componentWillReceiveProps(nextProps) {
+    searchOnSubmit = e => {
+        e.preventDefault();
 
-    }
+        const inputElement = e.target.firstElementChild;
 
-    componentDidMount() {
-
+        this.props.searchUserList(inputElement.value);
     }
 
     render() {
@@ -67,7 +67,7 @@ class UserList extends Component {
                 <div onScroll={this.onScroll} className="usersview">
 
                     <header className="media-list-header b-0">
-                        <form className="lookup lookup-lg w-100 bb-1 border-light">
+                        <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
                             <input onChange={this.onInputChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
                         </form>
                     </header>

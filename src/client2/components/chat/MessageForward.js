@@ -40,7 +40,7 @@ class MessageForward extends Component {
                 <div
                     className="modal modal-center fade show"
                     id="modal-center"
-                    tabindex="-1"
+                    tabIndex="-1"
                     style={mainStyle}
                 >
                     <div className="modal-dialog messageForward">

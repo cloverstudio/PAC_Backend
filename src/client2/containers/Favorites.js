@@ -43,6 +43,26 @@ class Favotites extends Base {
         window.removeEventListener('scroll', this.onScroll);
     }
 
+    selected = (message) => {
+
+        const chatIdSplit = message.roomID.split("-");
+        const chatType = chatIdSplit[0];
+
+        if (chatType == constant.ChatTypePrivate) {
+            this.props.openChatByUser(message.userModelTarget);
+        }
+        else if (chatType == constant.ChatTypeGroup) {
+            if (typeof message.group === 'undefined') return this.props.showToast('This group is deleted.') 
+            else this.props.openChatByGroup(message.group)
+        }
+        else if (chatType == constant.ChatTypeRoom) {
+            if (typeof message.room === 'undefined') return this.props.showToast('This room is deleted.') 
+            else this.props.openChatByRoom(message.room)
+        }
+
+        this.props.loadNewChat(message.roomID, message._id);
+    }
+
     onScroll = (e) => {
         
         if(this.props.pagingReachesEnd)
@@ -157,12 +177,24 @@ class Favotites extends Base {
 
                                 switch(message.type){
                                     case constant.MessageTypeFile:
-                                        messageContent = (
-                                        <span>
-                                            <i className="ti-zip text-secondary fs-45 mb-3"></i>
-                                            <br/>
-                                            <span className="fw-600">{message.file.file.name}</span>
-                                        </span>)
+                                        const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
+
+                                        if (fileMimeType === constant.imgMimeType){
+                                            messageContent = (
+                                               <span className="image-message">
+                                                   <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}/>
+                                                   <br/>
+                                                   <span className="fw-600">{message.file.file.name}</span>
+                                               </span>)
+                                       }
+                                       else {
+                                            messageContent = (
+                                                <span>
+                                                    <i className="ti-zip text-secondary fs-45 mb-3"></i>
+                                                    <br/>
+                                                    <span className="fw-600">{message.file.file.name}</span>
+                                                </span>)
+                                        }
                                         break;
                                     case constant.MessageTypeSticker:
                                         messageContent = <img className="favorite-sticker" src={config.mediaBaseURL + message.message}/>
@@ -187,7 +219,7 @@ class Favotites extends Base {
                                         </a>
                                     </h6>
 
-                                        <div className="code-preview">
+                                        <div className="code-preview" onClick={e => this.selected(message)}>
                                             <div className="media">
                                                 <span className="avatar">
                                                     <AvatarImage fileId={userAvatarId} type={constant.AvatarUser} />
@@ -248,6 +280,12 @@ const mapDispatchToProps = (dispatch) => {
 
         loadMessages: (page) => dispatch(actions.favorites.loadMessages(page)),
         startRemoveFavorite: (messageId) => dispatch(actions.favorites.startRemoveFavorite(messageId)),
+
+        openChatByUser: (user) => dispatch(actions.chat.openChatByUser(user)),
+        openChatByGroup: (group) => dispatch(actions.chat.openChatByGroup(group)),
+        openChatByRoom: (room) => dispatch(actions.chat.openChatByRoom(room)),
+        loadNewChat: (roomId, messageId) => dispatch(actions.chat.loadNewChat(roomId, messageId, constant.ChatDirectionAllTo)),
+        showToast: msg => dispatch(actions.notification.showToast(msg))
     };
 };
 

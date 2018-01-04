@@ -11,6 +11,24 @@ class MessageText extends Component {
   static propTypes = {};
   constructor() {
     super();
+    this.state = ({
+        initiallyScrolledToSearchTarget: false
+    })
+  }
+
+  componentDidMount(){
+    if (this.targetMessage.classList.contains('search-target')){
+        if (!this.state.initiallyScrolledToSearchTarget){
+
+            this.props.lockForScroll();
+            this.targetMessage.scrollIntoView();
+
+            this.setState({
+                initiallyScrolledToSearchTarget: true
+            })
+        }
+ 
+    }
   }
 
   render() {
@@ -20,11 +38,11 @@ class MessageText extends Component {
     
     const messageContent = Encryption.decryptText(message.message);
     
-    messageClass += message.isFavorite && messageContent.length > 0 ?  " bg-pink" : "";
+    messageClass += message.isFavorite && messageContent.length > 0 ?  " favorite-message" : "";
 
     let formattedMessages;
 
-    if (messageContent.length === 0) {
+    if (messageContent.length === 0 && typeof message.deleted !== 'undefined' && message.deleted !== 0 ) {
       formattedMessages = <i>This message is deleted.</i>;
     } else {
       //todo: better way to mark links
@@ -38,8 +56,12 @@ class MessageText extends Component {
       );
     }
 
+    if (this.props.searchTarget === message._id) {
+        messageClass += ' search-target'
+    }
+
     return (
-      <p className={messageClass} onClick={e => this.props.getMessageInfo(message)}>
+      <p className={messageClass} ref={message => this.targetMessage = message} onClick={e => this.props.getMessageInfo(message)}>
         {formattedMessages}
       </p>
     );
@@ -47,7 +69,9 @@ class MessageText extends Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    searchTarget: state.chat.loadAllToTarget
+  };
 };
 
 const mapDispatchToProps = dispatch => {

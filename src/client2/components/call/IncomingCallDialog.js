@@ -37,7 +37,7 @@ class IncomingCallDialog extends Component {
 
             <div className="modal-open">
             
-                <div className="modal modal-center fade show" id="modal-center" tabindex="-1" style={mainStyle}>
+                <div className="modal modal-center fade show" id="modal-center" tabIndex="-1" style={mainStyle}>
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-body">

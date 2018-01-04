@@ -79,6 +79,7 @@ export const ChatReceiveMessageInChat = "Chat/ReceiveMessageInChat";
 export const ChatForwardMessage = "Chat/ForwardMessage";
 export const ChatForwardMessageFailed = "Chat/ForwardMessageFailed";
 export const ChatUpdateMessages = "Chat/UpdateMessages";
+export const ChatLoadMessageStart = "Chat/LoadMessageStart";
 
 export const ChatStartedTyping = "Chat/StartedTyping";
 export const ChatStoppedTyping = "Chat/StoppedTyping";
