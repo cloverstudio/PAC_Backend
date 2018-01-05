@@ -78,9 +78,9 @@ class Conversation extends Component {
     handleDragEnter = e => {
         e.preventDefault();
 
-        if (e.target.classList.contains("chat-content")) {
-            e.target.classList.add("dragging-over");
-            this.props.showDropNotification("Drop files now");
+        if (e.currentTarget.classList.contains("chat-content")) {
+            e.currentTarget.classList.add("dragging-over");
+            this.dropIndicator.classList.add('drag-drop-indicator-visible')
         }
     };
 
@@ -93,7 +93,7 @@ class Conversation extends Component {
         });
         if (e.target.classList.contains("chat-content")) {
             e.target.classList.remove("dragging-over");
-            this.props.hideDropNotification();
+            this.dropIndicator.classList.remove('drag-drop-indicator-visible')
         }
     };
 
@@ -101,8 +101,9 @@ class Conversation extends Component {
         e.preventDefault();
         if (e.target.classList.contains("chat-content")) {
             e.target.classList.remove("dragging-over");
-            this.props.hideDropNotification();
+            this.dropIndicator.classList.remove('drag-drop-indicator-visible')
         }
+        
     };
 
     handleDragOver = e => {
@@ -272,6 +273,12 @@ class Conversation extends Component {
 
                 <ChatInput setLockedForScrolling={this.setLockedForScrolling}/>
                 <Stickers />
+
+                <div className="drag-drop-indicator" ref={dropIndicator => this.dropIndicator = dropIndicator}>
+                    <i className="fa fa-cloud-upload" ></i>
+                    <p> Drop files now </p>
+                </div>
+
             </div>
         );
     }
@@ -296,10 +303,7 @@ const mapDispatchToProps = dispatch => {
     return {
         loadOldMessages: (chatID, lastMessage) =>
             dispatch(actions.chat.loadOldMessages(chatID, lastMessage)),
-        startFileUpload: file => dispatch(actions.chat.startFileUpload(file)),
-        showDropNotification: message =>
-            dispatch(actions.notification.showToast(message)),
-        hideDropNotification: () => dispatch(actions.notification.hideToast())
+        startFileUpload: file => dispatch(actions.chat.startFileUpload(file))
     };
 };
 

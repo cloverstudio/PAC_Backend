@@ -87,6 +87,7 @@
         .chat-container{
         
             overflow-x: hidden;
+            overflow-y: hidden;
             margin-bottom: 0px;
 
             position:relative;
@@ -271,6 +272,9 @@
                     flex: 1;
                     background-color: transparent;
                     padding: 8px 10px;
+                    &:focus{
+                        outline:none;
+                    }
                 }
                 .gap-items{
                     margin: 0 10px 6px 10px;
@@ -418,13 +422,12 @@
     *{
         box-sizing: border-box;
     }
-    span{
+    
+    .imageView-close {
+        cursor: pointer;
         font-size: 20px;
         color: #fff;
         position: absolute;
-    }
-    .imageView-close {
-        cursor: pointer;
     }
     
     .imageView-close::-moz-focus-inner {
@@ -461,6 +464,10 @@
     .loaded{
         opacity:1;
     }
+
+    .spinner-dots{
+        position:absolute;
+    }
     
 }
 
@@ -483,4 +490,40 @@
     .btn{
         margin:10px;
     }
+}
+
+
+.drag-drop-indicator{
+
+    pointer-events: none;
+    border: 4px dashed;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.075);
+    z-index: 100;
+    transition: all 0.3s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transform: translateY(100%); 
+    opacity:0.5;
+
+    i{
+        font-size:60px;
+    }
+    p{
+        font-size: 20px;
+        margin-top: 50px;
+    }
+            
+}
+
+.drag-drop-indicator-visible{
+    transform: translateY(0px);
+    opacity:1;
+                   
 }

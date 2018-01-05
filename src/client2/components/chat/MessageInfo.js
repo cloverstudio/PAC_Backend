@@ -131,7 +131,8 @@ class MessageInfo extends Component {
                                         )
                                     )}
                                     <br />
-                                    {userName}
+                                    <AvatarImage type={constant.AvatarUser} user={this.props.selectedMessage.user}/>
+                                    {' '+userName}
                                 </p>
                             </div>
                             : null}

@@ -186,7 +186,7 @@ class GroupInfo extends Component {
                                         <span className={classname}>
                                             <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                         </span>
-                                        <p className="title">{user.name} {user.onlineStatus}</p>
+                                        <p className="title">{user.name}</p>
                                         <a className="media-action" href="#"><i className="fa fa-comment"></i></a>
                                     </div>
 
