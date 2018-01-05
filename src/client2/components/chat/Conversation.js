@@ -90,6 +90,7 @@ class Conversation extends Component {
             const data = new FormData();
             data.append("file", file);
             this.props.startFileUpload(data);
+            this.setLockedForScrolling(false);
         });
         if (e.target.classList.contains("chat-content")) {
             e.target.classList.remove("dragging-over");
