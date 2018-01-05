@@ -22,8 +22,14 @@ class WindowNotificationManager{
         if (this.permission) return;
 
         if (Notification.permission !== 'denied'){
-            Notification.requestPermission()
-            .then(permission => this.permission = permission)
+            try{
+                Notification.requestPermission()
+                .then(permission => this.permission = permission)
+            }
+            catch(error){
+                Notification.requestPermission(p => this.permission = p)
+            }
+            
         }
     }
 
@@ -64,7 +70,7 @@ class WindowNotificationManager{
     handleMessage = obj => {
         if (user.userData._id === obj.user._id) return;
 
-        if (this.permission === 'granted'){
+        if (this.permission === 'granted' || Notification.permission === 'granted'){
 
             const chatIdSplit = obj.roomID.split("-");
             const chatType = parseInt(chatIdSplit[0]);
