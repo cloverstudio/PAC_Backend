@@ -1,0 +1,380 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Conversation Management"}}</li>
+</ol>
+
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Conversation Management"}}
+        </h1>
+    </div>
+
+    <div class="header-action">
+        <nav class="nav">
+            <a class="nav-link active" href="/conversation/users">Private Chats</a>
+            <a class="nav-link" href="/conversation/groups">Group Chats</a>
+            <a class="nav-link" href="/conversation/rooms">Rooms</a>
+        </nav>
+    </div>
+
+</header>
+
+<hr /> {{> alertMessage }}
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    {{#if firstUser}}
+
+                        <div class="col-sm-3">
+                            <a class="btn btn-label btn-info" href="/admin/conversation/user">
+                                <label>
+                                    <i class="ti-arrow-left"></i>
+                                </label> {{l10n "Back"}}</a>
+                        </div>
+
+                    {{/if}}
+
+                    {{#if secondUser}}
+                        <div class="col-sm-3"></div>
+                    {{/if}}
+
+                    <div class="col-sm-6">
+
+                        {{#unless firstUser}}
+                            <form method="get" action="/admin/conversation/user" id="searchform" class="form-inline">
+                        {{/unless}}
+
+                        {{#if firstUser}}
+
+                            {{#unless secondUser}}
+                                <form method="get" action="/admin/conversation/user/{{firstUser._id}}" id="searchform" class="form-inline">
+                            {{/unless}}
+
+                            {{#if secondUser}}
+                                <form method="get" action="/admin/conversation/user/{{firstUser._id}}/{{secondUser._id}}" id="searchform" class="form-inline">
+                            {{/if}}
+
+                        {{/if}}
+
+                        <div class="form-group">
+                            <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+                        </div>
+
+                        {{#if keyword}}
+                            <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger">{{l10n "Clear"}}</button>
+                        {{/if}}
+
+                        <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="row">
+
+                    {{#if firstUser}}
+
+                        <div class="col-sm-3 {{#unless secondUser}} push-sm-3 {{/unless}}">
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <strong>
+                                                {{l10n "First User"}}
+                                            </strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{firstUser._id}}/'">
+
+                                        <td width="25%">
+                                            <img class="list-thumbnail img-rounded" src="{{showAvatar firstUser.avatar.thumbnail.nameOnServer _id}}" />
+                                        </td>
+
+                                        <td class="list-edit-link">
+                                            {{firstUser.name}}
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {{/if}}
+
+                    {{#if secondUser}}
+
+                        <div class="col-sm-3 push-sm-3">
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <strong>
+                                                {{l10n "Second User"}}
+                                            </strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{firstUser._id}}/{{secondUser._id}}'">
+
+                                        <td width="25%">
+                                            <img class="list-thumbnail img-rounded" src="{{showAvatar secondUser.avatar.thumbnail.nameOnServer _id}}" />
+                                        </td>
+
+                                        <td class="list-edit-link">
+                                            {{secondUser.name}}
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {{/if}}
+
+                    {{#unless secondUser}}
+                        <div class="col-sm-3">
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <strong>
+                                                {{#unless firstUser}}
+                                                    {{l10n "First User"}}
+                                                {{/unless}}
+                                                {{#if firstUser}}
+                                                    {{l10n "Second User"}}
+                                                {{/if}}
+                                            </strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {{#each list}}
+
+                                        {{#unless ../firstUser}}
+                                            <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{_id}}'">
+                                        {{/unless}}
+
+                                        {{#if ../firstUser}}
+                                            <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{../firstUser._id}}/{{_id}}'">
+                                        {{/if}}
+
+                                        <td width="25%">
+                                            <img class="list-thumbnail img-rounded" src="{{showAvatar avatar.thumbnail.nameOnServer _id}}" />
+                                        </td>
+
+                                        <td class="list-edit-link">
+                                            {{name}}
+                                        </td>
+
+                                        </tr>
+
+                                    {{/each}}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        {{#unless firstUser}}
+
+                            <div class="col-sm-3 ">
+
+                            </div>
+
+                        {{/unless}}
+
+                    {{/unless}}
+
+                    {{#unless secondUser}}
+                        <div class="col-sm-6">
+
+                            <div class="callout callout-success" role="alert">
+                                <h5>{{l10n "Please select user"}}</h5>
+                                <p>{{l10n "In Next step you will select another user"}}</p>
+                            </div>
+
+                        </div>
+                    {{/unless}}
+
+                    {{#if secondUser}}
+
+                        <div class="col-sm-6">
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">
+                                            {{l10n "Messages"}}
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {{#each list}}
+
+                                        <tr>
+                                            <td width="15%" rowspan="2">
+                                                <img class="list-thumbnail img-rounded" src="{{showAvatar user.avatar.thumbnail.nameOnServer user._id}}" />
+                                            </td>
+
+                                            <td class="list-edit-link">
+                                                {{#isEqual type 1}}
+                                                    <strong>{{message}}</strong>
+                                                {{/isEqual}}
+
+                                                {{#isEqual type 2}}
+                                                    <a href="/api/v2/file/{{file.file.id}}" target="_blank">
+                                                        {{file.file.name}}
+                                                    </a>
+                                                    <br />
+
+                                                    <i>{{size file.file.size}}</i>
+                                                {{/isEqual}}
+
+                                                {{#isEqual type 3}}
+                                                    Shared Location
+                                                    <br /> Lat: {{location.lat}} Lon: {{location.lat}}
+                                                {{/isEqual}}
+
+                                                {{#isEqual type 3}}
+                                                    Shared Contact
+                                                {{/isEqual}}
+
+                                                {{#isEqual type 5}}
+                                                    <img width="150px" src="{{message}}">
+                                                {{/isEqual}}
+
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td>
+                                                By {{user.name}} {{formatDate created}}
+                                            </td>
+
+                                        </tr>
+
+                                    {{/each}}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {{/if}}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{> paginator }}
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{l10n "Reset Device"}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <strong>{{l10n "Please confirm and press Procees to proceed"}}</strong>
+                <p></p>
+                <ul>
+                    <li>{{l10n "The user will be logged out from all devices."}}</li>
+                </ul>
+
+                <p>{{l10n "If multiple device option is not allowed in settings"}}</p>
+
+                <ul>
+                    <li>{{l10n "Cache will be wiped from current device when anyone tried to sign in again from the device."}}</li>
+                    <li>{{l10n "The device will be added to block list."}}</li>
+                    <li>{{l10n "The user can sign in again with another device."}}</li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{l10n "Close"}}</button>
+                <a id="btnResetDevice" href="#" class="btn btn-primary">{{l10n "Procees"}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#btn-clear').on('click', function () {
+            $('#tb-keyword').val('');
+            $('#searchform').submit();
+        });
+
+        $('#chk-showUsersWithoutDepartments').on('change', function () {
+            $('#searchform').submit();
+        });
+
+    });
+
+    function openModal(id) {
+
+        $('#btnResetDevice').attr('href', "/admin/user/resetDevice/" + id);
+
+        $('#myModal').modal({
+            keyboard: false
+        })
+
+    }
+
+</script>

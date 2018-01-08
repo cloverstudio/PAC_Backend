@@ -25,6 +25,7 @@ var OrganizationAdminMain = {
         router.use("/settings", require("./Controllers/SettingsController").init(app));
         router.use("/apikey", require("./Controllers/APIKeyController").init(app));
         router.use("/webhook", require("./Controllers/WebhookController").init(app));
+        router.use("/conversation", require("./Controllers/ConversationController").init(app));
 
         router.get('/file', function (request, response) {
 

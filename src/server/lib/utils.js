@@ -11,11 +11,11 @@ var sha1 = require("sha1");
 var Const = require("../lib/consts");
 var Config = require("./init");
 
-(function(global) {
+(function (global) {
   "use strict;";
 
   // Class ------------------------------------------------
-  function Utils() {}
+  function Utils() { }
 
   // Header -----------------------------------------------
   Utils.prototype.getRandomString = getRandomString;
@@ -42,6 +42,8 @@ var Config = require("./init");
   Utils.prototype.getRandomNumber = getRandomNumber;
   Utils.prototype.sendSMS = sendSMS;
   Utils.prototype.ApiV3StyleId = ApiV3StyleId;
+  Utils.prototype.readableSize = readableSize;
+
 
   // Implementation ---------------------------------------
 
@@ -112,7 +114,7 @@ var Config = require("./init");
   function now() {
     Date.now =
       Date.now ||
-      function() {
+      function () {
         return +new Date();
       };
 
@@ -268,7 +270,7 @@ var Config = require("./init");
   }
 
   function stripPrivateData(obj) {
-    _.forEach(obj, function(child, key, list) {
+    _.forEach(obj, function (child, key, list) {
       if (_.isObject(child)) stripPrivateData(child);
       else {
         // delete keys to hide
@@ -327,6 +329,18 @@ var Config = require("./init");
 
       return obj;
     });
+  }
+
+  function readableSize(bytes) {
+    if (bytes < 1000)
+      return bytes + "B";
+    else if (bytes < 1000 * 1000)
+      return new Number(bytes / 1000).toFixed(2) + " kB";
+    else if (bytes < 1000 * 1000 * 1000)
+      return new Number(bytes / 1000 / 1000).toFixed(2) + " mB";
+    else if (bytes > 1000 * 1000 * 1000)
+      return new Number(bytes / 1000 / 1000 / 1000).toFixed(2) + " gB";
+
   }
   // Exports ----------------------------------------------
   module["exports"] = new Utils();
