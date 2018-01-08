@@ -82,6 +82,7 @@ class ChatInput extends Component {
             data.append('file', file);
             this.props.startFileUpload(data);
         });
+        this.props.setLockedForScrolling(false);
         
     }
 

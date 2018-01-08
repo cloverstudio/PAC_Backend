@@ -4,6 +4,7 @@ import * as types from '../actions/types';
 
 import * as constants from '../lib/const';
 import * as utils from '../lib/utils';
+import user from '../lib/user';
 
 import Encryption from '../lib/encryption/encryption';
 
@@ -66,7 +67,7 @@ const historyList = (state = [], action) => {
                 history.lastMessage = newMessage;
                 history.lastUpdateUser = newMessage.user;
 
-                if (!action.currentChat)
+                if (!action.currentChat && newMessage.user._id !== user.userData._id)
                     history.unreadCount = history.unreadCount + 1;
 
             }

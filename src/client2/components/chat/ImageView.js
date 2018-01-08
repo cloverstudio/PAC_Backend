@@ -35,7 +35,11 @@ class ImageView extends Component {
                         : null}
 
                     {this.state.isLoading 
-                        ? <span>Loading...</span>
+                        ? <div className="spinner-dots">
+                            <span className="dot1"></span>
+                            <span className="dot2"></span>
+                            <span className="dot3"></span>
+                        </div>
                         : null}
                     
                     <span className="imageView-close" 
