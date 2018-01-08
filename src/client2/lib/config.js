@@ -10,6 +10,6 @@ export const AESPassword = "cl0v3r-S+uD10-h4X0r1";
 export const phoneNumberSignin = false;
 export const mediaBaseURL = "http://dev.spika.chat";
 
-export const BasePath = "/";
+export const BasePath = "";
 export const lang = "en";
 
