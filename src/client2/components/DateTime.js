@@ -9,7 +9,40 @@ import * as config from '../lib/config';
 
 class DateTime extends Component {
 
-    static propTypes = {
+    constructor(props){
+        super(props);
+    
+        this.state = {
+            formattedTimeStamp : this.formatDate(this.props.timestamp)
+        }
+    }
+
+    //component updates itself each minute for the first 60minutes or when receiving new props
+    componentDidMount(){
+        this.intervalID = setInterval( () => this.updateDate(this.props.timestamp), 60000)
+    }
+
+    componentDidUpdate(prevProps){
+        
+        if (this.props.timestamp !== prevProps.timestamp){
+            this.setState({
+                formattedTimeStamp : this.formatDate(this.props.timestamp)
+            })
+        }
+    }
+
+    updateDate(ut){
+        let interval = (new Date().getTime() - this.props.timestamp) / 1000;
+
+        if (interval < 60*60) this.setState({formattedTimeStamp : this.formatDate(this.props.timestamp)})
+
+        else clearInterval(this.intervalID)
+        
+        
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.intervalID);
     }
 
     formatDate(ut){
@@ -25,12 +58,9 @@ class DateTime extends Component {
         // will display time in 10:30:23 format
         var month = date.getMonth() + 1;
         var day = date.getDate();
-        var year = date.getYear();
+        var year = date.getFullYear();
         
         // dont want include browser detaction library so use this dumb style.
-        if(year < 1000){
-            year += 1900;
-        }
         
         if(hours < 10)
             hours = '0' + hours;
@@ -40,7 +70,6 @@ class DateTime extends Component {
             
         if(seconds < 10)
             seconds = '0' + seconds;
-        
         
         if(month < 10)
             month = '0' + month;
@@ -75,12 +104,10 @@ class DateTime extends Component {
     }
 
     render() {
-        
-        const formetedTime = this.formatDate(this.props.timestamp);
 
         return (
             <time dateTime={this.props.timestamp}>
-                {formetedTime}
+                {this.state.formattedTimeStamp}
             </time>
         );
     }
