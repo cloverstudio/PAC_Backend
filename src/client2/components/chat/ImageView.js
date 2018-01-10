@@ -27,7 +27,9 @@ class ImageView extends Component {
     render() {
         
         return(
-            <div className={this.props.visibility ? 'imageView imageView-opened': 'imageView'}>
+            <div className={this.props.visibility ? 'imageView imageView-opened': 'imageView'}
+            onClick={ e => e.target.nodeName==='DIV' ? this.props.hideImageView() : false }>
+            
                     {this.props.visibility 
                         ? <img className={this.state.isLoading ? 'imageView-img': 'imageView-img loaded'} 
                         src={config.APIEndpoint + constant.ApiUrlFile + this.props.imgId}
