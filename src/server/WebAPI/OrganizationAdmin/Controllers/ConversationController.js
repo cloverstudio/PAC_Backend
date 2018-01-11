@@ -165,6 +165,7 @@ ConversationController.prototype.init = function (app) {
         var organizationModel = OrganizationModel.get();
         var userModel = UserModel.get();
         var groupModel = GroupModel.get();
+        var messageModel = MessageModel.get();
         var roomModel = RoomModel.get();
 
         var keyword = request.session.conversationUser2Keyword;
@@ -206,14 +207,81 @@ ConversationController.prototype.init = function (app) {
             },
             function (result, done) {
 
+                var searchId = new RegExp('^.*' + Utils.escapeRegExp(firstUserId) + '.*$', "i");
+                var privateConversation = new RegExp('^.*' + Utils.escapeRegExp("1") + '.*$', "i");
+
+                messageModel.find({
+                    $and: [
+                        { roomID: searchId },
+                        { roomID: privateConversation }
+                    ]
+                }).
+
+                    exec(function (err, findMessages) {
+
+                        if (!findMessages) {
+                            return response.redirect('/admin/conversation/user/');
+                        }
+
+                        result.findMessages = findMessages;
+                        done(err, result);
+                    });
+
+            },
+            function (result, done) {
+
                 userModel.find(criteria).
                     limit(Const.pagingRows).
                     skip((page - 1) * Const.pagingRows).
                     sort({ created: "asc" }).
                     exec(function (err, findUsers) {
-                        result.list = findUsers;
+                        result.listAll = findUsers;
                         done(err, result);
                     });
+
+            },
+            function (result, done) {
+
+                result.list = []
+                var count = 0;
+                for (var i = 0; i < result.findMessages.length; i++) {
+
+                    for (var j = 0; j < result.listAll.length; j++) {
+
+                        if (result.findMessages[i].roomID.indexOf(result.listAll[j]._id) != -1) {
+
+                            if (result.listAll[j]._id != firstUserId) {
+
+                                if (result.list.length != 0) {
+
+                                    count = 0;
+                                    for (var k = 0; k < result.list.length; k++) {
+
+                                        if (result.list[k] != result.listAll[j]) {
+
+                                            count += 1
+                                        }
+                                    }
+                                    if (count == result.list.length) {
+                                        result.list.push(result.listAll[j])
+                                    }
+
+                                } else {
+
+                                    result.list.push(result.listAll[j])
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                done(null, result);
+
 
             },
             function (result, done) {
@@ -410,6 +478,445 @@ ConversationController.prototype.init = function (app) {
                 templateParams.keyword = keyword;
 
                 self.render(request, response, '/Conversation/User', templateParams);
+
+            });
+
+    });
+
+    router.get('/group', checkUserAdmin, function (request, response) {
+
+        var templateParams = {
+            page: menuItemName,
+            openMenu: menuItemName
+        };
+
+        var page = request.query.page;
+        if (!page)
+            page = 1;
+
+        var keyword = request.query.keyword;
+
+        // if keyrord is exist save to session and redirect to same page
+        if (keyword != undefined) {
+            request.session.conversationUser3Keyword = keyword;
+            return response.redirect('/admin/conversation/group');
+        }
+
+        var baseUser = request.session.user;
+        var organizationModel = OrganizationModel.get();
+        var userModel = UserModel.get();
+        var groupModel = GroupModel.get();
+        var roomModel = RoomModel.get();
+
+        var keyword = request.session.conversationUser3Keyword;
+
+        var organizationId = baseUser.organizationId;
+        var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
+
+        var criteria = {};
+        criteria.organizationId = organizationId;
+        criteria.type = 1;
+        var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
+
+        if (!organizationAdmin) {
+            criteria.groups = { $in: baseUser.groups };
+            criteria._id = { $ne: baseUser._id };
+        }
+
+        if (!_.isEmpty(keyword)) {
+            criteria.name = new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i");
+        }
+
+        async.waterfall([
+
+            function (done) {
+
+                var result = {};
+
+                groupModel.find(criteria).
+                    limit(Const.pagingRows).
+                    skip((page - 1) * Const.pagingRows).
+                    sort({ created: "asc" }).
+                    exec(function (err, findGroups) {
+
+                        result.list = findGroups;
+                        done(err, result);
+                    });
+
+            },
+            function (result, done) {
+
+                // get count
+                groupModel.count(criteria, function (err, countResult) {
+
+                    result.count = countResult;
+                    done(null, result);
+
+                });
+
+            }
+        ],
+            function (err, result) {
+
+                if (err)
+                    templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
+                else
+                    templateParams.list = result.list;
+
+                var listCountFrom = (result.count) ? Const.pagingRows * (page - 1) + 1 : result.count;
+                var listCountTo = (Const.pagingRows * page > result.count) ? result.count : Const.pagingRows * page;
+
+                templateParams.paging = {
+
+                    page: page,
+                    count: result.count,
+                    listCountFrom: listCountFrom,
+                    listCountTo: listCountTo,
+                    rows: Const.pagingRows,
+                    baseURL: "/admin/conversation/group?page="
+
+                }
+
+                templateParams.keyword = keyword;
+
+                self.render(request, response, '/Conversation/Group', templateParams);
+
+            });
+
+    });
+
+    // group id selected
+    router.get('/group/:groupId', checkUserAdmin, function (request, response) {
+
+        var groupId = request.params.groupId;
+        var templateParams = {
+            page: menuItemName,
+            openMenu: menuItemName
+        };
+
+        var page = request.query.page;
+        if (!page)
+            page = 1;
+
+        var keyword = request.query.keyword;
+
+        // if keyword exists, save it to session and redirect to same page
+        if (keyword != undefined) {
+            request.session.conversationUser4Keyword = keyword;
+            return response.redirect('/admin/conversation/group/' + groupId);
+        }
+
+        var baseUser = request.session.user;
+        var organizationModel = OrganizationModel.get();
+        var userModel = UserModel.get();
+        var groupModel = GroupModel.get();
+        var roomModel = RoomModel.get();
+        var messageModel = MessageModel.get();
+
+        var keyword = request.session.conversationUser4Keyword;
+
+        var organizationId = baseUser.organizationId;
+        var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
+
+        async.waterfall([
+
+            function (done) {
+
+                var result = {};
+
+                groupModel.findOne({
+                    _id: groupId
+                }).
+
+                    exec(function (err, findGroup) {
+
+                        if (!findGroup) {
+                            return response.redirect('/admin/conversation/group/');
+                        }
+
+                        result.selectedGroup = findGroup;
+                        done(err, result);
+                    });
+
+            },
+            function (result, done) {
+
+                result.criteria = {
+                    roomID: Const.chatTypeGroup + "-" + result.selectedGroup._id
+                }
+
+                if (keyword && keyword.length > 0) {
+                    result.criteria.message = RegExp("^.*" + Utils.escapeRegExp(keyword) + ".*$", "mi");
+                }
+
+                messageModel.find(result.criteria).
+                    limit(Const.pagingRows).
+                    skip((page - 1) * Const.pagingRows).
+                    sort({ created: "desc" }).
+                    exec(function (err, findMeesages) {
+                        result.messages = findMeesages;
+                        result.count = findMeesages.length;
+                        done(err, result);
+                    });
+
+
+            },
+            function (result, done) {
+
+                MessageModel.populateMessages(result.messages, (err, messages) => {
+                    result.messages = messages;
+                    done(err, result);
+                });
+
+            }
+        ],
+
+            function (err, result) {
+
+                if (err)
+                    templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
+                else
+                    templateParams.message = result.messages;
+
+                templateParams.selectedGroup = result.selectedGroup;
+
+                var listCountFrom = (result.count) ? Const.pagingRows * (page - 1) + 1 : result.count;
+                var listCountTo = (Const.pagingRows * page > result.count) ? result.count : Const.pagingRows * page;
+
+                templateParams.paging = {
+                    page: page,
+                    count: result.count,
+                    listCountFrom: listCountFrom,
+                    listCountTo: listCountTo,
+                    rows: Const.pagingRows,
+                    baseURL: "/admin/conversation/group/" +
+                        groupId + "?page="
+                }
+
+                templateParams.keyword = keyword;
+
+                self.render(request, response, '/Conversation/Group', templateParams);
+
+            });
+
+    });
+
+    router.get('/room', checkUserAdmin, function (request, response) {
+
+        var templateParams = {
+            page: menuItemName,
+            openMenu: menuItemName
+        };
+
+        var page = request.query.page;
+        if (!page)
+            page = 1;
+
+        var keyword = request.query.keyword;
+
+        // if keyword exists, save it to session and redirect to same page
+        if (keyword != undefined) {
+            request.session.conversationUser5Keyword = keyword;
+            return response.redirect('/admin/conversation/room');
+        }
+
+        var baseUser = request.session.user;
+        var organizationModel = OrganizationModel.get();
+        var userModel = UserModel.get();
+        var groupModel = GroupModel.get();
+        var roomModel = RoomModel.get();
+
+        var keyword = request.session.conversationUser5Keyword;
+
+        var organizationId = baseUser.organizationId;
+        var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
+
+        var criteria = {};
+        var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
+
+        if (!organizationAdmin) {
+            criteria.groups = { $in: baseUser.groups };
+            criteria._id = { $ne: baseUser._id };
+        }
+
+        if (!_.isEmpty(keyword)) {
+            criteria.name = new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i");
+        }
+
+        async.waterfall([
+
+            function (done) {
+
+                var result = {};
+
+                roomModel.find(criteria).
+                    limit(Const.pagingRows).
+                    skip((page - 1) * Const.pagingRows).
+                    sort({ created: "asc" }).
+                    exec(function (err, findRooms) {
+
+                        result.list = findRooms;
+                        done(err, result);
+
+                    });
+
+            },
+            function (result, done) {
+
+                // get count
+                roomModel.count(criteria, function (err, countResult) {
+
+                    result.count = countResult;
+                    done(null, result);
+
+                });
+
+            }
+        ],
+            function (err, result) {
+
+                if (err)
+                    templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
+                else
+                    templateParams.list = result.list;
+
+                var listCountFrom = (result.count) ? Const.pagingRows * (page - 1) + 1 : result.count;
+                var listCountTo = (Const.pagingRows * page > result.count) ? result.count : Const.pagingRows * page;
+
+                templateParams.paging = {
+
+                    page: page,
+                    count: result.count,
+                    listCountFrom: listCountFrom,
+                    listCountTo: listCountTo,
+                    rows: Const.pagingRows,
+                    baseURL: "/admin/conversation/room?page="
+
+                }
+
+                templateParams.keyword = keyword;
+
+                self.render(request, response, '/Conversation/Room', templateParams);
+
+            });
+
+    });
+
+    // room id selected
+    router.get('/room/:roomId', checkUserAdmin, function (request, response) {
+
+        var roomId = request.params.roomId;
+        var templateParams = {
+            page: menuItemName,
+            openMenu: menuItemName
+        };
+
+        var page = request.query.page;
+        if (!page)
+            page = 1;
+
+        var keyword = request.query.keyword;
+
+        // if keyword exists, save it to session and redirect to same page
+        if (keyword != undefined) {
+            request.session.conversationUser6Keyword = keyword;
+            return response.redirect('/admin/conversation/room/' + roomId);
+        }
+
+        var baseUser = request.session.user;
+        var organizationModel = OrganizationModel.get();
+        var userModel = UserModel.get();
+        var groupModel = GroupModel.get();
+        var roomModel = RoomModel.get();
+        var messageModel = MessageModel.get();
+
+        var keyword = request.session.conversationUser6Keyword;
+
+        var organizationId = baseUser.organizationId;
+        var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
+
+        async.waterfall([
+
+            function (done) {
+
+                var result = {};
+
+                roomModel.findOne({
+                    _id: roomId
+                }).
+
+                    exec(function (err, findRoom) {
+
+                        if (!findRoom) {
+                            return response.redirect('/admin/conversation/room');
+                        }
+
+                        result.selectedRoom = findRoom;
+                        done(err, result);
+
+                    });
+
+            },
+            function (result, done) {
+
+                result.criteria = {
+                    roomID: Const.chatTypeRoom + "-" + result.selectedRoom._id
+                }
+
+                if (keyword && keyword.length > 0) {
+                    result.criteria.message = RegExp("^.*" + Utils.escapeRegExp(keyword) + ".*$", "mi");
+                }
+
+                messageModel.find(result.criteria).
+                    limit(Const.pagingRows).
+                    skip((page - 1) * Const.pagingRows).
+                    sort({ created: "desc" }).
+                    exec(function (err, findMeesages) {
+
+                        result.messages = findMeesages;
+                        result.count = findMeesages.length;
+                        done(err, result);
+
+                    });
+
+
+            },
+
+            function (result, done) {
+
+                MessageModel.populateMessages(result.messages, (err, messages) => {
+                    result.messages = messages;
+                    done(err, result);
+                });
+
+            }
+        ],
+
+            function (err, result) {
+
+                if (err)
+                    templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
+                else
+                    templateParams.message = result.messages;
+
+                templateParams.selectedRoom = result.selectedRoom;
+
+                var listCountFrom = (result.count) ? Const.pagingRows * (page - 1) + 1 : result.count;
+                var listCountTo = (Const.pagingRows * page > result.count) ? result.count : Const.pagingRows * page;
+
+                templateParams.paging = {
+                    page: page,
+                    count: result.count,
+                    listCountFrom: listCountFrom,
+                    listCountTo: listCountTo,
+                    rows: Const.pagingRows,
+                    baseURL: "/admin/conversation/group/" +
+                        roomId + "?page="
+                }
+
+                templateParams.keyword = keyword;
+
+                self.render(request, response, '/Conversation/Room', templateParams);
 
             });
 

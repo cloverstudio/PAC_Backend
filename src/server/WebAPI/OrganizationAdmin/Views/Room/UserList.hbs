@@ -1,0 +1,102 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="/admin/room/list">{{l10n "Room Management"}}</a>
+    </li>
+    <li class="breadcrumb-item active">
+        {{l10n "Room Members"}}
+    </li>
+</ol>
+
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Room Members"}}
+            <small>{{roomName}}</small>
+        </h1>
+
+    </div>
+</header>
+
+<header class="flexbox align-items-center media-list-header bg-transparent b-0 py-16 pl-20">
+
+    <div>
+
+        <button class="btn btn-label btn-primary" onClick="location.href = '/admin/conversation/room/{{roomId}}';">
+            <label>
+                <i class="fa fa-plus"></i>
+            </label> {{l10n "View Chat"}}
+        </button>
+
+    </div>
+</header>
+
+<hr /> {{> alertMessage }}
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th width="5%"></th>
+                            <th>
+                                {{l10n "Name"}}
+                                <br />
+                            </th>
+                            <th width="15%">{{l10n "User ID"}}</th>
+                            <th width="15%">{{l10n "Created At"}}</th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each list}}
+
+                            <tr>
+                                <td>
+                                    <img class="list-thumbnail img-rounded" src="{{showAvatar avatar.thumbnail.nameOnServer _id}}" />
+                                </td>
+                                <td>
+                                    <strong>{{name}}</strong>
+                                    <br />
+                                    <span class="small">{{_id}}</span>
+                                </td>
+                                <td>{{userid}}</td>
+                                <td>{{formatDate created}}</td>
+                            </tr>
+
+                        {{/each}}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{> paginator }}
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#btn-clear').on('click', function () {
+            $('#tb-keyword').val(''); $('#searchform').submit();
+        });
+    });
+
+</script>

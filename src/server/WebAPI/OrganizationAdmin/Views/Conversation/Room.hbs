@@ -14,9 +14,9 @@
 
     <div class="header-action">
         <nav class="nav">
-            <a class="nav-link active" href="/admin/conversation/user">Private Chats</a>
+            <a class="nav-link" href="/admin/conversation/user">Private Chats</a>
             <a class="nav-link" href="/admin/conversation/group">Group Chats</a>
-            <a class="nav-link" href="/admin/conversation/room">Rooms</a>
+            <a class="nav-link active" href="/admin/conversation/room">Rooms</a>
         </nav>
     </div>
 
@@ -34,10 +34,10 @@
 
                 <div class="row">
 
-                    {{#if firstUser}}
+                    {{#if selectedRoom}}
 
                         <div class="col-sm-3">
-                            <a class="btn btn-label btn-info" href="/admin/conversation/user">
+                            <a class="btn btn-label btn-info" href="/admin/conversation/room">
                                 <label>
                                     <i class="ti-arrow-left"></i>
                                 </label> {{l10n "Back"}}</a>
@@ -45,26 +45,15 @@
 
                     {{/if}}
 
-                    {{#if secondUser}}
-                        <div class="col-sm-3"></div>
-                    {{/if}}
 
                     <div class="col-sm-6">
 
-                        {{#unless firstUser}}
-                            <form method="get" action="/admin/conversation/user" id="searchform" class="form-inline">
+                        {{#unless selectedRoom}}
+                            <form method="get" action="/admin/conversation/room" id="searchform" class="form-inline">
                         {{/unless}}
 
-                        {{#if firstUser}}
-
-                            {{#unless secondUser}}
-                                <form method="get" action="/admin/conversation/user/{{firstUser._id}}" id="searchform" class="form-inline">
-                            {{/unless}}
-
-                            {{#if secondUser}}
-                                <form method="get" action="/admin/conversation/user/{{firstUser._id}}/{{secondUser._id}}" id="searchform" class="form-inline">
-                            {{/if}}
-
+                        {{#if selectedRoom}}
+                            <form method="get" action="/admin/conversation/room/{{selectedRoom._id}}" id="searchform" class="form-inline">
                         {{/if}}
 
                         <div class="form-group">
@@ -87,83 +76,8 @@
 
                 <div class="row">
 
-                    {{#if firstUser}}
+                    {{#if selectedRoom}}
 
-                        <div class="col-sm-3 {{#unless secondUser}} push-sm-3 {{/unless}}">
-
-                            <table class="table table-hover">
-
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">
-                                            <strong>
-                                                {{l10n "First User"}}
-                                            </strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{firstUser._id}}/'">
-
-                                        <td width="25%">
-                                            <img class="list-thumbnail img-rounded" src="{{showAvatar firstUser.avatar.thumbnail.nameOnServer _id}}" />
-                                        </td>
-
-                                        <td class="list-edit-link">
-                                            {{firstUser.name}}
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    {{/if}}
-
-                    {{#if secondUser}}
-
-                        <div class="col-sm-3 push-sm-3">
-
-                            <table class="table table-hover">
-
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">
-                                            <strong>
-                                                {{l10n "Second User"}}
-                                            </strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{firstUser._id}}/{{secondUser._id}}'">
-
-                                        <td width="25%">
-                                            <img class="list-thumbnail img-rounded" src="{{showAvatar secondUser.avatar.thumbnail.nameOnServer _id}}" />
-                                        </td>
-
-                                        <td class="list-edit-link">
-                                            {{secondUser.name}}
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    {{/if}}
-
-                    {{#unless secondUser}}
                         <div class="col-sm-3">
 
                             <table class="table table-hover">
@@ -172,12 +86,45 @@
                                     <tr>
                                         <th colspan="2">
                                             <strong>
-                                                {{#unless firstUser}}
-                                                    {{l10n "First User"}}
-                                                {{/unless}}
-                                                {{#if firstUser}}
-                                                    {{l10n "Second User"}}
-                                                {{/if}}
+                                                {{l10n "Room"}}
+                                            </strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr class="cursor-pointer" onclick="location.href='/admin/conversation/room/{{selectedGroup._id}}/'">
+
+                                        <td width="25%">
+                                            <img class="list-thumbnail img-rounded" src="{{showAvatar selectedRoom.avatar.thumbnail.nameOnServer _id}}" />
+                                        </td>
+
+                                        <td class="list-edit-link">
+                                            {{selectedRoom.name}}
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {{/if}}
+
+                    {{#unless selectedRoom}}
+
+                        <div class="col-sm-3">
+
+                            <table class="table table-hover">
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <strong>
+                                                {{l10n "Rooms"}}
                                             </strong>
                                         </th>
                                     </tr>
@@ -187,21 +134,15 @@
 
                                     {{#each list}}
 
-                                        {{#unless ../firstUser}}
-                                            <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{_id}}'">
-                                        {{/unless}}
+                                        <tr class="cursor-pointer" onclick="location.href='/admin/conversation/room/{{_id}}/'">
 
-                                        {{#if ../firstUser}}
-                                            <tr class="cursor-pointer" onclick="location.href='/admin/conversation/user/{{../firstUser._id}}/{{_id}}'">
-                                        {{/if}}
+                                            <td width="25%">
+                                                <img class="list-thumbnail img-rounded" src="{{showAvatar avatar.thumbnail.nameOnServer _id}}" />
+                                            </td>
 
-                                        <td width="25%">
-                                            <img class="list-thumbnail img-rounded" src="{{showAvatar avatar.thumbnail.nameOnServer _id}}" />
-                                        </td>
-
-                                        <td class="list-edit-link">
-                                            {{name}}
-                                        </td>
+                                            <td class="list-edit-link">
+                                                {{name}}
+                                            </td>
 
                                         </tr>
 
@@ -213,28 +154,9 @@
 
                         </div>
 
-                        {{#unless firstUser}}
-
-                            <div class="col-sm-3 ">
-
-                            </div>
-
-                        {{/unless}}
-
                     {{/unless}}
 
-                    {{#unless secondUser}}
-                        <div class="col-sm-6">
-
-                            <div class="callout callout-success" role="alert">
-                                <h5>{{l10n "Please select user"}}</h5>
-                                <p>{{l10n "In Next step you will select another user"}}</p>
-                            </div>
-
-                        </div>
-                    {{/unless}}
-
-                    {{#if secondUser}}
+                    {{#if selectedRoom}}
 
                         <div class="col-sm-6">
 
@@ -250,7 +172,7 @@
 
                                 <tbody>
 
-                                    {{#each list}}
+                                    {{#each message}}
 
                                         <tr>
                                             <td width="15%" rowspan="2">

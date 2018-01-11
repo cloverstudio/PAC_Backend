@@ -21,6 +21,7 @@ var OrganizationAdminMain = {
         router.use("/group", require("./Controllers/GroupController").init(app));
         router.use("/signout", require("./Controllers/SignoutController").init(app));
         router.use("/department", require("./Controllers/DepartmentController").init(app));
+        router.use("/room", require("./Controllers/RoomController").init(app));
         router.use("/sticker", require("./Controllers/StickerController").init(app));
         router.use("/settings", require("./Controllers/SettingsController").init(app));
         router.use("/apikey", require("./Controllers/APIKeyController").init(app));

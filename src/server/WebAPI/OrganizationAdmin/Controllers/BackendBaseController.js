@@ -91,6 +91,28 @@ BackendBaseController.prototype.getGroups = function (baseUser, groupModel, grou
 
 }
 
+BackendBaseController.prototype.getRooms = function (baseUser, roomModel, callback) {
+
+    var model = roomModel.get();
+
+    var query = {
+        name: keyword || ""
+    };
+
+    if (baseUser.permission != Const.userPermission.organizationAdmin) {
+
+        query._id = { $in: baseUser.rooms };
+
+    };
+
+    model.find(query, { name: true }).sort({ sortName: "asc" }).batchSize(Const.maxBatchSizeFindResult).exec(function (err, findResult) {
+
+        callback(err, findResult);
+
+    });
+
+}
+
 BackendBaseController.prototype.addUserToGroup = function (groupId, userId, callback) {
 
     var userModel = UserModel.get();
