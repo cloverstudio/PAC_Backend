@@ -175,6 +175,7 @@ ConversationController.prototype.init = function (app) {
 
         var criteria = {};
         criteria.organizationId = organizationId;
+        criteria._id = { $ne: firstUserId };
 
         if (!organizationAdmin) {
             criteria.groups = { $in: baseUser.groups };
@@ -243,36 +244,15 @@ ConversationController.prototype.init = function (app) {
             function (result, done) {
 
                 result.list = []
-                var count = 0;
-                for (var i = 0; i < result.findMessages.length; i++) {
+                var uniqMsgs = _.uniq(result.findMessages, "roomID");
+
+                for (var i = 0; i < uniqMsgs.length; i++) {
 
                     for (var j = 0; j < result.listAll.length; j++) {
 
-                        if (result.findMessages[i].roomID.indexOf(result.listAll[j]._id) != -1) {
+                        if (uniqMsgs[i].roomID.indexOf(result.listAll[j]._id) != -1) {
 
-                            if (result.listAll[j]._id != firstUserId) {
-
-                                if (result.list.length != 0) {
-
-                                    count = 0;
-                                    for (var k = 0; k < result.list.length; k++) {
-
-                                        if (result.list[k] != result.listAll[j]) {
-
-                                            count += 1
-                                        }
-                                    }
-                                    if (count == result.list.length) {
-                                        result.list.push(result.listAll[j])
-                                    }
-
-                                } else {
-
-                                    result.list.push(result.listAll[j])
-
-                                }
-
-                            }
+                            result.list.push(result.listAll[j])
 
                         }
 
@@ -281,7 +261,6 @@ ConversationController.prototype.init = function (app) {
                 }
 
                 done(null, result);
-
 
             },
             function (result, done) {
