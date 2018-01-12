@@ -22,12 +22,12 @@ var tokenChecker = require(pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
 
-var UserDetailController = function () {
+var FavoriteListByChatController = function () {
 }
 
-_.extend(UserDetailController.prototype, BackendBase.prototype);
+_.extend(FavoriteListByChatController.prototype, BackendBase.prototype);
 
-UserDetailController.prototype.init = function (app) {
+FavoriteListByChatController.prototype.init = function (app) {
 
     var self = this;
 
@@ -140,4 +140,4 @@ UserDetailController.prototype.init = function (app) {
 
 }
 
-module["exports"] = new UserDetailController();
+module["exports"] = new FavoriteListByChatController();

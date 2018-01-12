@@ -63,7 +63,7 @@ var BackendMain = {
         router.use("/message/favorite/add", require("./Controllers/Message/AddToFavoriteController").init(app));
         router.use("/message/favorite/remove", require("./Controllers/Message/RemoveFromFavoriteController").init(app));
         router.use("/message/favorite/list", require("./Controllers/Message/FavoriteListController").init(app));
-        router.use("/message/favorite/list", require("./Controllers/Message/FavoriteListControllerByChat").init(app));
+        router.use("/message/favorite/list", require("./Controllers/Message/FavoriteListByChatController").init(app));
         router.use("/message/forward", require("./Controllers/Message/ForwardMessageController").init(app));
         router.use("/message/send", require("./Controllers/Message/SendMessageController").init(app));
         router.use("/message/seenby", require("./Controllers/Message/SeenByController").init(app));
