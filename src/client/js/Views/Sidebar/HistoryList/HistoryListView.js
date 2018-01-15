@@ -19,6 +19,7 @@ var templateContents = require('./HistoryListContents.hbs');
 
 var windowHandler = require('../../../lib/windowManager');
 var LoadMessageClient = require('../../../lib/APIClients/Messaging/LoadMessageClient');
+var localStorage = require('../../../lib/localstorageManager');
 
 var HistoryListView = Backbone.View.extend({
 
@@ -392,6 +393,9 @@ var HistoryListView = Backbone.View.extend({
 
         if (!historyObj)
             return;
+
+        localStorage.set(Const.LocalStorageKeyLastOpenChatId, historyId);
+        localStorage.set(Const.LocalStorageKeyLastOpenSidebarTab, Const.sidebarTab.history);
 
         if (historyObj.chatType == Const.chatTypePrivate) {
 
