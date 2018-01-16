@@ -18,6 +18,7 @@ import * as profile from "./profile";
 import * as password from "./password";
 import * as messageInfo from "./messageInfo";
 import * as searchAll from "./searchAll";
+import * as note from "./note";
 
 export function filterTable(filter) {
     return {
@@ -44,5 +45,6 @@ export {
     profile,
     password,
     messageInfo,
-    searchAll
+    searchAll,
+    note
 };

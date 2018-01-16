@@ -1,87 +1,92 @@
 import * as config from '../config';
-import {EN} from '../const';
+import { EN } from '../const';
 
 export const InfoViewUserDetailOptions = {
-    EN:"Options"
+    EN: "Options"
 }
 
 export const InfoViewUserDetailDetail = {
-    EN:"Detail"
+    EN: "Detail"
 }
 
 export const InfoViewUserDetailBlock = {
-    EN:"Block"
+    EN: "Block"
 }
 
 export const InfoViewUserDetailNotification = {
-    EN:"Mute"
+    EN: "Mute"
 }
 
 export const InfoViewUserDetailName = {
-    EN:"Name"
+    EN: "Name"
 }
 
 export const InfoViewUserDetailDescription = {
-    EN:"Description"
+    EN: "Description"
 }
 
 export const InfoViewUserDetailLastLogin = {
-    EN:"Last Login"
+    EN: "Last Login"
 }
 
 export const InfoViewUserDetailVideoCall = {
-    EN:"Video Call"
+    EN: "Video Call"
 }
 
 export const InfoViewUserDetailVoiceCall = {
-    EN:"Voice Call"
+    EN: "Voice Call"
 }
 
 export const InfoViewFailedToGetDetail = {
-    EN:"Failed to get detail. Please try again while after."
+    EN: "Failed to get detail. Please try again while after."
 }
 
 export const InfoViewTextMutedExplanation = {
-    EN:"This chat is muted."
+    EN: "This chat is muted."
 }
 
 export const InfoViewTextBlockedExplanation = {
-    EN:"This user is blocked."
+    EN: "This user is blocked."
 }
 
 export const InfoViewFailedToMute = {
-    EN:"Failed to mute."
+    EN: "Failed to mute."
 }
 
 export const InfoViewFailedToBlock = {
-    EN:"Failed to block."
+    EN: "Failed to block."
 }
 
 export const InfoViewCreated = {
-    EN:"Created"
+    EN: "Created"
 }
 
 export const InfoViewUserDetailMembers = {
-    EN:"Members"
+    EN: "Members"
 }
 
 export const InfoViewFailedToLoadUserList = {
-    EN:"Failed to get users. Please try again while after."
+    EN: "Failed to get users. Please try again while after."
 }
 
 export const InfoViewLeaveRoom = {
-    EN:"Leave Room"
+    EN: "Leave Room"
 }
 
 export const InfoViewDeleteRoom = {
-    EN:"Delete Room"
+    EN: "Delete Room"
 }
 
 export const InfoViewLeaveRoomConfirm = {
-    EN:"Press Again to Proceed"
+    EN: "Press Again to Proceed"
 }
 
 export const InfoViewFailedToLeave = {
-    EN:"Failed to leave room. Please try again while after."
+    EN: "Failed to leave room. Please try again while after."
 }
+
+export const InfoViewNotes = {
+    EN: "Notes"
+}
+
 
