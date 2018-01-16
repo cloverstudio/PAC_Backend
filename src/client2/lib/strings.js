@@ -93,7 +93,9 @@ export {
   InfoViewLeaveRoom,
   InfoViewDeleteRoom,
   InfoViewLeaveRoomConfirm,
-  InfoViewFailedToLeave
+  InfoViewFailedToLeave,
+  InfoViewNotes,
+  FavoriteTitleFrom
 } from "./strings/infoview";
 
 export {

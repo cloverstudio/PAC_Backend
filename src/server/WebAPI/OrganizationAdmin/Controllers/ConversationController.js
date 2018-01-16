@@ -956,7 +956,7 @@ ConversationController.prototype.init = function (app) {
 
                     result.messageIds.push(msg._id);
 
-                    if (msg.file.file.id) {
+                    if (msg.file && msg.file.file.id) {
 
                         result.fileIds.push(msg.file.file.id);
 
@@ -969,6 +969,7 @@ ConversationController.prototype.init = function (app) {
                     }
 
                 });
+
                 console.log("MessagesID", result.messageIds)
                 console.log("fileIds", result.fileIds)
 

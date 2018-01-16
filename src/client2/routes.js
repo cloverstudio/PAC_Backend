@@ -24,6 +24,7 @@ export default (
     <Route path={`${util.url("/editroom/:roomId")}`} component={Room} />
     <Route path={`${util.url("/chat/:chatId")}`} component={Chat} />
     <Route path={`${util.url("/search")}`} component={Search} />
+    <Route path={`${util.url("/favorites/:chatId")}`} component={Favorites} />
     <Route path={`${util.url("/favorites")}`} component={Favorites} />
     <Route path={`${util.url("/profile")}`} component={Profile} />
     <Route path={`${util.url("/password")}`} component={Password} />
