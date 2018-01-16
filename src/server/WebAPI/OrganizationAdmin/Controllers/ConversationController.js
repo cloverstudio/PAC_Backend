@@ -20,7 +20,12 @@ var UserModel = require('../../../Models/User');
 var GroupModel = require('../../../Models/Group');
 var RoomModel = require('../../../Models/Room');
 var MessageModel = require('../../../Models/Message');
+var HistoryModel = require('../../../Models/History');
+var FileModel = require('../../../Models/File');
+var FavoriteModel = require('../../../Models/Favorite');
 var OrganizationModel = require('../../../Models/Organization');
+
+var PermissionLogic = require('../../../Logics/Permission');
 
 var ConversationController = function () {
 }
@@ -434,6 +439,8 @@ ConversationController.prototype.init = function (app) {
 
             function (err, result) {
 
+                const roomID = Utils.chatIdByUser(result.firstUser, result.secondUser);
+
                 if (err)
                     templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
                 else
@@ -441,6 +448,7 @@ ConversationController.prototype.init = function (app) {
 
                 templateParams.firstUser = result.firstUser;
                 templateParams.secondUser = result.secondUser;
+                templateParams.roomID = roomID;
 
                 var listCountFrom = (result.count) ? Const.pagingRows * (page - 1) + 1 : result.count;
                 var listCountTo = (Const.pagingRows * page > result.count) ? result.count : Const.pagingRows * page;
@@ -896,6 +904,96 @@ ConversationController.prototype.init = function (app) {
                 templateParams.keyword = keyword;
 
                 self.render(request, response, '/Conversation/Room', templateParams);
+
+            });
+
+    });
+
+
+    router.post('/delete/:_id', checkUserAdmin, function (request, response) {
+
+        var roomID = request.params._id;
+        var baseUser = request.session.user;
+
+        var templateParams = {
+            page: menuItemName,
+            openMenu: menuItemName
+        };
+
+        var messageModel = MessageModel.get();
+        var historyModel = HistoryModel.get();
+        var fileModel = FileModel.get();
+        var favoriteModel = FavoriteModel.get();
+        var result = {};
+
+
+        async.waterfall([
+
+            function (done) {
+
+                result.foundMeesages = [];
+                result.messageIds = [];
+                result.fileIds = [];
+                result.fileSize = Number;
+
+                messageModel.find({ roomID: roomID }, function (err, findResults) {
+
+                    if (!findResults) {
+                        response.redirect('/admin/conversation/users');
+                        return;
+                    }
+
+                    result.foundMeesages = findResults;
+
+                    done(err, result);
+
+                });
+
+            },
+            function (result, done) {
+
+                result.foundMeesages.forEach(msg => {
+
+                    result.messageIds.push(msg._id);
+
+                    if (msg.file.file.id) {
+
+                        result.fileIds.push(msg.file.file.id);
+
+                    }
+
+                    if (msg.file.thumb.id) {
+
+                        result.fileIds.push(msg.file.thumb.id);
+
+                    }
+
+                });
+                console.log("MessagesID", result.messageIds)
+                console.log("fileIds", result.fileIds)
+
+                fileModel.remove({ _id: { $in: result.fileIds } }, function (err, findResults) {
+                    console.log(findResults);
+                    done(err, result);
+
+                })
+
+            }
+
+        ],
+            function (err, result) {
+
+                if (err) {
+
+                    templateParams.errorMessage = self.l10n('Critical Error.') + "<br/>" + err;
+
+
+                    self.render(request, response, '/Conversation/Delete', templateParams);
+
+                    return;
+                }
+
+                response.redirect('/admin/conversation/user?delete=1');
 
             });
 
