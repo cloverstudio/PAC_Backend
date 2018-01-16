@@ -165,3 +165,10 @@ export {
   NotificationNoNotification,
   NotificationReadAll
 } from "./strings/notification";
+
+export {
+  NoteTitle,
+  NoteSubTitle,
+  Edit,
+  Preview
+} from "./strings/note";

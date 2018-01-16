@@ -163,7 +163,7 @@ class UserInfo extends Component {
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
-                            <Link to={`${utils.url("/notes/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
+                            <Link to={`${utils.url("/note/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
                                 <label><i className="ti-agenda"></i></label>{strings.InfoViewNotes[user.lang]}
                             </Link>
                         </div>

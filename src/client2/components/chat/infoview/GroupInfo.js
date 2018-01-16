@@ -121,6 +121,19 @@ class GroupInfo extends Component {
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
+                            <Link to={`${utils.url("/note/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
+                                <label><i className="ti-agenda"></i></label>{strings.InfoViewNotes[user.lang]}
+                            </Link>
+                        </div>
+
+                        <div className="media">
+                            <Link to={`${utils.url("/favorites/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
+                                <label><i className="ti-heart"></i></label>{strings.SidebarFavorite[user.lang]}
+                            </Link>
+                        </div>
+
+
+                        <div className="media">
 
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
@@ -212,7 +225,8 @@ const mapStateToProps = (state) => {
         group: state.infoView.group,
         timestampByChat: state.chat.timestampByChat,
         muted: state.infoView.muted,
-        members: state.infoView.members
+        members: state.infoView.members,
+        chatId: state.chat.chatId,
     };
 };
 
