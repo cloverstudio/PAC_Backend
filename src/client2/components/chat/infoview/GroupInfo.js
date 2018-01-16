@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import * as constant from '../../../lib/const';
 import * as actions from '../../../actions';
 import * as strings from '../../../lib/strings';
+import * as utils from '../../../lib/utils';
 import user from '../../../lib/user';
 
 import {
