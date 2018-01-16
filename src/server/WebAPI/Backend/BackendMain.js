@@ -91,6 +91,9 @@ var BackendMain = {
 
         router.use("/lang/get", require("./Controllers/Lang/GetDictionaryController").init(app));
 
+        router.use("/note", require("./Controllers/Note/SaveNotesController").init(app));
+        router.use("/note", require("./Controllers/Note/LoadNotesController").init(app));
+
         return router;
     }
 }

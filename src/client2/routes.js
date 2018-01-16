@@ -13,6 +13,7 @@ import Favorites from "./containers/Favorites";
 import Profile from "./containers/Profile";
 import Password from "./containers/Password";
 import About from "./components/About";
+import Note from "./containers/Note";
 
 export default (
   <Switch>
@@ -25,9 +26,11 @@ export default (
     <Route path={`${util.url("/chat/:chatId")}`} component={Chat} />
     <Route path={`${util.url("/search")}`} component={Search} />
     <Route path={`${util.url("/favorites/:chatId")}`} component={Favorites} />
+    <Route path={`${util.url("/note/:chatId")}`} component={Note} />
     <Route path={`${util.url("/favorites")}`} component={Favorites} />
     <Route path={`${util.url("/profile")}`} component={Profile} />
     <Route path={`${util.url("/password")}`} component={Password} />
     <Route path={`${util.url("/logout")}`} component={Logout} />
+
   </Switch>
 );

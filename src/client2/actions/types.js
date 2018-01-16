@@ -204,3 +204,14 @@ export const MessageInfoForwardMessage = "MessageInfo/ForwardMessage";
 export const SearchAllStart = "SearchAll/Start";
 export const SearchAllSucceed = "SearchAll/Succeed";
 export const SearchAllFailed = "SearchAll/Failed";
+
+// Note
+export const NoteGoEdit = "Note/GoEdit";
+export const NoteGoPreview = "Note/GoPreview";
+export const NoteTypeNote = "Note/TypeNote";
+export const NoteSaveStart = "Note/SaveStart";
+export const NoteSaveSucceed = "Note/SaveSucceed";
+export const NoteSaveFailed = "Note/SaveFailed";
+export const NoteLoadStart = "Note/LoadStart";
+export const NoteLoadSucceed = "Note/LoadSucceed";
+export const NoteLoadFailed = "Note/LoadFailed";
