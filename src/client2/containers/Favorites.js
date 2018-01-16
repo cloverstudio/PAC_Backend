@@ -39,6 +39,7 @@ class Favotites extends Base {
 
         const url = this.props.location;
         const chatId = url.replace(config.BasePath + "/favorites", "").replace("/", "");
+        console.log("chatId", chatId);
 
         if (chatId.length > 1)
             this.chatId = chatId;
