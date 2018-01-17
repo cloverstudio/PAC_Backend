@@ -10,7 +10,7 @@ import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
 
 import user from '../lib/user';
-import {store} from '../index';
+import { store } from '../index';
 
 import Base from './Base';
 
@@ -31,8 +31,8 @@ class Profile extends Base {
     }
 
     componentDidMount() {
-        console.log('user.userData',user.userData);
-        
+        console.log('user.userData', user.userData);
+
         this.props.initProfileView(user.userData);
     }
 
@@ -40,24 +40,24 @@ class Profile extends Base {
     }
 
     render() {
-        
+
         let sideBarClass = "pace-done sidebar-folded";
-        if(this.props.sidebarState)
+        if (this.props.sidebarState)
             sideBarClass += " sidebar-open";
 
         let asideBarHolderClass = "layout-chat";
-        if(this.props.historyBarState)
+        if (this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
         return (
 
             <div className={sideBarClass} onClick={this.globalClick}>
-            
+
                 <SideBar />
                 <Header />
 
                 <main className={asideBarHolderClass}>
-                
+
                     {this.props.saving ?
                         <div className="spinner-linear profile">
                             <div className="line"></div>
@@ -84,13 +84,13 @@ class Profile extends Base {
 
                                     <div className="form-group">
                                         <label className="require">{strings.ProfileName[user.lang]}</label>
-                                        <input type="text" value={this.props.name} className="form-control" onChange={ e => { this.props.typeName ( e.target.value ) }}/>
+                                        <input type="text" value={this.props.name} className="form-control" onChange={e => { this.props.typeName(e.target.value) }} />
                                         <div className="invalid-feedback">{this.props.errorMessageName}</div>
                                     </div>
 
                                     <label>{strings.ProfileDescription[user.lang]}</label>
                                     <div className="input-group">
-                                        <textarea type="text" value={this.props.description} className="form-control" onChange={ e => { this.props.typeDescription ( e.target.value ) }} />
+                                        <textarea type="text" value={this.props.description} className="form-control" onChange={e => { this.props.typeDescription(e.target.value) }} />
                                     </div>
 
                                     <br />
@@ -108,23 +108,23 @@ class Profile extends Base {
                                     }
 
                                     <br />
-                                    
+
                                     {!this.props.avatarImage ?
                                         <div>
                                             <label>{strings.ProfileAvatar[user.lang]}</label>
                                             <div className="input-group">
-                                                <input type="file" className="form-control" onChange={ e => { this.props.selectFile(e.target.files[0]) }} accept="image/*" />
-                                            </div> 
+                                                <input type="file" className="form-control" onChange={e => { this.props.selectFile(e.target.files[0]) }} accept="image/*" />
+                                            </div>
                                         </div> : null
                                     }
 
                                     <br />
 
                                     <div className="text-right button-container">
-                                            
+
                                         <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
                                         <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
-                                        
+
                                     </div>
 
                                 </div>
@@ -136,9 +136,9 @@ class Profile extends Base {
                     </div>
 
                 </main>
-                
+
                 <Modals />
-                
+
             </div>
         );
     }

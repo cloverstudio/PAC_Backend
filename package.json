@@ -60,7 +60,7 @@
     "md5": "^2.0.0",
     "mime": "^1.4.1",
     "mockconsole": "0.0.1",
-    "mongoose": "4.13.9",
+    "mongoose": "5.0.0-rc2",
     "multer": "^0.1.8",
     "node-fetch": "^1.7.3",
     "node-gcm": "^0.14.8",
@@ -143,7 +143,8 @@
     "watchify": "latest",
     "webpack": "^1.15.0",
     "webpack-dev-server": "^1.14.1",
-    "webrtc-adapter": "^6.0.3"
+    "webrtc-adapter": "^6.0.3",
+    "markdown": "^0.5.0"
   },
   "scripts": {
     "build-js": "browserify src/client/js/main.js > public/js/bundle.js -d",

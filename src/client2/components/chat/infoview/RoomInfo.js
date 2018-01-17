@@ -147,6 +147,19 @@ class RoomInfo extends Component {
                     <div className={cnTabContentGeneral}>
 
                         <div className="media">
+                            <Link to={`${utils.url("/note/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
+                                <label><i className="ti-agenda"></i></label>{strings.InfoViewNotes[user.lang]}
+                            </Link>
+                        </div>
+
+                        <div className="media">
+                            <Link to={`${utils.url("/favorites/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
+                                <label><i className="ti-heart"></i></label>{strings.SidebarFavorite[user.lang]}
+                            </Link>
+                        </div>
+
+
+                        <div className="media">
                             <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
                         </div>
 
@@ -275,7 +288,8 @@ const mapStateToProps = (state) => {
         timestampByChat: state.chat.timestampByChat,
         muted: state.infoView.muted,
         members: state.infoView.members,
-        confirmRoomId: state.infoView.confirmRoomId
+        confirmRoomId: state.infoView.confirmRoomId,
+        chatId: state.chat.chatId,
     };
 };
 

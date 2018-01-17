@@ -105,6 +105,9 @@ Const.responsecodeRemoveUsersFromRoomUserIsNotOwner = 4000090;
 Const.resCodeSocketUpdateNoMessageID = 4000091;
 Const.resCodeSocketUpdateNoUserID = 4000092;
 
+Const.resCodeSaveNoteNoChatID = 4000093;
+Const.resCodeLoadNoteNoChatID = 4000094;
+
 
 Const.httpCodeSucceed = 200;
 Const.httpCodeForbidden = 403;

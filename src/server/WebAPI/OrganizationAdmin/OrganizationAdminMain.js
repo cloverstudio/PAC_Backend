@@ -21,10 +21,12 @@ var OrganizationAdminMain = {
         router.use("/group", require("./Controllers/GroupController").init(app));
         router.use("/signout", require("./Controllers/SignoutController").init(app));
         router.use("/department", require("./Controllers/DepartmentController").init(app));
+        router.use("/room", require("./Controllers/RoomController").init(app));
         router.use("/sticker", require("./Controllers/StickerController").init(app));
         router.use("/settings", require("./Controllers/SettingsController").init(app));
         router.use("/apikey", require("./Controllers/APIKeyController").init(app));
         router.use("/webhook", require("./Controllers/WebhookController").init(app));
+        router.use("/conversation", require("./Controllers/ConversationController").init(app));
 
         router.get('/file', function (request, response) {
 

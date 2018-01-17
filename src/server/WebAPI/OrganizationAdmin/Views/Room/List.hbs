@@ -1,0 +1,80 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/admin/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Room Management"}}</li>
+</ol>
+
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Room Management"}}
+            <small>{{l10n "Number of rooms in organization:"}}
+                <strong>{{numberOfRooms}}</strong> {{l10n "of max"}}
+                <strong>{{maxRoomNumber}}</strong>
+            </small>
+        </h1>
+    </div>
+</header>
+
+<header class="flexbox align-items-center media-list-header bg-transparent b-0 py-16 pl-20">
+
+    <div class="flexbox align-items-center">
+
+        <form method="post" action="/admin/room/search" id="searchform" class="form-inline">
+
+            <div class="form-group">
+                <input type="text" name="keyword" id="tb-keyword" class="form-control" value="{{keyword}}" placeholder="{{l10n "type keyword here..."}}">
+            </div>
+
+            {{#if keyword}}
+                <button type="button" id="btn-clear" name="clear" value="clear" class="btn btn-danger">{{l10n "Clear"}}</button>
+            {{/if}}
+
+            <button type="submit" class="btn btn-primary btnSearch">{{l10n "Search"}}</button>
+
+        </form>
+
+    </div>
+
+</header>
+
+
+<hr /> {{> alertMessage }}
+
+<div class="row">
+
+    {{> paginator }}
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                {{{createTreeGridRoom list}}}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{{> paginator }}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#btn-clear').on('click', function () {
+
+            $('#tb-keyword').val('');
+            $('#searchform').submit();
+
+        });
+
+    });
+
+</script>

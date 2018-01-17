@@ -18,10 +18,10 @@ var helpers = {
     "length": function (ary) {
         return ary.length;
     },
-    "showAvatar": function (fileID) {
+    "showAvatar": function (fileID, id) {
 
         if (_.isEmpty(fileID)) {
-            return "/images/usernoavatar.png"
+            return "/api/v2/avatar/user/" + id;
         } else {
             return "/api/v2/avatar/user/" + fileID;
         }
@@ -223,7 +223,6 @@ var helpers = {
         for (var i = 0; i < maxPages; i++) {
 
             var pageNum = from + i;
-
             // current selected page is colored
             if (pageNum == page)
                 html += '<li class="page-item active"><a class="page-link active" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
@@ -294,9 +293,9 @@ var helpers = {
 
         var childNodes = [];
 
-        return createTreeGrid(parentNodes);
+        return createTreeGrid(parentNodes, 0);
 
-        function createTreeGrid(treeGridData) {
+        function createTreeGrid(treeGridData, depth) {
 
             _.forEach(treeGridData, function (value, index) {
 
@@ -308,9 +307,21 @@ var helpers = {
                 var deleteButton =
                     (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
 
+                var fileId = value.avatar.thumbnail.nameOnServer;
+                if (!fileId)
+                    fileId = value._id;
+
+                let indent = "";
+                for (let i = 0; i < depth; i++) {
+                    indent += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                if (depth > 0)
+                    indent += " - ";
+
                 tableBody +=
-                    '<td><img class="list-tree-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" /></td>' +
-                    '<td class="list-edit-link">' +
+                    '<td><img class="list-tree-thumbnail img-rounded" src="/api/v2/avatar/group/' + fileId + '" /></td>' +
+                    '<td class="list-edit-link">' + indent +
                     '<a href="/admin/department/edit/' + value._id + '">' +
                     '<strong>' + value.name + '</strong>' +
                     '</a>' +
@@ -330,7 +341,99 @@ var helpers = {
 
                 childNodes = _.filter(data, { parentId: value._id.toString() });
 
-                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes);
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes, depth + 1);
+
+            });
+
+            return tableHeader + tableBody + tableFooter;
+        };
+
+    },
+    "createTreeGridRoom": function (data) {
+
+        var tableHeader =
+            '<table class="table table-hover tree">' +
+            '<thead>' +
+            '<tr>' +
+            '<th  width="5%"></th>' +
+            '<th>' + helpers.l10n("Name") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Description") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = "";
+        var tableFooter = "</tbody></table>";
+
+        var parentNodes = [];
+
+        // filter parent nodes
+        _.forEach(data, function (value) {
+
+            if (_.isEmpty(_.filter(data, { _id: DatabaseManager.toObjectId(value.parentId) }))) {
+
+                value.parentId = "";
+                parentNodes.push(value);
+
+            };
+
+        });
+
+        var childNodes = [];
+
+        return createTreeGrid(parentNodes, 0);
+
+        function createTreeGrid(treeGridData, depth) {
+
+            _.forEach(treeGridData, function (value, index) {
+
+                if (_.isEmpty(value.parentId))
+                    tableBody += '<tr class="treegrid-' + value._id + '">'
+                else
+                    tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
+
+                var deleteButton =
+                    (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/room/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
+
+                var fileId = value.avatar.thumbnail.nameOnServer;
+                if (!fileId)
+                    fileId = value._id;
+
+                let indent = "";
+                for (let i = 0; i < depth; i++) {
+                    indent += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                if (depth > 0)
+                    indent += " - ";
+
+                tableBody +=
+                    '<td><img class="list-tree-thumbnail img-rounded" src="/api/v2/avatar/room/' + fileId + '" /></td>' +
+                    '<td class="list-edit-link">' + indent +
+                    '<a href="/admin/room/userlist/' + value._id + '">' +
+                    '<strong>' + value.name + '</strong>' +
+                    '</a>' +
+                    '</td>' +
+                    '<td>' + value.description + '</td>' +
+                    '<td>' + helpers.formatDate(value.created) + '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-info" onclick=\'location.href="/admin/room/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/conversation/room/' + value._id + '"\'>' + helpers.l10n("View Chat") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    deleteButton +
+                    '</td>' +
+                    '</tr>';
+
+                childNodes = _.filter(data, { parentId: value._id.toString() });
+
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes, depth + 1);
 
             });
 
@@ -396,9 +499,21 @@ var helpers = {
         } else {
             return value;
         }
+    },
+    "selectedIfEqual": function (param1, param2) {
 
+        if (param1 == param2)
+            return 'selected="selected"';
 
-    }
+    },
+    "isEqual": function (param1, param2, options) {
+
+        if (param1 == param2)
+            return options.fn(this);
+        else
+            return "";
+
+    },
 }
 
 module["exports"] = helpers;

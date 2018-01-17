@@ -19,9 +19,14 @@ export function callSearchMessage(keyword) {
         });
 }
 
-export function callLoadFavorites(page) {
+export function callLoadFavorites(page, chatId) {
+
+    let url = constant.ApiUrlFavorites + "/" + page;
+    if (chatId)
+        url = constant.ApiUrlFavorites + "/" + chatId + "/" + page;
+
     return api
-        .get(constant.ApiUrlFavorites + "/" + page)
+        .get(url)
 
         .then(response => {
             if (!response.code || response.code != 1) {

@@ -22,6 +22,7 @@ import password from "./password";
 import notification from "./notification";
 import messageInfo from "./messageInfo";
 import messageForward from "./messageForward";
+import note from "./note";
 
 const filter = (state = "", action) => {
     switch (action.type) {
@@ -55,7 +56,8 @@ const rootReducer = combineReducers({
     password,
     notification,
     messageInfo,
-    messageForward
+    messageForward,
+    note
 });
 
 export default rootReducer;

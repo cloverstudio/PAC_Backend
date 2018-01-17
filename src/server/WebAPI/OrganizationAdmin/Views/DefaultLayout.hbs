@@ -93,6 +93,23 @@
           </a>
         </li>
 
+        <li class="menu-item {{{printIfEqual page 'room-list' 'active'}}}">
+          <a class="menu-link" href="/admin/room/list">
+            <span class="icon fa fa-commenting-o"></span>
+            <span class="title">{{l10n "Rooms"}}</span>
+          </a>
+        </li>
+
+        <li class="menu-category">{{l10n "Conversations"}}</li>
+
+        <li class="menu-item {{{printIfEqual page 'conversation' 'active'}}}">
+          <a class="menu-link" href="/admin/conversation/user">
+            <span class="icon fa fa-comment"></span>
+            <span class="title">{{l10n "Conversations"}}</span>
+          </a>
+        </li>
+
+
         <li class="menu-category">{{l10n "Integrations"}}</li>
 
         <li class="menu-item {{{printIfEqual page 'api-list' 'active'}}}">

@@ -20,7 +20,21 @@ const initial = {
     timestampByChat: 0,
     inputValues: {},
     loadingDirection: null,
-    loadAllToTarget: null
+    loadAllToTarget: null,
+    chatName: ""
+};
+
+const chatName = (state = initial.chatName, action) => {
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return action.user.name
+        case types.ChatOpenByGroup:
+            return action.group.name
+        case types.ChatOpenByRoom:
+            return action.room.name
+        default:
+            return state;
+    }
 };
 
 const timestampByChat = (state = initial.timestampByChat, action) => {
@@ -329,9 +343,9 @@ const loadingDirection = (state = initial.loadingDirection, action) => {
 }
 
 const loadAllToTarget = (state = initial.loadAllToTarget, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.ChatLoadMessageStart:
-            if (action.loadingDirection === constant.ChatDirectionAllTo){
+            if (action.loadingDirection === constant.ChatDirectionAllTo) {
                 return action.messageId
             }
             else {
@@ -352,5 +366,6 @@ export default combineReducers({
     timestampByChat,
     inputValues,
     loadingDirection,
-    loadAllToTarget
+    loadAllToTarget,
+    chatName
 });

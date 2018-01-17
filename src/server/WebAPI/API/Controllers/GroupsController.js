@@ -18,10 +18,10 @@ const UserModel = require(pathTop + "Models/User");
 const GroupLogic = require(pathTop + "Logics/v3/Group");
 const MessageListLogic = require(pathTop + "Logics/v3/MessageList");
 
-const GroupsController = function() {};
+const GroupsController = function () { };
 _.extend(GroupsController.prototype, APIBase.prototype);
 
-GroupsController.prototype.init = function(app) {
+GroupsController.prototype.init = function (app) {
   var self = this;
 
   /**
@@ -472,19 +472,6 @@ GroupsController.prototype.init = function(app) {
             done(null, result);
           },
           (result, done) => {
-            groupModel.update(
-              { _id: groupId },
-              {
-                users: result.newUsers
-              },
-              (err, updated) => {
-                if (!err) result.groupDetail.users = result.newUsers;
-
-                done(err, result);
-              }
-            );
-          },
-          (result, done) => {
             // check all user is valid
             async.eachSeries(
               userIds,
@@ -503,6 +490,19 @@ GroupsController.prototype.init = function(app) {
                 } else {
                   done(null, result);
                 }
+              }
+            );
+          },
+          (result, done) => {
+            groupModel.update(
+              { _id: groupId },
+              {
+                users: result.newUsers
+              },
+              (err, updated) => {
+                if (!err) result.groupDetail.users = result.newUsers;
+
+                done(err, result);
               }
             );
           },

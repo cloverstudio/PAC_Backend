@@ -51,3 +51,5 @@ export {
 export { callUpdateProfile, callUpdatePassword } from "./user";
 
 export { callSearchAll } from "./searchAll";
+
+export { saveNote, loadNote } from "./note";

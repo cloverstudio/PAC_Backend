@@ -1,36 +1,46 @@
-
 <ol class="breadcrumb">
     <li class="breadcrumb-item active">{{l10n "Home"}}</li>
 </ol>
 
 {{> alertMessage }}
 
-<h2>{{l10n "Users:"}} ({{userCount}}/{{organization.maxUserNumber}})</h2>
+<h2>
+    <a href="/admin/user/list">
+        {{l10n "Users:"}} ({{userCount}}/{{organization.maxUserNumber}})
+    </a>
+</h2>
 
 <div class="progress">
-	<div class="progress-bar" style="height: 16px;width:{{userPercentage}}%; min-width: 2em;" role="progressbar" aria-valuenow="{{userCount}}" aria-valuemin="0" aria-valuemax="{{organization.maxUserNumber}}" >
-  		{{userPercentage}}%
-	</div>
+    <div class="progress-bar" style="height: 16px;width:{{userPercentage}}%; min-width: 2em;" role="progressbar" aria-valuenow="{{userCount}}"
+        aria-valuemin="0" aria-valuemax="{{organization.maxUserNumber}}">
+        {{userPercentage}}%
+    </div>
 </div>
 
 
 <h2>{{l10n "Groups/Departments:"}} ({{groupCount}}/{{organization.maxGroupNumber}})</h2>
+
 <div class="progress">
-	<div class="progress-bar" role="progressbar" aria-valuenow="{{groupCount}}" aria-valuemin="0" aria-valuemax="{{organization.maxGroupNumber}}" style="height: 16px;width:{{groupPercentage}}%; min-width: 2em;">
-  		{{groupPercentage}}%
-	</div>
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{groupCount}}" aria-valuemin="0" aria-valuemax="{{organization.maxGroupNumber}}"
+        style="height: 16px;width:{{groupPercentage}}%; min-width: 2em;">
+        {{groupPercentage}}%
+    </div>
 </div>
 
 <h2>{{l10n "Rooms:"}} ({{roomCount}}/{{organization.maxRoomNumber}})</h2>
+
 <div class="progress">
-	<div class="progress-bar" role="progressbar" aria-valuenow="{{roomCount}}" aria-valuemin="{{organization.maxRoomNumber}}" aria-valuemax="100" style="height: 16px;width:{{roomPercentage}}%; min-width: 2em;">
-  		{{roomPercentage}}%
-	</div>
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{roomCount}}" aria-valuemin="{{organization.maxRoomNumber}}"
+        aria-valuemax="100" style="height: 16px;width:{{roomPercentage}}%; min-width: 2em;">
+        {{roomPercentage}}%
+    </div>
 </div>
 
 <h2>{{l10n "Disk Quota (GB):"}} ({{diskUsage}}/{{diskQuota}})</h2>
+
 <div class="progress">
-	<div class="progress-bar" role="progressbar" aria-valuenow="{{diskUsage}}" aria-valuemin="0" aria-valuemax="{{diskQuota}}" style="height: 16px;width:{{diskQuotaPercentage}}%; min-width: 2em;">
-	  	{{diskQuotaPercentage}}%
-	</div>
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{diskUsage}}" aria-valuemin="0" aria-valuemax="{{diskQuota}}"
+        style="height: 16px;width:{{diskQuotaPercentage}}%; min-width: 2em;">
+        {{diskQuotaPercentage}}%
+    </div>
 </div>

@@ -37,6 +37,8 @@ export const ApiUrlLeaveRoom = "/room/leave";
 export const ApiUrlGetMessageInfo = "/message/seenby/";
 export const ApiUrlMarkAll = "/user/history/markall";
 export const ApiUrlSearchAll = "/search/all/";
+export const ApiUrlSaveNote = "/note";
+export const ApiUrlLoadNote = "/note";
 
 export const ErrorCodeInvalidToken = 4000007;
 
@@ -95,3 +97,6 @@ export const CredentialsMinLength = 6;
 export const CredentialsRegex = /^[a-zA-Z0-9]+$/;
 
 export const KeepAliveInterval = 30 * 1000;
+
+export const NotesStatePreview = "Preview"
+export const NotesStateEdit = "Edit"

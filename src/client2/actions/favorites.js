@@ -14,14 +14,17 @@ import user from "../lib/user";
 import { store } from "../index";
 import { type } from "os";
 
-export function loadMessages(page) {
+export function loadMessages(page, chatId) {
     return (dispatch, getState) => {
         dispatch({
             type: types.FavoriteLoadMessageStart,
             page
         });
 
-        callLoadFavorites(page)
+        console.log('chatId', chatId);
+
+
+        callLoadFavorites(page, chatId)
             .then(data => {
                 dispatch({
                     type: types.FavoriteLoadMessageSuccess,
@@ -65,7 +68,7 @@ export function removeFavorite(messageId) {
         });
 
         callRemoveFromFavorite(messageId)
-            .then(data => {})
+            .then(data => { })
             .catch(err => {
                 console.error(err);
 
@@ -87,26 +90,26 @@ export function toggleFavorite(messageId, isFavorite) {
         });
         isFavorite
             ? callRemoveFromFavorite(messageId)
-                  .then(data => {})
-                  .catch(err => {
-                      console.error(err);
+                .then(data => { })
+                .catch(err => {
+                    console.error(err);
 
-                      dispatch(
-                          actions.notification.showToast(
-                              strings.FailedToRemoveFromFavorites[user.lang]
-                          )
-                      );
-                  })
+                    dispatch(
+                        actions.notification.showToast(
+                            strings.FailedToRemoveFromFavorites[user.lang]
+                        )
+                    );
+                })
             : callAddToFavorite(messageId)
-                  .then(data => {})
-                  .catch(err => {
-                      console.error(err);
+                .then(data => { })
+                .catch(err => {
+                    console.error(err);
 
-                      dispatch(
-                          actions.notification.showToast(
-                              strings.FailedToAddToFavorites[user.lang]
-                          )
-                      );
-                  });
+                    dispatch(
+                        actions.notification.showToast(
+                            strings.FailedToAddToFavorites[user.lang]
+                        )
+                    );
+                });
     };
 }
