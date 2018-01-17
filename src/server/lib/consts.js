@@ -108,6 +108,8 @@ Const.resCodeSocketUpdateNoUserID = 4000092;
 Const.resCodeSaveNoteNoChatID = 4000093;
 Const.resCodeLoadNoteNoChatID = 4000094;
 
+Const.resCodeSocketDeliverMessageNoUserId = 4000095;
+Const.resCodeSocketDeliverMessageNoMessageId = 4000096;
 
 Const.httpCodeSucceed = 200;
 Const.httpCodeForbidden = 403;
