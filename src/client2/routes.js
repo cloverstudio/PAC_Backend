@@ -28,6 +28,7 @@ export default (
     <Route path={`${util.url("/favorites/:chatId")}`} component={Favorites} />
     <Route path={`${util.url("/note/:chatId")}`} component={Note} />
     <Route path={`${util.url("/favorites")}`} component={Favorites} />
+    <Route path={`${util.url("/note/:chatId")}`} component={Note} />
     <Route path={`${util.url("/profile")}`} component={Profile} />
     <Route path={`${util.url("/password")}`} component={Password} />
     <Route path={`${util.url("/logout")}`} component={Logout} />

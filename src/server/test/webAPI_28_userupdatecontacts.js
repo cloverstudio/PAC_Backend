@@ -17,11 +17,11 @@ describe('WEB API', function () {
                 .send({
                     contacts: [
                         {
-                            id: global.getRandomStr(24),
+                            id: "5a5f2c7244aa2ce0a13310b5",
                             name: "test1"
                         },
                         {
-                            id: global.getRandomStr(24),
+                            id: "5a5f2c7244aa2ce0a13310b6",
                             name: "test2"
                         }
                     ]

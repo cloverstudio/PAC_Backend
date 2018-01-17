@@ -71,8 +71,9 @@ const Group = {
         // Get user's data
         (result, done) => {
           const userLists = _.pluck(result.list, "users");
+
           // Skip when select fields is set except users
-          if (_.contains(userLists, undefined)) done(null, result);
+          if (_.contains(userLists, undefined)) return done(null, result);
           const flattenUserIds = _.flatten(userLists);
           const uniqUserIds = _.uniq(flattenUserIds);
           const userModel = UserModel.get();
@@ -316,7 +317,7 @@ const Group = {
             userModel.update(
               { _id: user, groups: group.id },
               { $pull: { groups: group.id } },
-              (err, updated) => {}
+              (err, updated) => { }
             );
           });
 
