@@ -34,6 +34,7 @@ SaveNotesController.prototype.init = function (app) {
       * @apiDescription Add to callers favorite
       * @apiHeader {String} access-token Users unique access-token.
       * @apiParam {string} chatId chatId
+      * @apiParam {string} note note
       * @apiSuccessExample Success-Response:
  {
      "code": 1,
