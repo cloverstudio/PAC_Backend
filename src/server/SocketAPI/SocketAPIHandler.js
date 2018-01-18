@@ -30,6 +30,7 @@ var SocketAPIHandler = {
             require("./UpdateMessageActionHandler").attach(self.nsp, socket);
             require("./SendTypingActionHandler").attach(self.nsp, socket);
             require("./OpenMessageActionHandler").attach(self.nsp, socket);
+            require("./DeliverMessageActionHandler").attach(self.nsp, socket);
         });
     },
     emitAll: function (command, param) {

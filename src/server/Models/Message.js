@@ -55,7 +55,8 @@ Message.prototype.init = function (mongoose) {
         deliveredTo: [
             {
                 userId: String,
-                at: Number
+                at: Number,
+                _id: false
             }
         ]
     });
