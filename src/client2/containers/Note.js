@@ -114,6 +114,13 @@ class Note extends Base {
                                     {this.props.state == constant.NotesStatePreview ?
                                         <div dangerouslySetInnerHTML={html} /> : null}
 
+                                    {this.props.state == constant.NotesStatePreview &&
+                                        this.props.note.length == 0 ?
+                                        <div className="callout callout-info" >
+                                            <h5>{strings.EmptyMessageTitle[user.lang]}</h5>
+                                            <p>{strings.EmptyMessageText[user.lang]}</p>
+                                        </div> : null}
+
                                     <div className="text-right button-container mt-15">
 
                                         {this.props.state == constant.NotesStatePreview ?
