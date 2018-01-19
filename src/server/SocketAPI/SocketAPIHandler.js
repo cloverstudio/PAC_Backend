@@ -14,12 +14,13 @@ var DatabaseManager = require("../lib/DatabaseManager");
 var SocketAPIHandler = {
   io: null,
   nsp: null,
-  init: function(io) {
+  init: function (io) {
+
     var self = this;
     this.io = io;
     this.nsp = io.of(Config.socketNameSpace);
 
-    this.nsp.on("connection", function(socket) {
+    this.nsp.on("connection", function (socket) {
       require("./LoginActionHandler").attach(self.nsp, socket);
       require("./DisconnectActionHandler").attach(self.nsp, socket);
       require("./PongActionHandler").attach(self.nsp, socket);
@@ -32,13 +33,13 @@ var SocketAPIHandler = {
       require("./OpenMessageActionHandler").attach(self.nsp, socket);
     });
   },
-  emitAll: function(command, param) {
+  emitAll: function (command, param) {
     this.io.of(Config.socketNameSpace).emit(command, param);
   },
-  emitToSocket: function(socketId, command, param) {
+  emitToSocket: function (socketId, command, param) {
     this.nsp.to(socketId).emit(command, param);
   },
-  temporaryListener: function(socketId, command, timeout, callBack) {
+  temporaryListener: function (socketId, command, timeout, callBack) {
     var socket = this.nsp.sockets[socketId];
 
     if (!socket) {
@@ -52,17 +53,17 @@ var SocketAPIHandler = {
       socket.removeAllListeners(command);
     }, timeout);
 
-    socket.on(command, function(param) {
+    socket.on(command, function (param) {
       if (callBack) callBack(param);
 
       socket.removeAllListeners(command);
     });
   },
 
-  emitToUser: function(userId, command, param) {
+  emitToUser: function (userId, command, param) {
     var self = this;
 
-    DatabaseManager.redisGet(Const.redisKeyUserId + userId, function(
+    DatabaseManager.redisGet(Const.redisKeyUserId + userId, function (
       err,
       value
     ) {
@@ -78,14 +79,14 @@ var SocketAPIHandler = {
 
     //this.nsp.to(socketId).emit(command,param);
   },
-  emitToRoom: function(roomName, command, param) {
+  emitToRoom: function (roomName, command, param) {
     this.io
       .of(Config.socketNameSpace)
       .in(roomName)
       .emit(command, param);
   },
-  joinTo: function(userId, type, roomId) {
-    DatabaseManager.redisGet(Const.redisKeyUserId + userId, function(
+  joinTo: function (userId, type, roomId) {
+    DatabaseManager.redisGet(Const.redisKeyUserId + userId, function (
       err,
       value
     ) {
@@ -99,8 +100,8 @@ var SocketAPIHandler = {
       });
     });
   },
-  leaveFrom: function(userId, type, roomId) {
-    DatabaseManager.redisGet(Const.redisKeyUserId + userId, function(
+  leaveFrom: function (userId, type, roomId) {
+    DatabaseManager.redisGet(Const.redisKeyUserId + userId, function (
       err,
       value
     ) {

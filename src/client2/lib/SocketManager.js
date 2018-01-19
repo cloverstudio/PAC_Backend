@@ -17,9 +17,11 @@ import WindowNotificationManager from './WindowNotificationManager';
 class SocketManager {
 
     constructor() {
-
         this.timer = null;
         this.processId = util.getRandomString(16);
+    }
+
+    init() {
 
         this.io = socket;
 
@@ -28,19 +30,23 @@ class SocketManager {
             upgrade: false
         });
 
-        this.ioNsp.on('connect', function () {
+        this.ioNsp.on('connect', () => {
+
+            this.join();
 
         });
 
-        this.ioNsp.on('reconnect', function () {
+        this.ioNsp.on('reconnect', () => {
+
+            this.join();
 
         });
 
-        this.ioNsp.on('socketerror', function (error) {
+        this.ioNsp.on('socketerror', (error) => {
 
         });
 
-        this.ioNsp.on('typing', function (obj) {
+        this.ioNsp.on('typing', (obj) => {
             if (store.getState().chat.chatId === obj.roomID && obj.userID !== user.userData._id) {
                 if (obj.type === 1) {
                     store.dispatch(actions.chat.startedTyping(obj.userID, obj.userName));
@@ -51,7 +57,7 @@ class SocketManager {
             }
         });
 
-        this.ioNsp.on('newmessage', function (obj) {
+        this.ioNsp.on('newmessage', (obj) => {
 
             if (store.getState().chat.chatId === obj.roomID) {
                 this.emit('openMessage', {
@@ -63,18 +69,18 @@ class SocketManager {
             store.dispatch(actions.chat.receiveMessage(obj));
 
             WindowNotificationManager.handleMessage(obj);
-            
+
         });
 
-        this.ioNsp.on('updatemessages', function (ary) {
+        this.ioNsp.on('updatemessages', (ary) => {
             store.dispatch(actions.chat.updateMessages(ary));
         });
 
-        this.ioNsp.on('spikaping', function (obj) {
+        this.ioNsp.on('spikaping', (obj) => {
 
         });
 
-        this.ioNsp.on('call_failed', function (obj) {
+        this.ioNsp.on('call_failed', (obj) => {
 
             const failedType = obj.failedType;
 
@@ -104,53 +110,53 @@ class SocketManager {
 
         });
 
-        this.ioNsp.on('call_request', function (obj) {
+        this.ioNsp.on('call_request', (obj) => {
 
             store.dispatch(actions.call.incomingCall(obj));
 
         });
 
-        this.ioNsp.on('call_received', function () {
+        this.ioNsp.on('call_received', () => {
 
             store.dispatch(actions.call.outgoingCallStatusChanged(strings.CallOutgoingStatusRinging[user.lang]));
 
         });
 
-        this.ioNsp.on('call_cancel', function () {
+        this.ioNsp.on('call_cancel', () => {
 
             store.dispatch(actions.call.incomingCallClose());
 
         });
 
-        this.ioNsp.on('call_reject_mine', function () {
+        this.ioNsp.on('call_reject_mine', () => {
 
         });
 
-        this.ioNsp.on('call_answer', function () {
+        this.ioNsp.on('call_answer', () => {
 
             store.dispatch(actions.call.outgoingCallAnswered());
 
         });
 
-        this.ioNsp.on('call_close', function () {
+        this.ioNsp.on('call_close', () => {
 
             store.dispatch(actions.call.callClose());
 
         });
 
-        this.ioNsp.on('new_room', function (param) {
+        this.ioNsp.on('new_room', (param) => {
 
         });
 
-        this.ioNsp.on('delete_room', function (param) {
+        this.ioNsp.on('delete_room', (param) => {
 
         });
 
-        this.ioNsp.on('delete_group', function (param) {
+        this.ioNsp.on('delete_group', (param) => {
 
         });
 
-        this.ioNsp.on('logined', function () {
+        this.ioNsp.on('logined', () => {
 
             // start sending keep alive
 
