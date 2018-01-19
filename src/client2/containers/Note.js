@@ -2,7 +2,9 @@ import PropTypes, { string } from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { markdown } from 'markdown';
+import Remarkable from 'remarkable';
+import hljs from 'highlight.js';
+import twemoji from 'twemoji';
 
 import * as actions from '../actions';
 
@@ -28,6 +30,30 @@ class Note extends Base {
     constructor() {
         super();
         this.chatId = null;
+        this.md = new Remarkable('full', {
+            highlight: function (str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(lang, str).value
+                            .replace(/\r/g, "<br />")
+                            .replace(/\n/g, "<br />")
+                            .replace(/  /g, "&nbsp;&nbsp;")
+                            .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+
+                    } catch (err) { }
+                }
+
+                try {
+                    return hljs.highlightAuto(str).value
+                        .replace(/\r/g, "<br />")
+                        .replace(/\n/g, "<br />")
+                        .replace(/  /g, "&nbsp;&nbsp;")
+                        .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+                } catch (err) { }
+
+                return ''; // use external default escaping
+            }
+        });
     }
 
     static propTypes = {
@@ -69,7 +95,15 @@ class Note extends Base {
         if (this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
-        const html = { __html: markdown.toHTML(this.props.note) };
+
+        const rowHTML = this.md.render(this.props.note)
+            .replace(/<blockquote>/g, '<blockquote class="blockquote">')
+            .replace(/<table>/g, '<table class="table">')
+            .replace(/<img>/g, '<img class="rounded">')
+            .replace(/<code class="/g, '<code class="hljs ')
+            .replace(/<pre>/g, '<pre class="code">');
+
+        const html = { __html: rowHTML };
 
         return (
 
