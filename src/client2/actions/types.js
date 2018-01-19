@@ -1,4 +1,5 @@
 export const FILTER = "FILTER";
+export const LocationChange = "@@router/LOCATION_CHANGE";
 
 // Login
 export const LoginClick = "Login/Click";
@@ -44,6 +45,8 @@ export const HistoryMarkAllFailed = "History/MarkAllFailed";
 export const HistorySearchStart = "History/SearchStart";
 export const HistorySearchSucceed = "History/SearchSucceed";
 export const HistorySearchFailed = "History/SearchFailed";
+export const HistoryTypeKeyword = "History/TypeKeyword";
+
 
 // UserList
 export const UserListLoadStart = "UserList/LoadStart";

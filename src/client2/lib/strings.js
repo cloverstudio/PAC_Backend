@@ -170,5 +170,7 @@ export {
   NoteTitle,
   NoteSubTitle,
   Edit,
-  Preview
+  Preview,
+  EmptyMessageTitle,
+  EmptyMessageText
 } from "./strings/note";

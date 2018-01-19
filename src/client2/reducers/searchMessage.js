@@ -15,6 +15,8 @@ const searchResult = (state = [], action) => {
     switch (action.type) {
         case types.SearchMessageSuccess:
             return action.messages;
+        case types.LocationChange:
+            return [];
         default:
             return state;
     }

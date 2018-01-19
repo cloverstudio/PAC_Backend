@@ -35,8 +35,12 @@ class Conversation extends Component {
     onScroll = e => {
 
         if (e.target.scrollTop === 0 && !this.props.isLoading) {
-            this.props.loadOldMessages(this.props.currentChatId, this.props.messageList[0]._id);
-            this.setLockedForScrolling();
+
+            if (this.props.messageList[0]) {
+                this.props.loadOldMessages(this.props.currentChatId, this.props.messageList[0]._id);
+                this.setLockedForScrolling();
+            }
+
         }
 
     };
@@ -71,7 +75,7 @@ class Conversation extends Component {
         }
     };
 
-    setLockedForScrolling = (value=true) => {
+    setLockedForScrolling = (value = true) => {
         this.lockedForAutoScroll = value;
     }
 
@@ -104,7 +108,7 @@ class Conversation extends Component {
             e.target.classList.remove("dragging-over");
             this.dropIndicator.classList.remove('drag-drop-indicator-visible')
         }
-        
+
     };
 
     handleDragOver = e => {
@@ -272,7 +276,7 @@ class Conversation extends Component {
                     {conversationItems}
                 </div>
 
-                <ChatInput setLockedForScrolling={this.setLockedForScrolling}/>
+                <ChatInput setLockedForScrolling={this.setLockedForScrolling} />
                 <Stickers />
 
                 <div className="drag-drop-indicator" ref={dropIndicator => this.dropIndicator = dropIndicator}>

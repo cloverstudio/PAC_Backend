@@ -144,7 +144,14 @@ export function openChatByUser(targetUser) {
             chatId
         });
 
-        utils.changeWindowTitle(targetUser.name)
+        utils.changeWindowTitle(targetUser.name);
+
+        if (getState().history.keyword.length > 0) {
+            dispatch(actions.history.typeKeyword(""));
+            dispatch(actions.history.searchHistory(""));
+        }
+
+
     };
 }
 
@@ -160,7 +167,12 @@ export function openChatByGroup(group) {
             chatId
         });
 
-        utils.changeWindowTitle(group.name)
+        utils.changeWindowTitle(group.name);
+
+        if (getState().history.keyword.length > 0) {
+            dispatch(actions.history.typeKeyword(""));
+            dispatch(actions.history.searchHistory(""));
+        }
     };
 }
 
@@ -176,7 +188,12 @@ export function openChatByRoom(room) {
             chatId
         });
 
-        utils.changeWindowTitle(room.name)
+        utils.changeWindowTitle(room.name);
+
+        if (getState().history.keyword.length > 0) {
+            dispatch(actions.history.typeKeyword(""));
+            dispatch(actions.history.searchHistory(""));
+        }
     };
 }
 

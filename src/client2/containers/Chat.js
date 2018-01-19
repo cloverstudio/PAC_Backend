@@ -29,7 +29,7 @@ class Main extends Base {
 
     componentWillReceiveProps(nextProps) {
 
-        if (!this.props.isChatLoading){
+        if (!this.props.isChatLoading) {
             if (
                 this.props.location != nextProps.location ||
                 this.props.timestampByChat != nextProps.timestampByChat
@@ -37,9 +37,10 @@ class Main extends Base {
                 // location update
                 const chatId = util.getChatIdFromUrl(nextProps.location);
 
-                if (chatId && chatId.length > 0) {this.props.loadNewChat(chatId);
-                    
+                if (chatId && chatId.length > 0) {
+                    this.props.loadNewChat(chatId);
                 }
+
                 else this.props.clearChat();
             }
         }
@@ -49,7 +50,7 @@ class Main extends Base {
         if (!user.userData) return;
 
         // location update
-        if (this.props.loadingDirection != constant.ChatDirectionAllTo){
+        if (this.props.loadingDirection != constant.ChatDirectionAllTo) {
             const chatId = util.getChatIdFromUrl(this.props.location);
 
             if (chatId && chatId.length > 0) {

@@ -14,14 +14,14 @@ var MessageModel = require("../Models/Message");
 
 var SendMessageLogic = require("../Logics/SendMessage");
 
-var SendMessageActionHandler = function(){
-    
+var SendMessageActionHandler = function () {
+
 }
 
-_.extend(SendMessageActionHandler.prototype,SocketHandlerBase.prototype);
+_.extend(SendMessageActionHandler.prototype, SocketHandlerBase.prototype);
 
-SendMessageActionHandler.prototype.attach = function(io,socket){
-        
+SendMessageActionHandler.prototype.attach = function (io, socket) {
+
     var self = this;
 
     /**
@@ -37,51 +37,51 @@ SendMessageActionHandler.prototype.attach = function(io,socket){
      * @apiParam {object} location lat and lng if type == 3
      *
      */
-     
-    socket.on('sendMessage', function(param){
-                        
-                        
-        if(!param.roomID){
-            socket.emit('socketerror', {code:Const.resCodeSocketSendMessageNoRoomID}); 
+
+    socket.on('sendMessage', function (param) {
+
+
+        if (!param.roomID) {
+            socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoRoomID });
             return;
         }
 
 
-        if(!param.userID){
-            socket.emit('socketerror', {code:Const.resCodeSocketSendMessageNoUserId});
+        if (!param.userID) {
+            socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoUserId });
             return;
         }
 
-        if(!param.type){
-            socket.emit('socketerror', {code:Const.resCodeSocketSendMessageNoType}); 
-            return;
-        }
-                        
-        if(param.type == Const.messageTypeText && _.isEmpty(param.message)){
-            socket.emit('socketerror', {code:Const.resCodeSocketSendMessageNoMessage});               
+        if (!param.type) {
+            socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoType });
             return;
         }
 
-        if(param.type == Const.messageTypeLocation && (
-                                        !param.location ||
-                                        !param.location.lat ||
-                                        !param.location.lng )){
-                                        
-            socket.emit('socketerror', {code:Const.resCodeSocketSendMessageNoLocation});               
+        if (param.type == Const.messageTypeText && _.isEmpty(param.message)) {
+            socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoMessage });
             return;
-        
+        }
+
+        if (param.type == Const.messageTypeLocation && (
+            !param.location ||
+            !param.location.lat ||
+            !param.location.lng)) {
+
+            socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoLocation });
+            return;
+
         }
 
         param.ipAddress = socket.handshake.headers['x-forwarded-for'];
 
-        if(!param.ipAddress)
+        if (!param.ipAddress)
             param.ipAddress = socket.handshake.address;
 
-        SendMessageLogic.send(param,() => {
+        SendMessageLogic.send(param, () => {
 
-            socket.emit('socketerror', {code:Const.resCodeSocketUnknownError});  
+            socket.emit('socketerror', { code: Const.resCodeSocketUnknownError });
 
-        },() => {
+        }, () => {
 
             // success
 
