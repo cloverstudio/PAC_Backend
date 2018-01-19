@@ -34,12 +34,21 @@ class Note extends Base {
             highlight: function (str, lang) {
                 if (lang && hljs.getLanguage(lang)) {
                     try {
-                        return hljs.highlight(lang, str).value.replace("\n", "<br />");
+                        return hljs.highlight(lang, str).value
+                            .replace(/\r/g, "<br />")
+                            .replace(/\n/g, "<br />")
+                            .replace(/  /g, "&nbsp;&nbsp;")
+                            .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+
                     } catch (err) { }
                 }
 
                 try {
-                    return hljs.highlightAuto(str).value;
+                    return hljs.highlightAuto(str).value
+                        .replace(/\r/g, "<br />")
+                        .replace(/\n/g, "<br />")
+                        .replace(/  /g, "&nbsp;&nbsp;")
+                        .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
                 } catch (err) { }
 
                 return ''; // use external default escaping
