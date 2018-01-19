@@ -90,7 +90,9 @@ class Note extends Base {
         const rowHTML = this.md.render(this.props.note)
             .replace(/<blockquote>/g, '<blockquote class="blockquote">')
             .replace(/<table>/g, '<table class="table">')
-            .replace(/<img>/g, '<img class="rounded">');
+            .replace(/<img>/g, '<img class="rounded">')
+            .replace(/<code class="/g, '<code class="hljs ')
+            .replace(/<pre>/g, '<pre class="code">');
 
         const html = { __html: rowHTML };
 
