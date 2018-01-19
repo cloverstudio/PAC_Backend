@@ -192,7 +192,6 @@ class RoomInfo extends Component {
                             </div>
                         }
 
-
                         <div className="media">
                             <div className="media-body">
                                 <p><strong>{strings.InfoViewUserDetailNotification[user.lang]}</strong></p>
@@ -252,7 +251,7 @@ class RoomInfo extends Component {
                                     if (member.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={() => { this.props.openChat(user) }} >
+                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={() => { this.props.openChat(member) }} >
                                         <span className={classname}>
                                             <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                         </span>

@@ -19,5 +19,5 @@ export const FailedToAddToFavorites = {
 
 
 export const FavoriteTitleFrom = {
-    EN: "From chat : "
+    EN: "From chat: "
 }

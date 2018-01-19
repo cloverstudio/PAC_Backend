@@ -38,6 +38,8 @@ class History extends Component {
     onKeywordChange = (e) => {
         e.persist();
 
+        this.props.typeKeyword(e.target.value);
+
         clearTimeout(this.lastSearchTimeout);
 
         if (e.target.value == "") {
@@ -89,7 +91,7 @@ class History extends Component {
 
                         <header className="media-list-header b-0">
                             <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
-                                <input onChange={this.onKeywordChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
+                                <input onChange={this.onKeywordChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." value={this.props.keyword} />
                             </form>
                         </header>
 
@@ -118,7 +120,8 @@ class History extends Component {
 const mapStateToProps = (state) => {
     return {
         historyLoading: state.history.historyLoading,
-        historyList: state.history.historyList
+        historyList: state.history.historyList,
+        keyword: state.history.keyword
     };
 };
 
@@ -126,7 +129,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loadHistoryInitial: () => dispatch(actions.history.loadHistoryInitial()),
         loadHistory: (page) => dispatch(actions.history.loadHistory(page)),
-        searchHistory: keyword => dispatch(actions.history.searchHistory(keyword))
+        searchHistory: keyword => dispatch(actions.history.searchHistory(keyword)),
+        typeKeyword: keyword => dispatch(actions.history.typeKeyword(keyword)),
     };
 };
 

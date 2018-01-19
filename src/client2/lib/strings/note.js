@@ -6,7 +6,7 @@ export const NoteTitle = {
 }
 
 export const NoteSubTitle = {
-    EN: "For chat : "
+    EN: "For chat: "
 }
 
 export const Edit = {
@@ -22,7 +22,7 @@ export const EmptyMessageTitle = {
 }
 
 export const EmptyMessageText = {
-    EN: "You can save notes in markdown format here. Use this feature to keep information for this chat in one place !"
+    EN: "You can save notes in markdown format here.Use this feature to keep information for this chat in one place!"
 }
 
 
