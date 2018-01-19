@@ -67,6 +67,7 @@ var BackendMain = {
         router.use("/message/forward", require("./Controllers/Message/ForwardMessageController").init(app));
         router.use("/message/send", require("./Controllers/Message/SendMessageController").init(app));
         router.use("/message/seenby", require("./Controllers/Message/SeenByController").init(app));
+        router.use("/message/deliver", require("./Controllers/Message/DeliverMessageController").init(app));
 
         router.use("/message/list", require("./Controllers/Message/MessageListController").init(app));
 

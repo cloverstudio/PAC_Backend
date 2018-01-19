@@ -113,6 +113,10 @@ Const.resCodeSocketDeliverMessageNoMessageId = 4000096;
 Const.resCodeSocketDeliverMessageWrongUserId = 4000097;
 Const.resCodeSocketDeliverMessageWrongMessageId = 4000098;
 
+Const.responsecodeDeliverMessageNoMessageId = 4000099;
+Const.responsecodeDeliverMessageWrongMessageId = 4000100;
+Const.responsecodeDeliverMessageUserIsSender = 4000101;
+
 Const.httpCodeSucceed = 200;
 Const.httpCodeForbidden = 403;
 Const.httpCodeFileNotFound = 404;
