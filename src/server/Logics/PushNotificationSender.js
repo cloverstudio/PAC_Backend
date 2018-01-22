@@ -17,103 +17,103 @@ var EncryptionManager = require('../lib/EncryptionManager');
 var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
 
 PushNotificationSender = {
-    
-    start : function(tokenAndBadgeCount,payload,isVoip){
+
+    start: function (tokenAndBadgeCount, payload, isVoip) {
 
         var self = this;
 
         var tokensFiltered = [];
         var userModel = UserModel.get();
 
-        async.eachSeries(tokenAndBadgeCount,(tokenAndBadge,doneEach) => {
+        async.eachSeries(tokenAndBadgeCount, (tokenAndBadge, doneEach) => {
 
             var pushToken = tokenAndBadge.token;
             var unreadCount = tokenAndBadge.badge;
 
             // get user 
             userModel.find({
-                 UUID: { 
-                     $elemMatch: { pushTokens:  pushToken } 
-                 }
-            },function(err,findResult){
-                
-                if(!findResult){
+                UUID: {
+                    $elemMatch: { pushTokens: pushToken }
+                }
+            }, function (err, findResult) {
+
+                if (!findResult) {
                     doneEach(null);
                     return;
                 }
 
                 var isBlocked = false;
 
-                findResult.forEach(function(user){
+                findResult.forEach(function (user) {
 
                     // check is blocked
                     var UUIDs = user.UUID;
 
-                    var theRow = _.find(UUIDs,(o) => {
+                    var theRow = _.find(UUIDs, (o) => {
 
-                        if(o.pushTokens)
+                        if (o.pushTokens)
                             return o.pushTokens.indexOf(pushToken) != -1;
                         else
                             return false;
-                        
+
                     });
 
-                    if(theRow && theRow.blocked == true){
+                    if (theRow && theRow.blocked == true) {
                         isBlocked = true;
-                    }else{
+                    } else {
 
                     }
-                    
+
                 });
 
-                if(!isBlocked){
+                if (!isBlocked) {
                     tokensFiltered.push(tokenAndBadge);
                 }
 
                 doneEach(null);
             });
 
-        },(err) => {
+        }, (err) => {
 
-            self.send(tokensFiltered,payload,isVoip);
+            self.send(tokensFiltered, payload, isVoip);
 
         });
-        
+
     },
 
-    send : function(tokenAndBadgeCount,payload,isVoip){
+    send: function (tokenAndBadgeCount, payload, isVoip) {
 
-        async.eachLimit(tokenAndBadgeCount,Const.pushTokenThreadSize,function(tokenAndBadge,donePushEach){
-            
+        async.eachLimit(tokenAndBadgeCount, Const.pushTokenThreadSize, function (tokenAndBadge, donePushEach) {
+
             var pushToken = tokenAndBadge.token;
             var unreadCount = tokenAndBadge.badge;
-            
+
             async.parallel([
-                
-                function(donePushOne){
-                    
-                    if(isVoip){
+
+                function (donePushOne) {
+
+                    if (isVoip) {
                         donePushOne(null);
                         return;
                     }
 
                     // send dev push
-                    if(pushToken.length != 64){
-                            donePushOne(null);
-                            return; 
+                    if (pushToken.length != 64) {
+                        donePushOne(null);
+                        return;
                     }
-                    
+
 
                     // send apns adhoc
                     var options = {
                         production: false
                     };
-                    
-                    if(Config.apnsCertificates.dev.token){
+
+                    if (Config.apnsCertificates.dev.token) {
 
                         options.token = Config.apnsCertificates.dev.token;
 
-                    } else if(Config.apnsCertificates.dev.cert
+                    } else if (Config.apnsCertificates.dev.cert
                         && Config.apnsCertificates.dev.key) {
 
                         options.cert = Config.apnsCertificates.dev.cert;
@@ -133,25 +133,26 @@ PushNotificationSender = {
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
                     note.topic = Config.apnsCertificates.dev.appbundleid;
+                    note.contentAvailable = true;
 
-                    apnProvider.send(note, pushToken).then( (result) => {
+                    apnProvider.send(note, pushToken).then((result) => {
                         apnProvider.shutdown();
-                    }); 
-                    
+                    });
+
                     donePushOne(null);
-                    
+
                 },
 
-                function(donePushOne){
+                function (donePushOne) {
 
-                    if(isVoip){
+                    if (isVoip) {
                         donePushOne(null);
                         return;
                     }
 
-                    if(pushToken.length != 64){
-                            donePushOne(null);
-                            return; 
+                    if (pushToken.length != 64) {
+                        donePushOne(null);
+                        return;
                     }
 
                     // send apns adhoc
@@ -159,11 +160,11 @@ PushNotificationSender = {
                         production: true
                     };
 
-                    if(Config.apnsCertificates.adhoc.token){
+                    if (Config.apnsCertificates.adhoc.token) {
 
                         options.token = Config.apnsCertificates.adhoc.token;
 
-                    } else if(Config.apnsCertificates.adhoc.cert
+                    } else if (Config.apnsCertificates.adhoc.cert
                         && Config.apnsCertificates.adhoc.key) {
 
                         options.cert = Config.apnsCertificates.adhoc.cert;
@@ -183,37 +184,38 @@ PushNotificationSender = {
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
                     note.topic = Config.apnsCertificates.adhoc.appbundleid;
+                    note.contentAvailable = true;
 
-                    apnProvider.send(note, pushToken).then( (result) => {
+                    apnProvider.send(note, pushToken).then((result) => {
                         apnProvider.shutdown();
-                    }); 
+                    });
 
                     donePushOne(null);
 
                 },
 
-                function(donePushOne){
+                function (donePushOne) {
 
-                    if(isVoip){
+                    if (isVoip) {
                         donePushOne(null);
                         return;
                     }
 
-                    if(pushToken.length != 64){
-                            donePushOne(null);
-                            return; 
+                    if (pushToken.length != 64) {
+                        donePushOne(null);
+                        return;
                     }
 
                     // send apns store
                     var options = {
                         production: true
                     };
-                    
-                    if(Config.apnsCertificates.store.token){
+
+                    if (Config.apnsCertificates.store.token) {
 
                         options.token = Config.apnsCertificates.store.token;
 
-                    } else if(Config.apnsCertificates.store.cert
+                    } else if (Config.apnsCertificates.store.cert
                         && Config.apnsCertificates.store.key) {
 
                         options.cert = Config.apnsCertificates.store.cert;
@@ -233,39 +235,40 @@ PushNotificationSender = {
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
                     note.topic = Config.apnsCertificates.store.appbundleid;
+                    note.contentAvailable = true;
 
-                    apnProvider.send(note, pushToken).then( (result) => {
+                    apnProvider.send(note, pushToken).then((result) => {
                         apnProvider.shutdown();
-                    }); 
+                    });
 
                     donePushOne(null);
 
                 },
 
-                function(donePushOne){
+                function (donePushOne) {
 
-                    if(!isVoip){
+                    if (!isVoip) {
                         donePushOne(null);
                         return;
                     }
 
-                    if(pushToken.length != 64){
+                    if (pushToken.length != 64) {
                         donePushOne(null);
-                        return; 
-                    }
-
-                    if(!Config.apnsCertificates.voip){
-                        donePushOne(null);
-                        return; 
-                    }
-
-                    if(!Config.apnsCertificates.voip.cert ||
-                        !Config.apnsCertificates.voip.key){
-                        
-                        donePushOne(null); 
                         return;
                     }
-                    
+
+                    if (!Config.apnsCertificates.voip) {
+                        donePushOne(null);
+                        return;
+                    }
+
+                    if (!Config.apnsCertificates.voip.cert ||
+                        !Config.apnsCertificates.voip.key) {
+
+                        donePushOne(null);
+                        return;
+                    }
+
                     // send apns store
                     var options = {
                         cert: Config.apnsCertificates.voip.cert,
@@ -274,11 +277,11 @@ PushNotificationSender = {
                     };
 
                     if (!fs.existsSync(Config.apnsCertificates.voip.cert) ||
-                            !fs.existsSync(Config.apnsCertificates.voip.key)) {
+                        !fs.existsSync(Config.apnsCertificates.voip.key)) {
 
-                        donePushOne(null); 
+                        donePushOne(null);
                         return;
-                        
+
                     }
 
                     var apnProvider = new apn.Provider(options);
@@ -290,46 +293,47 @@ PushNotificationSender = {
                     note.alert = payload.message.messageiOS;
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
+                    note.contentAvailable = true;
 
-                    apnProvider.send(note, pushToken).then( (result) => {
+                    apnProvider.send(note, pushToken).then((result) => {
                         apnProvider.shutdown();
-                    }); 
+                    });
 
                     donePushOne(null);
 
                 },
 
-                function(donePushOne){
+                function (donePushOne) {
 
-                    if(pushToken.length <= 64){
-                            donePushOne(null);
-                            return; 
+                    if (pushToken.length <= 64) {
+                        donePushOne(null);
+                        return;
                     }
-                    
-                    var gcmData =  {
+
+                    var gcmData = {
                         roomId: payload.roomId,
                         message: payload.message,
                         fromuser: payload.from,
                         pushType: payload.pushType,
                         unreadCount: unreadCount
                     };
-                    
-                    if(payload.file){
+
+                    if (payload.file) {
                         gcmData.file = payload.file;
                     }
-                    
-                    if(payload.location){
+
+                    if (payload.location) {
                         gcmData.location = payload.location;
                     }
 
-                    if(payload.group){
+                    if (payload.group) {
                         gcmData.group = payload.group;
                     }
 
-                    if(payload.room){
+                    if (payload.room) {
                         gcmData.room = payload.room;
                     }
-                    
+
                     /*
                     var message = new gcm.Message({
                         collapseKey: 'spikaforbusiness',
@@ -340,41 +344,41 @@ PushNotificationSender = {
                         data:gcmData
                     });
                     */
-                    
-                    if(!_.isEmpty(Config.fcmServerKey)){
+
+                    if (!_.isEmpty(Config.fcmServerKey)) {
 
                         var fcm = new FCM(Config.fcmServerKey);
 
                         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                            to: pushToken, 
+                            to: pushToken,
                             collapse_key: 'spikaforbusiness',
-                            
+
                             data: gcmData
                         };
 
-                        fcm.send(message, function(err, response){
+                        fcm.send(message, function (err, response) {
                             if (err) {
                                 console.log(pushToken + " Something has gone wrong!", err);
                             } else {
                                 //console.log(pushToken + "Successfully sent with response: ", response);
                             }
                         });
-                        
+
                     }
-                    
+
                     donePushOne(null);
                 }
-                
-            ],function(err){
-                
-                donePushEach(null);
-                
-            });
-            
-        },function(err){
-            
 
-            
+            ], function (err) {
+
+                donePushEach(null);
+
+            });
+
+        }, function (err) {
+
+
+
         });
 
     }
