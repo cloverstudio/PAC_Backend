@@ -61,6 +61,8 @@ DeliverMessageController.prototype.init = function (app) {
 
             (done) => {
 
+                var result = {};
+
                 messageModel.findOne({
                     _id: messageId
                 }, (err, findResult) => {
@@ -72,12 +74,17 @@ DeliverMessageController.prototype.init = function (app) {
                     if (findResult.userID == user._id.toString())
                         return self.successResponse(response, Const.responsecodeDeliverMessageUserIsSender);
 
-                    done(err, { message: findResult });
+                    result.isDelivered = !_.isEmpty(_.filter(findResult.deliveredTo, { userId: user._id.toString() }));
+                    result.message = findResult;
+                    done(err, result);
 
                 });
 
             },
             (result, done) => {
+
+                if (result.isDelivered)
+                    return done(null, result);
 
                 var deliveredToRow = {
                     userId: user._id.toString(),

@@ -8,87 +8,93 @@ var async = require('async');
 
 var pathTop = "../../../../";
 
-var Const = require( pathTop + "lib/consts");
-var Config = require( pathTop + "lib/init");
-var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var Utils = require( pathTop + 'lib/utils');
+var Const = require(pathTop + "lib/consts");
+var Config = require(pathTop + "lib/init");
+var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
+var Utils = require(pathTop + 'lib/utils');
 
-var MessageModel = require( pathTop + 'Models/Message');
-var UserModel = require( pathTop + 'Models/User');
+var MessageModel = require(pathTop + 'Models/Message');
+var UserModel = require(pathTop + 'Models/User');
 
 var BackendBase = require('../BackendBase');
 
-var SeenByController = function(){
+var SeenByController = function () {
 }
 
-_.extend(SeenByController.prototype,BackendBase.prototype);
+_.extend(SeenByController.prototype, BackendBase.prototype);
 
-SeenByController.prototype.init = function(app){
-        
+SeenByController.prototype.init = function (app) {
+
     var self = this;
 
-   /**
-     * @api {get} /api/v2/message/seenby/messageid Get list of users who've seen the message
-     * @apiName Get SeenBy
-     * @apiGroup WebAPI
-     * @apiDescription Returns array of user model
-     **/
+    /**
+      * @api {get} /api/v2/message/seenby/messageid Get list of users who've seen the message
+      * @apiName Get SeenBy
+      * @apiGroup WebAPI
+      * @apiDescription Returns array of user model
+      **/
 
-    router.get('/:messageid',function(request,response){
+    router.get('/:messageid', function (request, response) {
 
         var messageId = request.params.messageid;
         var messageModel = MessageModel.get();
         var userModel = UserModel.get();
 
-        if(!Utils.isObjectId(messageId)){
-            self.successResponse(response,Const.responsecodeForwardMessageInvalidChatId);
+        if (!Utils.isObjectId(messageId)) {
+            self.successResponse(response, Const.responsecodeForwardMessageInvalidChatId);
             return;
         }
 
-        async.waterfall([(done) => {
-            
-            var result = {};
+        async.waterfall([
 
-            messageModel.findOne({_id:messageId},(err,findResult) => {
+            (done) => {
 
-                if(!findResult){
-                    self.successResponse(response,Const.responsecodeForwardMessageInvalidChatId);
-                    return;
-                }
+                var result = {};
 
-                result.message = findResult;
-                result.seebBy = findResult.seenBy;
-                done(err,result);
+                messageModel.findOne({ _id: messageId }, (err, findResult) => {
 
-            });
+                    if (!findResult) {
+                        self.successResponse(response, Const.responsecodeForwardMessageInvalidChatId);
+                        return;
+                    }
 
-        },
-        (result,done) => {
-            
-            var seenByUserIds = _.map(result.message.seenBy,(obj) => { return obj.user });
+                    result.message = findResult;
+                    result.seenBy = findResult.seenBy;
+                    result.deliveredTo = findResult.deliveredTo.map((item) => { return item.toObject() });
+                    done(err, result);
 
-            seenByUserIds = _.uniq(seenByUserIds);
-            seenByUserIds = _.filter(seenByUserIds,(str) => { return Utils.isObjectId(str)});
+                });
 
-            userModel.find({_id:{$in:seenByUserIds}},
-            UserModel.defaultResponseFields,
-            (err,findResult) => {
-                result.users = findResult;
-                done(err,result);
-            });
+            },
+            (result, done) => {
 
-        }],
-        (err,result) => {
+                var seenByUserIds = _.map(result.message.seenBy, "user");
+                var deliveredToUserIds = _.map(result.message.deliveredTo, "userId");
 
-            if(err){
-                console.log("critical err",err);
-                self.errorResponse(response,Const.httpCodeServerError);
+                var userIds = _.union(seenByUserIds, deliveredToUserIds);
+
+                userIds = _.filter(userIds, (str) => { return Utils.isObjectId(str) });
+
+                userModel.find({ _id: { $in: userIds } },
+                    UserModel.defaultResponseFields,
+                    (err, findResult) => {
+                        result.users = findResult;
+                        done(err, result);
+                    });
+
+            }
+
+        ], (err, result) => {
+
+            if (err) {
+                console.log("critical err", err);
+                self.errorResponse(response, Const.httpCodeServerError);
                 return;
             }
 
-            var responseAry = _.map(result.seebBy,function(obj){
+            var seenByAry = _.map(result.seenBy, function (obj) {
 
-                var user = _.find(result.users,(userRow) => {
+                var user = _.find(result.users, (userRow) => {
                     return userRow._id.toString() == obj.user;
                 });
 
@@ -98,8 +104,21 @@ SeenByController.prototype.init = function(app){
 
             });
 
-            self.successResponse(response,Const.responsecodeSucceed,{
-                seenBy:responseAry
+            var deliveredToAry = _.map(result.deliveredTo, function (obj) {
+
+                var user = _.find(result.users, (userRow) => {
+                    return userRow._id.toString() == obj.userId;
+                });
+
+                obj.user = user;
+
+                return obj;
+
+            });
+
+            self.successResponse(response, Const.responsecodeSucceed, {
+                seenBy: seenByAry,
+                deliveredTo: deliveredToAry
             });
 
         });

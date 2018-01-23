@@ -87,7 +87,7 @@ describe('SOCKET', function () {
                 param.should.have.length(1);
 
                 param[0].deliveredTo.should.Array();
-                param[0].deliveredTo.should.have.length(2);
+                param[0].deliveredTo.should.have.length(1);
 
                 param[0].deliveredTo[0].userId.should.equal(global.user2._id);
 
@@ -128,7 +128,7 @@ describe('SOCKET', function () {
                 param.should.have.length(1);
 
                 param[0].deliveredTo.should.Array();
-                param[0].deliveredTo.should.have.length(3);
+                param[0].deliveredTo.should.have.length(1);
 
                 param[0].deliveredTo[0].userId.should.equal(global.user2._id);
 
