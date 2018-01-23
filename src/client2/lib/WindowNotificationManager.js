@@ -6,9 +6,9 @@ import * as constant from './const';
 import * as config from './config';
 import notificationSound from '../assets/sounds/notification.mp3'
 
-class WindowNotificationManager{
+class WindowNotificationManager {
 
-    constructor(){
+    constructor() {
         this.permission = null;
         this.visibility = null;
 
@@ -19,25 +19,31 @@ class WindowNotificationManager{
     }
 
     askPermission = () => {
+        console.log(1);
+        if (!('Notification' in window)) return;
         if (this.permission) return;
 
-        if (Notification.permission !== 'denied'){
-            try{
+        console.log('Notification supported');
+
+        if (Notification.permission !== 'denied') {
+            try {
                 Notification.requestPermission()
-                .then(permission => this.permission = permission)
+                    .then(permission => this.permission = permission)
             }
-            catch(error){
+            catch (error) {
                 Notification.requestPermission(p => this.permission = p)
             }
-            
+
         }
     }
 
     initVisibilityEventListeners = callback => {
+        console.log(2);
+        if (!('Notification' in window)) return;
 
-        window.addEventListener('load', ()=>{ 
-            
-            let hidden, visibilityChange; 
+        window.addEventListener('load', () => {
+
+            let hidden, visibilityChange;
 
             if (typeof document.hidden !== "undefined") {
                 hidden = "hidden";
@@ -56,11 +62,11 @@ class WindowNotificationManager{
                 this.setVisibility(!window.document[hidden]);
             });
 
-            window.addEventListener("focus", ()=> this.setVisibility(true));
-            window.addEventListener("blur", ()=> this.setVisibility(false));
+            window.addEventListener("focus", () => this.setVisibility(true));
+            window.addEventListener("blur", () => this.setVisibility(false));
         });
-        
-    } 
+
+    }
 
     setVisibility = val => {
         this.visibility = val;
@@ -68,9 +74,12 @@ class WindowNotificationManager{
     }
 
     handleMessage = obj => {
+        console.log(3);
+        if (!('Notification' in window)) return;
+
         if (user.userData._id === obj.user._id) return;
 
-        if (this.permission === 'granted' || Notification.permission === 'granted'){
+        if (this.permission === 'granted' || Notification.permission === 'granted') {
 
             const chatIdSplit = obj.roomID.split("-");
             const chatType = parseInt(chatIdSplit[0]);
@@ -78,8 +87,8 @@ class WindowNotificationManager{
             const title = `${obj.user.name} sent:`
             let message;
             let avatar = config.APIEndpoint;
-            
-            switch(obj.type){
+
+            switch (obj.type) {
                 case constant.MessageTypeText:
                     message = Encryption.decryptText(obj.message);
                     break;
@@ -93,7 +102,7 @@ class WindowNotificationManager{
                     message = 'message';
             }
 
-            switch(chatType){
+            switch (chatType) {
                 case constant.ChatTypePrivate:
                     avatar += constant.ApiUrlGetUserAvatar;
                     if (obj.user.avatar && obj.user.avatar.thumbnail)
@@ -113,16 +122,18 @@ class WindowNotificationManager{
                     if (obj.room.avatar && obj.room.avatar.thumbnail)
                         avatar += obj.room.avatar.thumbnail.nameOnServer;
                     else avatar += obj.room._id;
-                    break; 
+                    break;
             }
 
-            if ( !(this.visibility || store.getState().infoView.muted) ) this.showNotification(title, message, avatar);
-            
+            if (!(this.visibility || store.getState().infoView.muted)) this.showNotification(title, message, avatar);
+
         }
 
     }
 
     showNotification = (title, body, icon) => {
+
+        if (!('Notification' in window)) return;
 
         const options = {
             body,

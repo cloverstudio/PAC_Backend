@@ -24,7 +24,8 @@ module.exports = {
     historyApiFallback: {
       index: basePath + "index.html"
     },
-    disableHostCheck: true
+    disableHostCheck: true,
+    host: "0.0.0.0"
   },
   output: {
     path: path.join(__dirname, "/new/"),
