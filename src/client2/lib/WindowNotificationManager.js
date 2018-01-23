@@ -19,8 +19,11 @@ class WindowNotificationManager {
     }
 
     askPermission = () => {
-        if (!Notification) return;
+        console.log(1);
+        if (!('Notification' in window)) return;
         if (this.permission) return;
+
+        console.log('Notification supported');
 
         if (Notification.permission !== 'denied') {
             try {
@@ -35,8 +38,8 @@ class WindowNotificationManager {
     }
 
     initVisibilityEventListeners = callback => {
-
-        if (!Notification) return;
+        console.log(2);
+        if (!('Notification' in window)) return;
 
         window.addEventListener('load', () => {
 
@@ -71,8 +74,8 @@ class WindowNotificationManager {
     }
 
     handleMessage = obj => {
-
-        if (!Notification) return;
+        console.log(3);
+        if (!('Notification' in window)) return;
 
         if (user.userData._id === obj.user._id) return;
 
@@ -130,7 +133,7 @@ class WindowNotificationManager {
 
     showNotification = (title, body, icon) => {
 
-        if (!Notification) return;
+        if (!('Notification' in window)) return;
 
         const options = {
             body,
