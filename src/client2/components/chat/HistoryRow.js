@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import * as constant from '../../lib/const';
 import loginUser from '../../lib/user';
 import * as strings from '../../lib/strings';
+import * as utils from '../../lib/utils';
 import * as actions from '../../actions';
 
 import AvatarImage from '../AvatarImage';
@@ -105,8 +106,30 @@ class HistoryRow extends Component {
             lastUpdateUserName += " : ";
         }
 
+        let rowClass = "history-row";
+
+        // get chatId from history.chatId
+        const originalChatId = this.props.history.chatId;
+        let chatId = "";
+
+        if (this.props.history.chatType == constant.ChatTypePrivate) {
+            chatId = utils.chatIdByUser(user, loginUser);
+        }
+        if (this.props.history.chatType == constant.ChatTypeGroup) {
+            chatId = utils.chatIdByGroup(group);
+        }
+        if (this.props.history.chatType == constant.ChatTypeRoom) {
+            chatId = utils.chatIdByRoom(room);
+        }
+
+        if (this.props.selectedChatId == chatId) {
+
+            rowClass += " selected";
+
+        }
+
         return (
-            <div className="history-row" onClick={this.selected}>
+            <div className={rowClass} onClick={this.selected}>
 
                 {history.chatType == constant.ChatTypePrivate ?
                     <div className={"media align-items-center"}>
@@ -178,6 +201,7 @@ class HistoryRow extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        selectedChatId: state.chat.chatId,
     };
 };
 

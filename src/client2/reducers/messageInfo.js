@@ -43,6 +43,13 @@ const selectedMessage = (state = {}, action) => {
 
 const seenBy = (state = [], action) => {
     switch (action.type) {
+        case types.ChatOpenByUser:
+            return [];
+        case types.ChatOpenByGroup:
+            return [];
+        case types.ChatOpenByRoom:
+            return [];
+
         case types.MessageInfoLoadSucceed:
             return action.data.seenBy;
         case types.MessageInfoLoadFailed:

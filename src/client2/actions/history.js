@@ -13,6 +13,17 @@ import * as strings from '../lib/strings';
 import user from '../lib/user';
 import { store } from '../index';
 
+
+export function typeKeyword(keyword) {
+
+    return {
+        type: types.HistoryTypeKeyword,
+        keyword
+    };
+
+}
+
+
 export function loadHistoryInitial() {
 
     return (dispatch, getState) => {

@@ -87,6 +87,8 @@
     "wildemitter": "^1.2.0"
   },
   "devDependencies": {
+    "remarkable": "^1.7.1",
+    "highlight.js": "^9.12.0",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.4",
@@ -143,8 +145,7 @@
     "watchify": "latest",
     "webpack": "^1.15.0",
     "webpack-dev-server": "^1.14.1",
-    "webrtc-adapter": "^6.0.3",
-    "markdown": "^0.5.0"
+    "webrtc-adapter": "^6.0.3"
   },
   "scripts": {
     "build-js": "browserify src/client/js/main.js > public/js/bundle.js -d",
