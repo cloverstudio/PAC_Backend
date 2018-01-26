@@ -52,8 +52,53 @@
 
             <div class="card-body">
 
-                {{{createTreeGridRoom list}}}
+                <table class="table table-hover">
 
+                    <thead>
+                        <tr>
+                            <th width="5%"></th>
+                            <th>
+                                {{l10n "Name"}}
+                            </th>
+                            <th width="15%">{{l10n "Description"}}</th>
+                            <th width="15%">{{l10n "Created At"}}</th>
+                            <th width="5%"></th>
+                            <th width="5%"></th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each list}}
+
+                            <tr>
+                                <td>
+                                    <img class="list-thumbnail img-rounded" src="{{showAvatar avatar.thumbnail.nameOnServer _id}}" />
+                                </td>
+                                <td class="list-edit-link">
+                                    <a href="/admin/room/userlist/{{_id}}">
+                                        <strong>{{name}}</strong>
+                                    </a>
+                                    <br/>
+                                    <span class="small">{{_id}}</span>
+                                </td>
+                                <td>{{description}}</td>
+                                <td>{{formatDate created}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-info" onclick='location.href="/admin/room/userlist/{{_id}}"'>{{l10n "Members"}}</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" onclick='location.href="/admin/conversation/room/{{_id}}"'>{{l10n "View Chat"}}</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick='location.href="/admin/room/delete/{{_id}}"'>{{l10n "Delete"}}</button>
+                                </td>
+                            </tr>
+
+                        {{/each}}
+                    </tbody>
+
+                </table>
 
             </div>
 
