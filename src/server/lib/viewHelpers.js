@@ -404,6 +404,98 @@ var helpers = {
             return options.fn(this);
         else
             return "";
+    },
+    "createTreeGridRoom": function (data) {
+
+        var tableHeader =
+            '<table class="table table-hover tree">' +
+            '<thead>' +
+            '<tr>' +
+            '<th  width="5%"></th>' +
+            '<th>' + helpers.l10n("Name") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Description") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = "";
+        var tableFooter = "</tbody></table>";
+
+        var parentNodes = [];
+
+        // filter parent nodes
+        _.forEach(data, function (value) {
+
+            if (_.isEmpty(_.filter(data, { _id: DatabaseManager.toObjectId(value.parentId) }))) {
+
+                value.parentId = "";
+                parentNodes.push(value);
+
+            };
+
+        });
+
+        var childNodes = [];
+
+        return createTreeGrid(parentNodes, 0);
+
+        function createTreeGrid(treeGridData, depth) {
+
+            _.forEach(treeGridData, function (value, index) {
+
+                if (_.isEmpty(value.parentId))
+                    tableBody += '<tr class="treegrid-' + value._id + '">'
+                else
+                    tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
+
+                var deleteButton =
+                    (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/room/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
+
+                var fileId = value.avatar.thumbnail.nameOnServer;
+                if (!fileId)
+                    fileId = value._id;
+
+                let indent = "";
+                for (let i = 0; i < depth; i++) {
+                    indent += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                if (depth > 0)
+                    indent += " - ";
+
+                tableBody +=
+                    '<td><img class="list-tree-thumbnail img-rounded" src="/api/v2/avatar/room/' + fileId + '" /></td>' +
+                    '<td class="list-edit-link">' + indent +
+                    '<a href="/admin/room/userlist/' + value._id + '">' +
+                    '<strong>' + value.name + '</strong>' +
+                    '</a>' +
+                    '</td>' +
+                    '<td>' + value.description + '</td>' +
+                    '<td>' + helpers.formatDate(value.created) + '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-info" onclick=\'location.href="/admin/room/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/conversation/room/' + value._id + '"\'>' + helpers.l10n("View Chat") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    deleteButton +
+                    '</td>' +
+                    '</tr>';
+
+                childNodes = _.filter(data, { parentId: value._id.toString() });
+
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes, depth + 1);
+
+            });
+
+            return tableHeader + tableBody + tableFooter;
+        };
+
     }
 }
 
