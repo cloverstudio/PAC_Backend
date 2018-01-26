@@ -80,8 +80,6 @@ describe('SOCKET', function () {
 
             client2.on('newmessage', function (param) {
 
-                global.privateMessage = param;
-
                 // send openmessage
                 client2.emit('openMessage', {
                     messageID: param._id,
@@ -174,8 +172,6 @@ describe('SOCKET', function () {
 
             client2.on('newmessage', function (param) {
 
-                global.groupMessage = param;
-
                 // send openmessage
                 client2.emit('openMessage', {
                     messageID: param._id,
@@ -267,8 +263,6 @@ describe('SOCKET', function () {
             }
 
             client2.on('newmessage', function (param) {
-
-                global.roomMessage = param;
 
                 // send openmessage
                 client2.emit('openMessage', {

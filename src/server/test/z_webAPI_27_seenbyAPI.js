@@ -19,6 +19,7 @@ describe('WEB API', function () {
                     }
 
                     res.body.data.seenBy[0].user._id.should.be.exactly(global.user2._id);
+                    res.body.data.deliveredTo[0].user._id.should.be.exactly(global.user2._id);
 
                     done();
 

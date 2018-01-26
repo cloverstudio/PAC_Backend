@@ -110,17 +110,7 @@ class HistoryRow extends Component {
 
         // get chatId from history.chatId
         const originalChatId = this.props.history.chatId;
-        let chatId = "";
-
-        if (this.props.history.chatType == constant.ChatTypePrivate) {
-            chatId = utils.chatIdByUser(user, loginUser);
-        }
-        if (this.props.history.chatType == constant.ChatTypeGroup) {
-            chatId = utils.chatIdByGroup(group);
-        }
-        if (this.props.history.chatType == constant.ChatTypeRoom) {
-            chatId = utils.chatIdByRoom(room);
-        }
+        const chatId = utils.getChatIdByHistory(this.props.history)
 
         if (this.props.selectedChatId == chatId) {
 

@@ -41,6 +41,8 @@ export function loadHistoryInitial() {
 
         }).catch((err) => {
 
+            console.error(err);
+
             dispatch(actions.notification.showToast(strings.FailedToGetHistory[user.lang]));
 
             dispatch({

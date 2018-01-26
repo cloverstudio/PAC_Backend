@@ -18,10 +18,10 @@ var helpers = {
     "length": function (ary) {
         return ary.length;
     },
-    "showAvatar": function (fileID, id) {
+    "showAvatar": function (fileID) {
 
         if (_.isEmpty(fileID)) {
-            return "/api/v2/avatar/user/" + id;
+            return "/images/usernoavatar.png"
         } else {
             return "/api/v2/avatar/user/" + fileID;
         }
@@ -205,7 +205,7 @@ var helpers = {
             prev = 1
 
         // prev
-        html += '<li class="page-item"><a class="page-link" href="' + baseURL + prev + '" aria-label="Previous"><span class="ti-arrow-left"></span></a></li>';
+        html += '<li><a href="' + baseURL + prev + '" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
 
         var from = page - maxPages / 2;
         if (from <= 1)
@@ -216,30 +216,31 @@ var helpers = {
         // first page 
         if (from > 3) {
 
-            html += '<li class="page-item"><a class="page-link" href="' + baseURL + '1">' + 1 + '</a></li>';
-            html += '<li class="page-item"><a class="page-link" href="#">...</a></li>';
+            html += '<li><a href="' + baseURL + '1">' + 1 + '</a></li>';
+            html += '<li><a href="#">...</a></li>';
         }
 
         for (var i = 0; i < maxPages; i++) {
 
             var pageNum = from + i;
+
             // current selected page is colored
             if (pageNum == page)
-                html += '<li class="page-item active"><a class="page-link active" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+                html += '<li><a class="selected-page" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
             else
-                html += '<li class="page-item"><a class="page-link" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+                html += '<li><a href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
 
         }
 
         if (from + maxPages <= pages - 1) {
 
-            html += '<li class="page-item"><a class="page-link" href="#">...</a></li>';
-            html += '<li class="page-item"><a class="page-link" href="' + baseURL + pages + '">' + pages + '</a></li>';
+            html += '<li><a href="#">...</a></li>';
+            html += '<li><a href="' + baseURL + pages + '">' + pages + '</a></li>';
 
         }
 
         // prev
-        html += '<li class="page-item"><a class="page-link" href="' + baseURL + next + '" aria-label="Next"><span class="ti-arrow-right"></span></a></li>';
+        html += '<li><a href="' + baseURL + next + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
 
 
         return html;
@@ -263,7 +264,6 @@ var helpers = {
             '<table class="table table-hover tree">' +
             '<thead>' +
             '<tr>' +
-            '<th  width="5%"></th>' +
             '<th>' + helpers.l10n("Name") + '</th>' +
             '<th width="15%">' + helpers.l10n("Description") + '</th>' +
             '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
@@ -293,9 +293,9 @@ var helpers = {
 
         var childNodes = [];
 
-        return createTreeGrid(parentNodes, 0);
+        return createTreeGrid(parentNodes);
 
-        function createTreeGrid(treeGridData, depth) {
+        function createTreeGrid(treeGridData) {
 
             _.forEach(treeGridData, function (value, index) {
 
@@ -305,23 +305,11 @@ var helpers = {
                     tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
 
                 var deleteButton =
-                    (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
-
-                var fileId = value.avatar.thumbnail.nameOnServer;
-                if (!fileId)
-                    fileId = value._id;
-
-                let indent = "";
-                for (let i = 0; i < depth; i++) {
-                    indent += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-
-                if (depth > 0)
-                    indent += " - ";
+                    (!value.default) ? '<button type="button" class="buttonRedGhoust" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
 
                 tableBody +=
-                    '<td><img class="list-tree-thumbnail img-rounded" src="/api/v2/avatar/group/' + fileId + '" /></td>' +
-                    '<td class="list-edit-link">' + indent +
+                    '<td class="list-edit-link">' +
+                    '<img class="list-tree-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" />' +
                     '<a href="/admin/department/edit/' + value._id + '">' +
                     '<strong>' + value.name + '</strong>' +
                     '</a>' +
@@ -329,10 +317,10 @@ var helpers = {
                     '<td>' + value.description + '</td>' +
                     '<td>' + helpers.formatDate(value.created) + '</td>' +
                     '<td>' +
-                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
                     '</td>' +
                     '<td>' +
-                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
+                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
                     '</td>' +
                     '<td>' +
                     deleteButton +
@@ -341,7 +329,7 @@ var helpers = {
 
                 childNodes = _.filter(data, { parentId: value._id.toString() });
 
-                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes, depth + 1);
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes);
 
             });
 
@@ -407,6 +395,7 @@ var helpers = {
         } else {
             return value;
         }
+<<<<<<< HEAD
     },
     "selectedIfEqual": function (param1, param2) {
 
@@ -422,6 +411,110 @@ var helpers = {
             return "";
 
     },
+=======
+
+
+    },
+    "isEqual": function (val1, val2, options) {
+
+        if (val1 == val2)
+            return options.fn(this);
+        else
+            return "";
+    },
+    "createTreeGridRoom": function (data) {
+
+        var tableHeader =
+            '<table class="table table-hover tree">' +
+            '<thead>' +
+            '<tr>' +
+            '<th  width="5%"></th>' +
+            '<th>' + helpers.l10n("Name") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Description") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = "";
+        var tableFooter = "</tbody></table>";
+
+        var parentNodes = [];
+
+        // filter parent nodes
+        _.forEach(data, function (value) {
+
+            if (_.isEmpty(_.filter(data, { _id: DatabaseManager.toObjectId(value.parentId) }))) {
+
+                value.parentId = "";
+                parentNodes.push(value);
+
+            };
+
+        });
+
+        var childNodes = [];
+
+        return createTreeGrid(parentNodes, 0);
+
+        function createTreeGrid(treeGridData, depth) {
+
+            _.forEach(treeGridData, function (value, index) {
+
+                if (_.isEmpty(value.parentId))
+                    tableBody += '<tr class="treegrid-' + value._id + '">'
+                else
+                    tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
+
+                var deleteButton =
+                    (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/room/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
+
+                var fileId = value.avatar.thumbnail.nameOnServer;
+                if (!fileId)
+                    fileId = value._id;
+
+                let indent = "";
+                for (let i = 0; i < depth; i++) {
+                    indent += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                if (depth > 0)
+                    indent += " - ";
+
+                tableBody +=
+                    '<td><img class="list-tree-thumbnail img-rounded" src="/api/v2/avatar/room/' + fileId + '" /></td>' +
+                    '<td class="list-edit-link">' + indent +
+                    '<a href="/admin/room/userlist/' + value._id + '">' +
+                    '<strong>' + value.name + '</strong>' +
+                    '</a>' +
+                    '</td>' +
+                    '<td>' + value.description + '</td>' +
+                    '<td>' + helpers.formatDate(value.created) + '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-info" onclick=\'location.href="/admin/room/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/conversation/room/' + value._id + '"\'>' + helpers.l10n("View Chat") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    deleteButton +
+                    '</td>' +
+                    '</tr>';
+
+                childNodes = _.filter(data, { parentId: value._id.toString() });
+
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes, depth + 1);
+
+            });
+
+            return tableHeader + tableBody + tableFooter;
+        };
+
+    }
+>>>>>>> ce4fdbe8da48d5ebb10ae259010568213116c212
 }
 
 module["exports"] = helpers;

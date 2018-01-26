@@ -1,7 +1,8 @@
 var should = require('should');
 var request = require('supertest');
 var app = require('../mainTest');
-var Const = require("../lib/consts")
+var Const = require("../lib/consts");
+
 describe('WEB API', function () {
 
     var req, res;
