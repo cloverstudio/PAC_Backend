@@ -71,11 +71,11 @@ export function url(url) {
 
 export function getTimestamp(dateObj) {
   return `${dateObj.getFullYear()}/${dateObj.getMonth()}/${dateObj.getDate()} ${
-        dateObj.getHours().toString().padLeft(2, '0')
+    dateObj.getHours().toString().padLeft(2, '0')
     }:${
-        dateObj.getMinutes().toString().padLeft(2, '0')
+    dateObj.getMinutes().toString().padLeft(2, '0')
     }:${
-        dateObj.getSeconds().toString().padLeft(2, '0')
+    dateObj.getSeconds().toString().padLeft(2, '0')
     }`;
 }
 
@@ -101,4 +101,25 @@ function updateWindowTitle() {
   if (unreadMessage > 0)
     document.title = "(" + unreadMessage + ") " + document.title;
 
+}
+
+export function getChatIdByHistory(history) {
+
+  let chatId = "";
+
+  const userFrom = history.user;
+  const group = history.group;
+  const room = history.room;
+
+  if (history.chatType == constant.ChatTypePrivate) {
+    chatId = chatIdByUser(userFrom, user);
+  }
+  if (history.chatType == constant.ChatTypeGroup) {
+    chatId = chatIdByGroup(group);
+  }
+  if (history.chatType == constant.ChatTypeRoom) {
+    chatId = chatIdByRoom(room);
+  }
+
+  return chatId;
 }

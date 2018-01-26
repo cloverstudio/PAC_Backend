@@ -33,9 +33,20 @@ describe('SOCKET', function () {
 
             client1.on('logined', function () {
 
+                client1.emit('sendMessage', {
+                    roomID: "1-" + global.user1._id + "-" + global.user2._id,
+                    userID: global.user1._id,
+                    type: 1,
+                    message: global.encryptedText
+                });
+
+            });
+
+            client1.on('newmessage', function (param) {
+
                 client1.emit('deliverMessage', {
                     userID: global.user2._id,
-                    messageID: global.privateMessage._id
+                    messageID: param._id
                 });
 
             });
@@ -74,9 +85,20 @@ describe('SOCKET', function () {
 
             client1.on('logined', function () {
 
+                client1.emit('sendMessage', {
+                    roomID: "2-" + global.group1._id,
+                    userID: global.user1._id,
+                    type: 1,
+                    message: global.encryptedText
+                });
+
+            });
+
+            client1.on('newmessage', function (param) {
+
                 client1.emit('deliverMessage', {
                     userID: global.user2._id,
-                    messageID: global.groupMessage._id
+                    messageID: param._id
                 });
 
             });
@@ -115,9 +137,20 @@ describe('SOCKET', function () {
 
             client1.on('logined', function () {
 
+                client1.emit('sendMessage', {
+                    roomID: "3-" + global.room2._id,
+                    userID: global.user1._id,
+                    type: 1,
+                    message: global.encryptedText
+                });
+
+            });
+
+            client1.on('newmessage', function (param) {
+
                 client1.emit('deliverMessage', {
                     userID: global.user2._id,
-                    messageID: global.roomMessage._id
+                    messageID: param._id
                 });
 
             });
@@ -140,7 +173,7 @@ describe('SOCKET', function () {
 
         });
 
-        it('fails if no userId', function (done) {
+        it('fails if there is no userID', function (done) {
 
             var params = {
                 token: global.user1.accessToken
@@ -157,8 +190,7 @@ describe('SOCKET', function () {
             client1.on('logined', function () {
 
                 client1.emit('deliverMessage', {
-                    userID: "",
-                    messageID: global.roomMessage._id
+                    userID: ""
                 });
 
             });
@@ -176,7 +208,7 @@ describe('SOCKET', function () {
 
         });
 
-        it('fails if no messageId', function (done) {
+        it('fails if there is no messageID', function (done) {
 
             var params = {
                 token: global.user1.accessToken
@@ -212,7 +244,7 @@ describe('SOCKET', function () {
 
         });
 
-        it('fails if invalid userId', function (done) {
+        it('fails if wrong userID', function (done) {
 
             var params = {
                 token: global.user1.accessToken
@@ -229,8 +261,8 @@ describe('SOCKET', function () {
             client1.on('logined', function () {
 
                 client1.emit('deliverMessage', {
-                    userID: "invaliduserId",
-                    messageID: global.roomMessage._id
+                    userID: "wrong",
+                    messageID: "messageID"
                 });
 
             });
@@ -248,7 +280,7 @@ describe('SOCKET', function () {
 
         });
 
-        it('fails if invalid messageId', function (done) {
+        it('fails if wrong messageID', function (done) {
 
             var params = {
                 token: global.user1.accessToken
@@ -266,7 +298,7 @@ describe('SOCKET', function () {
 
                 client1.emit('deliverMessage', {
                     userID: global.user2._id,
-                    messageID: "invalidmessageId"
+                    messageID: "wrong"
                 });
 
             });

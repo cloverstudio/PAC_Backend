@@ -102,6 +102,8 @@ class Notification extends Component {
 
                                 if (group.avatar && group.avatar.thumbnail) {
                                     fileId = group.avatar.thumbnail.nameOnServer;
+                                } else {
+                                    fileId = group._id;
                                 }
 
                             }
@@ -112,6 +114,8 @@ class Notification extends Component {
 
                                 if (room.avatar && room.avatar.thumbnail) {
                                     fileId = room.avatar.thumbnail.nameOnServer;
+                                } else {
+                                    fileId = room._id;
                                 }
 
                             }
@@ -125,6 +129,8 @@ class Notification extends Component {
 
                                 if (targetUser.avatar && targetUser.avatar.thumbnail) {
                                     fileId = targetUser.avatar.thumbnail.nameOnServer;
+                                } else {
+                                    fileId = targetUser._id;
                                 }
 
                             }
