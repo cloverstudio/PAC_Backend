@@ -67,6 +67,7 @@ var BackendMain = {
         router.use("/message/forward", require("./Controllers/Message/ForwardMessageController").init(app));
         router.use("/message/send", require("./Controllers/Message/SendMessageController").init(app));
         router.use("/message/seenby", require("./Controllers/Message/SeenByController").init(app));
+        router.use("/message/deliver", require("./Controllers/Message/DeliverMessageController").init(app));
 
         router.use("/message/list", require("./Controllers/Message/MessageListController").init(app));
 
@@ -90,6 +91,9 @@ var BackendMain = {
         router.use("/hook/r", require("./Controllers/WebHook/Receiver/WebHookReceiverController").init(app));
 
         router.use("/lang/get", require("./Controllers/Lang/GetDictionaryController").init(app));
+
+        router.use("/note", require("./Controllers/Note/SaveNotesController").init(app));
+        router.use("/note", require("./Controllers/Note/LoadNotesController").init(app));
 
         return router;
     }

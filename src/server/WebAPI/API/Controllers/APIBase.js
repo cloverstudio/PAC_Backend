@@ -5,58 +5,58 @@ var async = require('async');
 
 var pathTop = "../../../";
 
-var Const = require( pathTop + "lib/consts");
-var Config = require( pathTop + "lib/init");
-var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var Utils = require( pathTop + 'lib/utils');
+var Const = require(pathTop + "lib/consts");
+var Config = require(pathTop + "lib/init");
+var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
+var Utils = require(pathTop + 'lib/utils');
 
 const formidable = require('formidable');
 const path = require('path');
 
-var APIBase = function(){
-    
+var APIBase = function () {
+
 }
 
 var Base = require('../../BaseController');
 
-_.extend(APIBase.prototype,Base.prototype);
+_.extend(APIBase.prototype, Base.prototype);
 
 APIBase.prototype.errorResponse = (response, httpCode) => {
     response.status(httpCode).send("");
 }
 
-APIBase.prototype.successResponse = (response,code,data) => {
+APIBase.prototype.successResponse = (response, code, data) => {
     response.status(Const.httpCodeSucceed);
-    response.set('connection','Keep-alive');
+    response.set('connection', 'Keep-alive');
     response.json(data);
 }
 
 APIBase.prototype.checkQueries = (query) => {
-    
-    let keyword = "", 
-    offset = 0, 
-    limit = 0,
-    sort = {}, 
-    fields = {};
+
+    let keyword = "",
+        offset = 0,
+        limit = 0,
+        sort = {},
+        fields = {};
     if (query.keyword) {
         keyword = query.keyword;
     }
     if (query.offset) {
         if (query.offset < 0) return;
-        offset = query.offset;
+        offset = parseInt(query.offset);
     }
     if (query.limit) {
-        limit = query.limit;
+        limit = parseInt(query.limit);
     }
     if (query.sort) {
         const sortCondtions = query.sort.split(",");
-        _.each(sortCondtions,(condition) => {
+        _.each(sortCondtions, (condition) => {
             let splited = [];
             if (_.contains(condition, ":")) {
                 splited = condition.trim().split(":");
                 switch (splited[1].trim()) {
                     case 'desc':
-                        splited[1] = -1;            
+                        splited[1] = -1;
                         break;
                     default:
                         splited[1] = 1;
@@ -66,7 +66,7 @@ APIBase.prototype.checkQueries = (query) => {
         });
     }
     if (query.fields) {
-        const splitFields = query.fields.split(",");    
+        const splitFields = query.fields.split(",");
         _.each(splitFields, (key) => {
             fields[key.trim()] = 1;
         });
@@ -76,7 +76,7 @@ APIBase.prototype.checkQueries = (query) => {
 
 APIBase.prototype.parseFormData = (request, callback) => {
     let form = new formidable.IncomingForm();
-    const uploadPathError = APIBase.prototype.checkUploadPath();    
+    const uploadPathError = APIBase.prototype.checkUploadPath();
     form.uploadDir = Config.uploadPath;
     form.on('fileBegin', (name, file) => {
         file.path = path.dirname(file.path) + "/" + Utils.getRandomString();

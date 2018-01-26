@@ -8,6 +8,16 @@ import user from '../lib/user';
 
 import Encryption from '../lib/encryption/encryption';
 
+
+const keyword = (state = "", action) => {
+    switch (action.type) {
+        case types.HistoryTypeKeyword:
+            return action.keyword
+        default:
+            return state;
+    }
+};
+
 const historyLoading = (state = false, action) => {
     switch (action.type) {
         case types.HistoryLoadInitial:
@@ -41,8 +51,10 @@ const historyList = (state = [], action) => {
             return state.concat(action.data.list);
         case types.HistorySearchSucceed:
             return action.data.list;
+
     }
 
+    // update unread count
     if (action.type == types.ChatReceiveMessage) {
 
         const newMessage = action.message;
@@ -86,6 +98,7 @@ const historyList = (state = [], action) => {
 
     }
 
+    // make unread count to zero
     if (action.type == types.ChatOpenByUser ||
         action.type == types.ChatOpenByGroup ||
         action.type == types.ChatOpenByRoom) {
@@ -115,5 +128,6 @@ const historyList = (state = [], action) => {
 
 export default combineReducers({
     historyLoading,
-    historyList
+    historyList,
+    keyword
 });;

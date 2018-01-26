@@ -397,6 +397,11 @@
         cursor: pointer;
         transition: all 0.3s;
     }
+    
+    .selected{
+        cursor: default;
+        background-color: $color-pale-secondary;
+    }
 
     .history-row:hover{
         background-color: $color-bg-light;

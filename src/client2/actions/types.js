@@ -1,4 +1,5 @@
 export const FILTER = "FILTER";
+export const LocationChange = "@@router/LOCATION_CHANGE";
 
 // Login
 export const LoginClick = "Login/Click";
@@ -44,6 +45,8 @@ export const HistoryMarkAllFailed = "History/MarkAllFailed";
 export const HistorySearchStart = "History/SearchStart";
 export const HistorySearchSucceed = "History/SearchSucceed";
 export const HistorySearchFailed = "History/SearchFailed";
+export const HistoryTypeKeyword = "History/TypeKeyword";
+
 
 // UserList
 export const UserListLoadStart = "UserList/LoadStart";
@@ -204,3 +207,14 @@ export const MessageInfoForwardMessage = "MessageInfo/ForwardMessage";
 export const SearchAllStart = "SearchAll/Start";
 export const SearchAllSucceed = "SearchAll/Succeed";
 export const SearchAllFailed = "SearchAll/Failed";
+
+// Note
+export const NoteGoEdit = "Note/GoEdit";
+export const NoteGoPreview = "Note/GoPreview";
+export const NoteTypeNote = "Note/TypeNote";
+export const NoteSaveStart = "Note/SaveStart";
+export const NoteSaveSucceed = "Note/SaveSucceed";
+export const NoteSaveFailed = "Note/SaveFailed";
+export const NoteLoadStart = "Note/LoadStart";
+export const NoteLoadSucceed = "Note/LoadSucceed";
+export const NoteLoadFailed = "Note/LoadFailed";

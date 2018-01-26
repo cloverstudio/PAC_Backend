@@ -9,12 +9,12 @@ var DatabaseManager = require('../lib/DatabaseManager');
 var Utils = require("../lib/utils");
 
 var BaseModel = require('./BaseModel');
-var User = function(){};
+var User = function () { };
 
-_.extend(User.prototype,BaseModel.prototype);
+_.extend(User.prototype, BaseModel.prototype);
 
-User.prototype.init = function(mongoose){
-    
+User.prototype.init = function (mongoose) {
+
     this.schema = new mongoose.Schema({
         name: String,
         sortName: String,
@@ -28,25 +28,25 @@ User.prototype.init = function(mongoose){
         organizationId: { type: String, index: true },
         status: Number, // 1: Enabled, 0: Disabled
         avatar: {
-            picture: { 
-                originalName: String, 
-                size: Number, 
+            picture: {
+                originalName: String,
+                size: Number,
                 mimeType: String,
                 nameOnServer: String
             },
-            thumbnail: { 
-                originalName: String, 
-                size: Number, 
+            thumbnail: {
+                originalName: String,
+                size: Number,
                 mimeType: String,
                 nameOnServer: String
             }
         },
-        groups: [ String ],
+        groups: [String],
         permission: Number, // 1: user (za web client), 2: organizatinAdmin, 3: subAdmin,
         isGuest: Number,
-        muted : [],
-        blocked : [],
-        devices : [],
+        muted: [],
+        blocked: [],
+        devices: [],
         UUID: [],
         phoneNumber: String,
         activationCode: String
@@ -56,80 +56,80 @@ User.prototype.init = function(mongoose){
 
 }
 
-User.get = function(){
-    
+User.get = function () {
+
     return DatabaseManager.getModel('User').model;
-    
+
 }
 
 
-User.getUsersById = function(userIds,callBack){
-    
+User.getUsersById = function (userIds, callBack) {
+
     var model = DatabaseManager.getModel('User').model;
 
-    model.find({ _id: { "$in" : userIds } },function (err, result) {
+    model.find({ _id: { "$in": userIds } }, function (err, result) {
 
         if (err) throw err;
-                             
-        if(callBack)
-            callBack(result);    
-    
+
+        if (callBack)
+            callBack(result);
+
     });
-    
+
 };
 
-User.getUserById = function(userId,callBack){
-    
+User.getUserById = function (userId, callBack) {
+
     var model = DatabaseManager.getModel('User').model;
 
-    model.findOne({ _id: userId },function (err, result) {
+    model.findOne({ _id: userId }, function (err, result) {
 
         // comment out here because sometime webhook can send text which is not objectid
         //if (err) throw err;
-                             
-        if(callBack)
-            callBack(result);    
-    
+
+        if (callBack)
+            callBack(result);
+
     });
-    
+
 };
 
-User.findUsersbyId = function(aryId,callBack){
-        
+User.findUsersbyId = function (aryId, callBack) {
+
     var conditions = [];
-    aryId.forEach(function(userId){
-        
+    aryId.forEach(function (userId) {
+
         conditions.push({
-            _id : userId 
+            _id: userId
         });
-        
+
     });
-    
+
     var model = this.get();
-    
+
     var query = model.find({
-        $or : conditions
-    }).sort({'created': 1});        
-    
-    query.exec(function(err,data){
-        
+        $or: conditions
+    }).sort({ 'created': 1 });
+
+    query.exec(function (err, data) {
+
         if (err)
             console.error(err);
-        
-        if(callBack)
-            callBack(err,data)
-        
-    });                
-                
+
+        if (callBack)
+            callBack(err, data)
+
+    });
+
 };
 
 User.defaultResponseFields = {
-    _id:true,
-    description:true,
-    name:true,
-    organizationId:true,
-    userid:true,
-    avatar:true
+    _id: true,
+    description: true,
+    name: true,
+    organizationId: true,
+    userid: true,
+    avatar: true
 }
 
 module["exports"] = User;

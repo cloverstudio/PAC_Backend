@@ -60,7 +60,7 @@
     "md5": "^2.0.0",
     "mime": "^1.4.1",
     "mockconsole": "0.0.1",
-    "mongoose": "4.13.9",
+    "mongoose": "5.0.0-rc2",
     "multer": "^0.1.8",
     "node-fetch": "^1.7.3",
     "node-gcm": "^0.14.8",
@@ -87,6 +87,8 @@
     "wildemitter": "^1.2.0"
   },
   "devDependencies": {
+    "remarkable": "^1.7.1",
+    "highlight.js": "^9.12.0",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.4",

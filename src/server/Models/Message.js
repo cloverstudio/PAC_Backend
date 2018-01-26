@@ -52,7 +52,13 @@ Message.prototype.init = function (mongoose) {
         deleted: Number,
         created: Number,
         attributes: {},
-
+        deliveredTo: [
+            {
+                userId: String,
+                at: Number,
+                _id: false
+            }
+        ]
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "spika_messages", this.schema);

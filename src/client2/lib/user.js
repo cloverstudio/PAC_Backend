@@ -1,59 +1,59 @@
 import * as constant from './const';
 import SocketManager from './SocketManager';
 
-class user{
-    
-    constructor(){
+class user {
+
+    constructor() {
         this.lang = constant.EN;
         this.userData = null;
 
         const checkLocalStorage = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
-        if(checkLocalStorage){
+        if (checkLocalStorage) {
             this.userData = JSON.parse(localStorage.getItem(constant.LocalStorageKeyUserData));
             this.token = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
             setTimeout(() => {
-                SocketManager.join();
-            },100);
-            
+                SocketManager.init();
+            }, 100);
+
         }
     }
 
-    signinSucceed(signinData,save){
+    signinSucceed(signinData, save) {
         this.userData = signinData.user;
         this.token = signinData.newToken;
 
-        SocketManager.join();
+        SocketManager.init();
 
-        if(save){
+        if (save) {
             localStorage.setItem(constant.LocalStorageKeyAccessToken, signinData.newToken);
             localStorage.setItem(constant.LocalStorageKeyUserData, JSON.stringify(signinData.user));
-        }else{
+        } else {
             localStorage.removeItem(constant.LocalStorageKeyAccessToken);
             localStorage.removeItem(constant.LocalStorageKeyUserData);
         }
     }
 
-    updateUserData(userData){
+    updateUserData(userData) {
         this.userData = userData;
 
         const checkLocalStorage = localStorage.getItem(constant.LocalStorageKeyUserData);
 
-        if(checkLocalStorage){
+        if (checkLocalStorage) {
             const savedUserData = JSON.parse(checkLocalStorage);
 
-            if(savedUserData && savedUserData._id == userData._id)
+            if (savedUserData && savedUserData._id == userData._id)
                 localStorage.setItem(constant.LocalStorageKeyUserData, JSON.stringify(userData));
         }
 
     }
 
-    checkSavedToken(){
+    checkSavedToken() {
 
     }
 
-    logout(){
+    logout() {
 
         this.userData = null;
         this.token = null;

@@ -11,7 +11,7 @@ import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
 
 import user from '../lib/user';
-import {store} from '../index';
+import { store } from '../index';
 
 import Base from './Base';
 
@@ -28,6 +28,7 @@ class Favotites extends Base {
         super();
         this.lastSearchTimeout = null;
         this.page = 1;
+        this.chatId = null;
     }
 
     static propTypes = {
@@ -35,7 +36,14 @@ class Favotites extends Base {
 
     componentDidMount() {
         this.page = 1;
-        this.props.loadMessages(this.page);
+
+        const url = this.props.location;
+        const chatId = url.replace(config.BasePath + "/favorites", "").replace("/", "");
+
+        if (chatId.length > 1)
+            this.chatId = chatId;
+
+        this.props.loadMessages(this.page, this.chatId);
         window.addEventListener('scroll', this.onScroll);
     }
 
@@ -52,11 +60,11 @@ class Favotites extends Base {
             this.props.openChatByUser(message.userModelTarget);
         }
         else if (chatType == constant.ChatTypeGroup) {
-            if (typeof message.group === 'undefined') return this.props.showToast('This group is deleted.') 
+            if (typeof message.group === 'undefined') return this.props.showToast('This group is deleted.')
             else this.props.openChatByGroup(message.group)
         }
         else if (chatType == constant.ChatTypeRoom) {
-            if (typeof message.room === 'undefined') return this.props.showToast('This room is deleted.') 
+            if (typeof message.room === 'undefined') return this.props.showToast('This room is deleted.')
             else this.props.openChatByRoom(message.room)
         }
 
@@ -64,42 +72,42 @@ class Favotites extends Base {
     }
 
     onScroll = (e) => {
-        
-        if(this.props.pagingReachesEnd)
+
+        if (this.props.pagingReachesEnd)
             return;
-            
+
         const scrollPos = window.pageYOffset + 0;
-        const realScrollPos = scrollPos +  document.body.clientHeight;
+        const realScrollPos = scrollPos + document.body.clientHeight;
         const scrollHeight = document.body.scrollHeight;
 
         // if scroll position is between 2px from bottom
-        if(!this.props.isLoading && Math.abs(realScrollPos - scrollHeight) < 1){
+        if (!this.props.isLoading && Math.abs(realScrollPos - scrollHeight) < 1) {
 
             this.page++;
-            this.props.loadMessages(this.page);
-            
+            this.props.loadMessages(this.page, this.chatId);
+
         }
     }
 
     render() {
-        
+
         let sideBarClass = "pace-done sidebar-folded";
-        if(this.props.sidebarState)
+        if (this.props.sidebarState)
             sideBarClass += " sidebar-open";
 
         let asideBarHolderClass = "layout-chat";
-        if(this.props.historyBarState)
+        if (this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
         return (
 
             <div className={sideBarClass} onClick={this.globalClick}>
-            
+
                 <SideBar />
                 <Header />
 
                 <main className={asideBarHolderClass}>
-                
+
                     {this.props.isLoading ?
                         <div className="spinner-linear favorite">
                             <div className="line"></div>
@@ -112,6 +120,7 @@ class Favotites extends Base {
                         <div className="header-info form-type-line">
                             <h1 className="header-title">
                                 <strong>{strings.FavoriteTitle[user.lang]}</strong>
+                                {this.chatId ? <small>{strings.FavoriteTitleFrom[user.lang]}{this.props.chatName}</small> : null}
                             </h1>
                         </div>
                     </header>
@@ -120,84 +129,84 @@ class Favotites extends Base {
 
                         <div className="row">
 
-                            {this.props.favorites.map( (favorite) => {
+                            {this.props.favorites.map((favorite) => {
 
                                 const message = favorite.messageModel;
 
-                                if (typeof message.deleted !== 'undefined' && message.deleted !== 0 ){
+                                if (typeof message.deleted !== 'undefined' && message.deleted !== 0) {
                                     return null;
                                 }
 
                                 let chatName = "";
 
-                                if(message.userModelTarget){
+                                if (message.userModelTarget) {
                                     chatName = message.userModelTarget.name;
                                 }
 
-                                else if(message.room){
+                                else if (message.room) {
                                     chatName = message.room.name;
                                 }
 
-                                else if(message.group){
+                                else if (message.group) {
                                     chatName = message.group.name;
                                 }
 
-                                else if(message.user){
+                                else if (message.user) {
                                     chatName = message.user.name;
                                 }
 
                                 let chatAvatarId = "";
                                 let chatAvatarType = "";
 
-                                if(message.userModelTarget && message.userModelTarget.avatar && message.userModelTarget.avatar.thumbnail){
+                                if (message.userModelTarget && message.userModelTarget.avatar && message.userModelTarget.avatar.thumbnail) {
                                     chatAvatarId = message.userModelTarget.avatar.thumbnail.nameOnServer;
                                     chatAvatarType = constant.AvatarUser;
                                 }
 
-                                if(message.room && message.room.avatar && message.room.avatar.thumbnail){
+                                if (message.room && message.room.avatar && message.room.avatar.thumbnail) {
                                     chatAvatarId = message.room.avatar.thumbnail.nameOnServer;
                                     chatAvatarType = constant.AvatarRoom;
                                 }
 
-                                if(message.group && message.group.avatar && message.group.avatar.thumbnail){
+                                if (message.group && message.group.avatar && message.group.avatar.thumbnail) {
                                     chatAvatarId = message.group.avatar.thumbnail.nameOnServer;
                                     chatAvatarType = constant.AvatarGroup;
                                 }
 
                                 let userName = "";
-                                if(message.user)
+                                if (message.user)
                                     userName = message.user.name;
 
                                 let userAvatarId = "";
-                                if(message.user && message.user.avatar && message.user.avatar.thumbnail)
-                                userAvatarId = message.user.avatar.thumbnail.nameOnServer;
+                                if (message.user && message.user.avatar && message.user.avatar.thumbnail)
+                                    userAvatarId = message.user.avatar.thumbnail.nameOnServer;
 
 
                                 let messageContent;
 
-                                switch(message.type){
+                                switch (message.type) {
                                     case constant.MessageTypeFile:
                                         const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
 
-                                        if (fileMimeType === constant.imgMimeType){
+                                        if (fileMimeType === constant.imgMimeType) {
                                             messageContent = (
-                                               <span className="image-message">
-                                                   <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}/>
-                                                   <br/>
-                                                   <span className="fw-600">{message.file.file.name}</span>
-                                               </span>)
-                                       }
-                                       else {
+                                                <span className="image-message">
+                                                    <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id} />
+                                                    <br />
+                                                    <span className="fw-600">{message.file.file.name}</span>
+                                                </span>)
+                                        }
+                                        else {
                                             messageContent = (
                                                 <span>
                                                     <i className="ti-zip text-secondary fs-45 mb-3"></i>
-                                                    <br/>
+                                                    <br />
                                                     <span className="fw-600">{message.file.file.name}</span>
                                                 </span>)
                                         }
                                         break;
                                     case constant.MessageTypeSticker:
-                                        messageContent = <img className="favorite-sticker" src={config.mediaBaseURL + message.message}/>
+                                        messageContent = <img className="favorite-sticker" src={config.mediaBaseURL + message.message} />
                                         break;
                                     case constant.MessageTypeText:
                                         messageContent = message.message;
@@ -207,40 +216,40 @@ class Favotites extends Base {
                                 }
 
                                 let deleteIconClass = "ti-trash";
-                                if(message._id == this.props.removeConfirmMessageId)
+                                if (message._id == this.props.removeConfirmMessageId)
                                     deleteIconClass = "fa fa-check";
 
                                 return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}>
                                     <h6 className="code-title">
                                         <AvatarImage fileId={chatAvatarId} type={chatAvatarType} />
                                         {chatName}
-                                        <a onClick={ () => { this.props.startRemoveFavorite(message._id)}} href="javascript:void(0)">
+                                        <a onClick={() => { this.props.startRemoveFavorite(message._id) }} href="javascript:void(0)">
                                             <i className={deleteIconClass}></i>
                                         </a>
                                     </h6>
 
-                                        <div className="code-preview" onClick={e => this.selected(message)}>
-                                            <div className="media">
-                                                <span className="avatar">
-                                                    <AvatarImage fileId={userAvatarId} type={constant.AvatarUser} />
-                                                </span>
-                                                <div className="media-body">
-                                                    <p>
-                                                        <strong>{userName}</strong> 
-                                                    </p>
-                                                    
-                                                    <p className="messsage">
-                                                        {messageContent}
-                                                    </p>
+                                    <div className="code-preview" onClick={e => this.selected(message)}>
+                                        <div className="media">
+                                            <span className="avatar">
+                                                <AvatarImage fileId={userAvatarId} type={constant.AvatarUser} />
+                                            </span>
+                                            <div className="media-body">
+                                                <p>
+                                                    <strong>{userName}</strong>
+                                                </p>
 
-                                                    <p className="text-right">
-                                                        <DateTime timestamp={message.created} />
-                                                    </p>
+                                                <p className="messsage">
+                                                    {messageContent}
+                                                </p>
 
-                                                </div>
+                                                <p className="text-right">
+                                                    <DateTime timestamp={message.created} />
+                                                </p>
+
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
                             })}
 
@@ -249,9 +258,9 @@ class Favotites extends Base {
                     </div>
 
                 </main>
-                
+
                 <Modals />
-                
+
             </div>
         );
     }
@@ -260,12 +269,14 @@ class Favotites extends Base {
 
 const mapStateToProps = (state) => {
     return {
+        location: state.routing.location.pathname,
         isLoading: state.favorites.isLoading,
         sidebarState: state.chatUI.sidebarState,
         historyBarState: state.chatUI.historyBarState,
         favorites: state.favorites.favorites,
         pagingReachesEnd: state.favorites.pagingReachesEnd,
         removeConfirmMessageId: state.favorites.removeConfirmMessageId,
+        chatName: state.chat.chatName
     };
 };
 
@@ -278,7 +289,7 @@ const mapDispatchToProps = (dispatch) => {
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
 
-        loadMessages: (page) => dispatch(actions.favorites.loadMessages(page)),
+        loadMessages: (page, chatId) => dispatch(actions.favorites.loadMessages(page, chatId)),
         startRemoveFavorite: (messageId) => dispatch(actions.favorites.startRemoveFavorite(messageId)),
 
         openChatByUser: (user) => dispatch(actions.chat.openChatByUser(user)),

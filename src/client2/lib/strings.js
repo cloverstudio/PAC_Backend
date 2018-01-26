@@ -93,7 +93,8 @@ export {
   InfoViewLeaveRoom,
   InfoViewDeleteRoom,
   InfoViewLeaveRoomConfirm,
-  InfoViewFailedToLeave
+  InfoViewFailedToLeave,
+  InfoViewNotes
 } from "./strings/infoview";
 
 export {
@@ -133,7 +134,8 @@ export {
   FavoriteTitle,
   FailedToLoadFavorites,
   FailedToRemoveFromFavorites,
-  FailedToAddToFavorites
+  FailedToAddToFavorites,
+  FavoriteTitleFrom
 } from "./strings/favorite";
 
 export { FailedToLoadMessageInfo } from "./strings/messageInfo";
@@ -163,3 +165,12 @@ export {
   NotificationNoNotification,
   NotificationReadAll
 } from "./strings/notification";
+
+export {
+  NoteTitle,
+  NoteSubTitle,
+  Edit,
+  Preview,
+  EmptyMessageTitle,
+  EmptyMessageText
+} from "./strings/note";
