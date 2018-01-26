@@ -202,12 +202,12 @@
     }
 
     @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
-        width: 30%;
+        width: 100%;
     }
 
     @media only screen and (min-width: map-get($grid-breakpoints, lg)) {
 
-        width: calc( (100vw - 300px - 80px) * 0.3); // ( 100% - sidemenu - historybar ) x 30% ( infobar )
+        width: calc( (100vw - 300px - 80px)); // ( 100% - sidemenu - historybar ) x 30% ( infobar )
 
     }
             

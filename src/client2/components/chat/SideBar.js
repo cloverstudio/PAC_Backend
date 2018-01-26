@@ -24,6 +24,8 @@ class SideBar extends Component {
       user.userData.avatar.thumbnail
     ) {
       fileId = user.userData.avatar.thumbnail.nameOnServer;
+    } else {
+      fileId = user.userData._id;
     }
 
     return (
