@@ -9,6 +9,8 @@
     img.style.position = "fixed";
     img.style.zIndex = 99999;
     img.style.cursor = "pointer";
+    img.style.bottom = "50px";
+    img.style.right = "50px";
 
     img.onclick = function(){
 
@@ -27,8 +29,8 @@
             iframe.style.height = "100vh";
         }else{
             iframe.style.width = "500px";
-            img.style.bottom = "50px";
-            img.style.right = "50px";
+            iframe.style.right = "50px";
+            iframe.style.bottom = "0px";
             iframe.style.height = "100vh";
         }
 
