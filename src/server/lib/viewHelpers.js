@@ -224,187 +224,180 @@ var helpers = {
 
             var pageNum = from + i;
 
-            for (var i = 0; i < maxPages; i++) {
+            // current selected page is colored
+            if (pageNum == page)
+                html += '<li><a class="selected-page" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+            else
+                html += '<li><a href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
 
-                var pageNum = from + i;
-                // current selected page is colored
-                if (pageNum == page)
-                    html += '<li class="page-item active"><a class="page-link active" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+        }
+
+        if (from + maxPages <= pages - 1) {
+
+            html += '<li><a href="#">...</a></li>';
+            html += '<li><a href="' + baseURL + pages + '">' + pages + '</a></li>';
+
+        }
+
+        // prev
+        html += '<li><a href="' + baseURL + next + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+
+
+        return html;
+
+    },
+    "checkedIfEqual": function (param1, param2) {
+
+        if (param1 == param2)
+            return 'checked="checked"';
+
+    },
+    "selectedIfEqual": function (param1, param2) {
+
+        if (param1 == param2)
+            return 'selected="selected"';
+
+    },
+    "createTreeGridDepartment": function (data) {
+
+        var tableHeader =
+            '<table class="table table-hover tree">' +
+            '<thead>' +
+            '<tr>' +
+            '<th>' + helpers.l10n("Name") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Description") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = "";
+        var tableFooter = "</tbody></table>";
+
+        var parentNodes = [];
+
+        // filter parent nodes
+        _.forEach(data, function (value) {
+
+            if (_.isEmpty(_.filter(data, { _id: DatabaseManager.toObjectId(value.parentId) }))) {
+
+                value.parentId = "";
+                parentNodes.push(value);
+
+            };
+
+        });
+
+        var childNodes = [];
+
+        return createTreeGrid(parentNodes);
+
+        function createTreeGrid(treeGridData) {
+
+            _.forEach(treeGridData, function (value, index) {
+
+                if (_.isEmpty(value.parentId))
+                    tableBody += '<tr class="treegrid-' + value._id + '">'
                 else
-                    html += '<li><a href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+                    tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
 
-            }
+                var deleteButton =
+                    (!value.default) ? '<button type="button" class="buttonRedGhoust" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
 
-            if (from + maxPages <= pages - 1) {
+                tableBody +=
+                    '<td class="list-edit-link">' +
+                    '<img class="list-tree-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" />' +
+                    '<a href="/admin/department/edit/' + value._id + '">' +
+                    '<strong>' + value.name + '</strong>' +
+                    '</a>' +
+                    '</td>' +
+                    '<td>' + value.description + '</td>' +
+                    '<td>' + helpers.formatDate(value.created) + '</td>' +
+                    '<td>' +
+                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    deleteButton +
+                    '</td>' +
+                    '</tr>';
 
-                html += '<li><a href="#">...</a></li>';
-                html += '<li><a href="' + baseURL + pages + '">' + pages + '</a></li>';
+                childNodes = _.filter(data, { parentId: value._id.toString() });
 
-            }
-
-            // prev
-            html += '<li><a href="' + baseURL + next + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
-
-
-            return html;
-
-        },
-        "checkedIfEqual": function (param1, param2) {
-
-            if (param1 == param2)
-                return 'checked="checked"';
-
-        },
-        "selectedIfEqual": function (param1, param2) {
-
-            if (param1 == param2)
-                return 'selected="selected"';
-
-        },
-        "createTreeGridDepartment": function (data) {
-
-            var tableHeader =
-                '<table class="table table-hover tree">' +
-                '<thead>' +
-                '<tr>' +
-                '<th>' + helpers.l10n("Name") + '</th>' +
-                '<th width="15%">' + helpers.l10n("Description") + '</th>' +
-                '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
-                '<th width="5%"></th>' +
-                '<th width="5%"></th>' +
-                '<th width="5%"></th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody>';
-
-            var tableBody = "";
-            var tableFooter = "</tbody></table>";
-
-            var parentNodes = [];
-
-            // filter parent nodes
-            _.forEach(data, function (value) {
-
-                if (_.isEmpty(_.filter(data, { _id: DatabaseManager.toObjectId(value.parentId) }))) {
-
-                    value.parentId = "";
-                    parentNodes.push(value);
-
-                };
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes);
 
             });
 
-            var childNodes = [];
+            return tableHeader + tableBody + tableFooter;
+        };
 
-            return createTreeGrid(parentNodes, 0);
+    },
+    "getMainPicture": function (pictures) {
 
-            function createTreeGrid(treeGridData, depth) {
+        var picture = _.find(pictures, "main");
 
-                _.forEach(treeGridData, function (value, index) {
+        if (picture) return picture.thumbnail.nameOnServer;
 
-                    if (_.isEmpty(value.parentId))
-                        tableBody += '<tr class="treegrid-' + value._id + '">'
-                    else
-                        tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
+    },
+    "getStatusName": function (value) {
 
-                    var deleteButton =
-                        (!value.default) ? '<button type="button" class="buttonRedGhoust" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
+        var statusName = "";
 
-                    tableBody +=
-                        '<td class="list-edit-link">' +
-                        '<img class="list-tree-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" />' +
-                        '<a href="/admin/department/edit/' + value._id + '">' +
-                        '<strong>' + value.name + '</strong>' +
-                        '</a>' +
-                        '</td>' +
-                        '<td>' + value.description + '</td>' +
-                        '<td>' + helpers.formatDate(value.created) + '</td>' +
-                        '<td>' +
-                        '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
-                        '</td>' +
-                        '<td>' +
-                        '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
-                        '</td>' +
-                        '<td>' +
-                        deleteButton +
-                        '</td>' +
-                        '</tr>';
+        if (value)
+            statusName = "Enabled"
+        else
+            statusName = "Disabled"
 
-                    childNodes = _.filter(data, { parentId: value._id.toString() });
+        return helpers.l10n(statusName);
 
-                    if (!_.isEmpty(childNodes)) createTreeGrid(childNodes);
+    },
+    "checkIfUserIsOrganizationAdmin": function (permission) {
 
-                });
+        return (Const.userPermission.organizationAdmin == permission);
 
-                return tableHeader + tableBody + tableFooter;
-            };
+    },
+    "setFocus": function (fieldName, value) {
 
-        },
-        "getMainPicture": function (pictures) {
+        if (fieldName == value) return 'autofocus="autofocus"';
 
-            var picture = _.find(pictures, "main");
+    },
+    "getImageNote": function () {
 
-            if (picture) return picture.thumbnail.nameOnServer;
+        return helpers.l10n("Recommended minimum image size is ") + Const.thumbSize + " x " + Const.thumbSize + ".";
 
-        },
-        "getStatusName": function (value) {
+    },
+    "getStickerNote": function () {
 
-            var statusName = "";
+        return helpers.l10n("*.zip only.");
 
-            if (value)
-                statusName = "Enabled"
-            else
-                statusName = "Disabled"
+    },
+    "formatTableData": function (value, maxValue) {
 
-            return helpers.l10n(statusName);
+        var html = "";
 
-        },
-        "checkIfUserIsOrganizationAdmin": function (permission) {
+        if (value >= maxValue)
+            html = '<td class="formatTableData">' + value + '/' + maxValue + '</td>';
+        else
+            html = '<td>' + value + '/' + maxValue + '</td>';
 
-            return (Const.userPermission.organizationAdmin == permission);
+        return html;
 
-        },
-        "setFocus": function (fieldName, value) {
+    },
+    "truncate": function (value) {
 
-            if (fieldName == value) return 'autofocus="autofocus"';
+        if (value.length > 30) {
+            return value.substr(0, 27) + "...";
+        } else {
+            return value;
+        }
 
-        },
-        "getImageNote": function () {
 
-            return helpers.l10n("Recommended minimum image size is ") + Const.thumbSize + " x " + Const.thumbSize + ".";
-
-        },
-        "getStickerNote": function () {
-
-            return helpers.l10n("*.zip only.");
-
-        },
-        "formatTableData": function (value, maxValue) {
-
-            var html = "";
-
-            if (value >= maxValue)
-                html = '<td class="formatTableData">' + value + '/' + maxValue + '</td>';
-            else
-                html = '<td>' + value + '/' + maxValue + '</td>';
-
-            return html;
-
-        },
-        "truncate": function (value) {
-
-            if (value.length > 30) {
-                return value.substr(0, 27) + "...";
-            } else {
-                return value;
-            }
-
-            if (param1 == param2)
-                return options.fn(this);
-            else
-                return "";
-
-        },
     }
+}
 
 module["exports"] = helpers;
