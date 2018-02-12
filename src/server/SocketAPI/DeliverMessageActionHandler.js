@@ -75,6 +75,7 @@ DeliverMessageActionHandler.prototype.attach = function (io, socket) {
                     if (findResult.userID == param.userID)
                         return;
 
+                    result.isDelivered = !_.isEmpty(_.filter(findResult.deliveredTo, { userId: param.userID }));
                     result.message = findResult;
                     done(err, result);
 
@@ -82,6 +83,9 @@ DeliverMessageActionHandler.prototype.attach = function (io, socket) {
 
             },
             (result, done) => {
+
+                if (result.isDelivered)
+                    return done(null, result);
 
                 var deliveredToRow = {
                     userId: param.userID,

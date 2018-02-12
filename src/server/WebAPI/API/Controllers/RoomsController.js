@@ -23,10 +23,10 @@ var SocketAPIHandler = require(pathTop + "SocketAPI/SocketAPIHandler");
 
 const RoomLogic = require(pathTop + "Logics/v3/Room");
 
-const RoomsController = function() {};
+const RoomsController = function () { };
 _.extend(RoomsController.prototype, APIBase.prototype);
 
-RoomsController.prototype.init = function(app) {
+RoomsController.prototype.init = function (app) {
   var self = this;
 
   /**
@@ -599,7 +599,7 @@ RoomsController.prototype.init = function(app) {
                 chatId: roomId,
                 userId: userId
               },
-              function(err, deleteResult) {
+              function (err, deleteResult) {
                 SocketAPIHandler.emitToUser(userId, "delete_room", {
                   conversation: result.roomDetail
                 });
@@ -802,6 +802,60 @@ RoomsController.prototype.init = function(app) {
             return self.errorResponse(response, Const.httpCodeServerError);
           }
         );
+      }
+    );
+  });
+
+  /**
+ * @api {get} /rooms/{roomId}/users/ Get user list of room
+ **/
+  router.get("/guest/:userId", checkAPIKey, (request, response) => {
+    const userModel = UserModel.get();
+    const roomModel = RoomModel.get();
+    const userId = request.params.userId;
+
+    // Check params
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      return response.status(Const.httpCodeBadParameter).send("Bad Parameter");
+
+    async.waterfall(
+      [
+        done => {
+          const result = {};
+
+          // get the room which the user exists
+          roomModel.find({
+            users: userId
+          }, null,
+            {
+              sort: { created: -1 }
+            }, (err, findResult) => {
+              result.roomFindResult = findResult;
+              done(null, result);
+            });
+
+        },
+        (result, done) => {
+
+          if (result.roomFindResult && result.roomFindResult.length > 0) {
+            result.room = result.roomFindResult[0].toObject();
+          }
+
+          done(null, result);
+        }
+      ],
+      (err, result) => {
+        if (err) {
+          self.errorResponse(response, Const.httpCodeServerError);
+          return;
+        }
+
+        if (result.room)
+          result.room.id = result.room._id;
+
+        self.successResponse(response, Const.responsecodeSucceed, {
+          room: result.room
+        });
       }
     );
   });
