@@ -42,6 +42,7 @@ var Config = require("./init");
     Utils.prototype.getRandomNumber = getRandomNumber;
     Utils.prototype.sendSMS = sendSMS;
     Utils.prototype.ApiV3StyleId = ApiV3StyleId;
+    Utils.prototype.readableSize = readableSize;
 
     // Implementation ---------------------------------------
 
@@ -268,31 +269,21 @@ var Config = require("./init");
     }
 
     function stripPrivateData(obj) {
-
         _.forEach(obj, function (child, key, list) {
-
-            if (_.isObject(child)) {
-                stripPrivateData(child);
-            }
+            if (_.isObject(child)) stripPrivateData(child);
             else {
-
                 // delete keys to hide
-                switch (key) {
-                    case "password":
-                    case "token":
-                    case "lastToken":
-                        list[key] = "*****";
-                        break;
+                if (key == "password") list[key] = "*****";
 
-                    case "muted":
-                    case "blocked":
-                        list[key] = null;
-                };
+                if (key == "token") list[key] = "*****";
 
+                if (key == "token") list[key] = "*****";
+
+                if (key == "muted") list[key] = null;
+
+                if (key == "blocked") list[key] = null;
             }
-
         });
-
     }
 
     function getRandomNumber(length) {
@@ -338,6 +329,18 @@ var Config = require("./init");
             return obj;
         });
     }
+
+    function readableSize(bytes) {
+        if (bytes < 1000)
+            return bytes + "B";
+        else if (bytes < 1000 * 1000)
+            return new Number(bytes / 1000).toFixed(2) + " kB";
+        else if (bytes < 1000 * 1000 * 1000)
+            return new Number(bytes / 1000 / 1000).toFixed(2) + " mB";
+        else if (bytes > 1000 * 1000 * 1000)
+            return new Number(bytes / 1000 / 1000 / 1000).toFixed(2) + " gB";
+    }
+
     // Exports ----------------------------------------------
     module["exports"] = new Utils();
 })((this || 0).self || global);

@@ -7,6 +7,7 @@ var path = require('path');
 var _ = require('lodash');
 var JSON = require('JSON2');
 var async = require('async');
+var fs = require('fs');
 
 var Const = require("../../../lib/consts");
 var Config = require("../../../lib/init");
@@ -502,7 +503,7 @@ ConversationController.prototype.init = function (app) {
 
         var criteria = {};
         criteria.organizationId = organizationId;
-        criteria.type = 1;
+        //criteria.type = 1;
         var organizationAdmin = (baseUser.permission == Const.userPermission.organizationAdmin);
 
         if (!organizationAdmin) {
@@ -681,6 +682,7 @@ ConversationController.prototype.init = function (app) {
                 }
 
                 templateParams.keyword = keyword;
+                templateParams.roomID = result.criteria.roomID
 
                 self.render(request, response, '/Conversation/Group', templateParams);
 
@@ -795,7 +797,8 @@ ConversationController.prototype.init = function (app) {
         var roomId = request.params.roomId;
         var templateParams = {
             page: menuItemName,
-            openMenu: menuItemName
+            openMenu: menuItemName,
+            roomID: roomId
         };
 
         var page = request.query.page;
@@ -925,7 +928,13 @@ ConversationController.prototype.init = function (app) {
         var fileModel = FileModel.get();
         var favoriteModel = FavoriteModel.get();
         var result = {};
-
+        var chatType = roomID.split("-")[0];
+        console.log(chatType);
+        if (chatType == "1") {
+            var splitAry = roomID.split("-");
+            var user1 = splitAry[1];
+            var user2 = splitAry[2];
+        }
 
         async.waterfall([
 
@@ -939,8 +948,23 @@ ConversationController.prototype.init = function (app) {
                 messageModel.find({ roomID: roomID }, function (err, findResults) {
 
                     if (!findResults) {
-                        response.redirect('/admin/conversation/users');
-                        return;
+                        if (chatType == "1") {
+
+                            response.redirect('/admin/conversation/users');
+                            return;
+
+                        } else if (chatType == "2") {
+
+                            response.redirect('/admin/conversation/group');
+                            return;
+
+                        } else {
+
+                            response.redirect('/admin/conversation/room');
+                            return;
+
+                        }
+
                     }
 
                     result.foundMeesages = findResults;
@@ -957,27 +981,57 @@ ConversationController.prototype.init = function (app) {
                     result.messageIds.push(msg._id);
 
                     if (msg.file && msg.file.file.id) {
-
+                        fs.unlink(Config.uploadPath + "/" + msg.file.file.id, function () { });
                         result.fileIds.push(msg.file.file.id);
 
                     }
 
-                    if (msg.file.thumb.id) {
-
+                    if (msg.file && msg.file.thumb.id) {
+                        fs.unlink(Config.uploadPath + "/" + msg.file.thumb.id, function () { });
                         result.fileIds.push(msg.file.thumb.id);
 
                     }
 
                 });
 
-                console.log("MessagesID", result.messageIds)
-                console.log("fileIds", result.fileIds)
+                fileModel.remove({ _id: { $in: result.fileIds } }, function (err, res) {
 
-                fileModel.remove({ _id: { $in: result.fileIds } }, function (err, findResults) {
-                    console.log(findResults);
                     done(err, result);
 
                 })
+
+            },
+            function (result, done) {
+
+                messageModel.remove({ _id: { $in: result.messageIds } }, function (err, res) {
+
+                    done(err, result);
+                })
+            },
+            function (result, done) {
+
+                if (chatType == "1") {
+
+                    historyModel.remove({ $or: [{ $and: [{ userId: user1 }, { chatId: user2 }] }, { $and: [{ userId: user2 }, { chatId: user1 }] }] }, function (err, res) {
+
+                        done(err, result);
+                    })
+
+                } else if (chatType == "2") {
+
+                    historyModel.remove({ chatId: roomID.split("-")[1] }, function (err, res) {
+
+                        done(err, result);
+                    })
+
+                } else {
+
+                    historyModel.remove({ chatId: roomID.split("-")[1] }, function (err, res) {
+
+                        done(err, result);
+                    })
+
+                }
 
             }
 
@@ -994,7 +1048,20 @@ ConversationController.prototype.init = function (app) {
                     return;
                 }
 
-                response.redirect('/admin/conversation/user?delete=1');
+                if (chatType == "1") {
+
+                    response.redirect('/admin/conversation/user?delete=1');
+
+                } else if (chatType == "2") {
+
+                    response.redirect('/admin/conversation/group?delete=1');
+
+                } else {
+
+                    response.redirect('/admin/conversation/room?delete=1');
+
+                }
+
 
             });
 

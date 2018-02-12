@@ -311,6 +311,8 @@ var helpers = {
                     '<td class="list-edit-link">' +
                     '<img class="list-tree-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" />' +
                     '<a href="/admin/department/edit/' + value._id + '">' +
+<<<<<<< HEAD
+=======
                     '<strong>' + value.name + '</strong>' +
                     '</a>' +
                     '</td>' +
@@ -395,9 +397,203 @@ var helpers = {
         } else {
             return value;
         }
+<<<<<<< HEAD
+    },
+    "selectedIfEqual": function (param1, param2) {
+
+        if (param1 == param2)
+            return 'selected="selected"';
+
+    },
+    "isEqual": function (param1, param2, options) {
+
+        if (param1 == param2)
+            return options.fn(this);
+        else
+            return "";
+
+    },
+=======
+
+
+    },
+    "isEqual": function (val1, val2, options) {
+
+        if (val1 == val2)
+            return options.fn(this);
+        else
+            return "";
+    },
+    "createTreeGridRoom": function (data) {
+
+        var tableHeader =
+            '<table class="table table-hover tree">' +
+            '<thead>' +
+            '<tr>' +
+            '<th  width="5%"></th>' +
+            '<th>' + helpers.l10n("Name") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Description") + '</th>' +
+            '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '<th width="5%"></th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+
+        var tableBody = "";
+        var tableFooter = "</tbody></table>";
+
+        var parentNodes = [];
+
+        // filter parent nodes
+        _.forEach(data, function (value) {
+
+            if (_.isEmpty(_.filter(data, { _id: DatabaseManager.toObjectId(value.parentId) }))) {
+
+                value.parentId = "";
+                parentNodes.push(value);
+
+            };
+
+        });
+
+        var childNodes = [];
+
+        return createTreeGrid(parentNodes, 0);
+
+        function createTreeGrid(treeGridData, depth) {
+
+            _.forEach(treeGridData, function (value, index) {
+
+                if (_.isEmpty(value.parentId))
+                    tableBody += '<tr class="treegrid-' + value._id + '">'
+                else
+                    tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
+
+                var deleteButton =
+                    (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/room/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
+
+                var fileId = value.avatar.thumbnail.nameOnServer;
+                if (!fileId)
+                    fileId = value._id;
+
+                let indent = "";
+                for (let i = 0; i < depth; i++) {
+                    indent += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                if (depth > 0)
+                    indent += " - ";
+
+                tableBody +=
+                    '<td><img class="list-tree-thumbnail img-rounded" src="/api/v2/avatar/room/' + fileId + '" /></td>' +
+                    '<td class="list-edit-link">' + indent +
+                    '<a href="/admin/room/userlist/' + value._id + '">' +
+>>>>>>> 45c2cb8603c0d5c56b86bda9e9b671f0924afb16
+                    '<strong>' + value.name + '</strong>' +
+                    '</a>' +
+                    '</td>' +
+                    '<td>' + value.description + '</td>' +
+                    '<td>' + helpers.formatDate(value.created) + '</td>' +
+                    '<td>' +
+<<<<<<< HEAD
+                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
+=======
+                    '<button type="button" class="btn btn-info" onclick=\'location.href="/admin/room/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/conversation/room/' + value._id + '"\'>' + helpers.l10n("View Chat") + '</button>' +
+>>>>>>> 45c2cb8603c0d5c56b86bda9e9b671f0924afb16
+                    '</td>' +
+                    '<td>' +
+                    deleteButton +
+                    '</td>' +
+                    '</tr>';
+
+                childNodes = _.filter(data, { parentId: value._id.toString() });
+
+<<<<<<< HEAD
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes);
+=======
+                if (!_.isEmpty(childNodes)) createTreeGrid(childNodes, depth + 1);
+>>>>>>> 45c2cb8603c0d5c56b86bda9e9b671f0924afb16
+
+            });
+
+            return tableHeader + tableBody + tableFooter;
+        };
+
+<<<<<<< HEAD
+    },
+    "getMainPicture": function (pictures) {
+
+        var picture = _.find(pictures, "main");
+
+        if (picture) return picture.thumbnail.nameOnServer;
+
+    },
+    "getStatusName": function (value) {
+
+        var statusName = "";
+
+        if (value)
+            statusName = "Enabled"
+        else
+            statusName = "Disabled"
+
+        return helpers.l10n(statusName);
+
+    },
+    "checkIfUserIsOrganizationAdmin": function (permission) {
+
+        return (Const.userPermission.organizationAdmin == permission);
+
+    },
+    "setFocus": function (fieldName, value) {
+
+        if (fieldName == value) return 'autofocus="autofocus"';
+
+    },
+    "getImageNote": function () {
+
+        return helpers.l10n("Recommended minimum image size is ") + Const.thumbSize + " x " + Const.thumbSize + ".";
+
+    },
+    "getStickerNote": function () {
+
+        return helpers.l10n("*.zip only.");
+
+    },
+    "formatTableData": function (value, maxValue) {
+
+        var html = "";
+
+        if (value >= maxValue)
+            html = '<td class="formatTableData">' + value + '/' + maxValue + '</td>';
+        else
+            html = '<td>' + value + '/' + maxValue + '</td>';
+
+        return html;
+
+    },
+    "truncate": function (value) {
+
+        if (value.length > 30) {
+            return value.substr(0, 27) + "...";
+        } else {
+            return value;
+        }
 
 
     }
+=======
+    }
+>>>>>>> ce4fdbe8da48d5ebb10ae259010568213116c212
+>>>>>>> 45c2cb8603c0d5c56b86bda9e9b671f0924afb16
 }
 
 module["exports"] = helpers;
