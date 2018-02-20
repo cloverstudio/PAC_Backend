@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Remarkable from 'remarkable';
 import hljs from 'highlight.js';
-import twemoji from 'twemoji';
 
 import * as actions from '../actions';
 
