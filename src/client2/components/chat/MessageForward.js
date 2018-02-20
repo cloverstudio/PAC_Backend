@@ -28,7 +28,7 @@ class MessageForward extends Component {
     };
 
     render() {
-        
+
         const mainStyle = {
             display: "none"
         };
@@ -49,50 +49,51 @@ class MessageForward extends Component {
 
                                 <h5 className="modal-title">Forward message</h5>
 
-                                <button type="button" className="close msgInfo-dialog-close" onClick={e=> this.props.hideMessageForwardView()}>
+                                <button type="button" className="close msgInfo-dialog-close" onClick={e => this.props.hideMessageForwardView()}>
                                     <span className="msgInfo-dialog-close" aria-hidden="true">×</span>
                                 </button>
 
                             </div>
                             <form className="lookup lookup-lg w-100 bb-1 border-light">
-                                <input onChange={this.onInputChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
+                                <input onChange={this.onInputChange} className="w-100 no-radius no-border input--height60" type="text" placeholder="Search..." />
                             </form>
-                            {this.props.isLoading 
+                            {this.props.isLoading
                                 ? <div className="spinner-linear">
                                     <div className="line" />
-                                </div> 
+                                </div>
                                 : null}
                             <div className="modal-body">
                                 <div className="media-list-body bg-white">
 
-                                    {this.props.searchResults.map( resultItem => {
+                                    {this.props.searchResults.map(resultItem => {
 
                                         let fileId = null;
-                                        
+
                                         let avatarType;
                                         let chatId;
 
                                         if (resultItem.type === constant.ChatTypeRoom) {
-                                            avatarType= constant.AvatarRoom;
+                                            avatarType = constant.AvatarRoom;
                                             chatId = util.chatIdByRoom(resultItem);
                                         }
                                         if (resultItem.type === constant.ChatTypeGroup) {
-                                            avatarType= constant.AvatarGroup;
+                                            avatarType = constant.AvatarGroup;
                                             chatId = util.chatIdByGroup(resultItem);
                                         }
                                         if (resultItem.type === constant.ChatTypePrivate) {
-                                            avatarType= constant.AvatarUser;
+                                            avatarType = constant.AvatarUser;
                                             chatId = util.chatIdByUser(resultItem);
                                         }
 
-                                        if(resultItem.avatar && resultItem.avatar.thumbnail)
+                                        if (resultItem.avatar && resultItem.avatar.thumbnail)
                                             fileId = resultItem.avatar.thumbnail.nameOnServer;
 
 
                                         return (
-                                            <div className="media align-items-center" key={resultItem._id} onClick={ () => {
+                                            <div className="media align-items-center" key={resultItem._id} onClick={() => {
                                                 this.props.forwardMessage(chatId);
-                                                this.props.hideMessageForwardView()}}>
+                                                this.props.hideMessageForwardView()
+                                            }}>
 
                                                 <span className="flexbox flex-grow gap-items text-truncate">
 
@@ -118,7 +119,7 @@ class MessageForward extends Component {
                     </div>
                 </div>
 
-                {this.props.visibility 
+                {this.props.visibility
                     ? <div className="modal-backdrop fade show" />
                     : null}
             </div>
