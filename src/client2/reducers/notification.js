@@ -23,7 +23,8 @@ const notifications = (state = [], action) => {
             room: message.room,
             group: message.group,
             created: message.created,
-            unreadCount: 1
+            unreadCount: 1,
+            _id: message._id
         }, ...state];
 
         util.unreadMessageToWindowTitle(newNotifications.length);
