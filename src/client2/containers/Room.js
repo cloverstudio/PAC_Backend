@@ -269,7 +269,7 @@ class NewRoom extends Base {
                                         <div className="col-md-4 text-right">
 
                                             <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
-                                            <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
+                                            <button onClick={() => this.props.saving ? false : this.props.save()} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
 
                                         </div>
 
