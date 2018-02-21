@@ -95,9 +95,17 @@ class GroupInfo extends Component {
             cnTabContentMembers += " active";
         }
 
-        const members = this.props.members;
+        let members = this.props.members;
         members.sort((obj1, obj2) => {
             return -1 * (obj1.onlineStatus - obj2.onlineStatus);
+        });
+
+        members = members.map((member) => {
+
+            member.isCurrentUser = member._id == user.userData._id;
+
+            return member;
+
         });
 
         return (
@@ -196,12 +204,17 @@ class GroupInfo extends Component {
                                     if (user.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={() => { this.props.openChat(user) }} >
+                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id}
+                                        onClick={() => { user.isCurrentUser ? false : this.props.openChat(user) }} >
                                         <span className={classname}>
                                             <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                         </span>
                                         <p className="title">{user.name}</p>
-                                        <a className="media-action" href="#"><i className="fa fa-comment"></i></a>
+                                        {user.isCurrentUser
+                                            ? null
+                                            : <a className="media-action" href="javascript:void(0)">
+                                                <i className="fa fa-comment"></i>
+                                            </a>}
                                     </div>
 
                                 })}

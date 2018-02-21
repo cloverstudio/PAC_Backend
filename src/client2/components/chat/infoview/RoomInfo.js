@@ -77,8 +77,7 @@ class RoomInfo extends Component {
     }
 
     render() {
-
-        let isUserOwner = (this.props.room.owner == user._id)
+        let isUserOwner = (this.props.room.owner == user.userData._id)
 
         let cnTabGeneral = "nav-link ";
         let cnTabDetail = "nav-link ";
@@ -119,6 +118,7 @@ class RoomInfo extends Component {
 
         const membersModified = members.map((member) => {
 
+            member.isCurrentUser = member._id == user.userData._id;
             member.isOwner = false;
 
             if (member._id == this.props.room.owner) {
@@ -256,18 +256,25 @@ class RoomInfo extends Component {
                                     if (member.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={() => { this.props.openChat(member) }} >
-                                        <span className={classname}>
-                                            <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
-                                        </span>
-                                        <p className="title">
-                                            {member.isOwner ?
-                                                <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> :
-                                                <span>{member.name}</span>
-                                            }
-                                        </p>
-                                        <a className="media-action" href="javascript:void(0)"><i className="fa fa-comment"></i></a>
-                                    </div>
+                                    return (
+                                        <div className="media media-single media-action-visible cursor-pointer" key={member._id}
+                                            onClick={() => { member.isCurrentUser ? false : this.props.openChat(member) }} >
+                                            <span className={classname}>
+                                                <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
+                                            </span>
+                                            <p className="title">
+                                                {member.isOwner ?
+                                                    <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> :
+                                                    <span>{member.name}</span>
+                                                }
+                                            </p>
+                                            {member.isCurrentUser
+                                                ? null
+                                                : <a className="media-action" href="javascript:void(0)">
+                                                    <i className="fa fa-comment"></i>
+                                                </a>}
+
+                                        </div>)
 
                                 })}
 
