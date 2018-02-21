@@ -98,6 +98,28 @@ const historyList = (state = [], action) => {
 
     }
 
+    if (action.type == types.ChatUpdateMessages) {
+
+        return state.map(historyObj => {
+
+            if (historyObj.lastMessage != null) {
+
+                let match = action.updatedMessages.find(msg => msg._id == historyObj.lastMessage._id)
+
+                if (typeof match !== 'undefined') {
+                    if (match.message != '') {
+                        historyObj.lastMessage.message = match.message;
+                    }
+                    else {
+                        historyObj.lastMessage = null;
+                    }
+                }
+            }
+
+            return historyObj;
+        })
+    }
+
     // make unread count to zero
     if (action.type == types.ChatOpenByUser ||
         action.type == types.ChatOpenByGroup ||

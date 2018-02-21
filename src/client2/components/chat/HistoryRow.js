@@ -103,7 +103,7 @@ class HistoryRow extends Component {
             if (history.lastUpdateUser._id == loginUser.userData._id)
                 lastUpdateUserName = strings.HistoryYou[loginUser.lang];
 
-            lastUpdateUserName += " : ";
+            lastUpdateUserName += ": ";
         }
 
         let rowClass = "history-row";
