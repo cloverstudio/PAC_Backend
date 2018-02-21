@@ -78,6 +78,8 @@ class RoomInfo extends Component {
 
     render() {
 
+        let isUserOwner = (this.props.room.owner == user._id)
+
         let cnTabGeneral = "nav-link ";
         let cnTabDetail = "nav-link ";
         let cnTabMembers = "nav-link ";
@@ -158,10 +160,13 @@ class RoomInfo extends Component {
                             </Link>
                         </div>
 
-
-                        <div className="media">
-                            <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
-                        </div>
+                        {isUserOwner ?
+                            <div className="media">
+                                <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
+                            </div>
+                            :
+                            null
+                        }
 
                         {this.props.confirmRoomId == this.props.room._id ?
 
