@@ -205,10 +205,10 @@ class NewRoom extends Base {
                                                     if (user.avatar && user.avatar.thumbnail)
                                                         fileId = user.avatar.thumbnail.nameOnServer;
 
-                                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={() => { this.onDeleteMember(user) }}>
+                                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id}>
                                                         <AvatarImage className="avatar-sm" fileId={fileId} type={constant.AvatarUser} />
                                                         <a className="title" href="javascript:void(0)">{user.name}</a>
-                                                        <a className="media-action" href="javascript:void(0)"><i className="fa fa-close"></i></a>
+                                                        <a className="media-action" href="javascript:void(0)" onClick={() => { this.onDeleteMember(user) }}><i className="fa fa-close"></i></a>
                                                     </div>
                                                 })}
 
