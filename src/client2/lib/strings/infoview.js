@@ -90,7 +90,7 @@ export const InfoViewNotes = {
 }
 
 export const FavoriteTitleFrom = {
-    EN: "From chat : "
+    EN: "From chat: "
 }
 
 

@@ -16,20 +16,20 @@ import About from "./components/About";
 import Note from "./containers/Note";
 
 export default (
-  <Switch>
-    <Route exact path={`${util.url("/")}`} component={Login} />
-    <Route exact path={`${util.url("/signup")}`} component={SignUp} />
-    <Route path={`${util.url("/about")}`} component={About} />
-    <Route path={`${util.url("/chat")}`} component={Chat} />
-    <Route path={`${util.url("/newroom")}`} component={Room} />
-    <Route path={`${util.url("/editroom/:roomId")}`} component={Room} />
-    <Route path={`${util.url("/chat/:chatId")}`} component={Chat} />
-    <Route path={`${util.url("/search")}`} component={Search} />
-    <Route path={`${util.url("/favorites/:chatId")}`} component={Favorites} />
-    <Route path={`${util.url("/favorites")}`} component={Favorites} />
-    <Route path={`${util.url("/note/:chatId")}`} component={Note} />
-    <Route path={`${util.url("/profile")}`} component={Profile} />
-    <Route path={`${util.url("/password")}`} component={Password} />
-    <Route path={`${util.url("/logout")}`} component={Logout} />
-  </Switch>
+    <Switch>
+        <Route exact path={`${util.url("/")}`} component={Login} />
+        <Route exact path={`${util.url("/signup")}`} component={SignUp} />
+        <Route path={`${util.url("/about")}`} component={About} />
+        <Route path={`${util.url("/chat")}`} component={Chat} />
+        <Route path={`${util.url("/newroom")}`} component={Room} />
+        <Route path={`${util.url("/editroom/:roomId")}`} component={Room} />
+        <Route path={`${util.url("/chat/:chatId")}`} component={Chat} />
+        <Route path={`${util.url("/search")}`} component={Search} />
+        <Route path={`${util.url("/favorites/:chatId")}`} component={Favorites} key="targeted favorites" />
+        <Route path={`${util.url("/favorites")}`} component={Favorites} key="global favorites" />
+        <Route path={`${util.url("/note/:chatId")}`} component={Note} />
+        <Route path={`${util.url("/profile")}`} component={Profile} />
+        <Route path={`${util.url("/password")}`} component={Password} />
+        <Route path={`${util.url("/logout")}`} component={Logout} />
+    </Switch>
 );
