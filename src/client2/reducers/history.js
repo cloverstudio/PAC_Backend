@@ -46,7 +46,39 @@ const historyLoading = (state = false, action) => {
 const historyList = (state = [], action) => {
     switch (action.type) {
         case types.HistoryLoadInitialSucceed:
-            return action.data.list;
+
+            let oldState = state;
+            let currentChatId = action.currentChatId;
+
+            return action.data.list.map(historyObj => {
+
+                if (historyObj.unreadCount > 0) {
+                    let historyObjChatId;
+
+                    switch (historyObj.chatType) {
+                        case constants.ChatTypePrivate:
+                            historyObjChatId = utils.chatIdByUser(historyObj.user);
+                            break;
+                        case constants.ChatTypeGroup:
+                            historyObjChatId = utils.chatIdByGroup(historyObj.group);
+                            break;
+                        case constants.ChatTypeRoom:
+                            historyObjChatId = utils.chatIdByUser(historyObj.room);
+                            break;
+                    }
+
+                    if (currentChatId == historyObjChatId) {
+                        historyObj.unreadCount = 0;
+                    }
+                    return historyObj;
+
+                }
+                else {
+                    return historyObj;
+                }
+
+            });
+
         case types.HistoryLoadSucceed:
             return state.concat(action.data.list);
         case types.HistorySearchSucceed:

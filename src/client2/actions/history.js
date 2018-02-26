@@ -36,7 +36,8 @@ export function loadHistoryInitial() {
 
             dispatch({
                 type: types.HistoryLoadInitialSucceed,
-                data
+                data,
+                currentChatId: getState().chat.chatId
             });
 
         }).catch((err) => {
