@@ -27,36 +27,66 @@ import MessageInfo from "../components/chat/MessageInfo";
 class Main extends Base {
     static propTypes = {};
 
+    // componentWillReceiveProps(nextProps) {
+
+    //     if (!this.props.isChatLoading) {
+    //         console.log('from cwrp');
+    //         if (
+    //             this.props.location != nextProps.location ||
+    //             this.props.timestampByChat != nextProps.timestampByChat
+    //         ) {
+    //             // location update
+    //             const chatId = util.getChatIdFromUrl(nextProps.location);
+
+    //             if (chatId && chatId.length > 0) {
+    //                 this.props.loadNewChat(chatId);
+    //             }
+
+    //             else this.props.clearChat();
+    //         }
+    //     }
+    // }
+
+    // componentDidMount() {
+    //     if (!user.userData) return;
+    //     console.log('from cdm')
+    //     // location update
+    //     if (this.props.loadingDirection != constant.ChatDirectionAllTo) {
+    //         const chatId = util.getChatIdFromUrl(this.props.location);
+
+    //         if (chatId && chatId.length > 0) {
+    //             this.props.openChatByChatId(chatId);
+    //         }
+    //     }
+    // }
+
+    // componentWillReceiveProps(nextProps) {
+    //     if (!this.props.isChatLoading) {
+    //         if (
+    //             this.props.location != nextProps.location ||
+    //             this.props.timestampByChat != nextProps.timestampByChat
+    //         ) {
+    //             const chatId = util.getChatIdFromUrl(nextProps.location);
+    //             this.props.openChatByChatId(chatId);
+    //         }
+    //     }
+    // }
+
     componentWillReceiveProps(nextProps) {
+        if (!nextProps.isChatLoading) {
+            if (this.props.match.params.chatId != nextProps.match.params.chatId) {
 
-        if (!this.props.isChatLoading) {
-            if (
-                this.props.location != nextProps.location ||
-                this.props.timestampByChat != nextProps.timestampByChat
-            ) {
-                // location update
-                const chatId = util.getChatIdFromUrl(nextProps.location);
-
-                if (chatId && chatId.length > 0) {
-                    this.props.loadNewChat(chatId);
-                }
-
-                else this.props.clearChat();
+                this.props.openChatByChatId(nextProps.match.params.chatId);
             }
         }
     }
 
     componentDidMount() {
-        if (!user.userData) return;
-
-        // location update
-        if (this.props.loadingDirection != constant.ChatDirectionAllTo) {
-            const chatId = util.getChatIdFromUrl(this.props.location);
-
-            if (chatId && chatId.length > 0) {
-                this.props.openChatByChatId(chatId);
-            }
+        if (!this.props.isChatLoading) {
+            const chatId = this.props.match.params.chatId;
+            this.props.openChatByChatId(chatId);
         }
+
     }
 
     render() {

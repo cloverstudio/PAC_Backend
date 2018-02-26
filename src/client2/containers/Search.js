@@ -47,7 +47,8 @@ class Search extends Base {
             this.props.openChatByRoom(message.room);
         }
 
-        this.props.loadNewChat(message.roomID, message._id);
+        this.props.loadChatMessages(message.roomID, message._id);
+        this.props.changeCurrentChat(message.roomID);
 
     }
 
@@ -156,42 +157,42 @@ class Search extends Base {
 
                                 let messageContent;
 
-                                if (message.type === constant.MessageTypeText){
-                                    const messageHightlighted = message.message.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
+                                if (message.type === constant.MessageTypeText) {
+                                    const messageHightlighted = message.message.replace(new RegExp('(' + this.props.keyword + ')', 'i'), "<strong>$1</strong>");
 
                                     const regEx = /(<strong>.*<\/strong>)/g;
                                     const messageSplit = messageHightlighted.split(regEx)
 
-                                    if (messageSplit.length === 3){
+                                    if (messageSplit.length === 3) {
                                         messageSplit[1] = <strong key="keyword">{messageSplit[1].slice(8, -9)}</strong>
                                     }
                                     messageContent = messageSplit
                                 }
-                                else if(message.type === constant.MessageTypeFile){
+                                else if (message.type === constant.MessageTypeFile) {
 
-                                    const titleHighlighted = message.file.file.name.replace(new RegExp('('+this.props.keyword+')', 'i'), "<strong>$1</strong>");
+                                    const titleHighlighted = message.file.file.name.replace(new RegExp('(' + this.props.keyword + ')', 'i'), "<strong>$1</strong>");
                                     const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
 
-                                    if (fileMimeType === constant.imgMimeType){
-                                         messageContent = (
+                                    if (fileMimeType === constant.imgMimeType) {
+                                        messageContent = (
                                             <span className="image-message">
-                                                <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}/>
-                                                <br/>
-                                                <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                                <img className="img-thumbnail" src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id} />
+                                                <br />
+                                                <span className="fw-600" dangerouslySetInnerHTML={{ __html: titleHighlighted }}></span>
                                             </span>)
                                     }
-                                    else{
+                                    else {
                                         messageContent = (
                                             <span>
                                                 <i className="ti-zip text-secondary fs-45 mb-3"></i>
-                                                <br/>
-                                                <span className="fw-600" dangerouslySetInnerHTML={{__html: titleHighlighted}}></span>
+                                                <br />
+                                                <span className="fw-600" dangerouslySetInnerHTML={{ __html: titleHighlighted }}></span>
                                             </span>)
                                     }
                                 }
 
-                                return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id} 
-                                    onClick={e=> this.selected(message)}>
+                                return <div className="col-md-6 col-xl-4 code code-card code-fold" key={message._id}
+                                    onClick={e => this.selected(message)}>
                                     <h6 className="code-title">
                                         <AvatarImage fileId={chatAvatarId} type={chatAvatarType} />
                                         {chatName}
@@ -206,7 +207,7 @@ class Search extends Base {
                                                 <p>
                                                     <strong>{userName}</strong>
                                                 </p>
-                                                
+
                                                 <p className="messsage">
                                                     {messageContent}
                                                 </p>
@@ -258,7 +259,8 @@ const mapDispatchToProps = (dispatch) => {
         openChatByUser: (user) => dispatch(actions.chat.openChatByUser(user)),
         openChatByGroup: (group) => dispatch(actions.chat.openChatByGroup(group)),
         openChatByRoom: (room) => dispatch(actions.chat.openChatByRoom(room)),
-        loadNewChat: (roomId, messageId) => dispatch(actions.chat.loadNewChat(roomId, messageId, constant.ChatDirectionAllTo))
+        loadChatMessages: (roomId, messageId) => dispatch(actions.chat.loadChatMessages(roomId, messageId, constant.ChatDirectionAllTo)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
     };
 };
 

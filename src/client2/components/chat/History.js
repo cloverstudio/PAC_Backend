@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 import * as constant from '../../lib/const';
+import * as utils from '../../lib/utils';
 
 import HistoryRow from './HistoryRow';
 
@@ -98,9 +99,22 @@ class History extends Component {
                         <div className="history-list media-list-body">
 
                             {this.props.historyList.map((history) => {
+                                let linkedChat;
+
+                                switch (history.chatType) {
+                                    case constant.ChatTypePrivate:
+                                        linkedChat = utils.chatIdByUser(history.user);
+                                        break;
+                                    case constant.ChatTypeGroup:
+                                        linkedChat = utils.chatIdByGroup(history.group);
+                                        break;
+                                    case constant.ChatTypeRoom:
+                                        linkedChat = utils.chatIdByRoom(history.room);
+                                        break;
+                                }
 
                                 history = Object.assign({}, history);
-                                return <HistoryRow key={history._id} history={history} />
+                                return <HistoryRow key={history._id} history={history} linkedChat={linkedChat} />
 
                             })}
 

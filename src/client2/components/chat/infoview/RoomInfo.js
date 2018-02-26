@@ -76,6 +76,13 @@ class RoomInfo extends Component {
 
     }
 
+    openNewChat = (user, chatLink) => {
+        if (user.isCurrentUser) return;
+        this.props.openChat(user);
+        this.props.loadChatMessages(chatLink);
+        this.props.changeCurrentChat(chatLink);
+    }
+
     render() {
         let isUserOwner = (this.props.room.owner == user.userData._id)
 
@@ -256,9 +263,13 @@ class RoomInfo extends Component {
                                     if (member.onlineStatus)
                                         classname += " status-success";
 
+                                    let userChatLink = utils.chatIdByUser(member);
+
                                     return (
-                                        <div className="media media-single media-action-visible cursor-pointer" key={member._id}
-                                            onClick={() => { member.isCurrentUser ? false : this.props.openChat(member) }} >
+                                        <div className="media media-single media-action-visible cursor-pointer"
+                                            onClick={() => this.openNewChat(member, userChatLink)}
+                                            key={member._id}>
+
                                             <span className={classname}>
                                                 <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
                                             </span>
@@ -270,9 +281,9 @@ class RoomInfo extends Component {
                                             </p>
                                             {member.isCurrentUser
                                                 ? null
-                                                : <a className="media-action" href="javascript:void(0)">
+                                                : <span className="media-action">
                                                     <i className="fa fa-comment"></i>
-                                                </a>}
+                                                </span>}
 
                                         </div>)
 
@@ -316,7 +327,10 @@ const mapDispatchToProps = (dispatch) => {
         deleteRoomConfirm: roomId => dispatch(actions.infoView.deleteRoomConfirm(roomId)),
         leaveRoomConfirm: roomId => dispatch(actions.infoView.leaveRoomConfirm(roomId)),
         deleteRoom: roomId => dispatch(actions.infoView.deleteRoom(roomId)),
-        leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId))
+        leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId)),
+        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
+
     };
 };
 

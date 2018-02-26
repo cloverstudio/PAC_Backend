@@ -18,24 +18,22 @@ class MessageInfo extends Component {
     constructor() {
         super();
         this.state = {
-            confirmDelete : false
+            confirmDelete: false
         }
     }
 
-    deleteConfirm = (value = true) => this.setState({confirmDelete: value})
+    deleteConfirm = (value = true) => this.setState({ confirmDelete: value })
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.selectedMessage){
-            if (nextProps.selectedMessage._id !== this.props.selectedMessage._id){
+        if (nextProps.selectedMessage) {
+            if (nextProps.selectedMessage._id !== this.props.selectedMessage._id) {
                 this.deleteConfirm(false);
             }
         }
-        if (!nextProps.visible){
+        if (!nextProps.visible) {
             this.deleteConfirm(false);
         }
     }
-
-    componentDidMount() {}
 
     render() {
         let deleteClass = "btn btn-w-sm btn-multiline btn-outline btn-danger";
@@ -73,8 +71,7 @@ class MessageInfo extends Component {
                 <button
                     key="btn-forw"
                     className="btn btn-w-sm btn-multiline btn-outline btn-info"
-                    onClick={e => this.props.showMessageForwardView()}
-                >
+                    onClick={e => this.props.showMessageForwardView()}>
                     <i className="ti-back-right" />
                     <br />Forward
                 </button>
@@ -98,11 +95,11 @@ class MessageInfo extends Component {
                         key="btn-del"
                         className="btn btn-w-sm btn-multiline btn-outline btn-danger"
                         onClick={e => {
-                            if (this.state.confirmDelete){
+                            if (this.state.confirmDelete) {
                                 this.props.deleteMessage(this.props.selectedMessage._id);
                                 this.deleteConfirm(false);
                             }
-                            else{
+                            else {
                                 this.deleteConfirm();
                             }
                         }}>
@@ -122,47 +119,47 @@ class MessageInfo extends Component {
                     <div className="quickview-body ">
                         <div className="quickview-block">
                             {typeof this.props.selectedMessage._id !== "undefined"
-                            ? <div className="callout callout-success">
-                                <h6>sent</h6>
-                                <p>
-                                    {util.getTimestamp(
-                                        new Date(
-                                            this.props.selectedMessage.created
-                                        )
-                                    )}
-                                    <br />
-                                    <AvatarImage type={constant.AvatarUser} user={this.props.selectedMessage.user}/>
-                                    {' '+userName}
-                                </p>
-                            </div>
-                            : null}
-
-                            {typeof this.props.selectedMessage.deleted !==
-                                "undefined" &&
-                            this.props.selectedMessage.deleted !== 0 ? (
-                                <div className="callout callout-danger">
-                                    <h6>deleted</h6>
+                                ? <div className="callout callout-success">
+                                    <h6>sent</h6>
                                     <p>
                                         {util.getTimestamp(
                                             new Date(
-                                                this.props.selectedMessage.deleted
+                                                this.props.selectedMessage.created
                                             )
                                         )}
+                                        <br />
+                                        <AvatarImage type={constant.AvatarUser} user={this.props.selectedMessage.user} />
+                                        {' ' + userName}
                                     </p>
                                 </div>
-                            ) : null}
+                                : null}
+
+                            {typeof this.props.selectedMessage.deleted !==
+                                "undefined" &&
+                                this.props.selectedMessage.deleted !== 0 ? (
+                                    <div className="callout callout-danger">
+                                        <h6>deleted</h6>
+                                        <p>
+                                            {util.getTimestamp(
+                                                new Date(
+                                                    this.props.selectedMessage.deleted
+                                                )
+                                            )}
+                                        </p>
+                                    </div>
+                                ) : null}
                         </div>
-                        
-                        {typeof this.props.selectedMessage._id !== "undefined" 
-                        ? <div className="quickview-block">
-                            {messageInfoButtons}
-                        </div>
-                        :null}
-                        
+
+                        {typeof this.props.selectedMessage._id !== "undefined"
+                            ? <div className="quickview-block">
+                                {messageInfoButtons}
+                            </div>
+                            : null}
+
                     </div>
 
                     <header className="quickview-header">
-                        <p className="quickview-title lead"> Seen by </p>
+                        <p className="quickview-title lead">Seen by</p>
                     </header>
 
                     {this.props.messageInfoLoading ? (
@@ -180,9 +177,10 @@ class MessageInfo extends Component {
                                     className="media align-items-center"
                                     key={seenByItem.user._id}
                                     onClick={() =>
-                                        seenByItem.user._id !== user.userData._id ? this.props.openChat(seenByItem.user._id) : false
-                                    }
-                                >
+                                        seenByItem.user._id !== user.userData._id
+                                            ? this.props.openChat(seenByItem.user._id)
+                                            : false
+                                    }>
                                     <span className="flexbox flex-grow gap-items text-truncate">
                                         <AvatarImage
                                             type={constant.AvatarUser}
@@ -217,14 +215,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        openChat: userId =>
-            dispatch(actions.messageInfo.loadChatByUserSeen(userId)),
-        deleteMessage: messageID =>
-            dispatch(actions.messageInfo.deleteMessage(messageID)),
-        toggleFavorite: (messageId, isFavorite) =>
-            dispatch(actions.favorites.toggleFavorite(messageId, isFavorite)),
+        openChat: userId => dispatch(actions.messageInfo.loadChatByUserSeen(userId)),
+        deleteMessage: messageID => dispatch(actions.messageInfo.deleteMessage(messageID)),
+        toggleFavorite: (messageId, isFavorite) => dispatch(actions.favorites.toggleFavorite(messageId, isFavorite)),
         showMessageForwardView: () => dispatch(actions.chatUI.showMessageForwardView()),
-        showMessageUpdateView: () => dispatch(actions.chatUI.showMessageUpdateView())
+        showMessageUpdateView: () => dispatch(actions.chatUI.showMessageUpdateView()),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
     };
 };
 

@@ -20,7 +20,15 @@ import Encryption from "../lib/encryption/encryption";
 
 import { store } from "../index";
 
-export function loadNewChat(chatId, messageId = 0, direction = constant.ChatDirectionNew) {
+export function changeCurrentChat(chatId) {
+    return (dispatch, getState) => {
+
+        dispatch(push(`${utils.url("/chat/" + chatId)}`));
+    }
+
+}
+
+export function loadChatMessages(chatId, messageId = 0, direction = constant.ChatDirectionNew) {
     return (dispatch, getState) => {
 
         dispatch({
@@ -58,12 +66,14 @@ export function clearChat() {
     };
 }
 
-export function openChatByChatId(chatId) {
+export function openChatByChatId(chatId, messageId = 0, direction = constant.ChatDirectionNew) {
     return (dispatch, getState) => {
         if (!chatId) return;
 
         const chatIdSplit = chatId.split("-");
         const chatType = chatIdSplit[0];
+
+
 
         if (chatType == constant.ChatTypePrivate) {
             const user1 = chatIdSplit[1];
@@ -77,7 +87,7 @@ export function openChatByChatId(chatId) {
             callGetUserDetail(targetUser)
                 .then(data => {
                     dispatch(openChatByUser(data.user));
-                    dispatch(loadNewChat(chatId));
+                    dispatch(loadChatMessages(chatId, messageId, direction))
                 })
                 .catch(err => {
                     console.error(err);
@@ -98,7 +108,8 @@ export function openChatByChatId(chatId) {
             callGetGroupDetail(groupId)
                 .then(data => {
                     dispatch(openChatByGroup(data.group));
-                    dispatch(loadNewChat(chatId));
+                    dispatch(loadChatMessages(chatId, messageId, direction))
+
                 })
                 .catch(err => {
                     console.error(err);
@@ -118,7 +129,8 @@ export function openChatByChatId(chatId) {
             callGetRoomDetail(roomId)
                 .then(data => {
                     dispatch(openChatByRoom(data.room));
-                    dispatch(loadNewChat(chatId));
+                    dispatch(loadChatMessages(chatId, messageId, direction))
+
                 })
                 .catch(err => {
                     console.error(err);
@@ -135,8 +147,6 @@ export function openChatByChatId(chatId) {
 export function openChatByUser(targetUser) {
     return (dispatch, getState) => {
         const chatId = utils.chatIdByUser(targetUser);
-
-        store.dispatch(push(`${utils.url("/chat/" + chatId)}`));
 
         dispatch({
             type: types.ChatOpenByUser,
@@ -159,8 +169,6 @@ export function openChatByGroup(group) {
     return (dispatch, getState) => {
         const chatId = utils.chatIdByGroup(group);
 
-        dispatch(push(`${utils.url("/chat/" + chatId)}`));
-
         dispatch({
             type: types.ChatOpenByGroup,
             group,
@@ -179,8 +187,6 @@ export function openChatByGroup(group) {
 export function openChatByRoom(room) {
     return (dispatch, getState) => {
         const chatId = utils.chatIdByRoom(room);
-
-        dispatch(push(`${utils.url("/chat/" + chatId)}`));
 
         dispatch({
             type: types.ChatOpenByRoom,

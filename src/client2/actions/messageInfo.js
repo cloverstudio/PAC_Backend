@@ -5,6 +5,7 @@ import * as strings from "../lib/strings";
 import user from "../lib/user";
 import { store } from "../index";
 import { callGetUserDetail } from "../lib/api";
+import * as utils from '../lib/utils';
 
 export function getMessageInfo(message) {
     return (dispatch, getState) => {
@@ -56,9 +57,10 @@ export function updateMessage(messageID, message) {
 export function loadChatByUserSeen(userId) {
     return (dispatch, getState) => {
         callGetUserDetail(userId).then(data => {
+            let chatId = utils.chatIdByUser(data.user);
             dispatch(actions.chat.openChatByUser(data.user));
+            dispatch(actions.chat.loadChatMessages(chatId));
+            dispatch(actions.chat.changeCurrentChat(chatId));
         });
     };
 }
-
-// export function addToFavorite(messageId){}

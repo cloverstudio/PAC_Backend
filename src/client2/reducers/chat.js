@@ -146,12 +146,12 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
 
 const isLoading = (state = initial.isLoading, action) => {
     switch (action.type) {
-        // case types.ChatOpenByUser:
-        //     return true;
-        // case types.ChatOpenByGroup:
-        //     return true;
-        // case types.ChatOpenByRoom:
-        //     return true;
+        case types.ChatOpenByUser:
+            return true;
+        case types.ChatOpenByGroup:
+            return true;
+        case types.ChatOpenByRoom:
+            return true;
         case types.ChatLoadMessageStart:
             return true;
         case types.ChatLoadMessageSucceed:

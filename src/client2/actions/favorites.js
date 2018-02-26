@@ -21,9 +21,6 @@ export function loadMessages(page, chatId) {
             page
         });
 
-        console.log('chatId', chatId);
-
-
         callLoadFavorites(page, chatId)
             .then(data => {
                 dispatch({
