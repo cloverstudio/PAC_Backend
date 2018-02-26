@@ -86,6 +86,11 @@ MessageListController.prototype.init = function (app) {
 		var lastMessageId = request.params.lastMessageId;
 		var direction = request.params.direction ? request.params.direction : Const.MessageLoadDirection.append;
 
+		if (roomId.indexOf('null') !== -1) { // for iOS bug
+			self.successResponse(response, Const.responsecodeMessageListInvalidParam);
+			return;
+		}
+
 		if (!roomId) {
 			self.successResponse(response, Const.responsecodeMessageListInvalidParam);
 			return;
