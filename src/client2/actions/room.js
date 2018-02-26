@@ -1,4 +1,4 @@
-import { push,goBack } from 'react-router-redux'
+import { push, goBack } from 'react-router-redux'
 
 import * as utils from '../lib/utils';
 
@@ -19,96 +19,109 @@ import {
 } from '../lib/api/';
 
 
-import {store} from '../index';
+import { store } from '../index';
 
-export function initRoomEdit(roomId) {
+export function startRoomCreate() {
+    return {
+        type: types.RoomStartCreatingRoom
+    }
+}
+
+export function initRoomEditng(baseRoomData) {
+    return {
+        type: types.RoomInitEditingRoom,
+        data: baseRoomData
+    }
+}
+
+export function startRoomEdit(roomId) {
 
     return (dispatch, getState) => {
 
         callGetRoomDetail(roomId)
-        .then( (data) => {
+            .then((data) => {
 
-            dispatch({
-                type: types.RoomStartEditingRoom, 
-                room:data.room
-            });
-
-            
-            const room = data.room;
-
-            if(room){
-
-                dispatch(typeName(room.name));
-
-                if(room.description)
-                    dispatch(typeDescription(room.description));
-
-                room.userModels.forEach( (memberUser) => {
-
-                    if(user.userData._id != memberUser._id)
-                        dispatch(addMember(memberUser));
-
+                dispatch({
+                    type: types.RoomStartEditingRoom,
+                    room: data.room
                 });
 
-                let fileId = null;
-                
-                if(room.avatar && room.avatar.thumbnail){
-                    fileId = room.avatar.thumbnail.nameOnServer;
 
-                    dispatch(selectFileByURL(config.APIEndpoint + constant.ApiUrlGetRoomAvatar + fileId));
+                const room = data.room;
+
+                if (room) {
+
+                    dispatch(typeName(room.name));
+
+                    if (room.description)
+                        dispatch(typeDescription(room.description));
+
+                    room.userModels.forEach((memberUser) => {
+
+                        if (user.userData._id != memberUser._id)
+                            dispatch(addMember(memberUser));
+
+                    });
+
+                    let fileId = null;
+
+                    if (room.avatar && room.avatar.thumbnail) {
+                        fileId = room.avatar.thumbnail.nameOnServer;
+
+                        dispatch(selectFileByURL(config.APIEndpoint + constant.ApiUrlGetRoomAvatar + fileId));
+                    }
+
                 }
-                
-            }
 
-        })
-        .catch( (err) => {
+            })
+            .catch((err) => {
 
-            console.error(err);
-            dispatch(actions.notification.showToast(strings.FailedToGetRoomDetail[user.lang]));
+                console.error(err);
+                dispatch(actions.notification.showToast(strings.FailedToGetRoomDetail[user.lang]));
 
-        });
+            });
 
     }
 
 }
 
 export function searchUserList(value) {
-    
+
     return (dispatch, getState) => {
-        
+
         dispatch({
             type: types.RoomSearchUserStart,
             keyword: value
         });
 
         callSearchUserList(value)
-        .then( (data) => {
+            .then((data) => {
 
-            dispatch({
-                type: types.RoomSearchUserSucceed, 
-                data,
-                members: getState().room.members
+                dispatch({
+                    type: types.RoomSearchUserSucceed,
+                    data,
+                    members: getState().room.members
+                });
+
+            })
+            .catch((err) => {
+
+                console.error(err);
+
+                dispatch(actions.notification.showToast(strings.FailedToSearchUserList[user.lang]));
+
+                dispatch({
+                    type: types.RoomSearchUserFailed
+                });
+
             });
-
-        })
-        .catch( (err) => {
-
-            console.error(err);
-
-            dispatch(actions.notification.showToast(strings.FailedToSearchUserList[user.lang]));
-            
-            dispatch({
-                type: types.RoomSearchUserFailed
-            });
-
-        });
 
     };
 
 }
 
 export function save() {
-    
+
     return (dispatch, getState) => {
 
         dispatch({
@@ -121,41 +134,41 @@ export function save() {
         const oldRoomData = state.room.editingRoomData;
         const newUsers = state.room.members;
 
-        if(editingRoomId){
+        if (editingRoomId) {
 
-            const usersAdd = newUsers.filter( (newUser)  => {
-    
+            const usersAdd = newUsers.filter((newUser) => {
+
                 let isExist = false;
-    
-                oldRoomData.users.forEach( (userId) => {
-    
-                    if(userId == newUser._id)
+
+                oldRoomData.users.forEach((userId) => {
+
+                    if (userId == newUser._id)
                         isExist = true;
-    
+
                 });
-    
+
                 return !isExist;
-    
+
             });
-    
-            const usersDeleted = oldRoomData.users.filter( (userId)  => {
-    
-                if(user.userData._id == userId)
+
+            const usersDeleted = oldRoomData.users.filter((userId) => {
+
+                if (user.userData._id == userId)
                     return false;
-    
+
                 let isExist = false;
-    
-                newUsers.forEach( (newUser) => {
-    
-                    if(userId == newUser._id)
+
+                newUsers.forEach((newUser) => {
+
+                    if (userId == newUser._id)
                         isExist = true;
-    
+
                 });
-    
+
                 return !isExist;
-    
+
             });
-            
+
             let updatedRoom = null;
 
             callUpdateRoom(
@@ -164,54 +177,54 @@ export function save() {
                 state.room.description,
                 state.room.avatarImage
             )
-            .then( (room) =>{
+                .then((room) => {
 
-                updatedRoom = room;
-                
-                return callAddMemberToRoom(
-                    editingRoomId,
-                    usersAdd.map( (userToAdd) => {
-                        return userToAdd._id
-                    })
-                )
-            })
-            .then( (addUserResult) =>{
+                    updatedRoom = room;
+
+                    return callAddMemberToRoom(
+                        editingRoomId,
+                        usersAdd.map((userToAdd) => {
+                            return userToAdd._id
+                        })
+                    )
+                })
+                .then((addUserResult) => {
 
 
-                return callRemoveUserFromRoom(
-                    editingRoomId,
-                    usersDeleted
-                )
+                    return callRemoveUserFromRoom(
+                        editingRoomId,
+                        usersDeleted
+                    )
 
-            })
-            .then ( (removeUserResult) => {
-    
-                const chatId = constant.ChatTypeRoom + "-" + editingRoomId;
-    
-                dispatch({
-                    type: types.RoomSaveSucceed,
-                    room:updatedRoom
+                })
+                .then((removeUserResult) => {
+
+                    const chatId = constant.ChatTypeRoom + "-" + editingRoomId;
+
+                    dispatch({
+                        type: types.RoomSaveSucceed,
+                        room: updatedRoom
+                    });
+
+                    dispatch(push(`${utils.url('/chat/' + chatId)}`));
+
+                    dispatch({
+                        type: types.ChatOpenByRoom,
+                        room: updatedRoom,
+                        chatId
+                    });
+
+                }).catch((err) => {
+
+                    console.error(err);
+
+                    dispatch(actions.notification.showToast(strings.FailedToUpdateRoom[user.lang]));
+
+                    dispatch({
+                        type: types.RoomSaveFailed
+                    });
+
                 });
-    
-                dispatch(push(`${utils.url('/chat/' + chatId)}`));
-        
-                dispatch({
-                    type: types.ChatOpenByRoom,
-                    room:updatedRoom,
-                    chatId
-                });
-    
-            }).catch( (err) => {
-    
-                console.error(err);
-
-                dispatch(actions.notification.showToast(strings.FailedToUpdateRoom[user.lang]));
-                
-                dispatch({
-                    type: types.RoomSaveFailed
-                });
-    
-            });
 
         } else {
 
@@ -220,33 +233,33 @@ export function save() {
                 state.room.name,
                 state.room.description,
                 state.room.avatarImage
-            ).then ( (room) => {
-    
+            ).then((room) => {
+
                 const chatId = utils.chatIdByRoom(room);
-    
+
                 dispatch({
                     type: types.RoomSaveSucceed,
                     room
                 });
-    
+
                 dispatch(push(`${utils.url('/chat/' + chatId)}`));
-        
+
                 dispatch({
                     type: types.ChatOpenByRoom,
                     room,
                     chatId
                 });
-    
-            }).catch( (err) => {
-                
+
+            }).catch((err) => {
+
                 console.error(err);
 
                 dispatch(actions.notification.showToast(strings.FailedToCreateRoom[user.lang]));
-                
+
                 dispatch({
                     type: types.RoomSaveFailed
                 });
-    
+
             });
 
         }
@@ -260,7 +273,7 @@ export function typeKeyword(keyword) {
         type: types.RoomTypeKeyword,
         keyword
     }
-    
+
 }
 
 export function typeName(name) {
@@ -269,27 +282,27 @@ export function typeName(name) {
         type: types.RoomTypeName,
         name
     }
-    
+
 }
 
 export function typeDescription(description) {
-    
+
     return {
         type: types.RoomTypeDescription,
         description
     }
-    
+
 }
 
 export function selectFile(file) {
-    
+
     return (dispatch, getState) => {
 
         let reader = new FileReader();
-        
+
         reader.onloadend = () => {
 
-            dispatch( {
+            dispatch({
                 type: types.RoomSelectFile,
                 file,
                 fileUrl: reader.result
@@ -300,24 +313,24 @@ export function selectFile(file) {
         reader.readAsDataURL(file)
 
     }
-    
+
 }
 
 export function selectFileByURL(url) {
-    
+
     return {
         type: types.RoomSelectFileByURL,
         url
     }
-    
+
 }
 
 export function deleteFile(file) {
-    
+
     return {
         type: types.RoomDeleteFile
     }
-    
+
 }
 
 
@@ -329,12 +342,12 @@ export function addMember(user) {
 }
 
 export function deleteMember(user) {
-    
+
     return {
         type: types.RoomDeleteMember,
         user
     }
-    
+
 }
 
 

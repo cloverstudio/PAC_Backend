@@ -25,7 +25,7 @@ class NewRoom extends Base {
     constructor() {
         super();
 
-        this.roomId = "";
+        this.roomId = null
 
     }
 
@@ -60,29 +60,36 @@ class NewRoom extends Base {
 
     componentWillReceiveProps(nextProps) {
 
-        if (this.props.editingRoomId != nextProps.editingRoomId) {
+        if (this.props.match.path != nextProps.match.path) {
+            if (typeof nextProps.match.params.roomId != 'undefined') {
+                this.roomId = nextProps.match.params.roomId
+                this.props.startRoomEdit(this.roomId);
 
-            this.updateView();
+            }
+            else {
+                this.roomId = null;
+                this.props.startRoomCreate();
+
+            }
         }
 
     }
 
     componentDidMount() {
 
-        this.updateView();
+        if (typeof this.props.match.params.roomId != 'undefined') {
+            this.roomId = this.props.match.params.roomId
+        }
+        else {
+            this.roomId = null;
+        }
 
-    }
+        if (this.roomId) {
+            this.props.startRoomEdit(this.roomId);
 
-    updateView = () => {
-
-        if (this.props.editingRoomId != null) {
-
-            this.props.initRoomEdit(this.props.editingRoomId);
-
-        } else {
-
-            this.props.typeName('');
-
+        }
+        else {
+            this.props.startRoomCreate();
         }
 
     }
@@ -119,7 +126,7 @@ class NewRoom extends Base {
 
                                 {mode == constant.RoomModeEdit ?
                                     <strong>
-                                        {strings.EditRoom[user.lang]}&nbsp;&nbsp;{this.props.name}
+                                        {strings.EditRoom[user.lang]}&nbsp;{this.props.name}
                                     </strong> : null
                                 }
 
@@ -131,7 +138,7 @@ class NewRoom extends Base {
 
                         <div className="col-12 pt-15">
 
-                            {this.props.saving ?
+                            {this.props.saving || this.props.isRoomInfoLoading ?
                                 <div className="spinner-linear">
                                     <div className="line"></div>
                                 </div> : null
@@ -174,11 +181,14 @@ class NewRoom extends Base {
                                                                     if (user.avatar && user.avatar.thumbnail)
                                                                         fileId = user.avatar.thumbnail.nameOnServer;
 
-                                                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={() => { this.onAddMember(user) }}>
-                                                                        <AvatarImage className="avatar-sm" fileId={fileId} type={constant.AvatarUser} />
-                                                                        <span className="title">{user.name}</span>
-                                                                        <a className="media-action hover-success" href="javascript:void(0)" ><i className="ti-plus"></i></a>
-                                                                    </div>
+                                                                    return (
+                                                                        <div className="media media-single media-action-visible cursor-pointer"
+                                                                            key={user._id}
+                                                                            onClick={() => { this.onAddMember(user) }}>
+                                                                            <AvatarImage className="avatar-sm" fileId={fileId} type={constant.AvatarUser} />
+                                                                            <span className="title">{user.name}</span>
+                                                                            <a className="media-action hover-success" href="javascript:void(0)" ><i className="ti-plus"></i></a>
+                                                                        </div>)
                                                                 })}
                                                             </div>
 
@@ -293,7 +303,8 @@ class NewRoom extends Base {
 
 const mapStateToProps = (state) => {
     return {
-        isSearchLoading: state.room.loading,
+        isSearchLoading: state.room.userSearchLoading,
+        isRoomInfoLoading: state.room.roomInfoLoading,
         keyword: state.room.keyword,
         searchResult: state.room.searchResult,
         members: state.room.members,
@@ -327,8 +338,8 @@ const mapDispatchToProps = (dispatch) => {
         hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
-        initRoomEdit: (roomId) => dispatch(actions.room.initRoomEdit(roomId)),
-
+        startRoomEdit: (roomId) => dispatch(actions.room.startRoomEdit(roomId)),
+        startRoomCreate: () => dispatch(actions.room.startRoomCreate())
     };
 };
 

@@ -169,7 +169,14 @@ class RoomInfo extends Component {
 
                         {isUserOwner ?
                             <div className="media">
-                                <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
+                                <Link
+                                    to={`${utils.url('/editroom/' + this.props.room._id)}`}
+                                    className="btn btn-label btn-primary btn-block"
+                                    onClick={() => this.props.initRoomEditing(this.props.room)}>
+                                    <label>
+                                        <i className="ti-pencil"></i>
+                                    </label> Edit Room
+                                </Link>
                             </div>
                             :
                             null
@@ -319,17 +326,18 @@ const mapDispatchToProps = (dispatch) => {
     return {
         tabChange: tabName => dispatch(actions.chatUI.tabChangedRoomInfo(tabName)),
         loadDone: () => dispatch(actions.infoView.loadDone()),
-        loadMuteState: (state) => dispatch(actions.infoView.loadMuteState(state)),
-        showError: (err) => dispatch(actions.notification.showToast(err)),
-        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeRoom)),
+        loadMuteState: state => dispatch(actions.infoView.loadMuteState(state)),
+        showError: err => dispatch(actions.notification.showToast(err)),
+        updateMuteState: state => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeRoom)),
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
         openChat: user => dispatch(actions.chat.openChatByUser(user)),
         deleteRoomConfirm: roomId => dispatch(actions.infoView.deleteRoomConfirm(roomId)),
         leaveRoomConfirm: roomId => dispatch(actions.infoView.leaveRoomConfirm(roomId)),
         deleteRoom: roomId => dispatch(actions.infoView.deleteRoom(roomId)),
         leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId)),
-        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
-        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
+        loadChatMessages: chatId => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId)),
+        initRoomEditing: data => dispatch(actions.room.initRoomEditng(data))
 
     };
 };
