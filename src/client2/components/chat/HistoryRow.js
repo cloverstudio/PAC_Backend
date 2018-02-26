@@ -42,7 +42,6 @@ class HistoryRow extends Component {
             this.props.openChatByRoom(this.props.history.room);
         }
 
-
         this.props.loadChatMessages(chatId);
         this.props.changeCurrentChat(chatId);
 
