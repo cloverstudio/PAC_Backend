@@ -28,7 +28,7 @@ class Notification extends Component {
             this.props.hideNotifications();
     }
 
-    click(messageId) {
+    click(messageId, chatId) {
 
         const message = this.props.notifications.find((message) => {
 
@@ -52,12 +52,14 @@ class Notification extends Component {
             this.props.openChatByRoom(room);
         }
 
+        this.props.loadChatMessages(chatId);
+        this.props.changeCurrentChat(chatId);
 
     }
 
     render() {
 
-        let notificationsMenuClass = "dropdown-menu dropdown-menu-right ";
+        let notificationsMenuClass = "dropdown-menu ";
         if (this.props.notificationState)
             notificationsMenuClass += " show";
 
@@ -148,7 +150,7 @@ class Notification extends Component {
                             else if (message.type == constant.MessageTypeSticker)
                                 messageText = strings.HistoryMessageTypeSticker[user.lang];
 
-                            return <a onClick={() => { this.click(message._id) }} className="media cursor-pointer" key={message._id}>
+                            return <a onClick={() => { this.click(message._id, message.roomID) }} className="media cursor-pointer" key={message._id}>
                                 <span className={userClass}>
                                     <AvatarImage fileId={fileId} type={avatarType} />
                                 </span>
@@ -200,6 +202,9 @@ const mapDispatchToProps = (dispatch) => {
         openChatByUser: user => dispatch(actions.chat.openChatByUser(user)),
         openChatByGroup: group => dispatch(actions.chat.openChatByGroup(group)),
         openChatByRoom: room => dispatch(actions.chat.openChatByRoom(room)),
+        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
+
     };
 };
 

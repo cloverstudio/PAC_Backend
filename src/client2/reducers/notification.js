@@ -23,7 +23,8 @@ const notifications = (state = [], action) => {
             room: message.room,
             group: message.group,
             created: message.created,
-            unreadCount: 1
+            unreadCount: 1,
+            _id: message._id
         }, ...state];
 
         util.unreadMessageToWindowTitle(newNotifications.length);
@@ -61,23 +62,24 @@ const notifications = (state = [], action) => {
         let totalUnreadCount = 0;
 
         historyData.forEach((history) => {
+            if (history.lastMessage) {
+                if (history.unreadCount > 0) {
 
-            if (history.unreadCount > 0) {
+                    notifications.push({
+                        _id: history._id,
+                        roomID: util.getChatIdByHistory(history),
+                        type: history.lastMessage.type,
+                        message: history.lastMessage.message,
+                        user: history.lastUpdateUser,
+                        room: history.room,
+                        group: history.group,
+                        created: history.lastMessage.created,
+                        unreadCount: history.unreadCount
+                    });
 
-                notifications.push({
-                    _id: history._id,
-                    roomID: util.getChatIdByHistory(history),
-                    type: history.lastMessage.type,
-                    message: history.lastMessage.message,
-                    user: history.lastUpdateUser,
-                    room: history.room,
-                    group: history.group,
-                    created: history.lastMessage.created,
-                    unreadCount: history.unreadCount
-                });
+                    totalUnreadCount += history.unreadCount;
 
-                totalUnreadCount += history.unreadCount;
-
+                }
             }
 
         });

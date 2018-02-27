@@ -5,6 +5,10 @@
         overflow-y: auto;
     }
 
+    .dropdown-menu::after, .dropdown-menu::before{
+        content:none;
+    }
+
     @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
         .dropdown-menu{
             top: 64px;

@@ -10,7 +10,7 @@ import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
 
 import user from '../lib/user';
-import {store} from '../index';
+import { store } from '../index';
 
 import Base from './Base';
 
@@ -25,22 +25,22 @@ class NewRoom extends Base {
     constructor() {
         super();
 
-        this.roomId = "";
+        this.roomId = null
 
     }
 
     static propTypes = {
     }
-    
+
     onInputKeyword = (e) => {
 
         e.persist();
-        
+
         this.props.typeKeyword(e.target.value);
 
         clearTimeout(this.lastSearchTimeout);
 
-        this.lastSearchTimeout = setTimeout( () =>{
+        this.lastSearchTimeout = setTimeout(() => {
             this.props.searchUserList(e.target.value)
         }, constant.SearchInputTimeout);
 
@@ -57,56 +57,63 @@ class NewRoom extends Base {
     onOpenFileSelect = (e) => {
         this.fileInput.click();
     }
-    
+
     componentWillReceiveProps(nextProps) {
-        
-        if(this.props.editingRoomId != nextProps.editingRoomId){
-            
-            this.updateView();
+
+        if (this.props.match.path != nextProps.match.path) {
+            if (typeof nextProps.match.params.roomId != 'undefined') {
+                this.roomId = nextProps.match.params.roomId
+                this.props.startRoomEdit(this.roomId);
+
+            }
+            else {
+                this.roomId = null;
+                this.props.startRoomCreate();
+
+            }
         }
 
     }
 
     componentDidMount() {
-        
-        this.updateView();
 
-    }
-    
-    updateView = () => {
+        if (typeof this.props.match.params.roomId != 'undefined') {
+            this.roomId = this.props.match.params.roomId
+        }
+        else {
+            this.roomId = null;
+        }
 
-        if(this.props.editingRoomId != null){
-
-            this.props.initRoomEdit(this.props.editingRoomId);
-
-        } else {
-
-            this.props.typeName('');
+        if (this.roomId) {
+            this.props.startRoomEdit(this.roomId);
 
         }
-        
+        else {
+            this.props.startRoomCreate();
+        }
+
     }
 
     render() {
-        
+
         let sideBarClass = "pace-done sidebar-folded";
-        if(this.props.sidebarState)
+        if (this.props.sidebarState)
             sideBarClass += " sidebar-open";
 
         let asideBarHolderClass = "layout-chat";
-        if(this.props.historyBarState)
+        if (this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
         const mode = this.props.editingRoomId != null ? constant.RoomModeEdit : constant.RoomModeCreate;
 
         return (
             <div className={sideBarClass} onClick={this.globalClick}>
-            
+
                 <SideBar />
                 <Header />
 
                 <main className={asideBarHolderClass}>
-                
+
                     <History />
 
                     <header className="header bg-ui-general">
@@ -119,7 +126,7 @@ class NewRoom extends Base {
 
                                 {mode == constant.RoomModeEdit ?
                                     <strong>
-                                        {strings.EditRoom[user.lang]}&nbsp;&nbsp;{this.props.name}
+                                        {strings.EditRoom[user.lang]}&nbsp;{this.props.name}
                                     </strong> : null
                                 }
 
@@ -131,7 +138,7 @@ class NewRoom extends Base {
 
                         <div className="col-12 pt-15">
 
-                            {this.props.saving ?
+                            {this.props.saving || this.props.isRoomInfoLoading ?
                                 <div className="spinner-linear">
                                     <div className="line"></div>
                                 </div> : null
@@ -152,7 +159,7 @@ class NewRoom extends Base {
                                                 <input type="text" value={this.props.keyword} onChange={this.onInputKeyword} className="form-control" placeholder={strings.UserName[user.lang]} />
                                             </div>
                                             <small className="form-text">{strings.UserNameHelp[user.lang]}</small>
-                                        
+
                                             <div className="user-picker-container">
 
                                                 {this.props.isSearchLoading && this.props.keyword.length ?
@@ -160,29 +167,32 @@ class NewRoom extends Base {
                                                         <div className="line"></div>
                                                     </div> : null}
 
-                                                {this.props.keyword.length > 0 && !this.props.isSearchLoading ? 
+                                                {this.props.keyword.length > 0 && !this.props.isSearchLoading ?
 
                                                     <div className="media-list user-picker b-1">
-                                                        
-                                                        {this.props.searchResult.length > 0 ? 
+
+                                                        {this.props.searchResult.length > 0 ?
 
                                                             <div>
-                                                                {this.props.searchResult.map( (user) => {
+                                                                {this.props.searchResult.map((user) => {
 
                                                                     let fileId = null;
 
-                                                                    if(user.avatar && user.avatar.thumbnail)
+                                                                    if (user.avatar && user.avatar.thumbnail)
                                                                         fileId = user.avatar.thumbnail.nameOnServer;
 
-                                                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={ () => { this.onAddMember(user) }}>
-                                                                        <AvatarImage className="avatar-sm" fileId={fileId} type={constant.AvatarUser} />
-                                                                        <span className="title">{user.name}</span>
-                                                                        <a className="media-action hover-success" href="javascript:void(0)" ><i className="ti-plus"></i></a>
-                                                                    </div>
+                                                                    return (
+                                                                        <div className="media media-single media-action-visible cursor-pointer"
+                                                                            key={user._id}
+                                                                            onClick={() => { this.onAddMember(user) }}>
+                                                                            <AvatarImage className="avatar-sm" fileId={fileId} type={constant.AvatarUser} />
+                                                                            <span className="title">{user.name}</span>
+                                                                            <a className="media-action hover-success" href="javascript:void(0)" ><i className="ti-plus"></i></a>
+                                                                        </div>)
                                                                 })}
                                                             </div>
 
-                                                            : <div className="media media-single media-action-visible"> 
+                                                            : <div className="media media-single media-action-visible">
                                                                 {strings.NoUserFound[user.lang]}
                                                             </div>
                                                         }
@@ -190,7 +200,7 @@ class NewRoom extends Base {
                                                     </div> : null
 
                                                 }
-                                            
+
                                             </div>
 
                                             <br />
@@ -198,17 +208,17 @@ class NewRoom extends Base {
                                             <label className="mt-20">{strings.SelectedUsers[user.lang]}</label>
                                             <div className="media-list media-list-hover ">
 
-                                                {this.props.members.map( (user) => {
+                                                {this.props.members.map((user) => {
 
                                                     let fileId = null;
 
-                                                    if(user.avatar && user.avatar.thumbnail)
+                                                    if (user.avatar && user.avatar.thumbnail)
                                                         fileId = user.avatar.thumbnail.nameOnServer;
 
-                                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={ () => { this.onDeleteMember(user) }}>
+                                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id}>
                                                         <AvatarImage className="avatar-sm" fileId={fileId} type={constant.AvatarUser} />
                                                         <a className="title" href="javascript:void(0)">{user.name}</a>
-                                                        <a className="media-action" href="javascript:void(0)"><i className="fa fa-close"></i></a>
+                                                        <a className="media-action" href="javascript:void(0)" onClick={() => { this.onDeleteMember(user) }}><i className="fa fa-close"></i></a>
                                                     </div>
                                                 })}
 
@@ -219,18 +229,18 @@ class NewRoom extends Base {
                                             <label>{strings.RoomName[user.lang]}</label>
 
                                             <div className="input-group">
-                                            <input type="text" value={this.props.name} className="form-control" placeholder={strings.RoomName[user.lang]} onChange={ e => { this.props.typeName ( e.target.value ) }}/>
+                                                <input type="text" value={this.props.name} className="form-control" placeholder={strings.RoomName[user.lang]} onChange={e => { this.props.typeName(e.target.value) }} />
                                             </div>
 
                                             <br />
 
                                             <label>{strings.Description[user.lang]}</label>
                                             <div className="input-group">
-                                                <textarea type="text" value={this.props.description} className="form-control" placeholder={strings.Description[user.lang]} onChange={ e => { this.props.typeDescription ( e.target.value ) }} />
+                                                <textarea type="text" value={this.props.description} className="form-control" placeholder={strings.Description[user.lang]} onChange={e => { this.props.typeDescription(e.target.value) }} />
                                             </div>
 
                                             <br />
-                                            
+
                                             {this.props.avatarImage ?
                                                 <div className="media flex-column b-1 p-0">
                                                     <div className="flexbox bg-pale-secondary bt-1 border-light px-12 py-10">
@@ -244,18 +254,18 @@ class NewRoom extends Base {
                                             }
 
                                             <br />
-                                            
+
                                             {!this.props.avatarImage ?
                                                 <div>
                                                     <label>{strings.AvatarImage[user.lang]}</label>
                                                     <div className="input-group file-group">
-                                                        <input type="text" className="form-control file-value" placeholder={strings.ChooseFile[user.lang]} readonly="" />
-                                                        <input type="file" ref={(ref) => this.fileInput = ref} onChange={ e => { this.props.selectFile(e.target.files[0]) }} accept="image/*"/>
+                                                        <input type="text" className="form-control file-value" placeholder={strings.ChooseFile[user.lang]} readOnly="" />
+                                                        <input type="file" ref={(ref) => this.fileInput = ref} onChange={e => { this.props.selectFile(e.target.files[0]) }} accept="image/*" />
                                                         <span className="input-group-btn">
                                                             <button className="btn btn-light file-browser" type="button" onClick={this.onOpenFileSelect}><i className="fa fa-upload"></i></button>
                                                         </span>
-                                                    </div> 
-                                                </div>: null
+                                                    </div>
+                                                </div> : null
                                             }
 
                                         </div>
@@ -263,28 +273,28 @@ class NewRoom extends Base {
                                     </div>
 
                                     <div className="row button-container mt-20">
-                                        
+
                                         <div className="col-md-4"></div>
 
                                         <div className="col-md-4 text-right">
-                                                
+
                                             <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
-                                            <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
-                                            
+                                            <button onClick={() => this.props.saving ? false : this.props.save()} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
+
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                     </div>
 
                 </main>
-                
+
                 <Modals />
-                
+
             </div>
         );
     }
@@ -293,7 +303,8 @@ class NewRoom extends Base {
 
 const mapStateToProps = (state) => {
     return {
-        isSearchLoading: state.room.loading,
+        isSearchLoading: state.room.userSearchLoading,
+        isRoomInfoLoading: state.room.roomInfoLoading,
         keyword: state.room.keyword,
         searchResult: state.room.searchResult,
         members: state.room.members,
@@ -327,8 +338,8 @@ const mapDispatchToProps = (dispatch) => {
         hideStickersView: () => dispatch(actions.chatUI.hideStickersView()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
-        initRoomEdit: (roomId) => dispatch(actions.room.initRoomEdit(roomId)),
-        
+        startRoomEdit: (roomId) => dispatch(actions.room.startRoomEdit(roomId)),
+        startRoomCreate: () => dispatch(actions.room.startRoomCreate())
     };
 };
 

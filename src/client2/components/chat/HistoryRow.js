@@ -30,7 +30,7 @@ class HistoryRow extends Component {
         }
     }
 
-    selected = () => {
+    selected = chatId => {
 
         if (this.props.history.chatType == constant.ChatTypePrivate) {
             this.props.openChatByUser(this.props.history.user);
@@ -41,6 +41,9 @@ class HistoryRow extends Component {
         else if (this.props.history.chatType == constant.ChatTypeRoom) {
             this.props.openChatByRoom(this.props.history.room);
         }
+
+        this.props.loadChatMessages(chatId);
+        this.props.changeCurrentChat(chatId);
 
     }
 
@@ -103,7 +106,7 @@ class HistoryRow extends Component {
             if (history.lastUpdateUser._id == loginUser.userData._id)
                 lastUpdateUserName = strings.HistoryYou[loginUser.lang];
 
-            lastUpdateUserName += " : ";
+            lastUpdateUserName += ": ";
         }
 
         let rowClass = "history-row";
@@ -119,8 +122,7 @@ class HistoryRow extends Component {
         }
 
         return (
-            <div className={rowClass} onClick={this.selected}>
-
+            <div className={rowClass} onClick={() => this.selected(this.props.linkedChat)}>
                 {history.chatType == constant.ChatTypePrivate ?
                     <div className={"media align-items-center"}>
                         <span className={userClass}>
@@ -197,9 +199,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
         openChatByUser: user => dispatch(actions.chat.openChatByUser(user)),
         openChatByGroup: group => dispatch(actions.chat.openChatByGroup(group)),
         openChatByRoom: room => dispatch(actions.chat.openChatByRoom(room)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
     };
 };
 

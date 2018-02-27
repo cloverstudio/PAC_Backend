@@ -30,8 +30,15 @@ class GroupInfo extends Component {
         this.props.loadMembers();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.timestampByChat != nextProps.timestampByChat) {
+    // componentWillReceiveProps(nextProps) {
+    //     if (this.props.timestampByChat != nextProps.timestampByChat) {
+    //         this.updateSwitches();
+    //         this.props.loadMembers();
+    //     }
+    // }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.chatId !== this.props.chatId) {
             this.updateSwitches();
             this.props.loadMembers();
         }
@@ -70,6 +77,13 @@ class GroupInfo extends Component {
         this.props.loadMuteState(!this.props.muted);
     }
 
+    openNewChat = (user, chatLink) => {
+        if (user.isCurrentUser) return;
+        this.props.openChat(user);
+        this.props.loadChatMessages(chatLink);
+        this.props.changeCurrentChat(chatLink);
+    }
+
     render() {
 
         let cnTabGeneral = "nav-link ";
@@ -95,9 +109,17 @@ class GroupInfo extends Component {
             cnTabContentMembers += " active";
         }
 
-        const members = this.props.members;
+        let members = this.props.members;
         members.sort((obj1, obj2) => {
             return -1 * (obj1.onlineStatus - obj2.onlineStatus);
+        });
+
+        members = members.map((member) => {
+
+            member.isCurrentUser = member._id == user.userData._id;
+
+            return member;
+
         });
 
         return (
@@ -196,13 +218,24 @@ class GroupInfo extends Component {
                                     if (user.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={user._id} onClick={() => { this.props.openChat(user) }} >
-                                        <span className={classname}>
-                                            <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
-                                        </span>
-                                        <p className="title">{user.name}</p>
-                                        <a className="media-action" href="#"><i className="fa fa-comment"></i></a>
-                                    </div>
+                                    let userChatLink = utils.chatIdByUser(user);
+
+
+                                    return (
+                                        <div className="media media-single media-action-visible cursor-pointer"
+                                            onClick={() => user.isCurrentUser ? false : this.openNewChat(user, userChatLink)}
+                                            key={user._id}>
+                                            <span className={classname}>
+                                                <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
+                                            </span>
+                                            <p className="title">{user.name}</p>
+                                            {user.isCurrentUser
+                                                ? null
+                                                : <span className="media-action" >
+                                                    <i className="fa fa-comment"></i>
+                                                </span>}
+                                        </div>
+                                    )
 
                                 })}
 
@@ -239,7 +272,10 @@ const mapDispatchToProps = (dispatch) => {
         showError: (err) => dispatch(actions.notification.showToast(err)),
         updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeGroup)),
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
-        openChat: user => dispatch(actions.chat.openChatByUser(user))
+        openChat: user => dispatch(actions.chat.openChatByUser(user)),
+        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
+
     };
 };
 

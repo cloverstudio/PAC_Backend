@@ -46,7 +46,50 @@ const historyLoading = (state = false, action) => {
 const historyList = (state = [], action) => {
     switch (action.type) {
         case types.HistoryLoadInitialSucceed:
-            return action.data.list;
+
+            let oldState = state;
+            let currentChatId = action.currentChatId;
+
+            return action.data.list.map(historyObj => {
+
+                if (historyObj.unreadCount > 0) {
+                    let historyObjChatId;
+
+                    switch (historyObj.chatType) {
+                        case constants.ChatTypePrivate:
+                            historyObjChatId = utils.chatIdByUser(historyObj.user);
+                            break;
+                        case constants.ChatTypeGroup:
+                            historyObjChatId = utils.chatIdByGroup(historyObj.group);
+                            break;
+                        case constants.ChatTypeRoom:
+                            historyObjChatId = utils.chatIdByUser(historyObj.room);
+                            break;
+                    }
+
+                    if (currentChatId === historyObjChatId) {
+                        historyObj.unreadCount = 0;
+                        return historyObj;
+                    }
+
+                    let oldStateMatchObj = oldState.find(oldHistoryObj => oldHistoryObj.chatId === historyObj.chatId);
+
+                    if (oldStateMatchObj) {
+                        if (oldStateMatchObj.unreadCount === 0
+                            && oldStateMatchObj.lastMessage.messageId === historyObj.lastMessage.messageId) {
+                            historyObj.unreadCount = 0;
+                        }
+                    }
+
+                    return historyObj;
+
+                }
+                else {
+                    return historyObj;
+                }
+
+            });
+
         case types.HistoryLoadSucceed:
             return state.concat(action.data.list);
         case types.HistorySearchSucceed:
@@ -96,6 +139,28 @@ const historyList = (state = [], action) => {
 
         }
 
+    }
+
+    if (action.type == types.ChatUpdateMessages) {
+
+        return state.map(historyObj => {
+
+            if (historyObj.lastMessage != null) {
+
+                let match = action.updatedMessages.find(msg => msg._id == historyObj.lastMessage._id)
+
+                if (typeof match !== 'undefined') {
+                    if (match.message != '') {
+                        historyObj.lastMessage.message = match.message;
+                    }
+                    else {
+                        historyObj.lastMessage = null;
+                    }
+                }
+            }
+
+            return historyObj;
+        })
     }
 
     // make unread count to zero

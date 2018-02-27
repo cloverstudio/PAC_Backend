@@ -52,6 +52,16 @@ const timestampByChat = (state = initial.timestampByChat, action) => {
 
 const chatId = (state = initial.chatId, action) => {
     switch (action.type) {
+        case '@@router/LOCATION_CHANGE':
+            let chatId = utils.getChatIdFromUrl(action.payload.pathname);
+            if (chatId) {
+                if (chatId !== state) {
+                    return chatId
+                }
+                return state;
+
+            }
+            return state;
         case types.ChatOpenByUser:
             return action.chatId;
         case types.ChatOpenByGroup:
@@ -146,12 +156,12 @@ const chatAvatar = (state = initial.chatAvatar, action) => {
 
 const isLoading = (state = initial.isLoading, action) => {
     switch (action.type) {
-        // case types.ChatOpenByUser:
-        //     return true;
-        // case types.ChatOpenByGroup:
-        //     return true;
-        // case types.ChatOpenByRoom:
-        //     return true;
+        case types.ChatOpenByUser:
+            return true;
+        case types.ChatOpenByGroup:
+            return true;
+        case types.ChatOpenByRoom:
+            return true;
         case types.ChatLoadMessageStart:
             return true;
         case types.ChatLoadMessageSucceed:

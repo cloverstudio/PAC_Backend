@@ -68,7 +68,7 @@ class GroupList extends Component {
 
                     <header className="media-list-header b-0">
                         <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
-                            <input onChange={this.onInputChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." />
+                            <input onChange={this.onInputChange} className="w-100 no-radius no-border input--height60" type="text" placeholder="Search..." />
                         </form>
                     </header>
 

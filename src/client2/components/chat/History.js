@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../actions';
 import * as constant from '../../lib/const';
+import * as utils from '../../lib/utils';
 
 import HistoryRow from './HistoryRow';
 
@@ -91,16 +92,29 @@ class History extends Component {
 
                         <header className="media-list-header b-0">
                             <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
-                                <input onChange={this.onKeywordChange} className="w-100 no-radius no-border py-30" type="text" placeholder="Search..." value={this.props.keyword} />
+                                <input onChange={this.onKeywordChange} className="w-100 no-radius no-border input--height60" type="text" placeholder="Search..." value={this.props.keyword} />
                             </form>
                         </header>
 
                         <div className="history-list media-list-body">
 
                             {this.props.historyList.map((history) => {
+                                let linkedChat;
+
+                                switch (history.chatType) {
+                                    case constant.ChatTypePrivate:
+                                        linkedChat = utils.chatIdByUser(history.user);
+                                        break;
+                                    case constant.ChatTypeGroup:
+                                        linkedChat = utils.chatIdByGroup(history.group);
+                                        break;
+                                    case constant.ChatTypeRoom:
+                                        linkedChat = utils.chatIdByRoom(history.room);
+                                        break;
+                                }
 
                                 history = Object.assign({}, history);
-                                return <HistoryRow key={history._id} history={history} />
+                                return <HistoryRow key={history._id} history={history} linkedChat={linkedChat} />
 
                             })}
 

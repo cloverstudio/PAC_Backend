@@ -76,7 +76,15 @@ class RoomInfo extends Component {
 
     }
 
+    openNewChat = (user, chatLink) => {
+        if (user.isCurrentUser) return;
+        this.props.openChat(user);
+        this.props.loadChatMessages(chatLink);
+        this.props.changeCurrentChat(chatLink);
+    }
+
     render() {
+        let isUserOwner = (this.props.room.owner == user.userData._id)
 
         let cnTabGeneral = "nav-link ";
         let cnTabDetail = "nav-link ";
@@ -117,6 +125,7 @@ class RoomInfo extends Component {
 
         const membersModified = members.map((member) => {
 
+            member.isCurrentUser = member._id == user.userData._id;
             member.isOwner = false;
 
             if (member._id == this.props.room.owner) {
@@ -158,10 +167,20 @@ class RoomInfo extends Component {
                             </Link>
                         </div>
 
-
-                        <div className="media">
-                            <Link to={`${utils.url('/editroom/' + this.props.room._id)}`} className="btn btn-label btn-primary btn-block"><label><i className="ti-pencil"></i></label> Edit Room</Link>
-                        </div>
+                        {isUserOwner ?
+                            <div className="media">
+                                <Link
+                                    to={`${utils.url('/editroom/' + this.props.room._id)}`}
+                                    className="btn btn-label btn-primary btn-block"
+                                    onClick={() => this.props.initRoomEditing(this.props.room)}>
+                                    <label>
+                                        <i className="ti-pencil"></i>
+                                    </label> Edit Room
+                                </Link>
+                            </div>
+                            :
+                            null
+                        }
 
                         {this.props.confirmRoomId == this.props.room._id ?
 
@@ -251,18 +270,29 @@ class RoomInfo extends Component {
                                     if (member.onlineStatus)
                                         classname += " status-success";
 
-                                    return <div className="media media-single media-action-visible cursor-pointer" key={member._id} onClick={() => { this.props.openChat(member) }} >
-                                        <span className={classname}>
-                                            <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
-                                        </span>
-                                        <p className="title">
-                                            {member.isOwner ?
-                                                <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> :
-                                                <span>{member.name}</span>
-                                            }
-                                        </p>
-                                        <a className="media-action" href="javascript:void(0)"><i className="fa fa-comment"></i></a>
-                                    </div>
+                                    let userChatLink = utils.chatIdByUser(member);
+
+                                    return (
+                                        <div className="media media-single media-action-visible cursor-pointer"
+                                            onClick={() => this.openNewChat(member, userChatLink)}
+                                            key={member._id}>
+
+                                            <span className={classname}>
+                                                <AvatarImage className="status-success" fileId={fileId} type={constant.AvatarUser} />
+                                            </span>
+                                            <p className="title">
+                                                {member.isOwner ?
+                                                    <strong className=""><span className="fa fa-flag text-yellow"></span> {member.name}</strong> :
+                                                    <span>{member.name}</span>
+                                                }
+                                            </p>
+                                            {member.isCurrentUser
+                                                ? null
+                                                : <span className="media-action">
+                                                    <i className="fa fa-comment"></i>
+                                                </span>}
+
+                                        </div>)
 
                                 })}
 
@@ -296,15 +326,19 @@ const mapDispatchToProps = (dispatch) => {
     return {
         tabChange: tabName => dispatch(actions.chatUI.tabChangedRoomInfo(tabName)),
         loadDone: () => dispatch(actions.infoView.loadDone()),
-        loadMuteState: (state) => dispatch(actions.infoView.loadMuteState(state)),
-        showError: (err) => dispatch(actions.notification.showToast(err)),
-        updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeRoom)),
+        loadMuteState: state => dispatch(actions.infoView.loadMuteState(state)),
+        showError: err => dispatch(actions.notification.showToast(err)),
+        updateMuteState: state => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypeRoom)),
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
         openChat: user => dispatch(actions.chat.openChatByUser(user)),
         deleteRoomConfirm: roomId => dispatch(actions.infoView.deleteRoomConfirm(roomId)),
         leaveRoomConfirm: roomId => dispatch(actions.infoView.leaveRoomConfirm(roomId)),
         deleteRoom: roomId => dispatch(actions.infoView.deleteRoom(roomId)),
-        leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId))
+        leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId)),
+        loadChatMessages: chatId => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId)),
+        initRoomEditing: data => dispatch(actions.room.initRoomEditng(data))
+
     };
 };
 

@@ -43,6 +43,10 @@ class Favotites extends Base {
         if (chatId.length > 1)
             this.chatId = chatId;
 
+        if (typeof this.props.match.params.chatId !== 'undefined') {
+            this.chatId = this.props.match.params.chatId;
+        }
+
         this.props.loadMessages(this.page, this.chatId);
         window.addEventListener('scroll', this.onScroll);
     }
@@ -52,7 +56,6 @@ class Favotites extends Base {
     }
 
     selected = (message) => {
-
         const chatIdSplit = message.roomID.split("-");
         const chatType = chatIdSplit[0];
 
@@ -68,7 +71,8 @@ class Favotites extends Base {
             else this.props.openChatByRoom(message.room)
         }
 
-        this.props.loadNewChat(message.roomID, message._id);
+        this.props.loadChatMessages(message.roomID, message._id, constant.ChatDirectionAllTo);
+        this.props.changeCurrentChat(message.roomID);
     }
 
     onScroll = (e) => {
@@ -227,7 +231,6 @@ class Favotites extends Base {
                                             <i className={deleteIconClass}></i>
                                         </a>
                                     </h6>
-
                                     <div className="code-preview" onClick={e => this.selected(message)}>
                                         <div className="media">
                                             <span className="avatar">
@@ -291,11 +294,12 @@ const mapDispatchToProps = (dispatch) => {
 
         loadMessages: (page, chatId) => dispatch(actions.favorites.loadMessages(page, chatId)),
         startRemoveFavorite: (messageId) => dispatch(actions.favorites.startRemoveFavorite(messageId)),
-
+        openChatByChatId: (chatId, messageId, direction) => dispatch(actions.chat.openChatByChatId(chatId, messageId, direction)),
         openChatByUser: (user) => dispatch(actions.chat.openChatByUser(user)),
         openChatByGroup: (group) => dispatch(actions.chat.openChatByGroup(group)),
         openChatByRoom: (room) => dispatch(actions.chat.openChatByRoom(room)),
-        loadNewChat: (roomId, messageId) => dispatch(actions.chat.loadNewChat(roomId, messageId, constant.ChatDirectionAllTo)),
+        loadChatMessages: (chatId, messageId, direction) => dispatch(actions.chat.loadChatMessages(chatId, messageId, direction)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId)),
         showToast: msg => dispatch(actions.notification.showToast(msg))
     };
 };

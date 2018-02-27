@@ -131,9 +131,10 @@ export const RoomSaveStart = "Room/SaveStart";
 export const RoomSaveSucceed = "Room/SaveSucceed";
 export const RoomSaveFailed = "Room/SaveFailed";
 export const RoomCancel = "Room/Cancel";
-export const RoomModeChanged = "Room/ModeChanged";
 export const RoomSelectFileByURL = "Room/SelectFileByURL";
+export const RoomInitEditingRoom ="Room/InitEditingRoom";
 export const RoomStartEditingRoom = "Room/StartEditingRoom";
+export const RoomStartCreatingRoom = "Room/StartCreatingRoom";
 
 // call
 export const CallIncoming = "Call/Incoming";

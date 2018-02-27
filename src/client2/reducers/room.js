@@ -7,6 +7,10 @@ import * as constant from '../lib/const';
 
 const keyword = (state = "", action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return "";
+        case types.RoomStartCreatingRoom:
+            return "";
         case types.RoomTypeKeyword:
             return action.keyword;
         case types.RoomAddMember:
@@ -18,7 +22,18 @@ const keyword = (state = "", action) => {
     }
 };
 
-const loading = (state = false, action) => {
+const roomInfoLoading = (state = false, action) => {
+    switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return true;
+        case types.RoomStartEditingRoom:
+            return false;
+        default:
+            return state;
+    }
+}
+
+const userSearchLoading = (state = false, action) => {
     switch (action.type) {
         case types.RoomSearchUserStart:
             return true;
@@ -33,14 +48,18 @@ const loading = (state = false, action) => {
 
 const searchResult = (state = [], action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return [];
+        case types.RoomStartCreatingRoom:
+            return [];
         case types.RoomSearchUserSucceed:
-            return action.data.list.filter( (user) => {
+            return action.data.list.filter((user) => {
 
                 let isExists = false;
 
-                action.members.forEach( (selectedUser) => {
+                action.members.forEach((selectedUser) => {
 
-                    if(selectedUser._id == user._id)
+                    if (selectedUser._id == user._id)
                         isExists = true;
 
                 });
@@ -57,10 +76,16 @@ const searchResult = (state = [], action) => {
 
 const members = (state = [], action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return [];
+        case types.RoomStartCreatingRoom:
+            return [];
         case types.RoomAddMember:
-            return state.concat( action.user );
+            return state.find(user => user._id == action.user._id)
+                ? state
+                : state.concat(action.user);
         case types.RoomDeleteMember:
-            return state.filter ( (user) => {
+            return state.filter((user) => {
                 return action.user._id != user._id
             });
         case types.RoomCancel:
@@ -75,6 +100,10 @@ const members = (state = [], action) => {
 
 const name = (state = "", action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return action.data.name;
+        case types.RoomStartCreatingRoom:
+            return "";
         case types.RoomTypeName:
             return action.name
         case types.RoomSaveSucceed:
@@ -86,6 +115,12 @@ const name = (state = "", action) => {
 
 const description = (state = "", action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return typeof action.data.description == 'undefined'
+                ? ""
+                : action.data.description;
+        case types.RoomStartCreatingRoom:
+            return "";
         case types.RoomTypeDescription:
             return action.description;
         case types.RoomSaveSucceed:
@@ -97,6 +132,10 @@ const description = (state = "", action) => {
 
 const avatarImage = (state = null, action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return null;
+        case types.RoomStartCreatingRoom:
+            return null;
         case types.RoomSelectFile:
             return action.file
         case types.RoomDeleteFile:
@@ -113,6 +152,10 @@ const avatarImage = (state = null, action) => {
 
 const avatarImageUrl = (state = "", action) => {
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return "";
+        case types.RoomStartCreatingRoom:
+            return "";
         case types.RoomSelectFile:
             return action.fileUrl;
         case types.RoomSelectFileByURL:
@@ -139,27 +182,16 @@ const saving = (state = false, action) => {
 
 const editingRoomId = (state = null, action) => {
 
-    if(!action.payload)
-        return state;
-
-    const path = action.payload.pathname;
-
-    if(/editroom/.test(path)){
-    
-        const chanks = path.split('/');
-    
-        const roomId = chanks[chanks.length - 1];
-    
-        return roomId;
-
+    switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return action.data._id;
+        case types.RoomStartEditingRoom:
+            return action.room._id;
+        case types.RoomStartCreatingRoom:
+            return null;
+        default:
+            return state;
     }
-    
-    if(/newroom/.test(path)){
-        return null;
-    }
-
-
-    return state;
 
 }
 
@@ -167,6 +199,10 @@ const editingRoomId = (state = null, action) => {
 const editingRoomData = (state = null, action) => {
 
     switch (action.type) {
+        case types.RoomInitEditingRoom:
+            return action.data;
+        case types.RoomStartCreatingRoom:
+            return null;
         case types.RoomStartEditingRoom:
             return action.room
         default:
@@ -177,7 +213,8 @@ const editingRoomData = (state = null, action) => {
 
 
 export default combineReducers({
-    loading,
+    userSearchLoading,
+    roomInfoLoading,
     searchResult,
     keyword,
     members,
