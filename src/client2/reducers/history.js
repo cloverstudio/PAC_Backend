@@ -67,9 +67,20 @@ const historyList = (state = [], action) => {
                             break;
                     }
 
-                    if (currentChatId == historyObjChatId) {
+                    if (currentChatId === historyObjChatId) {
                         historyObj.unreadCount = 0;
+                        return historyObj;
                     }
+
+                    let oldStateMatchObj = oldState.find(oldHistoryObj => oldHistoryObj.chatId === historyObj.chatId);
+
+                    if (oldStateMatchObj) {
+                        if (oldStateMatchObj.unreadCount === 0
+                            && oldStateMatchObj.lastMessage.messageId === historyObj.lastMessage.messageId) {
+                            historyObj.unreadCount = 0;
+                        }
+                    }
+
                     return historyObj;
 
                 }
