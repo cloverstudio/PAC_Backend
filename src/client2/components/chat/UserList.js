@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as constant from '../../lib/const';
 import * as actions from '../../actions';
+import * as utils from '../../lib/utils';
 
 import AvatarImage from '../AvatarImage';
 
@@ -84,7 +85,13 @@ class UserList extends Component {
                                 fileId = user._id;
 
                             return (
-                                <div className="media align-items-center" key={user._id} onClick={() => { this.props.openChat(user) }}>
+                                <div className="media align-items-center" key={user._id}
+                                    onClick={() => {
+                                        let chatId = utils.chatIdByUser(user);
+                                        this.props.openChat(user);
+                                        this.props.loadChatMessages(chatId);
+                                        this.props.changeCurrentChat(chatId)
+                                    }}>
 
                                     <span className="flexbox flex-grow gap-items text-truncate">
 
@@ -126,6 +133,9 @@ const mapDispatchToProps = (dispatch) => {
         loadUserList: (page) => dispatch(actions.userlist.loadUserList(page)),
         searchUserList: (value) => dispatch(actions.userlist.searchUserList(value)),
         openChat: user => dispatch(actions.chat.openChatByUser(user)),
+        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
+
     };
 };
 
