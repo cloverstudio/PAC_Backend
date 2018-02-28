@@ -376,8 +376,6 @@ export function deleteRoom(obj) {
 
     return (dispatch, getState) => {
         dispatch(actions.history.loadHistoryInitial());
-
-        console.log(obj);
     }
 
 }
