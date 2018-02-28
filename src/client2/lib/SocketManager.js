@@ -145,11 +145,11 @@ class SocketManager {
         });
 
         this.ioNsp.on('new_room', (param) => {
-
+            store.dispatch(actions.room.newRoom(param));
         });
 
         this.ioNsp.on('delete_room', (param) => {
-
+            store.dispatch(actions.room.deleteRoom(param));
         });
 
         this.ioNsp.on('delete_group', (param) => {

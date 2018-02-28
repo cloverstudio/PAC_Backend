@@ -77,7 +77,8 @@ class Login extends Component {
                 </div>
 
                 <div className="col-md-6 col-lg-5 col-xl-4 align-self-center">
-                    <div className="px-80 py-30">
+                
+                    <div className="login-panel">
                         <h4>{strings.LoginTitle1[user.lang]}</h4>
                         <p><small>{strings.LoginText2[user.lang]}</small></p>
                         <br />
@@ -124,7 +125,11 @@ class Login extends Component {
                         <hr className="w-30px" />
 
                         <p className="text-center text-muted fs-13 mt-20">{strings.LoginText3[user.lang]}<br />
+<<<<<<< HEAD
                             &nbsp; <Link to={config.BasePath + '/signup'} className="text-primary fw-500">{strings.LoginLink1[user.lang]}</Link>
+=======
+                            &nbsp; <Link to={'/signup'} className="text-primary fw-500">{strings.LoginLink1[user.lang]}</Link>
+>>>>>>> 985c54139a4699627077638ad220e2337d66bdf0
                         </p>
                     </div>
                 </div>

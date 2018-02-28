@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as constant from '../../lib/const';
 import * as actions from '../../actions';
+import * as utils from '../../lib/utils';
 
 import AvatarImage from '../AvatarImage';
 
@@ -84,7 +85,13 @@ class GroupList extends Component {
                                 fileId = group._id;
 
                             return (
-                                <div className="media align-items-center" key={group._id} onClick={() => { this.props.openChat(group) }} >
+                                <div className="media align-items-center" key={group._id}
+                                    onClick={() => {
+                                        let chatId = utils.chatIdByGroup(group);
+                                        this.props.openChat(group);
+                                        this.props.loadChatMessages(chatId);
+                                        this.props.changeCurrentChat(chatId)
+                                    }} >
                                     <span className="flexbox flex-grow gap-items text-truncate">
 
                                         <AvatarImage fileId={fileId} type={constant.AvatarGroup} />
@@ -121,7 +128,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loadGroupList: (page) => dispatch(actions.grouplist.loadGroupList(page)),
         searchGroupList: (value) => dispatch(actions.grouplist.searchGroupList(value)),
-        openChat: group => dispatch(actions.chat.openChatByGroup(group))
+        openChat: group => dispatch(actions.chat.openChatByGroup(group)),
+        loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
     };
 };
 

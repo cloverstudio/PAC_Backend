@@ -364,3 +364,20 @@ export function cancel() {
     }
 
 }
+
+export function newRoom(obj) {
+    return (dispatch, getState) => {
+        dispatch(actions.history.loadHistoryInitial());
+    }
+}
+
+
+export function deleteRoom(obj) {
+
+    return (dispatch, getState) => {
+        dispatch(actions.history.loadHistoryInitial());
+
+        console.log(obj);
+    }
+
+}
