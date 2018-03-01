@@ -19,6 +19,7 @@ var SocketAPIHandler = require("../../../SocketAPI/SocketAPIHandler");
 var RoomModel = require('../../../Models/Room');
 var UserModel = require('../../../Models/User');
 var HistoryModel = require('../../../Models/History');
+var FavoriteModel = require('../../../Models/Favorite');
 
 var checkUserAdmin = require('../../../lib/auth.js').checkUserAdmin;
 
@@ -209,6 +210,7 @@ RoomController.prototype.init = function (app) {
 
         var model = RoomModel.get();
         var historyModel = HistoryModel.get();
+        var favoriteModel = FavoriteModel.get();
 
         var uploadPathError = self.checkUploadPath();
 
@@ -272,6 +274,14 @@ RoomController.prototype.init = function (app) {
 
                 });
 
+            },
+            function (result, done) {
+                // remove favorites
+                favoriteModel.remove({ roomId: "2-" + _id }, function (err, foundFavorites) {
+
+                    done(err, result);
+
+                });
             }
         ],
             function (err, result) {
