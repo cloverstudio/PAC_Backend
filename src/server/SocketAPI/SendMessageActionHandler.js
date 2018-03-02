@@ -40,12 +40,10 @@ SendMessageActionHandler.prototype.attach = function (io, socket) {
 
     socket.on('sendMessage', function (param) {
 
-
-        if (!param.roomID) {
+        if (!param.roomID || param.roomID.indexOf('null') != -1) {
             socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoRoomID });
             return;
         }
-
 
         if (!param.userID) {
             socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoUserId });
