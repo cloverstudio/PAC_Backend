@@ -38,7 +38,7 @@ class Login extends Component {
         this.props.onUserNameChange(v);
     }
 
-    handlePassword = (v) =>{
+    handlePassword = (v) => {
         this.props.onPasswordChange(v);
     }
 
@@ -52,13 +52,13 @@ class Login extends Component {
 
     render() {
 
-        if(user.token)
+        if (user.token)
             return <Redirect to={`${util.url('/chat')}`} />
 
         return (
             <div className="row no-gutters min-h-fullscreen bg-white">
 
-                <div className="col-md-6 col-lg-7 col-xl-8 d-none d-md-block bg-img" style={{backgroundImage: `url(${loginPic})`}} data-overlay="5">
+                <div className="col-md-6 col-lg-7 col-xl-8 d-none d-md-block bg-img" style={{ backgroundImage: `url(${loginPic})` }} data-overlay="5">
 
                     <div className="row h-100 pl-50">
                         <div className="col-md-10 col-lg-8 align-self-end">
@@ -72,58 +72,58 @@ class Login extends Component {
                         </div>
                     </div>
 
-                    </div>
+                </div>
 
-                    <div className="col-md-6 col-lg-5 col-xl-4 align-self-center">
-                    <div className="px-80 py-30">
-                    <h4>{strings.LoginTitle1[user.lang]}</h4>
-                    <p><small>{strings.LoginText2[user.lang]}</small></p>
-                    <br />
+                <div className="col-md-6 col-lg-5 col-xl-4 align-self-center">
+                    <div className="login-panel">
+                        <h4>{strings.LoginTitle1[user.lang]}</h4>
+                        <p><small>{strings.LoginText2[user.lang]}</small></p>
+                        <br />
 
-                    <form className="form-type-material" onSubmit={this.handleLoginClick}>
+                        <form className="form-type-material" onSubmit={this.handleLoginClick}>
 
-                        <div className="form-group">
-                            <input type="text" className="form-control" placeholder={strings.LoginFormPlaceholderOrganization[user.lang]} 
-                                value={this.props.organization}
-                                onChange={e => this.handleOrg(e.target.value)} />
-                        </div>
-                            
-                        <div className="form-group">
-                            <input type="text" className="form-control" placeholder={strings.LoginFormPlaceholderUsername[user.lang]} 
-                                value={this.props.username}
-                                onChange={e => this.handleUserName(e.target.value)} />
-                        </div>
+                            <div className="form-group">
+                                <input type="text" className="form-control" placeholder={strings.LoginFormPlaceholderOrganization[user.lang]}
+                                    value={this.props.organization}
+                                    onChange={e => this.handleOrg(e.target.value)} />
+                            </div>
 
-                        <div className="form-group">
-                            <input type="password" className="form-control" placeholder={strings.LoginFormPlaceholderPassword[user.lang]} 
-                                value={this.props.password}
-                                onChange={e => this.handlePassword(e.target.value)} />
-                        </div>
+                            <div className="form-group">
+                                <input type="text" className="form-control" placeholder={strings.LoginFormPlaceholderUsername[user.lang]}
+                                    value={this.props.username}
+                                    onChange={e => this.handleUserName(e.target.value)} />
+                            </div>
 
-                        <div className="form-group flexbox">
-                            <label className="custom-control custom-checkbox">
-                            <input type="checkbox" className="custom-control-input" 
-                                checked={this.props.remember}
-                                onChange={e => this.handleRememberCheck(e.target.checked)}/>
-                            <span className="custom-control-indicator"></span>
-                            <span className="custom-control-description">{strings.LoginFormRemember[user.lang]}</span>
-                            </label>
-                        </div>
+                            <div className="form-group">
+                                <input type="password" className="form-control" placeholder={strings.LoginFormPlaceholderPassword[user.lang]}
+                                    value={this.props.password}
+                                    onChange={e => this.handlePassword(e.target.value)} />
+                            </div>
 
-                        <div className="form-group">
-                            <button className="btn btn-bold btn-block btn-primary" type="submit">
-                                {this.props.loadingLogin ? <i className="fa fa-spinner fa-spin fa-fw"></i>:null }
-                                {strings.LoginButtonTitle[user.lang]}
-                            </button>
-                        </div>
-                        
-                    </form>
+                            <div className="form-group flexbox">
+                                <label className="custom-control custom-checkbox">
+                                    <input type="checkbox" className="custom-control-input"
+                                        checked={this.props.remember}
+                                        onChange={e => this.handleRememberCheck(e.target.checked)} />
+                                    <span className="custom-control-indicator"></span>
+                                    <span className="custom-control-description">{strings.LoginFormRemember[user.lang]}</span>
+                                </label>
+                            </div>
 
-                    <hr className="w-30px" />
+                            <div className="form-group">
+                                <button className="btn btn-bold btn-block btn-primary" type="submit">
+                                    {this.props.loadingLogin ? <i className="fa fa-spinner fa-spin fa-fw"></i> : null}
+                                    {strings.LoginButtonTitle[user.lang]}
+                                </button>
+                            </div>
 
-                    <p className="text-center text-muted fs-13 mt-20">{strings.LoginText3[user.lang]}<br />
-                         &nbsp; <Link to={'/signup'} className="text-primary fw-500">{strings.LoginLink1[user.lang]}</Link>
-                    </p>
+                        </form>
+
+                        <hr className="w-30px" />
+
+                        <p className="text-center text-muted fs-13 mt-20">{strings.LoginText3[user.lang]}<br />
+                            &nbsp; <Link to={'/signup'} className="text-primary fw-500">{strings.LoginLink1[user.lang]}</Link>
+                        </p>
                     </div>
                 </div>
 
@@ -146,7 +146,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoginClick: (org,username,password,remember) => dispatch(actions.login.onLoginClick(org,username,password,remember)),
+        onLoginClick: (org, username, password, remember) => dispatch(actions.login.onLoginClick(org, username, password, remember)),
         onOrgChange: (v) => dispatch(actions.login.onOrgChange(v)),
         onUserNameChange: (v) => dispatch(actions.login.onUserNameChange(v)),
         onPasswordChange: (v) => dispatch(actions.login.onPasswordChange(v)),

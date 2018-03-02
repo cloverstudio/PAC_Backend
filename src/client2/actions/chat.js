@@ -39,10 +39,16 @@ export function loadChatMessages(chatId, messageId = 0, direction = constant.Cha
 
         callGetMessageList(chatId, messageId, direction)
             .then(data => {
-                dispatch({
-                    type: types.ChatLoadMessageSucceed,
-                    messages: data.messages
-                });
+
+                if (chatId == getState().chat.chatId) {
+
+                    dispatch({
+                        type: types.ChatLoadMessageSucceed,
+                        messages: data.messages,
+                    });
+
+                }
+
             })
             .catch(err => {
                 console.error(err);

@@ -8,12 +8,15 @@ var DatabaseManager = require("../lib/DatabaseManager");
 var Utils = require("../lib/utils");
 var Const = require("../lib/consts");
 var Config = require("../lib/init");
+var UpdateHistory = require('../Logics/UpdateHistory');
+
 var SocketHandlerBase = require("./SocketHandlerBase");
 var SocketAPIHandler = require("./SocketAPIHandler");
 
 var GroupModel = require('../Models/Group');
 var RoomModel = require('../Models/Room');
 var UserModel = require('../Models/User');
+
 
 var MessageModel = require('../Models/Message');
 
@@ -132,6 +135,11 @@ OpenMessageActionHandler.prototype.attach = function (io, socket) {
 
         },
         (message, done) => {
+
+            UpdateHistory.resetUnreadCount({
+                roomID: message.roomID,
+                userID: param.userID
+            });
 
             done(null, message);
 
