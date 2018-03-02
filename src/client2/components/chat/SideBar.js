@@ -130,7 +130,7 @@ class SideBar extends Component {
             </li>
 
             <li className="menu-item">
-              <Link to={`${utils.url("/favorite")}`} className="menu-link">
+              <Link to="/admin" className="menu-link" target="_blank">
                 <span className="icon fa fa-gear" />
                 <span className="title">{strings.SidebarAdmin[user.lang]}</span>
               </Link>
@@ -157,7 +157,7 @@ class SideBar extends Component {
             </li>
           </ul>
         </nav>
-      </aside>
+      </aside >
     );
   }
 }
