@@ -205,7 +205,7 @@ var helpers = {
             prev = 1
 
         // prev
-        html += '<li><a href="' + baseURL + prev + '" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+        html += '<li class="page-item"><a class="page-link" href="' + baseURL + prev + '" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
 
         var from = page - maxPages / 2;
         if (from <= 1)
@@ -216,8 +216,8 @@ var helpers = {
         // first page 
         if (from > 3) {
 
-            html += '<li><a href="' + baseURL + '1">' + 1 + '</a></li>';
-            html += '<li><a href="#">...</a></li>';
+            html += '<li class="page-item"><a class="page-link" href="' + baseURL + '1">' + 1 + '</a></li>';
+            html += '<li class="page-item"><a href="#">...</a></li>';
         }
 
         for (var i = 0; i < maxPages; i++) {
@@ -226,21 +226,21 @@ var helpers = {
 
             // current selected page is colored
             if (pageNum == page)
-                html += '<li><a class="selected-page" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+                html += '<li class="page-item active"><a class="page-link" class="selected-page" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
             else
-                html += '<li><a href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
+                html += '<li class="page-item"><a class="page-link" href="' + baseURL + pageNum + '">' + pageNum + '</a></li>';
 
         }
 
         if (from + maxPages <= pages - 1) {
 
-            html += '<li><a href="#">...</a></li>';
-            html += '<li><a href="' + baseURL + pages + '">' + pages + '</a></li>';
+            html += '<li class="page-item"><a class="page-link" href="#">...</a></li>';
+            html += '<li class="page-item"><a class="page-link" href="' + baseURL + pages + '">' + pages + '</a></li>';
 
         }
 
         // prev
-        html += '<li><a href="' + baseURL + next + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+        html += '<li class="page-item"><a class="page-link" href="' + baseURL + next + '" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
 
 
         return html;
