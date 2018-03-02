@@ -19,41 +19,46 @@ class Message extends Component {
 
     static propTypes = {
     }
-    constructor(){
+    constructor() {
         super();
     }
 
     render() {
 
-        switch(this.props.messageData.type){
+        switch (this.props.messageData.type) {
             case constant.MessageTypeText:
-                return <MessageText message={this.props.messageData} lockForScroll = {this.props.lockForScroll}/>
+                return <MessageText message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
 
             case constant.MessageTypeSticker:
-                return <MessageSticker message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll = {this.props.lockForScroll}/>
+                return <MessageSticker message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll={this.props.lockForScroll} />
 
             case constant.MessageTypeFile:
-                if (typeof this.props.messageData._id !== 'undefined'){
+                if (typeof this.props.messageData._id !== 'undefined') {
 
-                    if (typeof this.props.messageData.file === 'undefined' || this.props.messageData.file === null){
-                        return <MessageFileDeleted message={this.props.messageData}/>
+                    if (typeof this.props.messageData.file === 'undefined' || this.props.messageData.file === null) {
+                        return <MessageFileDeleted message={this.props.messageData} />
                     }
 
-                    else{
-                        
+                    else {
+
                         const [fileMimeType, fileMimeSubtype] = this.props.messageData.file.file.mimeType.split('/')
 
-                        if (fileMimeType === constant.imgMimeType){
-                            return <MessageFileImage message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll = {this.props.lockForScroll}/>
+                        if (fileMimeType === constant.imgMimeType) {
+
+                            if (fileMimeSubtype === constant.svgXmlMimeSubtype) {
+                                return <MessageFile message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
+                            }
+
+                            return <MessageFileImage message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll={this.props.lockForScroll} />
                         }
-                        else{
-                            return <MessageFile message={this.props.messageData} lockForScroll = {this.props.lockForScroll}/>
+                        else {
+                            return <MessageFile message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
                         }
                     }
 
                 }
-                else{
-                    return <MessageFileUploading message={this.props.messageData}/>
+                else {
+                    return <MessageFileUploading message={this.props.messageData} />
                 }
 
             default:
@@ -64,8 +69,8 @@ class Message extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        currentChatId:state.chat.chatId,
-        fileProgress: state.files  
+        currentChatId: state.chat.chatId,
+        fileProgress: state.files
     };
 };
 
