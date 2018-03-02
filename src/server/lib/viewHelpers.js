@@ -264,8 +264,9 @@ var helpers = {
             '<table class="table table-hover tree">' +
             '<thead>' +
             '<tr>' +
+            '<th width="5%"></th>' +
             '<th>' + helpers.l10n("Name") + '</th>' +
-            '<th width="15%">' + helpers.l10n("Description") + '</th>' +
+            '<th width="10%">' + helpers.l10n("Description") + '</th>' +
             '<th width="15%">' + helpers.l10n("Created At") + '</th>' +
             '<th width="5%"></th>' +
             '<th width="5%"></th>' +
@@ -305,11 +306,13 @@ var helpers = {
                     tableBody += '<tr class="treegrid-' + value._id + ' treegrid-parent-' + value.parentId + '">'
 
                 var deleteButton =
-                    (!value.default) ? '<button type="button" class="buttonRedGhoust" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
+                    (!value.default) ? '<button type="button" class="btn btn-danger" onclick=\'location.href="/admin/department/delete/' + value._id + '"\'>' + helpers.l10n("Delete") + '</button>' : "";
 
                 tableBody +=
-                    '<td class="list-edit-link">' +
-                    '<img class="list-tree-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" />' +
+                    '<td>' +
+                    '<img class="list-thumbnail img-rounded" src="/admin/file/' + value.avatar.thumbnail.nameOnServer + '" />' +
+                    '</td>' +
+                    '<td>' +
                     '<a href="/admin/department/edit/' + value._id + '">' +
                     '<strong>' + value.name + '</strong>' +
                     '</a>' +
@@ -317,10 +320,10 @@ var helpers = {
                     '<td>' + value.description + '</td>' +
                     '<td>' + helpers.formatDate(value.created) + '</td>' +
                     '<td>' +
-                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
+                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/department/userlist/' + value._id + '"\'>' + helpers.l10n("Members") + '</button>' +
                     '</td>' +
                     '<td>' +
-                    '<button type="button" class="buttonGreenGhoust" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
+                    '<button type="button" class="btn btn-primary" onclick=\'location.href="/admin/department/edit/' + value._id + '"\'>' + helpers.l10n("Edit") + '</button>' +
                     '</td>' +
                     '<td>' +
                     deleteButton +

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 import * as util from "./lib/utils";
 
@@ -32,6 +32,7 @@ export default (
     <Route path={`${util.url("/profile")}`} component={Profile} />
     <Route path={`${util.url("/password")}`} component={Password} />
     <Route path={`${util.url("/logout")}`} component={Logout} />
+    <Redirect from='*' to={`${util.url("/")}`} />
   </Switch>
 
 );

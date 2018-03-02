@@ -2,7 +2,7 @@
 
 var bodyParser = require("body-parser");
 var express = require('express');
-var exphbs  = require('express-handlebars');
+var exphbs = require('express-handlebars');
 var router = express.Router();
 var fs = require('fs')
 var session = require('express-session')
@@ -11,6 +11,7 @@ var cookieParser = require('cookie-parser')
 var geoip = require('geoip-lite');
 var bodyParser = require("body-parser");
 var _ = require('lodash');
+var path = require('path');
 
 var init = require('../lib/init.js');
 var Const = require('../lib/consts.js');
@@ -19,7 +20,7 @@ var Utils = require('../lib/utils');
 
 var WebAPIMain = {
 
-    init: function(app) {
+    init: function (app) {
 
         var self = this;
 
@@ -39,16 +40,16 @@ var WebAPIMain = {
         app.engine('.hbs', hbs.engine);
         app.set('view engine', '.hbs');
 
-        app.use('/',express.static(__dirname + '/../../../public'));
+        app.use('/', express.static(__dirname + '/../../../public'));
         app.use(bodyParser.json());
-		app.use(bodyParser.urlencoded({
-		  extended: true
-		}));
-        
+        app.use(bodyParser.urlencoded({
+            extended: true
+        }));
+
         app.use(cookieParser());
-        
+
         app.use(session({
-            genid: function(req) {
+            genid: function (req) {
                 return Utils.getRandomString(32)
             },
             secret: Const.sessionsalt,
@@ -58,61 +59,68 @@ var WebAPIMain = {
             cookie: { path: '/', httpOnly: false, secure: false, maxAge: null }
         }));
 
-        app.use(function(request, response, next) {
+        app.use(function (request, response, next) {
             response.header("Access-Control-Allow-Origin", "*");
             response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, access-token, apikey");
-        next();
+            next();
         });
 
-        app.all('*', function(request, response, next) {
-            
-            if(request.cookies.lang){
-                
+        app.all('*', function (request, response, next) {
+
+            if (request.cookies.lang) {
+
                 next();
-                
-            }else{
-                
-                var ip = request.headers['x-forwarded-for'] || 
-                    request.connection.remoteAddress || 
+
+            } else {
+
+                var ip = request.headers['x-forwarded-for'] ||
+                    request.connection.remoteAddress ||
                     request.socket.remoteAddress ||
                     request.connection.socket.remoteAddress;
-                                
+
                 var geo = geoip.lookup(ip);
-                
-                if(geo && geo.country){
-                    
+
+                if (geo && geo.country) {
+
                     response.cookie('lang', geo.country.toLowerCase());
-                    
-                }else{
-                    
+
+                } else {
+
                     response.cookie('lang', 'en');
-                    
+
                 }
 
                 next();
-                
+
             }
 
         });
 
-        app.all('/', function(request, response, next) {
-              
+        app.all('/', function (request, response, next) {
+
         });
 
-        app.all('/admin', function(request, response){
-            response.redirect('/admin/home');          
+        app.all('/admin', function (request, response) {
+            response.redirect('/admin/home');
         });
 
-        app.all('/owner', function(request, response){
+        app.all('/owner', function (request, response) {
             response.redirect('/owner/home');
         });
-        
+
         router.use("/", require("./Front/FrontMain").init(app));
         router.use("/admin", require("./OrganizationAdmin/OrganizationAdminMain").init(app));
         router.use("/owner", require("./SuperAdmin/SuperAdminMain").init(app));
         router.use("/api/v2", require("./Backend/BackendMain").init(app));
         router.use("/api/v3", require("./API/APIMain").init(app));
         app.use(init.urlPrefix, router);
+
+        app.use(function (req, res, next) {
+
+            // return index.html
+            res.sendFile(path.join(__dirname + '/../../../public/index.html'));
+
+        });
 
     }
 }
