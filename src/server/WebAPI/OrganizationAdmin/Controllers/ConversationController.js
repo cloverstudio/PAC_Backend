@@ -649,6 +649,20 @@ ConversationController.prototype.init = function (app) {
 
 
             },
+
+            function (result, done) {
+
+                // get conversation
+                // create chat id
+                const roomID = Utils.chatIdByGroup(result.selectedGroup);
+
+                messageModel.count(result.criteria, (err, messageCounts) => {
+                    result.count = messageCounts;
+                    done(err, result);
+                });
+
+            },
+
             function (result, done) {
 
                 MessageModel.populateMessages(result.messages, (err, messages) => {
@@ -874,6 +888,19 @@ ConversationController.prototype.init = function (app) {
 
             function (result, done) {
 
+                // get conversation
+                // create chat id
+                const roomID = Utils.chatIdByRoom(result.selectedRoom);
+
+                messageModel.count(result.criteria, (err, messageCounts) => {
+                    result.count = messageCounts;
+                    done(err, result);
+                });
+
+            },
+
+            function (result, done) {
+
                 MessageModel.populateMessages(result.messages, (err, messages) => {
                     result.messages = messages;
                     done(err, result);
@@ -929,7 +956,7 @@ ConversationController.prototype.init = function (app) {
         var favoriteModel = FavoriteModel.get();
         var result = {};
         var chatType = roomID.split("-")[0];
-        console.log(chatType);
+
         if (chatType == "1") {
             var splitAry = roomID.split("-");
             var user1 = splitAry[1];
