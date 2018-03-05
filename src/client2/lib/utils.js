@@ -70,7 +70,7 @@ export function url(url) {
 }
 
 export function getTimestamp(dateObj) {
-  return `${dateObj.getFullYear()}/${dateObj.getMonth()}/${dateObj.getDate()} ${
+  return `${dateObj.getFullYear()}/${dateObj.getMonth() + 1}/${dateObj.getDate()} ${
     dateObj.getHours().toString().padLeft(2, '0')
     }:${
     dateObj.getMinutes().toString().padLeft(2, '0')
