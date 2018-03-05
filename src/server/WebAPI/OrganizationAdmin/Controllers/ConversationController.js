@@ -1037,6 +1037,14 @@ ConversationController.prototype.init = function (app) {
             },
             function (result, done) {
 
+                favoriteModel.remove({ roomId: roomID }, function (err, res) {
+
+                    done(err, result);
+
+                })
+            },
+            function (result, done) {
+
                 if (chatType == "1") {
 
                     historyModel.remove({ $or: [{ $and: [{ userId: user1 }, { chatId: user2 }] }, { $and: [{ userId: user2 }, { chatId: user1 }] }] }, function (err, res) {
