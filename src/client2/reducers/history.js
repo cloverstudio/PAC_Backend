@@ -151,7 +151,7 @@ const historyList = (state = [], action) => {
 
                 if (typeof match !== 'undefined') {
                     if (match.message != '') {
-                        historyObj.lastMessage.message = match.message;
+                        historyObj.lastMessage.message = Encryption.decryptText(match.message);
                     }
                     else {
                         historyObj.lastMessage = null;
