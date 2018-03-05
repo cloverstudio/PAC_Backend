@@ -137,8 +137,8 @@ class Favotites extends Base {
 
                                 const message = favorite.messageModel;
 
-                                //if (!message)
-                                //    return <span key={favorite._id}></span>;
+                                if (!message)
+                                    return <span key={favorite._id}></span>;
 
                                 if (typeof message.deleted !== 'undefined' && message.deleted !== 0) {
                                     return null;
