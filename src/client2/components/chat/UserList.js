@@ -55,6 +55,12 @@ class UserList extends Component {
         this.props.searchUserList(inputElement.value);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.usersViewState && nextProps.usersViewState) {
+            this.inputField.select();
+        }
+    }
+
     render() {
 
         return (
@@ -69,7 +75,12 @@ class UserList extends Component {
 
                     <header className="media-list-header b-0">
                         <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
-                            <input onChange={this.onInputChange} className="w-100 no-radius no-border input--height60" type="text" placeholder="Search..." />
+                            <input
+                                ref={inputField => this.inputField = inputField}
+                                onChange={this.onInputChange}
+                                className="w-100 no-radius no-border input--height60"
+                                type="text"
+                                placeholder="Search..." />
                         </form>
                     </header>
 
@@ -124,7 +135,9 @@ class UserList extends Component {
 const mapStateToProps = (state) => {
     return {
         usersLoading: state.userlist.loading,
-        users: state.userlist.users
+        users: state.userlist.users,
+        usersViewState: state.chatUI.usersViewState,
+
     };
 };
 

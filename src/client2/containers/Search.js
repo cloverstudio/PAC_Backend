@@ -64,6 +64,10 @@ class Search extends Base {
         }, constant.SearchInputTimeout);
     }
 
+    componentDidMount() {
+        this.inputField.select();
+    }
+
     render() {
 
         let sideBarClass = "pace-done sidebar-folded";
@@ -93,7 +97,11 @@ class Search extends Base {
                             <div className="input-group">
                                 <span className="input-group-addon" id="basic-addon1">
                                     <i className="ti-search"></i></span>
-                                <input onChange={this.onKeywordChange} type="text" className="form-control" />
+                                <input
+                                    ref={inputField => this.inputField = inputField}
+                                    onChange={this.onKeywordChange}
+                                    type="text"
+                                    className="form-control" />
                             </div>
                         </div>
                     </header>

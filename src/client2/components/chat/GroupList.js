@@ -55,6 +55,12 @@ class GroupList extends Component {
         this.props.searchGroupList(inputElement.value);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.groupsViewState && nextProps.groupsViewState) {
+            this.inputField.select();
+        }
+    }
+
     render() {
 
         return (
@@ -69,7 +75,12 @@ class GroupList extends Component {
 
                     <header className="media-list-header b-0">
                         <form className="lookup lookup-lg w-100 bb-1 border-light" onSubmit={this.searchOnSubmit}>
-                            <input onChange={this.onInputChange} className="w-100 no-radius no-border input--height60" type="text" placeholder="Search..." />
+                            <input
+                                ref={inputField => this.inputField = inputField}
+                                onChange={this.onInputChange}
+                                className="w-100 no-radius no-border input--height60"
+                                type="text"
+                                placeholder="Search..." />
                         </form>
                     </header>
 
@@ -120,7 +131,9 @@ class GroupList extends Component {
 const mapStateToProps = (state) => {
     return {
         groupsLoading: state.grouplist.loading,
-        groups: state.grouplist.groups
+        groups: state.grouplist.groups,
+        groupsViewState: state.chatUI.groupsViewState,
+
     };
 };
 

@@ -52,7 +52,7 @@ const timestampByChat = (state = initial.timestampByChat, action) => {
 
 const chatId = (state = initial.chatId, action) => {
     switch (action.type) {
-        case '@@router/LOCATION_CHANGE':
+        case types.LocationChange:
             let chatId = utils.getChatIdFromUrl(action.payload.pathname);
             if (chatId) {
                 if (chatId !== state) {

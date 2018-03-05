@@ -13,7 +13,7 @@ import Notification from './Notification';
 
 class Header extends Component {
 
-    constructor(){
+    constructor() {
         super();
         this.initialUserListLoaded = false;
         this.initialGroupsLoaded = false;
@@ -23,10 +23,10 @@ class Header extends Component {
     }
 
     toggleUsersView = (e) => {
-        if(!this.props.usersViewState){
+        if (!this.props.usersViewState) {
             this.props.showUsersView();
 
-            if(!this.initialUserListLoaded){
+            if (!this.initialUserListLoaded) {
                 this.props.loadUserList(1);
                 this.initialUserListLoaded = true;
             }
@@ -37,10 +37,10 @@ class Header extends Component {
     }
 
     toggleGroupsView = (e) => {
-        if(!this.props.groupsViewState){
+        if (!this.props.groupsViewState) {
             this.props.showGroupsView();
 
-            if(!this.initialGroupsLoaded){
+            if (!this.initialGroupsLoaded) {
                 this.props.loadGroupList(1);
                 this.initialGroupsLoaded = true;
             }
@@ -52,7 +52,7 @@ class Header extends Component {
 
     tuggleSidebar = (e) => {
 
-        if(this.props.sidebarState)
+        if (this.props.sidebarState)
             this.props.hideSidebar();
         else
             this.props.showSidebar();
@@ -61,34 +61,34 @@ class Header extends Component {
 
     toggleInfoView = (e) => {
 
-        if(this.props.infoViewState)
+        if (this.props.infoViewState)
             this.props.hideInfoView();
         else
             this.props.showInfoView();
 
     }
-    
+
     render() {
 
         let usersViewClass = "quickview";
-        if(this.props.usersViewState)
+        if (this.props.usersViewState)
             usersViewClass += " reveal";
 
         let groupsViewClass = "quickview";
-        if(this.props.groupsViewState)
+        if (this.props.groupsViewState)
             groupsViewClass += " reveal";
 
         return (
-            
+
             <header className="topbar">
 
                 <div className="topbar-left">
                     <span onClick={this.tuggleSidebar} className="topbar-btn sidebar-toggler">
-                    <i className="sidebar-icon">&#9776;</i></span>
+                        <i className="sidebar-icon">&#9776;</i></span>
                 </div>
 
                 <div className="topbar-right">
-                    
+
                     <a className="topbar-btn hidden-sm-up" onClick={this.toggleInfoView}>
                         <i className="fa fa-info-circle"></i>
                     </a>
@@ -122,10 +122,10 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        usersViewState:state.chatUI.usersViewState,
-        groupsViewState:state.chatUI.groupsViewState,
-        sidebarState:state.chatUI.sidebarState,
-        infoViewState:state.chatUI.infoViewState
+        usersViewState: state.chatUI.usersViewState,
+        groupsViewState: state.chatUI.groupsViewState,
+        sidebarState: state.chatUI.sidebarState,
+        infoViewState: state.chatUI.infoViewState
     };
 };
 
@@ -135,7 +135,7 @@ const mapDispatchToProps = (dispatch) => {
         hideUsersView: () => dispatch(actions.chatUI.hideUsersView()),
         showGroupsView: () => dispatch(actions.chatUI.showGroupsView()),
         hideGroupsView: () => dispatch(actions.chatUI.hideGroupsView()),
-        loadUserList: page => dispatch(actions.userlist.loadUserList(page)), 
+        loadUserList: page => dispatch(actions.userlist.loadUserList(page)),
         loadGroupList: page => dispatch(actions.grouplist.loadGroupList(page)),
         showSidebar: () => dispatch(actions.chatUI.showSidebar()),
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),

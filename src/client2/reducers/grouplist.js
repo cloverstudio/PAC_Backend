@@ -19,7 +19,8 @@ const loading = (state = false, action) => {
 const groups = (state = [], action) => {
     switch (action.type) {
         case types.GroupListLoadSucceed:
-            return state.concat(action.data.list);
+            let newData = action.data.list.filter(group => !state.find(oldGroup => oldGroup._id === group._id))
+            return state.concat(newData);
         case types.GroupListSearchSucceed:
             return action.data.list
         default:
