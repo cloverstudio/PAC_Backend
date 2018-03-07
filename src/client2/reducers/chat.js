@@ -295,7 +295,10 @@ const messageList = (state = initial.messageList, action) => {
                 return oldState.map((oldMsg, i) => {
                     let msgToReplaceIndex = currentChatUpdatedMsgsIndexes.indexOf(i)
                     if (msgToReplaceIndex > -1) {
-                        return currentChatUpdatedMsgs[msgToReplaceIndex]
+                        return {
+                            ...oldMsg,
+                            ...currentChatUpdatedMsgs[msgToReplaceIndex]
+                        }
                     }
                     else {
                         return oldMsg

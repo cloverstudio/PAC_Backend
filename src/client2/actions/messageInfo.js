@@ -46,13 +46,6 @@ export function deleteMessage(messageID) {
     };
 }
 
-export function updateMessage(messageID, message) {
-    return {
-        type: types.MessageInfoUpdateMessage,
-        messageID,
-        message
-    };
-}
 
 export function loadChatByUserSeen(userId) {
     return (dispatch, getState) => {
