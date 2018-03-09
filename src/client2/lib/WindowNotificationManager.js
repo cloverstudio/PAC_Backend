@@ -5,6 +5,7 @@ import user from './user';
 import * as constant from './const';
 import * as config from './config';
 import notificationSound from '../assets/sounds/notification.mp3'
+import * as utils from '../lib/utils';
 
 class WindowNotificationManager {
 
@@ -19,7 +20,7 @@ class WindowNotificationManager {
     }
 
     askPermission = () => {
-        console.log(1);
+
         if (!('Notification' in window)) return;
         if (this.permission) return;
 
@@ -38,7 +39,7 @@ class WindowNotificationManager {
     }
 
     initVisibilityEventListeners = callback => {
-        console.log(2);
+
         if (!('Notification' in window)) return;
 
         window.addEventListener('load', () => {
@@ -74,19 +75,19 @@ class WindowNotificationManager {
     }
 
     handleMessage = obj => {
-        console.log(3);
+
         if (!('Notification' in window)) return;
 
         if (user.userData._id === obj.user._id) return;
 
         if (this.permission === 'granted' || Notification.permission === 'granted') {
 
-            const chatIdSplit = obj.roomID.split("-");
-            const chatType = parseInt(chatIdSplit[0]);
+            const chatType = utils.getChatTypeFromRoomId(obj.roomID);
 
             const title = `${obj.user.name} sent:`
             let message;
             let avatar = config.APIEndpoint;
+            let singleChatId;
 
             switch (obj.type) {
                 case constant.MessageTypeText:
@@ -104,6 +105,9 @@ class WindowNotificationManager {
 
             switch (chatType) {
                 case constant.ChatTypePrivate:
+
+                    singleChatId = utils.getTargetUserIdFromRoomId(obj.roomID);
+
                     avatar += constant.ApiUrlGetUserAvatar;
                     if (obj.user.avatar && obj.user.avatar.thumbnail)
                         avatar += obj.user.avatar.thumbnail.nameOnServer;
@@ -111,6 +115,9 @@ class WindowNotificationManager {
                     break;
 
                 case constant.ChatTypeGroup:
+
+                    singleChatId = utils.getGroupOrRoomIdFromRoomID(obj.roomID);
+
                     avatar += constant.ApiUrlGetGroupAvatar;
                     if (obj.group.avatar && obj.group.avatar.thumbnail)
                         avatar += obj.group.avatar.thumbnail.nameOnServer;
@@ -118,6 +125,9 @@ class WindowNotificationManager {
                     break;
 
                 case constant.ChatTypeRoom:
+
+                    singleChatId = utils.getGroupOrRoomIdFromRoomID(obj.roomID);
+
                     avatar += constant.ApiUrlGetRoomAvatar;
                     if (obj.room.avatar && obj.room.avatar.thumbnail)
                         avatar += obj.room.avatar.thumbnail.nameOnServer;
@@ -125,7 +135,10 @@ class WindowNotificationManager {
                     break;
             }
 
-            if (!(this.visibility || store.getState().infoView.muted)) this.showNotification(title, message, avatar);
+            let isMuted = store.getState().userData.muted.includes(singleChatId)
+            console.log(isMuted);
+
+            if (!(this.visibility || isMuted)) this.showNotification(title, message, avatar);
 
         }
 

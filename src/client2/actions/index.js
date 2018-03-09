@@ -19,6 +19,7 @@ import * as password from "./password";
 import * as messageInfo from "./messageInfo";
 import * as searchAll from "./searchAll";
 import * as note from "./note";
+import * as userData from "./userData";
 
 export function filterTable(filter) {
     return {
@@ -46,5 +47,6 @@ export {
     password,
     messageInfo,
     searchAll,
-    note
+    note,
+    userData
 };

@@ -15,6 +15,9 @@ const notifications = (state = [], action) => {
 
         const message = action.message;
 
+        if (state.find(notification => notification._id === message._id))
+            return state;
+
         const newNotifications = [{
             type: message.type,
             roomID: message.roomID,

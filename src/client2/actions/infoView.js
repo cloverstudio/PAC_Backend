@@ -27,12 +27,29 @@ export function loadDone() {
 
 }
 
-export function loadMuteState(state) {
+export function loadMuteState(state, chatId) {
 
-    return {
-        type: types.InfoViewLoadMuteState,
-        state
-    };
+    return (dispatch, getState) => {
+
+        let targetId = null;
+        const targetUser = getState().infoView.user;
+        const targetGroup = getState().infoView.group;
+        const targetRoom = getState().infoView.room;
+
+        if (targetUser._id)
+            targetId = targetUser._id;
+        if (targetGroup._id)
+            targetId = targetGroup._id;
+        if (targetRoom._id)
+            targetId = targetRoom._id;
+
+        dispatch({
+            type: types.InfoViewLoadMuteState,
+            state,
+            chatId: targetId
+        });
+
+    }
 
 }
 

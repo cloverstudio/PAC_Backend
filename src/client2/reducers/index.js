@@ -23,6 +23,7 @@ import notification from "./notification";
 import messageInfo from "./messageInfo";
 import messageForward from "./messageForward";
 import note from "./note";
+import userData from './userData';
 
 const filter = (state = "", action) => {
     switch (action.type) {
@@ -57,7 +58,8 @@ const rootReducer = combineReducers({
     notification,
     messageInfo,
     messageForward,
-    note
+    note,
+    userData
 });
 
 export default rootReducer;

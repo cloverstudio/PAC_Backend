@@ -1,5 +1,7 @@
 import * as constant from './const';
 import SocketManager from './SocketManager';
+import { store } from '../index';
+import * as types from '../actions/types';
 
 class user {
 
@@ -10,6 +12,7 @@ class user {
         const checkLocalStorage = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
         if (checkLocalStorage) {
+
             this.userData = JSON.parse(localStorage.getItem(constant.LocalStorageKeyUserData));
             this.token = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
@@ -25,6 +28,11 @@ class user {
         this.token = signinData.newToken;
 
         SocketManager.init();
+
+        store.dispatch({
+            type: types.userDataSignInLoad,
+            data: signinData.user
+        })
 
         if (save) {
             localStorage.setItem(constant.LocalStorageKeyAccessToken, signinData.newToken);

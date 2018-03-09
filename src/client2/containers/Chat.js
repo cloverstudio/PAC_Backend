@@ -82,11 +82,15 @@ class Main extends Base {
     }
 
     componentDidMount() {
-        if (!this.props.isChatLoading) {
-            const chatId = this.props.match.params.chatId;
-            this.props.openChatByChatId(chatId);
+        if (user.token) {
+            if (!this.props.isChatLoading) {
+                const chatId = this.props.match.params.chatId;
+                this.props.openChatByChatId(chatId);
+            }
+            if (!this.props.wasInitialUserDataLoaded) {
+                this.props.loadNewestUserData();
+            }
         }
-
     }
 
     render() {
@@ -133,7 +137,8 @@ const mapStateToProps = state => {
         calling: state.call.calling,
         callingWindowState: state.call.windowState,
         loadingDirection: state.chat.loadingDirection,
-        isChatLoading: state.chat.isLoading
+        isChatLoading: state.chat.isLoading,
+        wasInitialUserDataLoaded: state.userData.wasInitialLoad
     };
 };
 
@@ -150,7 +155,8 @@ const mapDispatchToProps = dispatch => {
         hideSidebar: () => dispatch(actions.chatUI.hideSidebar()),
         hideHistory: () => dispatch(actions.chatUI.hideHistory()),
         hideMessageInfoView: () =>
-            dispatch(actions.chatUI.hideMessageInfoView())
+            dispatch(actions.chatUI.hideMessageInfoView()),
+        loadNewestUserData: () => dispatch(actions.userData.loadNewestUserData())
     };
 };
 
