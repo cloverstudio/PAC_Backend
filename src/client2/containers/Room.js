@@ -19,6 +19,7 @@ import SideBar from '../components/chat/SideBar';
 import Header from '../components/chat/Header';
 import History from '../components/chat/History';
 import AvatarImage from '../components/AvatarImage';
+import ReLogin from "../components/ReLogin";
 
 class NewRoom extends Base {
 
@@ -95,6 +96,8 @@ class NewRoom extends Base {
     }
 
     render() {
+
+        if (!user.token) return <ReLogin />;
 
         let sideBarClass = "pace-done sidebar-folded";
         if (this.props.sidebarState)

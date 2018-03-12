@@ -11,45 +11,49 @@ import user from "../lib/user";
 import { store } from "../index";
 
 export function onLogout(data) {
-  return (dispatch, getState) => {
-    callLogout()
-      .then(response => {
-        dispatch(
-          actions.notification.showToast(strings.LogoutSucceed[user.lang])
-        );
+    return (dispatch, getState) => {
+        callLogout()
+            .then(response => {
+                dispatch(
+                    actions.notification.showToast(strings.LogoutSucceed[user.lang])
+                );
 
-        dispatch({
-          type: types.Logout
-        });
+                dispatch({
+                    type: types.Logout
+                });
 
-        user.logout();
-        store.dispatch(push(`${util.url("/")}`));
-      })
-      .catch(err => {
+                dispatch({
+                    type: types.ChatClearChat
+                })
 
-        console.error(err);
+                user.logout();
+                store.dispatch(push(`${util.url("/")}`));
+            })
+            .catch(err => {
 
-        dispatch(
-          actions.notification.showToast(strings.LogoutFailed[user.lang])
-        );
+                console.error(err);
 
-        dispatch({
-          type: types.Logout
-        });
+                dispatch(
+                    actions.notification.showToast(strings.LogoutFailed[user.lang])
+                );
 
-        user.logout();
-        store.dispatch(push(`${util.url("/")}`));
-      });
-  };
+                dispatch({
+                    type: types.Logout
+                });
+
+                user.logout();
+                store.dispatch(push(`${util.url("/")}`));
+            });
+    };
 }
 
 export function forceLogout() {
 
-  store.dispatch({
-    type: types.Logout
-  });
+    store.dispatch({
+        type: types.Logout
+    });
 
-  user.logout();
-  store.dispatch(push(`${util.url("/")}`));
+    user.logout();
+    store.dispatch(push(`${util.url("/")}`));
 
 }

@@ -25,8 +25,10 @@ export function chatIdByRoom(room) {
 }
 
 export function getChatIdFromUrl(url) {
-    if (url) return url.replace(config.BasePath + "/chat", "").replace("/", "");
-
+    if (url) {
+        const strippedURL = url.replace(config.BasePath, "").replace("/chat", "").replace("/", "");
+        return strippedURL.split('-').length >= 2 ? strippedURL : "";
+    }
     return url;
 }
 

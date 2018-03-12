@@ -23,7 +23,9 @@ const users = (state = [], action) => {
             let newData = action.data.list.filter(user => !state.find(oldUser => oldUser._id === user._id))
             return state.concat(newData);
         case types.UserListSearchSucceed:
-            return action.data.list
+            return action.data.list;
+        case types.Logout:
+            return [];
         default:
             return state;
     }

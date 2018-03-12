@@ -94,7 +94,8 @@ const historyList = (state = [], action) => {
             return state.concat(action.data.list);
         case types.HistorySearchSucceed:
             return action.data.list;
-
+        case types.Logout:
+            return [];
     }
 
     // update unread count

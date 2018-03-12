@@ -30,6 +30,8 @@ const muted = (state = [], action) => {
 
             return newState;
         }
+        case types.Logout:
+            return [];
 
         default:
             return state;
@@ -42,6 +44,8 @@ const wasInitialLoad = (state = false, action) => {
             return true;
         case types.userDataNewLoad:
             return true;
+        case types.Logout:
+            return false;
         default:
             return state;
     }

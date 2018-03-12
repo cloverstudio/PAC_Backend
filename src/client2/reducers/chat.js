@@ -15,7 +15,7 @@ const initial = {
     isLoading: false,
     messageList: [],
     chatId: "",
-    chatType: constant.ChatTypePrivate,
+    chatType: null,
     typing: {},
     timestampByChat: 0,
     inputValues: {},
@@ -32,6 +32,8 @@ const chatName = (state = initial.chatName, action) => {
             return action.group.name
         case types.ChatOpenByRoom:
             return action.room.name
+        case types.ChatClearChat:
+            return initial.chatName;
         default:
             return state;
     }

@@ -21,6 +21,7 @@ import Header from '../components/chat/Header';
 import History from '../components/chat/History';
 import AvatarImage from '../components/AvatarImage';
 import DateTime from '../components/DateTime';
+import ReLogin from "../components/ReLogin";
 
 class Favotites extends Base {
 
@@ -37,14 +38,11 @@ class Favotites extends Base {
     componentDidMount() {
         this.page = 1;
 
-        const url = this.props.location;
-        const chatId = url.replace(config.BasePath + "/favorites", "").replace("/", "");
-
-        if (chatId.length > 1)
-            this.chatId = chatId;
-
         if (typeof this.props.match.params.chatId !== 'undefined') {
             this.chatId = this.props.match.params.chatId;
+        }
+        else {
+            this.chatId = null;
         }
 
         this.props.loadMessages(this.page, this.chatId);
@@ -94,6 +92,8 @@ class Favotites extends Base {
     }
 
     render() {
+
+        if (!user.token) return <ReLogin />;
 
         let sideBarClass = "pace-done sidebar-folded";
         if (this.props.sidebarState)

@@ -10,7 +10,7 @@ import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
 
 import user from '../lib/user';
-import {store} from '../index';
+import { store } from '../index';
 
 import Base from './Base';
 
@@ -20,6 +20,7 @@ import Header from '../components/chat/Header';
 import History from '../components/chat/History';
 import AvatarImage from '../components/AvatarImage';
 import DateTime from '../components/DateTime';
+import ReLogin from "../components/ReLogin";
 
 class Password extends Base {
 
@@ -37,28 +38,30 @@ class Password extends Base {
     }
 
     render() {
-        
+
+        if (!user.token) return <ReLogin />;
+
         let sideBarClass = "pace-done sidebar-folded";
-        if(this.props.sidebarState)
+        if (this.props.sidebarState)
             sideBarClass += " sidebar-open";
 
         let asideBarHolderClass = "layout-chat";
-        if(this.props.historyBarState)
+        if (this.props.historyBarState)
             asideBarHolderClass += " aside-open";
 
         let modalClass = "modal fade";
-        if(this.props.success)
+        if (this.props.success)
             modalClass += " show";
 
         return (
 
             <div className={sideBarClass} onClick={this.globalClick}>
-            
+
                 <SideBar />
                 <Header />
 
                 <main className={asideBarHolderClass}>
-                
+
                     {this.props.saving ?
                         <div className="spinner-linear password">
                             <div className="line"></div>
@@ -81,15 +84,15 @@ class Password extends Base {
                             <div className="modal-dialog modal-sm">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                    <h4 className="modal-title">{strings.PasswordSucceedDialogTitle[user.lang]}</h4>
+                                        <h4 className="modal-title">{strings.PasswordSucceedDialogTitle[user.lang]}</h4>
                                     </div>
                                     <div className="modal-body">
-                                    <p>
-                                        {strings.PasswordSucceedDialogMessage[user.lang]}
-                                    </p>
+                                        <p>
+                                            {strings.PasswordSucceedDialogMessage[user.lang]}
+                                        </p>
                                     </div>
                                     <div className="modal-footer">
-                                    <button onClick={this.props.logout} type="button" className="btn btn-bold btn-pure btn-primary">OK</button>
+                                        <button onClick={this.props.logout} type="button" className="btn btn-bold btn-pure btn-primary">OK</button>
                                     </div>
                                 </div>
                             </div>
@@ -103,27 +106,27 @@ class Password extends Base {
 
                                     <div className="form-group">
                                         <label className="require">{strings.PasswordCurrentPassword[user.lang]}</label>
-                                        <input type="password" value={this.props.currentPassword} className="form-control" onChange={ e => { this.props.typeCurrentPassword ( e.target.value ) }}/>
+                                        <input type="password" value={this.props.currentPassword} className="form-control" onChange={e => { this.props.typeCurrentPassword(e.target.value) }} />
                                         <div className="invalid-feedback">{this.props.errorMessageCurrentPassword}</div>
                                     </div>
 
                                     <div className="form-group">
                                         <label className="require">{strings.PasswordNewPassword[user.lang]}</label>
-                                        <input type="text" value={this.props.newPassword} className="form-control" onChange={ e => { this.props.typeNewPassword ( e.target.value ) }}/>
+                                        <input type="text" value={this.props.newPassword} className="form-control" onChange={e => { this.props.typeNewPassword(e.target.value) }} />
                                         <div className="invalid-feedback">{this.props.errorMessageNewPassword}</div>
                                     </div>
 
                                     <div className="form-group">
                                         <label className="require">{strings.PasswordNewPasswordConfirm[user.lang]}</label>
-                                        <input type="text" value={this.props.confirmPassword} className="form-control" onChange={ e => { this.props.typeConfirmPassword ( e.target.value ) }}/>
+                                        <input type="text" value={this.props.confirmPassword} className="form-control" onChange={e => { this.props.typeConfirmPassword(e.target.value) }} />
                                         <div className="invalid-feedback">{this.props.errorMessageConfirmPassword}</div>
                                     </div>
 
                                     <div className="text-right button-container">
-                                            
+
                                         <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
                                         <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
-                                        
+
                                     </div>
 
                                 </div>
@@ -135,7 +138,7 @@ class Password extends Base {
                     </div>
 
                 </main>
-                
+
                 <Modals />
 
             </div>
@@ -158,7 +161,7 @@ const mapStateToProps = (state) => {
         errorMessageNewPassword: state.password.errorMessageNewPassword,
         errorMessageConfirmPassword: state.password.errorMessageConfirmPassword,
 
-        saving:state.password.saving,
+        saving: state.password.saving,
         success: state.password.success
     };
 };

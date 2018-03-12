@@ -22,7 +22,9 @@ const groups = (state = [], action) => {
             let newData = action.data.list.filter(group => !state.find(oldGroup => oldGroup._id === group._id))
             return state.concat(newData);
         case types.GroupListSearchSucceed:
-            return action.data.list
+            return action.data.list;
+        case types.Logout:
+            return [];
         default:
             return state;
     }

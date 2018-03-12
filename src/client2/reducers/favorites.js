@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import * as types from '../actions/types';
-import {store} from '../index';
+import { store } from '../index';
 
 const paging = (state = 1, action) => {
     switch (action.type) {
@@ -13,11 +13,11 @@ const paging = (state = 1, action) => {
 
 const favorites = (state = [], action) => {
 
-    if(action.type == types.FavoriteLoadMessageSuccess){
+    if (action.type == types.FavoriteLoadMessageSuccess) {
 
         const page = store.getState().favorites.paging;
 
-        if(page == 1)
+        if (page == 1)
             return action.messages;
 
         else
@@ -26,16 +26,20 @@ const favorites = (state = [], action) => {
     }
 
 
-    if(action.type == types.FavoriteRemoveFavorite){
+    if (action.type == types.FavoriteRemoveFavorite) {
 
         const messageId = action.messageId;
 
-        return state.filter( (message) => {
+        return state.filter((message) => {
             return message.messageId != messageId;
         });
 
     }
-    
+
+    if (action.type === types.Logout) {
+        return [];
+    }
+
     return state;
 
 };

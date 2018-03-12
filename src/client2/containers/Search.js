@@ -21,6 +21,7 @@ import Header from '../components/chat/Header';
 import History from '../components/chat/History';
 import AvatarImage from '../components/AvatarImage';
 import DateTime from '../components/DateTime';
+import ReLogin from "../components/ReLogin";
 
 class Search extends Base {
 
@@ -69,6 +70,8 @@ class Search extends Base {
     }
 
     render() {
+
+        if (!user.token) return <ReLogin />;
 
         let sideBarClass = "pace-done sidebar-folded";
         if (this.props.sidebarState)
