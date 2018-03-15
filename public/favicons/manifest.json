@@ -1,7 +1,7 @@
 {
     "name": "Spika for Business",
     "short_name": "Spika",
-    "start_url": "spika.chat/login",
+    "start_url": "spika.chat",
     "display": "standalone",
     "background_color": "#fff",
     "description": "Most flexible and beautiful chat solution in the world.",
