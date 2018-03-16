@@ -17,6 +17,9 @@ var KeepAliveManager = {
 
         setInterval(function () {
 
+            if (!loginUserManager.getUser())
+                return;
+
             SocketIOManager.emit("keepalive", {
                 userId: loginUserManager.getUser()._id
             });
