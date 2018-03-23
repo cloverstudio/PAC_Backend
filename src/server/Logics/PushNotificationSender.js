@@ -83,6 +83,8 @@ PushNotificationSender = {
 
     send: function (tokenAndBadgeCount, payload, isVoip) {
 
+        var self = this;
+
         async.eachLimit(tokenAndBadgeCount, Const.pushTokenThreadSize, function (tokenAndBadge, donePushEach) {
 
             var pushToken = tokenAndBadge.token;
@@ -136,6 +138,10 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
+
+                        if (!_.isEmpty(result.failed))
+                            self.deletePushTokens(pushToken);
+
                         apnProvider.shutdown();
                     });
 
@@ -187,6 +193,10 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
+
+                        if (!_.isEmpty(result.failed))
+                            self.deletePushTokens(pushToken);
+
                         apnProvider.shutdown();
                     });
 
@@ -238,6 +248,10 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
+
+                        if (!_.isEmpty(result.failed))
+                            self.deletePushTokens(pushToken);
+
                         apnProvider.shutdown();
                     });
 
@@ -296,6 +310,10 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
+
+                        if (!_.isEmpty(result.failed))
+                            self.deletePushTokens(pushToken);
+
                         apnProvider.shutdown();
                     });
 
@@ -380,6 +398,50 @@ PushNotificationSender = {
 
 
         });
+
+    },
+
+    deletePushTokens: function (pushToken) {
+
+        var userModel = UserModel.get();
+
+        userModel.find(
+            {
+                $or: [
+                    { pushToken: pushToken },
+                    { UUID: { $elemMatch: { pushTokens: pushToken } } }
+                ]
+            },
+            (err, findResult) => {
+
+                if (err)
+                    console.log(err);
+
+                findResult.forEach((user) => {
+
+                    var UUID = _.map(user.UUID, (uuid) => {
+                        uuid.pushTokens = _.pull(uuid.pushTokens, pushToken)
+                        return uuid;
+                    });
+
+                    var pushTokens = _.pull(user.pushToken, pushToken);
+
+                    userModel.update(
+                        { _id: user._id },
+                        {
+                            pushToken: pushTokens,
+                            UUID: UUID
+                        },
+                        (err, updateResult) => {
+
+                            if (err)
+                                console.log(err);
+
+                        });
+
+                });
+
+            });
 
     }
 }

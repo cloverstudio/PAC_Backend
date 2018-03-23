@@ -16,6 +16,7 @@
     "html.format.indentHandlebars" : true,
     "html.format.preserveNewLines": true,
 
-    "files.associations": { "*.hbs": "html" }
-    
+    "files.associations": {
+        "*.hbs": "handlebars"
+    }
 }
