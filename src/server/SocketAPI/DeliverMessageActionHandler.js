@@ -13,6 +13,7 @@ var SocketAPIHandler = require("./SocketAPIHandler");
 
 var UserModel = require("../Models/User");
 var MessageModel = require("../Models/Message");
+var HistoryModel = require('../Models/History');
 
 var DeliverMessageActionHandler = function () {
 
@@ -43,6 +44,7 @@ DeliverMessageActionHandler.prototype.attach = function (io, socket) {
 
         var messageModel = MessageModel.get();
         var userModel = UserModel.get();
+        var historyModel = HistoryModel.get();
 
         async.waterfall([
 
@@ -102,6 +104,22 @@ DeliverMessageActionHandler.prototype.attach = function (io, socket) {
                     (err, updateResult) => {
 
                         result.message.deliveredTo.push(deliveredToRow);
+                        done(err, result);
+
+                    });
+
+            },
+            (result, done) => {
+
+                historyModel.update(
+                    { "lastMessage.messageId": param.messageID },
+                    {
+                        "lastMessage.delivered": true,
+                        lastUpdate: Utils.now()
+                    },
+                    { multi: true },
+                    (err, updateResult) => {
+
                         done(err, result);
 
                     });

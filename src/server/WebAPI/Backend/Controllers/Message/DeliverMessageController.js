@@ -15,6 +15,7 @@ var Utils = require(pathTop + 'lib/utils');
 var SocketAPIHandler = require(pathTop + "SocketAPI/SocketAPIHandler");
 
 var MessageModel = require(pathTop + 'Models/Message');
+var HistoryModel = require(pathTop + 'Models/History');
 
 var tokenChecker = require(pathTop + 'lib/authApi');
 var BackendBase = require('../BackendBase');
@@ -56,6 +57,7 @@ DeliverMessageController.prototype.init = function (app) {
             return self.successResponse(response, Const.responsecodeDeliverMessageNoMessageId);
 
         var messageModel = MessageModel.get();
+        var historyModel = HistoryModel.get();
 
         async.waterfall([
 
@@ -101,6 +103,22 @@ DeliverMessageController.prototype.init = function (app) {
                     (err, updateResult) => {
 
                         result.message.deliveredTo.push(deliveredToRow);
+                        done(err, result);
+
+                    });
+
+            },
+            (result, done) => {
+
+                historyModel.update(
+                    { "lastMessage.messageId": messageId },
+                    {
+                        "lastMessage.delivered": true,
+                        lastUpdate: Utils.now()
+                    },
+                    { multi: true },
+                    (err, updateResult) => {
+
                         done(err, result);
 
                     });
