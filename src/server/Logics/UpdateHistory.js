@@ -603,7 +603,27 @@ var UpdateHistory = {
 
             });
 
+    },
+
+    updateLastMessageStatus: function (messageId, updateDelivered, updateSeen, updateTimestamp, callback) {
+
+        var updateParams = {};
+
+        if (updateDelivered)
+            updateParams["lastMessage.delivered"] = true;
+
+        if (updateSeen)
+            updateParams["lastMessage.seen"] = true;
+
+        if (updateTimestamp)
+            updateParams.lastUpdate = Utils.now();
+
+        historyModel.update({ "lastMessage.messageId": messageId }, updateTimestamp, { multi: true }, (err, updateResult) => {
+            callback(err);
+        });
+
     }
+
 };
 
 
