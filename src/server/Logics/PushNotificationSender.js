@@ -138,10 +138,6 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
-
-                        if (!_.isEmpty(result.failed))
-                            self.deletePushTokens(pushToken);
-
                         apnProvider.shutdown();
                     });
 
@@ -193,10 +189,6 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
-
-                        if (!_.isEmpty(result.failed))
-                            self.deletePushTokens(pushToken);
-
                         apnProvider.shutdown();
                     });
 
@@ -253,6 +245,7 @@ PushNotificationSender = {
                             self.deletePushTokens(pushToken);
 
                         apnProvider.shutdown();
+
                     });
 
                     donePushOne(null);
@@ -310,10 +303,6 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
-
-                        if (!_.isEmpty(result.failed))
-                            self.deletePushTokens(pushToken);
-
                         apnProvider.shutdown();
                     });
 
@@ -375,11 +364,24 @@ PushNotificationSender = {
                         };
 
                         fcm.send(message, function (err, response) {
+
                             if (err) {
+
                                 console.log(pushToken + " Something has gone wrong!", err);
-                            } else {
-                                //console.log(pushToken + "Successfully sent with response: ", response);
+
+                                if (err == "InvalidServerResponse")
+                                    return;
+
+                                err = JSON.parse(err);
+
+                                if (err.failure)
+                                    self.deletePushTokens(pushToken);
+
                             }
+                            else {
+                                //console.log(pushToken + " Successfully sent with response: ", response);
+                            }
+
                         });
 
                     }
@@ -424,7 +426,7 @@ PushNotificationSender = {
                         return uuid;
                     });
 
-                    var pushTokens = _.pull(user.pushToken, pushToken);
+                    var pushTokens = _.pull(user.pushToken.toObject(), pushToken);
 
                     userModel.update(
                         { _id: user._id },
@@ -432,6 +434,7 @@ PushNotificationSender = {
                             pushToken: pushTokens,
                             UUID: UUID
                         },
+                        { multi: true },
                         (err, updateResult) => {
 
                             if (err)
