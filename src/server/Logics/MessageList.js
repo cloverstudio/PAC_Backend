@@ -79,7 +79,10 @@ var MessageList = {
             if (message.userID == userID || !_.isEmpty(message.seenBy))
                 return done(null, messages);
 
-            UpdateHistory.updateLastMessageStatus(message._id.toString(), false, true, false, (err) => {
+            UpdateHistory.updateLastMessageStatus({
+                messageId: message._id.toString(),
+                seen: true
+            }, (err) => {
                 done(err, messages);
             });
 

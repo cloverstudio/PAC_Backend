@@ -605,22 +605,22 @@ var UpdateHistory = {
 
     },
 
-    updateLastMessageStatus: function (messageId, updateDelivered, updateSeen, updateTimestamp, callback) {
+    updateLastMessageStatus: function (obj, callback) {
 
         var historyModel = HistoryModel.get();
 
         var updateParams = {};
 
-        if (updateDelivered)
+        if (obj.delivered)
             updateParams["lastMessage.delivered"] = true;
 
-        if (updateSeen)
+        if (obj.seen)
             updateParams["lastMessage.seen"] = true;
 
-        if (updateTimestamp)
+        if (obj.timestamp)
             updateParams.lastUpdate = Utils.now();
 
-        historyModel.update({ "lastMessage.messageId": messageId }, updateParams, { multi: true }, (err, updateResult) => {
+        historyModel.update({ "lastMessage.messageId": obj.messageId }, updateParams, { multi: true }, (err, updateResult) => {
             callback(err);
         });
 
