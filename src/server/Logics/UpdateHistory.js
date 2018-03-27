@@ -607,6 +607,8 @@ var UpdateHistory = {
 
     updateLastMessageStatus: function (messageId, updateDelivered, updateSeen, updateTimestamp, callback) {
 
+        var historyModel = HistoryModel.get();
+
         var updateParams = {};
 
         if (updateDelivered)
@@ -618,7 +620,7 @@ var UpdateHistory = {
         if (updateTimestamp)
             updateParams.lastUpdate = Utils.now();
 
-        historyModel.update({ "lastMessage.messageId": messageId }, updateTimestamp, { multi: true }, (err, updateResult) => {
+        historyModel.update({ "lastMessage.messageId": messageId }, updateParams, { multi: true }, (err, updateResult) => {
             callback(err);
         });
 

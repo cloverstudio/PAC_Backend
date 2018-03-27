@@ -17,7 +17,6 @@ var WebhookModel = require('../Models/Webhook');
 var UserModel = require('../Models/User');
 var RoomModel = require('../Models/Room');
 var GroupModel = require('../Models/Group');
-var HistoryModel = require('../Models/History');
 
 var PolulateMessageLogic = require('../Logics/PolulateMessage');
 var UpdateHistory = require('../Logics/UpdateHistory');
@@ -80,17 +79,9 @@ var MessageList = {
             if (message.userID == userID || !_.isEmpty(message.seenBy))
                 return done(null, messages);
 
-            var historyModel = HistoryModel.get();
-
-            historyModel.update(
-                { "lastMessage.messageId": message._id.toString() },
-                { "lastMessage.seen": true },
-                { multi: true },
-                (err, updateResult) => {
-
-                    done(err, messages);
-
-                });
+            UpdateHistory.updateLastMessageStatus(message._id.toString(), false, true, false, (err) => {
+                done(err, messages);
+            });
 
         },
         function (messages, done) {
