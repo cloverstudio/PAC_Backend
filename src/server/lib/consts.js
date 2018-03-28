@@ -136,8 +136,8 @@ Const.sessionsalt = "8zgqvU6LaziThJI1uz3PevYd";
 Const.tokenLength = 16;
 Const.pagingRows = 20;
 
-Const.tokenValidInteval = 60 * 60 * 24 * 1000 * 30;
-//Const.tokenValidInteval = 30*1000; // ms
+// Const.tokenValidInteval = 60 * 60 * 24 * 1000 * 30;
+Const.tokenValidInteval = 1000 * 60 * 2; // ms
 
 Const.chatTypePrivate = 1;
 Const.chatTypeGroup = 2;
