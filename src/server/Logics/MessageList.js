@@ -83,7 +83,9 @@ var MessageList = {
                 messageId: message._id.toString(),
                 seen: true
             }, (err) => {
+
                 done(err, messages);
+
             });
 
         },

@@ -18,7 +18,6 @@ var RoomModel = require('../Models/Room');
 var UserModel = require('../Models/User');
 
 var MessageModel = require('../Models/Message');
-var HistoryModel = require('../Models/History');
 
 var OpenMessageActionHandler = function () {
 
@@ -50,7 +49,6 @@ OpenMessageActionHandler.prototype.attach = function (io, socket) {
         }
 
         var messageModel = MessageModel.get();
-        var historyModel = HistoryModel.get();
 
         async.waterfall([(done) => {
 
@@ -128,19 +126,16 @@ OpenMessageActionHandler.prototype.attach = function (io, socket) {
         },
         (result, done) => {
 
-            historyModel.update(
-                { "lastMessage.messageId": param.messageID },
-                {
-                    "lastMessage.delivered": true,
-                    "lastMessage.seen": param.doNotUpdateSeenBy ? false : true,
-                    lastUpdate: Utils.now()
-                },
-                { multi: true },
-                (err, updateResult) => {
+            UpdateHistory.updateLastMessageStatus({
+                messageId: param.messageID,
+                delivered: true,
+                seen: param.doNotUpdateSeenBy ? false : true,
+                timestamp: true
+            }, (err) => {
 
-                    done(err, result);
+                done(err, result);
 
-                });
+            });
 
         },
         (result, done) => {
