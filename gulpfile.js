@@ -24,14 +24,14 @@ var sourceFile = './src/client/js/main.js',
     destFolder = './public/js/',
     destFile = 'bundle.js',
     sourceCSS = 'src/client/css/';
-    
+
 // build for dist
-gulp.task('browserify-build', function() {
+gulp.task('browserify-build', function () {
 
     var bundler = browserify({
         // Required watchify args
-        cache: {}, 
-        packageCache: {}, 
+        cache: {},
+        packageCache: {},
         fullPaths: true,
         // Browserify Options
         entries: sourceFile,
@@ -41,30 +41,30 @@ gulp.task('browserify-build', function() {
     hbsfy.configure({
         extensions: ['hbs']
     });
-    
-    var bundle = function() {
+
+    var bundle = function () {
         return bundler
-        .transform(hbsfy)
-        .bundle()
-        .on('error', function(err){
-            console.log(err.message);
-            this.emit('end');
-        })
-        .pipe(source(destFile))
-        .pipe(gulp.dest(destFolder));
+            .transform(hbsfy)
+            .bundle()
+            .on('error', function (err) {
+                console.log(err.message);
+                this.emit('end');
+            })
+            .pipe(source(destFile))
+            .pipe(gulp.dest(destFolder));
     };
 
     return bundle();
-  
+
 });
 
 // build for sdk
-gulp.task('sdk', function() {
+gulp.task('sdk', function () {
 
     var bundler = browserify({
         // Required watchify args
-        cache: {}, 
-        packageCache: {}, 
+        cache: {},
+        packageCache: {},
         fullPaths: true,
         // Browserify Options
         entries: './src/client/js/sdk/main.js',
@@ -74,58 +74,64 @@ gulp.task('sdk', function() {
     hbsfy.configure({
         extensions: ['hbs']
     });
-    
-    var bundle = function() {
+
+    var bundle = function () {
         return bundler
-        .transform(hbsfy)
-        .bundle()
-        .on('error', function(err){
-            console.log(err.message);
-            this.emit('end');
-        })
-        .pipe(source('spika.js'))
-        .pipe(gulp.dest('./public/js/sdk/'));
+            .transform(hbsfy)
+            .bundle()
+            .on('error', function (err) {
+                console.log(err.message);
+                this.emit('end');
+            })
+            .pipe(source('spika.js'))
+            .pipe(gulp.dest('./public/js/sdk/'));
     };
 
     return bundle();
-  
-});
-
-
-gulp.task('copy', function() {
-
-    gulp.src('node_modules/bootstrap-sass/assets/fonts/**/*').pipe( gulp.dest('public/fonts') );
-    gulp.src('node_modules/font-awesome/fonts/**/*').pipe( gulp.dest('public/fonts') );
-    gulp.src('src/client/index.html').pipe( gulp.dest('public') );
-    gulp.src('src/client/js/sdk/index.html').pipe( gulp.dest('public/js/sdk/') );
-    gulp.src('src/client/images/**/*').pipe( gulp.dest('public/images') );
-    gulp.src('src/client/sounds/**/*').pipe( gulp.dest('public/sounds') );
-    gulp.src('src/server/assets/**/*').pipe( gulp.dest('public/assets') );
-	gulp.src('node_modules/jquery-colorbox/example1/images/*').pipe( gulp.dest('public/css/images') );
 
 });
 
-gulp.task('build-css', function() {
 
-  return gulp.src(sourceCSS + '*.scss')
+gulp.task('copy', function () {
+
+    gulp.src('node_modules/bootstrap-sass/assets/fonts/**/*').pipe(gulp.dest('public/fonts'));
+    gulp.src('node_modules/font-awesome/fonts/**/*').pipe(gulp.dest('public/fonts'));
+    gulp.src('src/client/index.html').pipe(gulp.dest('public'));
+    gulp.src('src/client/js/sdk/index.html').pipe(gulp.dest('public/js/sdk/'));
+    gulp.src('src/client/images/**/*').pipe(gulp.dest('public/images'));
+    gulp.src('src/client/sounds/**/*').pipe(gulp.dest('public/sounds'));
+    gulp.src('src/server/assets/**/*').pipe(gulp.dest('public/assets'));
+    gulp.src('node_modules/jquery-colorbox/example1/images/*').pipe(gulp.dest('public/css/images'));
+
+});
+
+gulp.task('build-css', function () {
+
+    return gulp.src(sourceCSS + '*.scss')
         .pipe(plumber())
         .pipe(sass())
         .pipe(gulp.dest(destCSS));
 });
 
-gulp.task('build-apidoc', function(done){
-    
+gulp.task('build-apidoc', function (done) {
+
     apidoc.exec({
-        src: "src/",
+        src: "src/server/WebAPI/Backend",
         dest: "public/doc/API",
-        debug: false
-    },done);
+        debug: true
+    }, done);
+
+    apidoc.exec({
+        src: "src/server/SocketAPI",
+        dest: "public/doc/SocketAPI",
+        debug: true
+    }, done);
 
 });
 
-gulp.task('build-dist',['sdk','build-apidoc','copy','browserify-build','build-css'],function(){
-    
-    
+gulp.task('build-dist', ['sdk', 'build-apidoc', 'copy', 'browserify-build', 'build-css'], function () {
+
+
 });
 
 
@@ -133,20 +139,20 @@ gulp.task('build-dist',['sdk','build-apidoc','copy','browserify-build','build-cs
 
 gulp.task('messenger-test', function (done) {
     return gulp.src('src/server/test/**/*.js', { read: false })
-    .pipe(mocha({ reporter: 'spec' }))
-    .pipe(exit());
+        .pipe(mocha({ reporter: 'spec' }))
+        .pipe(exit());
 });
 
 gulp.task('server-test', function (done) {
     return gulp.src('src/server/test/**/*.js', { read: false })
-    .pipe(mocha({ reporter: 'spec' }))
-    .pipe(exit());
+        .pipe(mocha({ reporter: 'spec' }))
+        .pipe(exit());
 });
 
 
-gulp.task('default',['build-dist'],function(){
-    
-    gulp.watch('src/client/**/*',['build-dist']);
-    
+gulp.task('default', ['build-dist'], function () {
+
+    gulp.watch('src/client/**/*', ['build-dist']);
+
 });
 
