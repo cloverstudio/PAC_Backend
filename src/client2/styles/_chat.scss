@@ -123,6 +123,10 @@
                             cursor:pointer;
                             white-space: pre-wrap;
                             transition:0.35s all;
+                            max-width:100%;
+                            overflow-wrap: break-word;
+                            word-wrap: break-word;
+
                             img{
                                 max-width: 150px;
                             }
@@ -142,27 +146,74 @@
                         }
 
                         .search-target{
-                            background-color:#926dde;
-                            color:white;
+                            border: 1px solid #926dde;
+                            border-radius:3px;
+
+                            figure{
+                                border: 1px solid #926dde;
+                                border-radius:3px;
+                            }
+
                         }
 
-                        .image-message{
+                        %image-shared{
                             background:transparent;
-                            min-width:150px;
+                            width:150px;
+                            height:150px;
                             margin: 4px 0;
                             border-radius: 3px;
                             position: relative;
+                            display:flex;
+                            justify-content: center;
+                            align-items:center;
+                        }
+
+                        .image-message{
+                            @extend %image-shared;
+
                             .teaser{
                                 background:none;
+                                margin:0;
+                                transition: opacity 0.5s;
+                                opacity:1;
+                                position:absolute;
+                                left:0;
+                                right:0;
+                                width:150px;
+                                height:150px;
+
                                 img{
                                     cursor:pointer;
-                                    max-width:150px;
                                 }
+
+                                figcaption{
+                                    padding:0;
+                                }
+                            }
+                            .spinner-dots + .teaser{
+                                opacity:0;
                             }
                             
                         }
                         .upload-progress{
                             width:200px;
+                        }
+
+                        .sticker-message{
+                            @extend %image-shared;
+                            cursor:pointer;
+
+                            img{
+                                left:0;
+                                right:0;
+                                position: absolute;
+                                opacity:1;
+                                transition: opacity 0.5s;
+                            }
+
+                            .spinner-dots + img{
+                                opacity:0;
+                            }
                         }
                         
                     }
@@ -179,14 +230,9 @@
                         p{
                             background-color: $color-blue;
                             color: #fff;
-                            min-width: 20%;
                             
                             &.unsent{
                                 opacity:0.60;
-                            }
-
-                            &.sticker-message{
-                                background:transparent;
                             }                        
             
                             a{

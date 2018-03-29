@@ -30,7 +30,11 @@ class Message extends Component {
                 return <MessageText message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
 
             case constant.MessageTypeSticker:
-                return <MessageSticker message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll={this.props.lockForScroll} />
+
+                if (this.props.messageData.message.length === 0) {
+                    return <MessageFileDeleted message={this.props.messageData} />
+                }
+                return <MessageSticker message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
 
             case constant.MessageTypeFile:
                 if (typeof this.props.messageData._id !== 'undefined') {
@@ -49,7 +53,7 @@ class Message extends Component {
                                 return <MessageFile message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
                             }
 
-                            return <MessageFileImage message={this.props.messageData} scrollChat={this.props.scrollChat} lockForScroll={this.props.lockForScroll} />
+                            return <MessageFileImage message={this.props.messageData} lockForScroll={this.props.lockForScroll} />
                         }
                         else {
                             return <MessageFile message={this.props.messageData} lockForScroll={this.props.lockForScroll} />

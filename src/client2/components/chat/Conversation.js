@@ -69,12 +69,6 @@ class Conversation extends Component {
         }
     }
 
-    scrollCallback = e => {
-        if (!this.lockedForAutoScroll) {
-            util.scrollElemBottom(this.scrollableConversation);
-        }
-    };
-
     setLockedForScrolling = (value = true) => {
         this.lockedForAutoScroll = value;
     }
@@ -204,7 +198,6 @@ class Conversation extends Component {
                                     <Message
                                         key={message._id || message.localID}
                                         messageData={message}
-                                        scrollChat={this.scrollCallback}
                                         lockForScroll={this.setLockedForScrolling}
                                     />
                                 ))}
@@ -225,7 +218,6 @@ class Conversation extends Component {
                                     <Message
                                         key={message._id}
                                         messageData={message}
-                                        scrollChat={this.scrollCallback}
                                         lockForScroll={this.setLockedForScrolling}
                                     />
                                 ))}

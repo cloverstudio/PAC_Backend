@@ -11,7 +11,7 @@ class MessageFileImage extends Component {
 
     static propTypes = {
     }
-    constructor(){
+    constructor() {
         super();
         this.state = {
             isLoading: true,
@@ -19,26 +19,26 @@ class MessageFileImage extends Component {
         }
     }
 
-    componentDidMount(){
-        if (this.targetMessage.classList.contains('search-target')){
-            if (!this.state.initiallyScrolledToSearchTarget){
-    
+    componentDidMount() {
+        if (this.targetMessage.classList.contains('search-target')) {
+            if (!this.state.initiallyScrolledToSearchTarget) {
+
                 this.props.lockForScroll();
                 this.targetMessage.scrollIntoView();
-    
+
                 this.setState({
-                    ...this.state, 
+                    ...this.state,
                     initiallyScrolledToSearchTarget: true
                 })
             }
-     
+
         }
-      }
+    }
 
     toggleMessageLoading = () => {
         this.setState({
-            ...this.state, 
-            isLoading : !this.state.isLoading
+            ...this.state,
+            isLoading: !this.state.isLoading
         })
     }
 
@@ -47,44 +47,45 @@ class MessageFileImage extends Component {
         let messageContent;
         let messageClass = 'image-message';
 
-        const [fileMimeType, fileMimeSubtype] = message.file.file.mimeType.split('/')
-
-        const thumbId = fileMimeSubtype === constant.svgXmlMimeSubtype 
-        ? message.file.file.id 
-        : message.file.thumb.id
-        
         if (this.props.searchTarget === message._id) {
             messageClass += ' search-target'
         }
-        
-        return(
-            <div className={messageClass} 
-            ref={message => this.targetMessage = message}>
 
-                {this.state.isLoading ? 
-                    <span className="spinner-linear">
-                        <span className="line"></span>
-                    </span> : null}
+        return (
+            <div className={messageClass}
+                ref={message => this.targetMessage = message}>
+
+                {this.state.isLoading
+                    ? <div className="spinner-dots">
+                        <span className="dot1"></span>
+                        <span className="dot2"></span>
+                        <span className="dot3"></span>
+                    </div>
+                    : null}
 
                 <figure className="teaser teaser-simple">
                     <img className='img-thumbnail'
-                        src={config.APIEndpoint + constant.ApiUrlFile + thumbId} 
-                        onLoad={e=>{
+                        src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}
+                        onLoad={e => {
                             this.toggleMessageLoading();
-                            this.props.scrollChat();
                         }}
                         alt="image message"
                     />
-                    
+
                     <figcaption>
-                        <span className="btn btn-round btn-square btn-info msg-target" 
-                        onClick={e => this.props.getMessageInfo(message)}>
+                        <span className="btn btn-round btn-square btn-info msg-target"
+                            onClick={e => this.props.getMessageInfo(message)}>
                             <i className="fa fa-info msg-target"></i>
                         </span>
-                        <span className="btn btn-round btn-square btn-primary" 
-                        onClick={e=> this.props.showImageView(message.file.file.id)}>
+                        <span className="btn btn-round btn-square btn-primary"
+                            onClick={e => this.props.showImageView(message.file.file.id)}>
                             <i className="fa fa-eye"></i>
                         </span>
+                        <a className="btn btn-round btn-square btn-success"
+                            href={config.APIEndpoint + constant.ApiUrlFile + message.file.file.id}
+                            download>
+                            <i className="fa fa-download"></i>
+                        </a>
                     </figcaption>
                 </figure>
 
@@ -97,14 +98,14 @@ class MessageFileImage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        searchTarget: state.chat.loadAllToTarget              
+        searchTarget: state.chat.loadAllToTarget
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         showImageView: imgId => dispatch(actions.chatUI.showImageView(imgId)),
-        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))        
+        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))
     };
 };
 
