@@ -112,8 +112,7 @@ DeliverMessageController.prototype.init = function (app) {
 
                 UpdateHistory.updateLastMessageStatus({
                     messageId: messageId,
-                    delivered: true,
-                    timestamp: true
+                    delivered: true
                 }, (err) => {
 
                     done(err, result);

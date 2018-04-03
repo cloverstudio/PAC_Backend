@@ -617,9 +617,6 @@ var UpdateHistory = {
         if (obj.seen)
             updateParams["lastMessage.seen"] = true;
 
-        if (obj.timestamp)
-            updateParams.lastUpdate = Utils.now();
-
         historyModel.update({ "lastMessage.messageId": obj.messageId }, updateParams, { multi: true }, (err, updateResult) => {
             callback(err);
         });

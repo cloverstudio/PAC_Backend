@@ -1,4 +1,3 @@
-
 var _ = require('lodash');
 var async = require('async');
 
@@ -113,8 +112,7 @@ DeliverMessageActionHandler.prototype.attach = function (io, socket) {
 
                 UpdateHistory.updateLastMessageStatus({
                     messageId: param.messageID,
-                    delivered: true,
-                    timestamp: true
+                    delivered: true
                 }, (err) => {
 
                     done(err, result);

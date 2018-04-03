@@ -129,8 +129,7 @@ OpenMessageActionHandler.prototype.attach = function (io, socket) {
             UpdateHistory.updateLastMessageStatus({
                 messageId: param.messageID,
                 delivered: true,
-                seen: param.doNotUpdateSeenBy ? false : true,
-                timestamp: true
+                seen: param.doNotUpdateSeenBy ? false : true
             }, (err) => {
 
                 done(err, result);
