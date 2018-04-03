@@ -603,7 +603,26 @@ var UpdateHistory = {
 
             });
 
+    },
+
+    updateLastMessageStatus: function (obj, callback) {
+
+        var historyModel = HistoryModel.get();
+
+        var updateParams = {};
+
+        if (obj.delivered)
+            updateParams["lastMessage.delivered"] = true;
+
+        if (obj.seen)
+            updateParams["lastMessage.seen"] = true;
+
+        historyModel.update({ "lastMessage.messageId": obj.messageId }, updateParams, { multi: true }, (err, updateResult) => {
+            callback(err);
+        });
+
     }
+
 };
 
 
