@@ -12,11 +12,18 @@ class WindowNotificationManager {
     constructor() {
         this.permission = null;
         this.visibility = null;
-
-        this.askPermission();
-        this.initVisibilityEventListeners();
+        this.wasInitialised = null;
 
         this.audioElement = new Audio(notificationSound);
+    }
+
+    init = () => {
+        console.log('starting notification manager')
+        if (this.wasInitialised || this.permission) return;
+
+        this.wasInitialised = true;
+        this.askPermission();
+        this.initVisibilityEventListeners();
     }
 
     askPermission = () => {

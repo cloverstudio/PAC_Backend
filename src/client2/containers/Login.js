@@ -15,6 +15,8 @@ import * as strings from '../lib/strings';
 import * as config from '../lib/config';
 import user from '../lib/user';
 
+import WindowNotificationManager from '../lib/WindowNotificationManager';
+
 
 class Login extends Component {
 
@@ -54,8 +56,11 @@ class Login extends Component {
 
     render() {
 
-        if (user.token)
+        if (user.token) {
+            WindowNotificationManager.init();
             return <Redirect to={`${util.url('/chat')}`} />
+        }
+
 
         return (
             <div className="row no-gutters min-h-fullscreen bg-white">
