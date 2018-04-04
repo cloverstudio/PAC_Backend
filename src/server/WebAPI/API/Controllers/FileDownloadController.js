@@ -11,35 +11,35 @@ var path = require('path');
 
 var pathTop = "../../../";
 
-var Const = require( pathTop + "lib/consts");
-var Config = require( pathTop + "lib/init");
-var Utils = require( pathTop + "lib/utils");
+var Const = require(pathTop + "lib/consts");
+var Config = require(pathTop + "lib/init");
+var Utils = require(pathTop + "lib/utils");
 
-var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var checkAPIKey = require( pathTop + 'lib/authApiV3');
+var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
+var checkAPIKey = require(pathTop + 'lib/authApiV3');
 
 var APIBase = require('./APIBase');
 
-var FileModel = require( pathTop + 'Models/File');
+var FileModel = require(pathTop + 'Models/File');
 
-var FileDownloadController = function(){
+var FileDownloadController = function () {
 }
 
-_.extend(FileDownloadController.prototype,APIBase.prototype);
+_.extend(FileDownloadController.prototype, APIBase.prototype);
 
-FileDownloadController.prototype.init = function(app){
-        
+FileDownloadController.prototype.init = function (app) {
+
     var self = this;
 
-   /**
-     * @api {post} /api/v3/file/download/fileid download file
-     **/
+    /**
+      * @api {post} /api/v3/file/download/fileid download file
+      **/
 
-    router.get('/:fileId',checkAPIKey,function(request,response){
+    router.get('/:fileId', checkAPIKey, function (request, response) {
 
         var fileId = request.params.fileId;
-        
-        if(!fileId){
+
+        if (!fileId) {
             response.status(422).send('Bad Parameter');
             return;
         }
@@ -53,42 +53,40 @@ FileDownloadController.prototype.init = function(app){
             (done) => {
 
                 fileModel.findOne({
-                    _id:fileId
-                },function(err,findResult){
+                    _id: fileId
+                }, function (err, findResult) {
 
-                    done(err,{
-                        fileModel:findResult
+                    done(err, {
+                        fileModel: findResult
                     })
                 });
 
             },
-            (result,done) => {
+            (result, done) => {
 
                 fs.exists(filePath, function (exists) {
-                    
-                    if(!exists){
-                        
-                        done("file not found",result);
+
+                    if (!exists) {
+
+                        done("file not found", result);
 
                     } else {
-                        
+
                         result.filePath = filePath;
-                        done(null,result);
-                        
+                        done(null, result);
+
                     }
-                    
+
                 });
 
             },
 
-        ],(err, result) => {
+        ], (err, result) => {
 
-            if(err){
-                response.send('File Not Found', 404);
-                return;
-            }
+            if (err)
+                return response.status(404).send('File Not Found');
 
-            response.download(filePath,result.fileModel.name);
+            response.download(filePath, result.fileModel.name);
 
         });
 

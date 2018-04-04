@@ -11,47 +11,60 @@ class MessageSticker extends Component {
 
     static propTypes = {
     }
-    constructor(){
+    constructor() {
         super();
         this.state = ({
+            isLoading: true,
             initiallyScrolledToSearchTarget: false
         })
     }
 
-    componentDidMount(){
-        if (this.targetMessage.classList.contains('search-target')){
-            if (!this.state.initiallyScrolledToSearchTarget){
-    
+    componentDidMount() {
+        if (this.targetMessage.classList.contains('search-target')) {
+            if (!this.state.initiallyScrolledToSearchTarget) {
+
                 this.props.lockForScroll();
                 this.targetMessage.scrollIntoView();
-    
+
                 this.setState({
                     initiallyScrolledToSearchTarget: true
                 })
             }
-     
+
         }
-      }
+    }
+
+    toggleMessageLoading = () => {
+        this.setState({
+            ...this.state,
+            isLoading: !this.state.isLoading
+        })
+    }
 
     render() {
-        const message = this.props.message;        
-        let messageClass = typeof message._id === 'undefined' ? 'sticker-message unsent' : 'sticker-message';
-
-        const isDeleted = message.message.length === 0;
-        messageClass = isDeleted ?  'text-message' : messageClass;
+        const message = this.props.message;
+        let messageClass = 'sticker-message';
 
         if (this.props.searchTarget === message._id) {
             messageClass += ' search-target'
         }
 
-        return(
-            <p className={messageClass} 
-            ref={message => this.targetMessage = message}
-            onClick={e => this.props.getMessageInfo(message)}>
-                {isDeleted 
-                ? <i>This message is deleted.</i>
-                : <img className={messageClass} onLoad={e => this.props.scrollChat()} src={config.mediaBaseURL + message.message}/>}
-            </p>
+        return (
+            <div className={messageClass} ref={message => this.targetMessage = message}>
+
+                {this.state.isLoading
+                    ? <div className="spinner-dots">
+                        <span className="dot1"></span>
+                        <span className="dot2"></span>
+                        <span className="dot3"></span>
+                    </div>
+                    : null}
+
+                <img className='sticker-inner-message'
+                    onLoad={e => this.toggleMessageLoading()}
+                    src={config.mediaBaseURL + message.message}
+                    onClick={e => this.props.getMessageInfo(message)} />
+            </div>
         );
     }
 
@@ -59,13 +72,13 @@ class MessageSticker extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        searchTarget: state.chat.loadAllToTarget       
+        searchTarget: state.chat.loadAllToTarget
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))        
+        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))
     };
 };
 
