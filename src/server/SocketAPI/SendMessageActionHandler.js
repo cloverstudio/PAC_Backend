@@ -38,7 +38,7 @@ SendMessageActionHandler.prototype.attach = function (io, socket) {
      *
      */
 
-    socket.on('sendMessage', function (param) {
+    socket.on('sendMessage', function (param, callback) {
 
         if (!param.roomID || param.roomID.indexOf('null') != -1) {
             socket.emit('socketerror', { code: Const.resCodeSocketSendMessageNoRoomID });
@@ -76,12 +76,11 @@ SendMessageActionHandler.prototype.attach = function (io, socket) {
             param.ipAddress = socket.handshake.address;
 
         SendMessageLogic.send(param, () => {
-
             socket.emit('socketerror', { code: Const.resCodeSocketUnknownError });
+        }, (messageObj) => {
 
-        }, () => {
-
-            // success
+            if (_.isFunction(callback))
+                callback(messageObj);
 
         });
 
