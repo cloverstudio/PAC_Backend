@@ -3,48 +3,52 @@ import { push } from 'react-router-redux'
 import * as types from './types';
 import * as actions from '../actions';
 
-import {callLogin} from '../lib/api/';
+import { callLogin } from '../lib/api/';
 import * as strings from '../lib/strings';
 import * as util from '../lib/utils';
 import user from '../lib/user';
 
-import {store} from '../index';
+import { store } from '../index';
 
-export function onLoginClick(organization,username,password,remember) {
+import WindowNotificationManager from '../lib/WindowNotificationManager';
+
+export function onLoginClick(organization, username, password, remember) {
 
     return (dispatch, getState) => {
 
         dispatch({
-			type: types.LoginClick
+            type: types.LoginClick
         });
 
-        callLogin({organization,username,password})
+        callLogin({ organization, username, password })
 
-        .then( (response) => {
-            
-            dispatch( {
-                type: types.LoginSucceed,
-                response
+            .then((response) => {
+
+                dispatch({
+                    type: types.LoginSucceed,
+                    response
+                });
+
+                dispatch(actions.notification.showToast(strings.LoginSucceed[user.lang]));
+
+                user.signinSucceed(response, remember);
+
+                store.dispatch(push(`${util.url('/chat')}`));
+
+                WindowNotificationManager.init();
+
+            }).catch((err) => {
+
+                dispatch({
+                    type: types.LoginFailed,
+                    err
+                });
+
+                dispatch(actions.notification.showToast(strings.LoginFailed[user.lang]));
+
+                console.warn(err);
+
             });
-
-            dispatch(actions.notification.showToast(strings.LoginSucceed[user.lang]));
-
-            user.signinSucceed(response,remember);
-
-            store.dispatch(push(`${util.url('/chat')}`));
-
-        }).catch( (err) => {
-
-            dispatch( {
-                type: types.LoginFailed,
-                err
-            });
-            
-            dispatch(actions.notification.showToast(strings.LoginFailed[user.lang]));
-
-            console.warn(err);            
-
-        });
 
         return Promise.resolve();
 
@@ -73,14 +77,14 @@ export function onPasswordChange(v) {
     };
 }
 
-export function onRememberCheck(v){
+export function onRememberCheck(v) {
     return {
         type: types.LoginFormCheckRemember,
         v
     };
 }
 
-export function onLoginSucceed(data){
+export function onLoginSucceed(data) {
     return {
         type: types.LoginSucceed,
         data
