@@ -46,7 +46,19 @@ if (!Conf.useCluster) {
 function startServer() {
   // initialization
   var app = express();
-  var server = http.createServer(app);
+  var server = null;
+
+  if (Conf.useSSL) {
+
+    var options = Conf.sslOptions;
+    server = https.createServer(options, app);
+
+  } else {
+
+    server = http.createServer(app);
+
+  }
+
   var port = Conf.port;
   var io = socket.listen(server);
 
@@ -113,13 +125,6 @@ function startServer() {
       server.on("connection", function (socket) {
         socket.setTimeout(120000);
       });
-
-      /*
-        server.setTimeout(120000, function(param,next){
-            console.log(' request timeout',param.parser.incoming.originalUrl);
-            console.log(next);
-        });
-        */
 
       server.listen(Conf.port, function () {
         console.log("Server listening on port " + Conf.port + "!");
