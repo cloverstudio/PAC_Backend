@@ -23,8 +23,6 @@ import AvatarImage from '../components/AvatarImage';
 import DateTime from '../components/DateTime';
 import ReLogin from "../components/ReLogin";
 
-import WindowNotificationManager from '../lib/WindowNotificationManager';
-
 
 class Favotites extends Base {
 
@@ -97,7 +95,6 @@ class Favotites extends Base {
     render() {
 
         if (!user.token) return <ReLogin />;
-        WindowNotificationManager.init();
 
         let sideBarClass = "pace-done sidebar-folded";
         if (this.props.sidebarState)

@@ -24,8 +24,6 @@ import Information from "../components/chat/Information";
 import ReLogin from "../components/ReLogin";
 import MessageInfo from "../components/chat/MessageInfo";
 
-import WindowNotificationManager from '../lib/WindowNotificationManager';
-
 
 class Main extends Base {
     static propTypes = {};
@@ -54,7 +52,6 @@ class Main extends Base {
 
     render() {
         if (!user.token) return <ReLogin />;
-        WindowNotificationManager.init();
 
         let sideBarClass = "pace-done sidebar-folded";
         if (this.props.sidebarState) sideBarClass += " sidebar-open";

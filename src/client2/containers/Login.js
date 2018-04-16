@@ -15,9 +15,6 @@ import * as strings from '../lib/strings';
 import * as config from '../lib/config';
 import user from '../lib/user';
 
-import WindowNotificationManager from '../lib/WindowNotificationManager';
-
-
 class Login extends Component {
 
     static propTypes = {
@@ -57,7 +54,6 @@ class Login extends Component {
     render() {
 
         if (user.token) {
-            WindowNotificationManager.init();
             return <Redirect to={`${util.url('/chat')}`} />
         }
 
