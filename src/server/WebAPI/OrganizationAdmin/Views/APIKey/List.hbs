@@ -96,7 +96,9 @@
 
                         <tr>
                             <td colspan="4" class="text-right">
-                                <button type="button" class="btn btn-primary" onclick="getNewAPI()">{{l10n "Add New"}}</button>
+                                <form id="newapiform" action="/admin/apikey/add" method="post">
+                                    <button type="submit" class="btn btn-primary">{{l10n "Add New"}}</button>
+                                </form>
                             </td>
                         </tr>
 
@@ -111,16 +113,3 @@
     </div>
 
 </div>
-
-<form id="newapiform" action="/admin/apikey/add" method="post">
-</form>
-
-<script type="text/javascript">
-
-    function getNewAPI() {
-
-        $('#newapiform').submit();
-
-    }
-
-</script>
