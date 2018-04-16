@@ -16,6 +16,8 @@ var DatabaseManager = require('../lib/DatabaseManager');
 var EncryptionManager = require('../lib/EncryptionManager');
 var SocketAPIHandler = require('../SocketAPI/SocketAPIHandler');
 
+var webpush = require('web-push');
+
 PushNotificationSender = {
 
     start: function (tokenAndBadgeCount, payload, isVoip) {
@@ -387,6 +389,21 @@ PushNotificationSender = {
                     }
 
                     donePushOne(null);
+                },
+
+                function (donePushOne) {
+                    webpush.setVapidDetails('mailto:' + Config.vapidDetails.mailTo, Config.vapidDetails.publicKey, Config.vapidDetails.privateKey);
+
+                    webpush.sendNotification(pushToken, JSON.stringify(payload))
+                        .catch(err => {
+
+                            if (err.statusCode === 410) {
+                                console.log('deleting push subscription');
+                                self.deletePushTokens(pushToken);
+                            }
+                        });
+
+                    donePushOne(null);
                 }
 
             ], function (err) {
@@ -411,7 +428,8 @@ PushNotificationSender = {
             {
                 $or: [
                     { pushToken: pushToken },
-                    { UUID: { $elemMatch: { pushTokens: pushToken } } }
+                    { UUID: { $elemMatch: { pushTokens: pushToken } } },
+                    { webPushSubscription: { $elemMatch: { endpoint: pushToken.endpoint } } }
                 ]
             },
             (err, findResult) => {
@@ -428,11 +446,16 @@ PushNotificationSender = {
 
                     var pushTokens = _.pull(user.pushToken.toObject(), pushToken);
 
+                    var webPushSubscription = _.remove(user.webPushSubscription.toObject(), function (pushSubs) {
+                        return pushSubs.endpoint !== pushToken.endpoint;
+                    });
+
                     userModel.update(
                         { _id: user._id },
                         {
                             pushToken: pushTokens,
-                            UUID: UUID
+                            UUID: UUID,
+                            webPushSubscription: webPushSubscription
                         },
                         { multi: true },
                         (err, updateResult) => {

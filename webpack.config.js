@@ -26,7 +26,11 @@ module.exports = {
             index: basePath + "index.html"
         },
         disableHostCheck: true,
-        host: "0.0.0.0"
+        host: "0.0.0.0",
+        proxy: [{
+            context: ["/favicons", "/admin", "/assets"],
+            target: "http://localhost:8080"
+        }]
     },
     output: {
         path: path.join(__dirname, "/new/"),

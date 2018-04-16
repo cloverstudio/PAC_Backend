@@ -39,6 +39,7 @@ export const ApiUrlMarkAll = "/user/history/markall";
 export const ApiUrlSearchAll = "/search/all/";
 export const ApiUrlSaveNote = "/note";
 export const ApiUrlLoadNote = "/note";
+export const ApiUrlSaveWebPushSubscription = "/user/savewebpushsubscription";
 
 export const ErrorCodeInvalidToken = 4000007;
 
@@ -100,3 +101,8 @@ export const KeepAliveInterval = 30 * 1000;
 
 export const NotesStatePreview = "Preview"
 export const NotesStateEdit = "Edit"
+
+export const NotificationMethodPush = 'Push';
+export const NotificationMethodSocket = 'Socket';
+export const NotificationOriginPush = 'Push';
+export const NotificationOriginSocket = 'Socket';

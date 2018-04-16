@@ -33,6 +33,7 @@ var BackendMain = {
         router.use("/user/online", require("./Controllers/User/GetOnlineStatusController").init(app));
         router.use("/user/detail", require("./Controllers/User/UserDetailController").init(app));
         router.use("/user/savepushtoken", require("./Controllers/User/SavePushTokenController").init(app));
+        router.use("/user/savewebpushsubscription", require("./Controllers/User/SaveWebPushSubscriptionController").init(app));
         router.use("/user/savevoippushtoken", require("./Controllers/User/SaveVoipPushTokenController").init(app));
         router.use("/user/hooks", require("./Controllers/User/HookListController").init(app));
         router.use("/user/block", require("./Controllers/User/BlockUserController").init(app));

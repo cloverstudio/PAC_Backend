@@ -128,4 +128,6 @@ It is for Android's push notification
 
 Needs to be https if ssl is supported in nodejs level
 
-- 
+- Config.vapidDetails
+
+Generate web push keys with web-push generate-vapid-keys --json
