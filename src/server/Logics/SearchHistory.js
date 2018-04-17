@@ -15,7 +15,7 @@ var TotalUnreadCount = require('./TotalUnreadCount');
 
 var SearchHistory = {
 
-    search: function (lastUpdate, page, keyword, baseUser, onSuccess, onError) {
+    search: function (lastUpdate, page, keyword, baseUser, pagingRows, onSuccess, onError) {
 
         var user = baseUser;
 
@@ -53,8 +53,8 @@ var SearchHistory = {
 
                     query = model.find(conditions)
                         .sort({ pinned: "desc", lastUpdate: "desc" })
-                        .skip(Const.pagingRows * page)
-                        .limit(Const.pagingRows);
+                        .skip(pagingRows * page)
+                        .limit(pagingRows);
 
                 }
 
@@ -80,13 +80,40 @@ var SearchHistory = {
             },
             function (result, done) {
 
-                model.count({
-                    userId: user._id.toString()
-                }, function (err, countResult) {
+                var query = null;
+
+                if (lastUpdate > 0) {
+
+                    query = model.count({
+                        userId: user._id.toString(),
+                        $or: [
+                            { lastUpdate: { $gt: lastUpdate } },
+                            { lastUpdateUnreadCount: { $gt: lastUpdate } }
+                        ]
+                    }).sort({ pinned: "desc", lastUpdate: "desc" });
+
+                } else {
+
+                    const conditions = {
+                        userId: user._id.toString()
+                    };
+
+                    if (keyword) {
+                        conditions.keyword = new RegExp('^.*' + Utils.escapeRegExp(keyword) + '.*$', "i")
+                    }
+
+                    if (!page || page < 1)
+                        page = 0;
+
+                    query = model.count(conditions)
+                        .sort({ pinned: "desc", lastUpdate: "desc" })
+
+                }
+
+                query.exec(function (err, countResult) {
 
                     result.count = countResult;
-
-                    done(null, result);
+                    done(err, result);
 
                 });
 

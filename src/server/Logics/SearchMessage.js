@@ -20,11 +20,11 @@ var PolulateMessageLogic = require('./PolulateMessage');
 
 var SearchMessage = {
 
-    search: function (baseUser, keyword, page, onSuccess, onError) {
+    search: function (baseUser, keyword, page, pagingRows, onSuccess, onError) {
 
         var messageModel = MessageModel.get();
 
-        var regexMessage = RegExp("^.*" + Utils.escapeRegExp(keyword) + ".*$", "mi");
+        var regexMessage = RegExp("^.*" + Utils.escapeRegExp(keyword || "") + ".*$", "mi");
 
         async.waterfall([
 
@@ -78,7 +78,7 @@ var SearchMessage = {
                             ]
                         }
                     ]
-                }).limit(Const.pagingRows).skip(Const.pagingRows * page).exec(function (err, privateMessageFindResult) {
+                }).limit(pagingRows).skip(pagingRows * page).exec(function (err, privateMessageFindResult) {
 
                     var objects = privateMessageFindResult.map(function (item) {
                         return item.toObject();
@@ -118,7 +118,7 @@ var SearchMessage = {
                         { message: { $regex: regexMessage } },
                         { "file.file.name": { $regex: regexMessage } }
                     ]
-                }).limit(Const.pagingRows).skip(Const.pagingRows * page).exec(function (err, groupMessageFindResult) {
+                }).limit(pagingRows).skip(pagingRows * page).exec(function (err, groupMessageFindResult) {
 
                     var objects = groupMessageFindResult.map(function (item) {
                         return item.toObject();
@@ -157,7 +157,7 @@ var SearchMessage = {
                         { message: { $regex: regexMessage } },
                         { "file.file.name": { $regex: regexMessage } }
                     ]
-                }).limit(Const.pagingRows).skip(Const.pagingRows * page).exec(function (err, groupMessageFindResult) {
+                }).limit(pagingRows).skip(pagingRows * page).exec(function (err, groupMessageFindResult) {
 
                     var objects = groupMessageFindResult.map(function (item) {
                         return item.toObject();

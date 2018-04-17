@@ -243,7 +243,7 @@ SearchMessageController.prototype.init = function (app) {
         var keyword = decodeURIComponent(request.params.keyword);
         var page = request.params.page - 1;
 
-        SearchMessageLogic.search(request.user, keyword, page, (result) => {
+        SearchMessageLogic.search(request.user, keyword, page, Const.pagingRows, (result) => {
 
             self.successResponse(response, Const.responsecodeSucceed, {
                 messages: result.messages,

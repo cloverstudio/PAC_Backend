@@ -335,7 +335,7 @@ HistioryListController.prototype.init = function (app) {
         if (request.params.page)
             page = request.params.page - 1
 
-        SearchHistoryLogic.search(0, page, request.query.keyword, request.user, (result) => {
+        SearchHistoryLogic.search(0, page, request.query.keyword, request.user, Const.pagingRows, (result) => {
 
             self.successResponse(response, Const.responsecodeSucceed, result);
 
@@ -360,7 +360,7 @@ HistioryListController.prototype.init = function (app) {
 
     router.get('/diff/:lastUpdate', tokenChecker, function (request, response) {
 
-        SearchHistoryLogic.search(request.params.lastUpdate, 0, null, request.user, (result) => {
+        SearchHistoryLogic.search(request.params.lastUpdate, 0, null, request.user, Const.pagingRows, (result) => {
 
             self.successResponse(response, Const.responsecodeSucceed, result);
 
