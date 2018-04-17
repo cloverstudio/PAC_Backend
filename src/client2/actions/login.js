@@ -10,8 +10,6 @@ import user from '../lib/user';
 
 import { store } from '../index';
 
-import WindowNotificationManager from '../lib/WindowNotificationManager';
-
 export function onLoginClick(organization, username, password, remember) {
 
     return (dispatch, getState) => {
@@ -34,8 +32,6 @@ export function onLoginClick(organization, username, password, remember) {
                 user.signinSucceed(response, remember);
 
                 store.dispatch(push(`${util.url('/chat')}`));
-
-                WindowNotificationManager.init();
 
             }).catch((err) => {
 

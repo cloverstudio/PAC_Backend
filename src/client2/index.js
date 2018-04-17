@@ -4,6 +4,8 @@ import { AppContainer } from 'react-hot-loader';
 import { configureStore, history } from './store/configureStore';
 import Root from './containers/Root';
 
+import ServiceWorkerManager from './lib/ServiceWorkerManager';
+
 const theStore = configureStore();
 
 render(

@@ -138,7 +138,7 @@ Const.pagingRows = 20;
 Const.pagingRowsHistoryAndMessages = 10;
 
 Const.tokenValidInteval = 60 * 60 * 24 * 1000 * 30;
-// Const.tokenValidInteval = 1000 * 60 * 2; // ms
+//Const.tokenValidInteval = 1000 * 60 * 2; // ms
 
 Const.chatTypePrivate = 1;
 Const.chatTypeGroup = 2;

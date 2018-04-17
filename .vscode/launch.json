@@ -3,9 +3,9 @@
 	"configurations": [
         {
             "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome",
-            "url": "http://localhost:3000/new/chat",
+            "request": "attach",
+            "name": "Attach to Chrome",
+            "port": 3000,
             "webRoot": "${workspaceFolder}"
         },
 		{

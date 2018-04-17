@@ -1,15 +1,20 @@
 {
     "name": "Spika for Business",
     "short_name": "Spika",
-    "start_url": "spika.chat",
+    "start_url": "/chat",
     "display": "standalone",
     "background_color": "#fff",
     "description": "Most flexible and beautiful chat solution in the world.",
     "theme_color": "white",
-    "related_applications": [{
-        "platform": "play",
-        "url": "https://play.google.com/store/apps/details?id=com.clover_studio.spikaenterprisev2&hl=en"
-      }],
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.clover_studio.spikaenterprisev2&hl=en"
+        }, {
+            "platform": "itunes",
+            "url": "https://itunes.apple.com/in/app/spika-for-business/id1143027894?mt=8"
+        }
+    ],
       "icons": [
 		{
 			"src": "android-chrome-36x36.png",

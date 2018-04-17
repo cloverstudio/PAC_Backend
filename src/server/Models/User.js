@@ -24,6 +24,13 @@ User.prototype.init = function (mongoose) {
         created: Number,
         token: [],
         pushToken: [],
+        webPushSubscription: [
+            {
+                endpoint: String,
+                expiration: mongoose.Schema.Types.Mixed,
+                keys: {}
+            }
+        ],
         voipPushToken: [],
         organizationId: { type: String, index: true },
         status: Number, // 1: Enabled, 0: Disabled

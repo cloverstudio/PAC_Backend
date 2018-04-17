@@ -2,12 +2,15 @@ import * as constant from './const';
 import SocketManager from './SocketManager';
 import { store } from '../index';
 import * as types from '../actions/types';
+import MainNotificationManager from './MainNotificationManager';
+import PushNotificationHandler from './PushNotificationHandler';
 
 class user {
 
     constructor() {
         this.lang = constant.EN;
         this.userData = null;
+        this.userInitialised = null;
 
         const checkLocalStorage = localStorage.getItem(constant.LocalStorageKeyAccessToken);
 
@@ -15,6 +18,10 @@ class user {
 
             this.userData = JSON.parse(localStorage.getItem(constant.LocalStorageKeyUserData));
             this.token = localStorage.getItem(constant.LocalStorageKeyAccessToken);
+
+            MainNotificationManager.init({
+                isSaved: true
+            });
 
             setTimeout(() => {
                 SocketManager.init();
@@ -37,10 +44,15 @@ class user {
         if (save) {
             localStorage.setItem(constant.LocalStorageKeyAccessToken, signinData.newToken);
             localStorage.setItem(constant.LocalStorageKeyUserData, JSON.stringify(signinData.user));
+
         } else {
             localStorage.removeItem(constant.LocalStorageKeyAccessToken);
             localStorage.removeItem(constant.LocalStorageKeyUserData);
         }
+
+        MainNotificationManager.init({
+            isSaved: save
+        });
     }
 
     updateUserData(userData) {
@@ -68,6 +80,10 @@ class user {
 
         localStorage.removeItem(constant.LocalStorageKeyAccessToken);
         localStorage.removeItem(constant.LocalStorageKeyUserData);
+
+        MainNotificationManager.disconnect();
+
+        SocketManager.disconnect();
     }
 }
 

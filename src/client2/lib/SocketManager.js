@@ -12,7 +12,7 @@ import user from './user';
 import Encryption from "./encryption/encryption";
 import { store } from '../index';
 import { chat } from '../actions';
-import WindowNotificationManager from './WindowNotificationManager';
+import MainNotificationManager from './MainNotificationManager';
 
 class SocketManager {
 
@@ -68,7 +68,7 @@ class SocketManager {
 
             store.dispatch(actions.chat.receiveMessage(obj));
 
-            WindowNotificationManager.handleMessage(obj);
+            MainNotificationManager.handleNotification(obj);
 
         });
 
@@ -327,7 +327,7 @@ class SocketManager {
 
     disconnect() {
 
-        if (!this.ioNsp.disconnected)
+        if (typeof this.ioNsp !== 'undefined' && !this.ioNsp.disconnected)
             this.ioNsp.disconnect();
 
     }
