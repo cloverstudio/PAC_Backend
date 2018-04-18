@@ -52,7 +52,8 @@ module.exports = {
         })
         ,
         new swPlugin({
-            entry: path.join(__dirname, "src/client2/sw.js")
+            entry: path.join(__dirname, "src/client2/sw.js"),
+            publicPath: basePath
         })
     ],
     module: {
