@@ -3,6 +3,7 @@ import * as consts from './lib/const';
 
 import viewIcon from './assets/img/fa-eye.png';
 import closeIcon from './assets/img/fa-close.png';
+import badgeIcon from './assets/img/notification-badge.png';
 
 let cacheName = 'STATIC_ASSETS-v1';
 
@@ -72,6 +73,7 @@ self.addEventListener('push', function (event) {
     ];
 
     const notificationOptions = {
+        badge: badgeIcon,
         timestamp: getTimestamp(new Date(payload.message.created)),
         actions: notificationActions,
         body: payload.message.message,
