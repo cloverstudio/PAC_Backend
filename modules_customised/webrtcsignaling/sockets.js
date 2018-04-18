@@ -1,11 +1,10 @@
 var socketIO = require('socket.io'),
-    uuid = require('node-uuid'),
-    crypto = require('crypto');
+    uuid = require('uuid/v1');
 
 module.exports = function (io, config) {
-     
+
     var nsp = io.of(config.socketNameSpace);
-    
+
     nsp.on('connection', function (client) {
         client.resources = {
             screen: false,
@@ -14,22 +13,22 @@ module.exports = function (io, config) {
         };
 
         // pass a message to another id
-        client.on('message', function (details,cb) {
+        client.on('message', function (details, cb) {
 
             if (!details) return;
 
             var otherClient = nsp.to(details.to);
-            
+
             if (!otherClient) return;
 
             details.from = client.id;
-            
-            if(details.type == 'offer'){
+
+            if (details.type == 'offer') {
                 safeCb(cb)('offerreceived', '');
             }
-            
+
             otherClient.emit('message', details);
-            
+
         });
 
         client.on('shareScreen', function () {
@@ -45,7 +44,7 @@ module.exports = function (io, config) {
 
         function removeFeed(type) {
             if (client.room) {
-                
+
                 io.of(config.socketNameSpace).in(client.room).emit('remove', {
                     id: client.id,
                     type: type
@@ -85,7 +84,7 @@ module.exports = function (io, config) {
 
         client.on('create', function (name, cb) {
             if (arguments.length == 2) {
-                cb = (typeof cb == 'function') ? cb : function () {};
+                cb = (typeof cb == 'function') ? cb : function () { };
                 name = name || uuid();
             } else {
                 cb = name;
@@ -137,30 +136,30 @@ module.exports = function (io, config) {
 
 
     function describeRoom(name) {
-        
+
         var adapter = io.nsps["/" + config.socketNameSpace].adapter;
 
         var clients = {};
-        
-        if(adapter.rooms[name])
+
+        if (adapter.rooms[name])
             clients = adapter.rooms[name].sockets;
-            
+
         var result = {
             clients: {}
         };
-        
+
         Object.keys(clients).forEach(function (id) {
             result.clients[id] = adapter.nsp.connected[id].resources;
         });
-        
+
         return result;
-        
+
     }
 
     function clientsInRoom(name) {
-        
+
         var adapter = io.nsps["/" + config.socketNameSpace].adapter;
-        
+
         return adapter.rooms[name].length;
     }
 
@@ -170,6 +169,6 @@ function safeCb(cb) {
     if (typeof cb === 'function') {
         return cb;
     } else {
-        return function () {};
+        return function () { };
     }
 }

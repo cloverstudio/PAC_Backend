@@ -269,6 +269,7 @@ var Config = require("./init");
     }
 
     function stripPrivateData(obj) {
+
         _.forEach(obj, function (child, key, list) {
             if (_.isObject(child)) stripPrivateData(child);
             else {

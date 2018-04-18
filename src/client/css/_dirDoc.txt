@@ -1,1 +1,0 @@
-CSSs which is used for clients part, should be scss

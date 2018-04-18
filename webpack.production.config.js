@@ -14,7 +14,7 @@ module.exports = {
     entry: [
         // Polyfills go here too, like babel-polyfill or whatwg-fetch
         "babel-polyfill",
-        path.join(__dirname, "src/client2/index.js")
+        path.join(__dirname, "src/client/index.js")
     ],
     // Where you want the output to go
     output: {
@@ -32,7 +32,7 @@ module.exports = {
         // change name because the hash part changes. We want hash name changes to bust cache
         // on client browsers.
         new HtmlWebpackPlugin({
-            template: "src/client2/index.tpl.html",
+            template: "src/client/index.tpl.html",
             inject: "body",
             filename: "index.html"
         }),
@@ -57,7 +57,7 @@ module.exports = {
             "process.env.NODE_ENV": JSON.stringify("production")
         })
         , new swPlugin({
-            entry: path.join(__dirname, "src/client2/sw.js"),
+            entry: path.join(__dirname, "src/client/sw.js"),
             publicPath: basePath
         })
     ],

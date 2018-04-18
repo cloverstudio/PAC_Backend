@@ -500,7 +500,7 @@ var NotifyNewMessage = {
                         name: name,
                         thumb: avatarURL,
                         created: obj.user.created,
-                        avatar: obj.user.avatar.toObject()
+                        avatar: obj.user.avatar
                     }
                 };
 

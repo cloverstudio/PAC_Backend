@@ -1,0 +1,214 @@
+.modal-fill.calling{
+    justify-content: start;
+}
+
+.calling{
+
+    &.minimized{
+        height: 0px;
+        overflow: hidden;
+        opacity: 0;
+        position: absolute;
+        z-index: 0;
+    }
+
+    @media only screen and (max-width: map-get($grid-breakpoints, md)) {
+        padding-top: 0px;
+
+        .row{
+            margin: 0px;
+        }
+        
+    }
+
+    @media only screen and (min-width: map-get($grid-breakpoints, md)) {
+        padding-top: 10vh;
+        padding-bottom: 10vh;
+    }
+
+    .videos{
+
+        padding: 0px;
+        position: relative;
+        width: 100%;
+
+        @media only screen and (max-width: map-get($grid-breakpoints, md)) {
+            height: 100vh;
+        }
+
+        @media only screen and (min-width: map-get($grid-breakpoints, md)) {
+            height: 80vh;
+        }
+        
+        .target-video-holder{
+    
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 100;
+
+            text-align: center;
+
+            video{
+                width: 100%;
+                height: 100%;   
+            }
+
+
+            #video-target{
+                position: absolute;
+                z-index: 210;
+                width: 100%;
+                height: 100%;   
+            }
+
+            .avatar-holder{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 205;
+                color: #fff;
+                vertical-align: middle;
+                padding-top: 50px;
+            }
+            overflow: hidden;
+        }
+
+        .my-video-holder{
+
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 200;
+            overflow: hidden;
+            
+            @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+                width: 40vw;
+                height: 30vw;
+            }
+    
+            @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
+                width: 16vw;
+                height: 12vw;
+            }
+
+            video{
+                width: 100%;
+                height: 100%;
+            }
+
+            #video-mine{
+                position: absolute;
+                z-index: 210;
+                width: 100%;
+                height: 100%;   
+            }
+
+            .avatar-holder{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 205;
+                color: #fff;
+                text-align: center;
+                vertical-align: middle;
+                padding-top: 50px;
+
+            }
+
+        }
+
+        .buttons-holder{
+
+            position: absolute;
+            bottom: 5vh;
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            z-index: 300;
+            text-align: center;
+
+            button{
+                width: 45px;
+                height: 45px;
+                opacity: 0.5;
+                margin: 10px;
+            }
+
+            button:hover{
+                opacity: 1.0;
+            }
+
+        }
+        
+    }
+
+}
+
+.calling-minimized{
+
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    height: 50px;
+    background-color: $color-dark;
+    color: #fff;
+    z-index: 1000;
+    vertical-align: middle;
+    display: none;
+
+    &.show{
+        display: block;
+    }
+
+    &.minimized{
+        bottom: -10000px;
+    }
+
+    .button-holder{
+
+        width: 50%;
+        overflow: hidden;
+
+        float: right;
+        text-align: right;
+
+        .btn-square{
+            margin: 9px 3px 9px 3px;
+            width: 32px;
+            height: 32px; 
+        }
+
+    }
+
+    .user-holder{
+        float: left;
+        width: 50%;
+        overflow: hidden;
+
+        img{
+            margin: 9px 3px 9px 3px;
+            width: 32px;
+            height: 32px; 
+        }
+
+    }
+
+    @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+        width: 100%;
+    }
+
+    @media only screen and (min-width: map-get($grid-breakpoints, sm)) {
+        width: 100%;
+    }
+
+    @media only screen and (min-width: map-get($grid-breakpoints, lg)) {
+
+        width: calc( (100vw - 300px - 80px)); // ( 100% - sidemenu - historybar ) x 30% ( infobar )
+
+    }
+            
+}

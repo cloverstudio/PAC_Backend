@@ -1,1 +1,0 @@
-These files are used when calling web API.
