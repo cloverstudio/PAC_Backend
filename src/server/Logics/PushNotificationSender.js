@@ -394,7 +394,7 @@ PushNotificationSender = {
                 function (donePushOne) {
 
                     if (!Config.vapidDetails ||
-                        !Config.vapidDetails.mailTo ||
+                        !Config.vapidDetails.email ||
                         !Config.vapidDetails.publicKey ||
                         !Config.vapidDetails.privateKey)
 
