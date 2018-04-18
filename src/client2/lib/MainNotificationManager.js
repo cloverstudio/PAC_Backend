@@ -36,10 +36,8 @@ class MainNotificationManager {
 
         this.wasInitialised = true;
 
-        if (isSaved) {
-            if ('PushManager' in window) {
-                this.notificationMethod = constant.NotificationMethodPush;
-            }
+        if (isSaved && 'PushManager' in window) {
+            this.notificationMethod = constant.NotificationMethodPush;
         }
         else {
             this.notificationMethod = constant.NotificationMethodSocket;

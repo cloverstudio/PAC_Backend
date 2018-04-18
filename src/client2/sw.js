@@ -93,6 +93,9 @@ self.addEventListener('push', function (event) {
             if (filteredClients[0].visibilityState !== 'visible' || !filteredClients[0].focused) {
 
                 return self.registration.showNotification(notificationTitle, notificationOptions)
+                    .then(() => filteredClients[0].postMessage({
+                        action: 'NOTIFICATION_PLAY_SOUND'
+                    }))
                     .then(() => self.registration.getNotifications())
                     .then(notifications => {
                         const recentNotif = notifications.find(notif => notif.tag === payload.roomId);
