@@ -8,14 +8,14 @@ Config.host = "localhost";
 Config.port = 8080;
 Config.urlPrefix = '/';
 Config.useSSL = false;
-Config.sslOptions = {
-    key: fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "ssl.key")),
-    cert: fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "ssl.crt")),
-    ca: [
-        fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "sf_bundle-g2-g1.crt")),
-        fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "sfroot-g2.crt")),
-    ]
-};
+// Config.sslOptions = {
+//     key: fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "ssl.key")),
+//     cert: fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "ssl.crt")),
+//     ca: [
+//         fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "sf_bundle-g2-g1.crt")),
+//         fs.readFileSync(path.resolve(__dirname, "../assets/ssl", "sfroot-g2.crt")),
+//     ]
+// };
 
 Config.dbCollectionPrefix = '';
 Config.databaseUrl = "mongodb://localhost/spikaenterprise";
