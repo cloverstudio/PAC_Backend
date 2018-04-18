@@ -7,7 +7,7 @@ var webpack = require("webpack");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var StatsPlugin = require("stats-webpack-plugin");
-// var swPlugin = require("serviceworker-webpack-plugin")
+var swPlugin = require("serviceworker-webpack-plugin")
 
 module.exports = {
     // The entry file. All your app roots from here.
@@ -56,9 +56,10 @@ module.exports = {
         new webpack.DefinePlugin({
             "process.env.NODE_ENV": JSON.stringify("production")
         })
-        // ,new swPlugin({
-        //     entry: path.join(__dirname, "src/client2/sw.js")
-        // })
+        , new swPlugin({
+            entry: path.join(__dirname, "src/client2/sw.js"),
+            publicPath: basePath
+        })
     ],
 
     module: {

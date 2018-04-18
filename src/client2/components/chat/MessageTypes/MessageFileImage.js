@@ -7,6 +7,8 @@ import * as constant from '../../../lib/const';
 import * as config from '../../../lib/config';
 import * as actions from '../../../actions';
 
+import NoThumbnail from '../../../assets/img/fa-image.png';
+
 class MessageFileImage extends Component {
 
     static propTypes = {
@@ -44,7 +46,10 @@ class MessageFileImage extends Component {
 
     render() {
         const message = this.props.message;
-        let messageContent;
+        const thumbnailImage = typeof message.file.thumb === 'undefined'
+            ? NoThumbnail
+            : config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id;
+
         let messageClass = 'image-message';
 
         if (this.props.searchTarget === message._id) {
@@ -65,7 +70,7 @@ class MessageFileImage extends Component {
 
                 <figure className="teaser teaser-simple">
                     <img className='img-thumbnail'
-                        src={config.APIEndpoint + constant.ApiUrlFile + message.file.thumb.id}
+                        src={thumbnailImage}
                         onLoad={e => {
                             this.toggleMessageLoading();
                         }}

@@ -21,8 +21,6 @@ import History from '../components/chat/History';
 import AvatarImage from '../components/AvatarImage';
 import ReLogin from "../components/ReLogin";
 
-import WindowNotificationManager from '../lib/WindowNotificationManager';
-
 class NewRoom extends Base {
 
     constructor() {
@@ -100,7 +98,6 @@ class NewRoom extends Base {
     render() {
 
         if (!user.token) return <ReLogin />;
-        WindowNotificationManager.init();
 
         let sideBarClass = "pace-done sidebar-folded";
         if (this.props.sidebarState)

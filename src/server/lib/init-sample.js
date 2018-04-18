@@ -151,4 +151,10 @@ Config.vapidDetails = {
     privateKey: ""
 }
 
+Config.vapidDetails = {
+    email: '',
+    publicKey: "",
+    privateKey: ""
+}
+
 module["exports"] = Config;
