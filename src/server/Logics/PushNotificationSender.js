@@ -392,6 +392,14 @@ PushNotificationSender = {
                 },
 
                 function (donePushOne) {
+
+                    if (!Config.vapidDetails ||
+                        !Config.vapidDetails.mailTo ||
+                        !Config.vapidDetails.publicKey ||
+                        !Config.vapidDetails.privateKey)
+
+                        return donePushOne(null);
+
                     webpush.setVapidDetails('mailto:' + Config.vapidDetails.mailTo, Config.vapidDetails.publicKey, Config.vapidDetails.privateKey);
 
                     webpush.sendNotification(pushToken, JSON.stringify(payload))

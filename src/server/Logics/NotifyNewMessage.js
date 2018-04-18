@@ -500,7 +500,7 @@ var NotifyNewMessage = {
                         name: name,
                         thumb: avatarURL,
                         created: obj.user.created,
-                        avatar: obj.user.avatar.toObject()
+                        avatar: obj.user.avatar
                     }
                 };
 
@@ -511,6 +511,9 @@ var NotifyNewMessage = {
                 if (obj.location) {
                     payload.location = obj.location;
                 }
+
+                if (obj.attributes)
+                    payload.message.attributes = obj.attributes;
 
                 if (obj.group) {
 

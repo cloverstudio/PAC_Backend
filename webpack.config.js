@@ -15,7 +15,7 @@ module.exports = {
         "webpack-dev-server/client?http://localhost:3000/",
         "webpack/hot/only-dev-server",
         "react-hot-loader/patch",
-        path.join(__dirname, "src/client2/index.js")
+        path.join(__dirname, "src/client/index.js")
     ],
     devServer: {
         contentBase: path.join(__dirname, "new"),
@@ -39,7 +39,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "src/client2/index.tpl.html",
+            template: "src/client/index.tpl.html",
             inject: "body",
             filename: "index.html"
         }),
@@ -52,7 +52,7 @@ module.exports = {
         })
         ,
         new swPlugin({
-            entry: path.join(__dirname, "src/client2/sw.js"),
+            entry: path.join(__dirname, "src/client/sw.js"),
             publicPath: basePath
         })
     ],
