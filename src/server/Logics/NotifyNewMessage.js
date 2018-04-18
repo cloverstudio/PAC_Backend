@@ -512,6 +512,9 @@ var NotifyNewMessage = {
                     payload.location = obj.location;
                 }
 
+                if (obj.attributes)
+                    payload.message.attributes = obj.attributes;
+
                 if (obj.group) {
 
                     var avatarURL = "/api/v2/avatar/group/";

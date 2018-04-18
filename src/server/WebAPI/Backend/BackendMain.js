@@ -76,6 +76,7 @@ var BackendMain = {
         router.use("/file/upload", require("./Controllers/File/FileUploadController").init(app));
 
         router.use("/search/all", require("./Controllers/Search/SearchAllController").init(app));
+        router.use("/search/historyAndMessages", require("./Controllers/Search/SearchHistoryAndMessagesController").init(app));
 
         router.use("/stickers", require("./Controllers/Sticker/StickersController").init(app));
         router.use("/sticker", require("./Controllers/Sticker/ShowStickerController").init(app));
