@@ -57,7 +57,8 @@ module.exports = {
             "process.env.NODE_ENV": JSON.stringify("production")
         })
         , new swPlugin({
-            entry: path.join(__dirname, "src/client2/sw.js")
+            entry: path.join(__dirname, "src/client2/sw.js"),
+            publicPath: basePath
         })
     ],
 

@@ -144,7 +144,7 @@ class UserInfo extends Component {
             if (lastToken)
                 lastlogin = lastToken.generateAt;
         }
-
+        
         return (
 
             <div>
