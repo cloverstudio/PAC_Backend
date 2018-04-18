@@ -218,6 +218,9 @@ const messageList = (state = initial.messageList, action) => {
                     } else return msg;
                 });
             }
+            else {
+                newState = oldState.concat(action.message);
+            }
         } else {
             newState = oldState.concat(action.message);
         }
