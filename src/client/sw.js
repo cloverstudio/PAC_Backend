@@ -3,6 +3,7 @@ import * as consts from './lib/const';
 
 import viewIcon from './assets/img/fa-eye.png';
 import closeIcon from './assets/img/fa-close.png';
+import badgeIcon from './assets/img/notification-badge.png';
 
 let cacheName = 'STATIC_ASSETS-v1';
 
@@ -72,6 +73,7 @@ self.addEventListener('push', function (event) {
     ];
 
     const notificationOptions = {
+        badge: badgeIcon,
         timestamp: getTimestamp(new Date(payload.message.created)),
         actions: notificationActions,
         body: payload.message.message,
@@ -91,6 +93,9 @@ self.addEventListener('push', function (event) {
             if (filteredClients[0].visibilityState !== 'visible' || !filteredClients[0].focused) {
 
                 return self.registration.showNotification(notificationTitle, notificationOptions)
+                    .then(() => filteredClients[0].postMessage({
+                        action: 'NOTIFICATION_PLAY_SOUND'
+                    }))
                     .then(() => self.registration.getNotifications())
                     .then(notifications => {
                         const recentNotif = notifications.find(notif => notif.tag === payload.roomId);
