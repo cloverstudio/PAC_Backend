@@ -89,6 +89,9 @@ class MainNotificationManager {
             })
 
         }
+        else {
+            return Promise.reject('permission denied');
+        }
     }
 
     initNotificationHandler() {

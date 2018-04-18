@@ -60,10 +60,10 @@ class PushNotificationHandler {
     }
 
     removeSubscription = () => {
-        if (this.pushSubscription) {
 
-            return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
 
+            if (this.pushSubscription) {
                 this.pushSubscription.unsubscribe()
                     .then(success => {
                         resolve('unsubscription successful');
@@ -71,9 +71,13 @@ class PushNotificationHandler {
                     .catch(err => {
                         reject(err);
                     })
-            })
+            }
+            else {
+                resolve('no subscription to remove')
+            }
 
-        }
+        })
+
     }
 
 }

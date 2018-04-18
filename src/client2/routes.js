@@ -12,7 +12,6 @@ import Search from "./containers/Search";
 import Favorites from "./containers/Favorites";
 import Profile from "./containers/Profile";
 import Password from "./containers/Password";
-import About from "./components/About";
 import Note from "./containers/Note";
 
 export default (
@@ -20,7 +19,6 @@ export default (
     <Switch>
         <Route exact path={`${util.url("/")}`} component={Login} />
         <Route exact path={`${util.url("/signup")}`} component={SignUp} />
-        <Route path={`${util.url("/about")}`} component={About} />
         <Route exact path={`${util.url("/chat")}`} component={Chat} key="base chat" />
         <Route path={`${util.url("/chat/:chatId")}`} component={Chat} key="target chat" />
         <Route path={`${util.url("/newroom")}`} component={Room} />

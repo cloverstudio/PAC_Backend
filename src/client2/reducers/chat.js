@@ -174,6 +174,8 @@ const isLoading = (state = initial.isLoading, action) => {
             return true;
         case types.ChatLoadOldMessagesSucceed:
             return false;
+        case types.ChatClearChat:
+            return false;
         default:
             return state;
     }
