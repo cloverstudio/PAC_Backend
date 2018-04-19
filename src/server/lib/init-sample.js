@@ -146,12 +146,6 @@ Config.robotUserId = "56e0084a62a63ebf55eef398";
 Config.phoneNumberSignin = false;
 
 Config.vapidDetails = {
-    email: 'test@example.com',
-    publicKey: "",
-    privateKey: ""
-}
-
-Config.vapidDetails = {
     email: '',
     publicKey: "",
     privateKey: ""
