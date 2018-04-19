@@ -46,15 +46,15 @@ Config.signinBackDoorSecret = "";
 
 Config.apnsCertificates = {
 
-    dev: {
-        key: null,
-        cert: null
+    push: {
+        token: {
+            key: null,
+            keyId: "",
+            teamId: ""
+        },
+        appbundleid: ""
     },
-    adhoc: {
-        key: null,
-        cert: null
-    },
-    store: {
+    voip: {
         key: null,
         cert: null
     }
