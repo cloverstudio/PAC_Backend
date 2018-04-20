@@ -206,13 +206,9 @@ export function save() {
                         room: updatedRoom
                     });
 
-                    dispatch(push(`${utils.url('/chat/' + chatId)}`));
+                    dispatch(actions.chat.changeCurrentChat(chatId));
+                    dispatch(actions.chat.openChatByRoom(updatedRoom));
 
-                    dispatch({
-                        type: types.ChatOpenByRoom,
-                        room: updatedRoom,
-                        chatId
-                    });
 
                 }).catch((err) => {
 
@@ -242,12 +238,11 @@ export function save() {
                     room
                 });
 
-                dispatch(push(`${utils.url('/chat/' + chatId)}`));
-
+                dispatch(actions.chat.openChatByRoom(room));
+                dispatch(actions.chat.changeCurrentChat(chatId));
                 dispatch({
-                    type: types.ChatOpenByRoom,
-                    room,
-                    chatId
+                    type: types.ChatLoadMessageSucceed,
+                    messages: []
                 });
 
             }).catch((err) => {

@@ -270,20 +270,11 @@ export function leaveRoom(roomId) {
 
             dispatch({
                 type: types.InfoViewLeaveRoomSucceed
-            })
-
-
-            // get first chat from history
-            const historyList = state.history.historyList;
-
-            console.log('historyList', historyList);
-            const historyToOpen = historyList.find((history) => {
-                return history.chatId != roomId;
             });
 
+            dispatch(actions.chat.clearChat());
+            dispatch(push(`${utils.url('/chat')}`));
 
-            //dispatch(push(`${utils.url('/chat/')}`));
-            store.dispatch(goBack());
             dispatch(historyActions.loadHistoryInitial());
 
         }).catch((err) => {

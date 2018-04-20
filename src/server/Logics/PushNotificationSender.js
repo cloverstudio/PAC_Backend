@@ -107,76 +107,15 @@ PushNotificationSender = {
                         return;
                     }
 
-
-                    // send apns adhoc
-                    var options = {
-                        production: false
-                    };
-
-                    if (Config.apnsCertificates.dev.token) {
-
-                        options.token = Config.apnsCertificates.dev.token;
-
-                    } else if (Config.apnsCertificates.dev.cert
-                        && Config.apnsCertificates.dev.key) {
-
-                        options.cert = Config.apnsCertificates.dev.cert;
-                        options.key = Config.apnsCertificates.dev.key;
-
-                    } else {
-                        return donePushOne(null);
-                    }
-
-                    var apnProvider = new apn.Provider(options);
-                    var note = new apn.Notification();
-
-                    note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
-                    note.badge = unreadCount;
-                    note.sound = "ping.aiff";
-                    note.alert = payload.message.messageiOS;
-                    note.category = Const.apnCategoryMessage;
-                    note.payload = payload;
-                    note.topic = Config.apnsCertificates.dev.appbundleid;
-                    note.contentAvailable = true;
-
-                    apnProvider.send(note, pushToken).then((result) => {
-                        apnProvider.shutdown();
-                    });
-
-                    donePushOne(null);
-
-                },
-
-                function (donePushOne) {
-
-                    if (isVoip) {
-                        donePushOne(null);
-                        return;
-                    }
-
-                    if (pushToken.length != 64) {
-                        donePushOne(null);
-                        return;
-                    }
-
                     // send apns adhoc
                     var options = {
                         production: true
                     };
 
-                    if (Config.apnsCertificates.adhoc.token) {
-
-                        options.token = Config.apnsCertificates.adhoc.token;
-
-                    } else if (Config.apnsCertificates.adhoc.cert
-                        && Config.apnsCertificates.adhoc.key) {
-
-                        options.cert = Config.apnsCertificates.adhoc.cert;
-                        options.key = Config.apnsCertificates.adhoc.key;
-
-                    } else {
+                    if (Config.apnsCertificates.push.token)
+                        options.token = Config.apnsCertificates.push.token;
+                    else
                         return donePushOne(null);
-                    }
 
                     var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
@@ -187,66 +126,28 @@ PushNotificationSender = {
                     note.alert = payload.message.messageiOS;
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
-                    note.topic = Config.apnsCertificates.adhoc.appbundleid;
-                    note.contentAvailable = true;
-
-                    apnProvider.send(note, pushToken).then((result) => {
-                        apnProvider.shutdown();
-                    });
-
-                    donePushOne(null);
-
-                },
-
-                function (donePushOne) {
-
-                    if (isVoip) {
-                        donePushOne(null);
-                        return;
-                    }
-
-                    if (pushToken.length != 64) {
-                        donePushOne(null);
-                        return;
-                    }
-
-                    // send apns store
-                    var options = {
-                        production: true
-                    };
-
-                    if (Config.apnsCertificates.store.token) {
-
-                        options.token = Config.apnsCertificates.store.token;
-
-                    } else if (Config.apnsCertificates.store.cert
-                        && Config.apnsCertificates.store.key) {
-
-                        options.cert = Config.apnsCertificates.store.cert;
-                        options.key = Config.apnsCertificates.store.key;
-
-                    } else {
-                        return donePushOne(null);
-                    }
-
-                    var apnProvider = new apn.Provider(options);
-                    var note = new apn.Notification();
-
-                    note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
-                    note.badge = unreadCount;
-                    note.sound = "ping.aiff";
-                    note.alert = payload.message.messageiOS;
-                    note.category = Const.apnCategoryMessage;
-                    note.payload = payload;
-                    note.topic = Config.apnsCertificates.store.appbundleid;
+                    note.topic = Config.apnsCertificates.push.appbundleid;
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
 
-                        if (!_.isEmpty(result.failed))
-                            self.deletePushTokens(pushToken);
-
                         apnProvider.shutdown();
+
+                        if (!_.isEmpty(result.failed)) {
+
+                            options.production = false;
+                            apnProvider = new apn.Provider(options);
+
+                            apnProvider.send(note, pushToken).then((result) => {
+
+                                apnProvider.shutdown();
+
+                                if (!_.isEmpty(result.failed))
+                                    self.deletePushTokens(pushToken);
+
+                            });
+
+                        }
 
                     });
 
@@ -314,7 +215,7 @@ PushNotificationSender = {
 
                 function (donePushOne) {
 
-                    if (pushToken.length <= 64) {
+                    if (pushToken.length <= 64 || _.isObject(pushToken)) {
                         donePushOne(null);
                         return;
                     }
@@ -394,9 +295,10 @@ PushNotificationSender = {
                 function (donePushOne) {
 
                     if (!Config.vapidDetails ||
-                        !Config.vapidDetails.mailTo ||
+                        !Config.vapidDetails.email ||
                         !Config.vapidDetails.publicKey ||
-                        !Config.vapidDetails.privateKey)
+                        !Config.vapidDetails.privateKey ||
+                        !_.isObject(pushToken))
 
                         return donePushOne(null);
 

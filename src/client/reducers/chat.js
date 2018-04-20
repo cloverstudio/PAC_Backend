@@ -174,6 +174,8 @@ const isLoading = (state = initial.isLoading, action) => {
             return true;
         case types.ChatLoadOldMessagesSucceed:
             return false;
+        case types.ChatClearChat:
+            return false;
         default:
             return state;
     }
@@ -217,6 +219,9 @@ const messageList = (state = initial.messageList, action) => {
                         return action.message;
                     } else return msg;
                 });
+            }
+            else {
+                newState = oldState.concat(action.message);
             }
         } else {
             newState = oldState.concat(action.message);

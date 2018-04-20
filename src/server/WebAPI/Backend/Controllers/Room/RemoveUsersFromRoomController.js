@@ -13,247 +13,249 @@ var easyimg = require('easyimage');
 
 var pathTop = "../../../../";
 
-var Const = require( pathTop + "lib/consts");
-var Config = require( pathTop + "lib/init");
-var DatabaseManager = require( pathTop + 'lib/DatabaseManager');
-var Utils = require( pathTop + 'lib/utils');
-var UserModel = require( pathTop + 'Models/User');
-var RoomModel = require( pathTop + 'Models/Room');
-var HistoryModel = require( pathTop + 'Models/History');
+var Const = require(pathTop + "lib/consts");
+var Config = require(pathTop + "lib/init");
+var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
+var Utils = require(pathTop + 'lib/utils');
+var UserModel = require(pathTop + 'Models/User');
+var RoomModel = require(pathTop + 'Models/Room');
+var HistoryModel = require(pathTop + 'Models/History');
 
-var SocketAPIHandler = require( pathTop + 'SocketAPI/SocketAPIHandler');
+var SocketAPIHandler = require(pathTop + 'SocketAPI/SocketAPIHandler');
 
-var tokenChecker = require( pathTop + 'lib/authApi');
+var tokenChecker = require(pathTop + 'lib/authApi');
 
 var BackendBase = require('../BackendBase');
 
-var RemoveUsersFromRoomController = function(){}
+var RemoveUsersFromRoomController = function () { }
 
-_.extend(RemoveUsersFromRoomController.prototype,BackendBase.prototype);
+_.extend(RemoveUsersFromRoomController.prototype, BackendBase.prototype);
 
-RemoveUsersFromRoomController.prototype.init = function(app){
-        
+RemoveUsersFromRoomController.prototype.init = function (app) {
+
     var self = this;
 
 
-   /**
-     * @api {post} /api/v2/room/users/remove Remove users from room
-     * @apiName Remove users from room
-     * @apiGroup WebAPI
-     * @apiDescription Update profile of conversation
-     * @apiHeader {String} access-Token Users unique access-token.
-     * @apiParam {string} roomId roomId
-     * @apiParam {Array} users Array of user ids
-
-     * @apiSuccessExample Success-Response:
-{
-	"code": 1,
-	"time": 1457082886197,
-	"data": {
-		"room": {
-			"_id": "56d94c88bf06a1f30ad6091d",
-            "owner" : "56c32acd331dd81f8134f200"
-			"ownerModel": {
-				"_id": "56c32acd331dd81f8134f200",
-				"name": "Ken",
-				"sortName": "ken yasue",
-				"description": "ああああ",
-				"userid": "kenyasue",
-				"password": "*****",
-				"created": 1455631053660,
-				"status": 1,
-				"organizationId": "56ab7b9061b760d9eb6feba3",
-				"__v": 0,
-				"tokenGeneratedAt": 1457082869691,
-				"token": "*****",
-				"departments": [],
-				"groups": ["56cf0a60ed51d2905e28a848"],
-				"avatar": {
-					"thumbnail": {
-						"originalName": "2015-01-11 21.30.05 HDR.jpg",
-						"size": 1551587,
-						"mimeType": "image/png",
-						"nameOnServer": "c2gQT5IMJAYqx89eo8gwFrKJSRxlFYFU"
-					},
-					"picture": {
-						"originalName": "2015-01-11 21.30.05 HDR.jpg",
-						"size": 1551587,
-						"mimeType": "image/png",
-						"nameOnServer": "jf7mBTsU6CVfFPLsnY4Ijqcuo6vYTKAs"
-					}
-				}
-			},
-			"name": "ああああああ",
-			"created": 1457081480907,
-			"__v": 0,
-			"description": "いいいいいddd",
-			"modified": 1457082886193,
-			"avatar": {
-				"thumbnail": {
-					"originalName": "2014-06-03 17.23.39.jpg",
-					"size": 1504586,
-					"mimeType": "image/png",
-					"nameOnServer": "ut4G1A3Jq9LbfeDxXUh8jibgDB4wPGV1"
-				},
-				"picture": {
-					"originalName": "2014-06-03 17.23.39.jpg",
-					"size": 1504586,
-					"mimeType": "image/png",
-					"nameOnServer": "egStPNb3ysJKhUGtyeFzcwKCPgmp5Cnj"
-				}
-			},
-			"users": ["56c32acd331dd81f8134f200"]
-		}
-	}
-}
-    */
-    router.post('/',tokenChecker,function(request,response){
+    /**
+      * @api {post} /api/v2/room/users/remove Remove users from room
+      * @apiName Remove users from room
+      * @apiGroup WebAPI
+      * @apiDescription Update profile of conversation
+      * @apiHeader {String} access-Token Users unique access-token.
+      * @apiParam {string} roomId roomId
+      * @apiParam {Array} users Array of user ids
+ 
+      * @apiSuccessExample Success-Response:
+ {
+     "code": 1,
+     "time": 1457082886197,
+     "data": {
+         "room": {
+             "_id": "56d94c88bf06a1f30ad6091d",
+             "owner" : "56c32acd331dd81f8134f200"
+             "ownerModel": {
+                 "_id": "56c32acd331dd81f8134f200",
+                 "name": "Ken",
+                 "sortName": "ken yasue",
+                 "description": "ああああ",
+                 "userid": "kenyasue",
+                 "password": "*****",
+                 "created": 1455631053660,
+                 "status": 1,
+                 "organizationId": "56ab7b9061b760d9eb6feba3",
+                 "__v": 0,
+                 "tokenGeneratedAt": 1457082869691,
+                 "token": "*****",
+                 "departments": [],
+                 "groups": ["56cf0a60ed51d2905e28a848"],
+                 "avatar": {
+                     "thumbnail": {
+                         "originalName": "2015-01-11 21.30.05 HDR.jpg",
+                         "size": 1551587,
+                         "mimeType": "image/png",
+                         "nameOnServer": "c2gQT5IMJAYqx89eo8gwFrKJSRxlFYFU"
+                     },
+                     "picture": {
+                         "originalName": "2015-01-11 21.30.05 HDR.jpg",
+                         "size": 1551587,
+                         "mimeType": "image/png",
+                         "nameOnServer": "jf7mBTsU6CVfFPLsnY4Ijqcuo6vYTKAs"
+                     }
+                 }
+             },
+             "name": "ああああああ",
+             "created": 1457081480907,
+             "__v": 0,
+             "description": "いいいいいddd",
+             "modified": 1457082886193,
+             "avatar": {
+                 "thumbnail": {
+                     "originalName": "2014-06-03 17.23.39.jpg",
+                     "size": 1504586,
+                     "mimeType": "image/png",
+                     "nameOnServer": "ut4G1A3Jq9LbfeDxXUh8jibgDB4wPGV1"
+                 },
+                 "picture": {
+                     "originalName": "2014-06-03 17.23.39.jpg",
+                     "size": 1504586,
+                     "mimeType": "image/png",
+                     "nameOnServer": "egStPNb3ysJKhUGtyeFzcwKCPgmp5Cnj"
+                 }
+             },
+             "users": ["56c32acd331dd81f8134f200"]
+         }
+     }
+ }
+     */
+    router.post('/', tokenChecker, function (request, response) {
 
         var roomId = request.body.roomId
         var roomModel = RoomModel.get();
         var userModel = UserModel.get();
         var users = request.body.users;
-        
+
         var user = request.user;
-        
-        if(!_.isArray(users)){
-            self.successResponse(response,Const.responsecodeRemoveUsersFromRoomWrongUserId);
-            return; 
+
+        if (!_.isArray(users)) {
+            self.successResponse(response, Const.responsecodeRemoveUsersFromRoomWrongUserId);
+            return;
         }
-        
+
         var result = {};
-             
+
         async.waterfall([
 
             function (done) {
-                
-            	roomModel.findOne({_id:roomId},function(err,roomFindResult){
-	            	
-	            	if(!roomFindResult){
-		            	
-                        self.successResponse(response,Const.responsecodeRemoveUsersFromRoomWrongRoomId);
-		            	
-		            	return;
-	            	}
-                    
+
+                roomModel.findOne({ _id: roomId }, function (err, roomFindResult) {
+
+                    if (!roomFindResult) {
+
+                        self.successResponse(response, Const.responsecodeRemoveUsersFromRoomWrongRoomId);
+
+                        return;
+                    }
+
                     if (roomFindResult.owner != user._id.toString())
                         return self.successResponse(response, Const.responsecodeRemoveUsersFromRoomUserIsNotOwner);
 
-	            	result.targetRoom = roomFindResult.toObject();
-	            		            	
-	            	done(err,result);
-	            	
-            	});
-            	          
-            },
-                        
-            function (result,done){
-                
-                var usersFilterd = _.filter(users,function(userId){
-                    
-                    return Utils.isObjectId(userId);
-                        
+                    result.targetRoom = roomFindResult.toObject();
+
+                    done(err, result);
+
                 });
-                
+
+            },
+
+            function (result, done) {
+
+                var usersFilterd = _.filter(users, function (userId) {
+
+                    return Utils.isObjectId(userId);
+
+                });
+
                 // filter users
                 userModel.find({
-                    _id:{ $in : usersFilterd}
-                },function(err,userFindResult){
-                    result.users = userFindResult;
-                    done(err,result);
+                    _id: { $in: usersFilterd }
+                }, function (err, userFindResult) {
+                    result.users = userFindResult.map((user) => {
+                        return user.toObject();
+                    });
+                    done(err, result);
                 });
 
             },
-            function (result,done){
-                
-                var userIdsExistsObjectId = _.pluck(result.users,"_id");
-                var userIdsExistsStr = _.map(userIdsExistsObjectId,function(userIdObj){
-                    return userIdObj.toString();    
+            function (result, done) {
+
+                var userIdsExistsObjectId = _.pluck(result.users, "_id");
+                var userIdsExistsStr = _.map(userIdsExistsObjectId, function (userIdObj) {
+                    return userIdObj.toString();
                 });
-                
+
                 var usersOld = result.targetRoom.users;
-                
-                var newUsers = _.filter(usersOld,function(userId){
-                    
+
+                var newUsers = _.filter(usersOld, function (userId) {
+
                     return userIdsExistsStr.indexOf(userId) == -1; // return users which is not in param
-                     
+
                 });
-                
+
                 roomModel.update({
-                    _id:result.targetRoom._id
-                },{
-                    users:newUsers
-                },function(err,updateResult){
-                    
-                    done(err,result);
-                
+                    _id: result.targetRoom._id
+                }, {
+                        users: newUsers
+                    }, function (err, updateResult) {
+
+                        done(err, result);
+
+                    });
+
+            },
+            function (result, done) {
+
+                roomModel.findOne({ _id: roomId }, function (err, roomFindResult) {
+
+                    roomFindResult = roomFindResult.toObject();
+                    roomFindResult.ownerModel = request.user.toObject();
+                    result.updatedData = roomFindResult;
+
+                    done(err, result);
+
                 });
 
             },
-            function (result,done){
-                
-            	roomModel.findOne({_id:roomId},function(err,roomFindResult){
-                    
-                    roomFindResult = roomFindResult.toObject();
-                    roomFindResult.ownerModel = request.user;
-	            	result.updatedData = roomFindResult;
-	            		            	
-	            	done(err,result);
-	            	
-            	});
+            function (result, done) {
 
-            },
-            function (result,done){
-
-                done(null,result);
+                done(null, result);
 
                 // delete from history
                 var historyModel = HistoryModel.get();
                 result.users.forEach((user) => {
 
                     // stop sending notification
-                    SocketAPIHandler.leaveFrom(user._id,Const.chatTypeRoom,roomId);
-                    
-                    historyModel.remove({ 
+                    SocketAPIHandler.leaveFrom(user._id, Const.chatTypeRoom, roomId);
+
+                    historyModel.remove({
                         chatId: roomId,
                         userId: user._id
-                    }, function(err, deleteResult) {
-    
+                    }, function (err, deleteResult) {
+
                         SocketAPIHandler.emitToUser(
                             user._id,
                             'delete_room',
-                            {conversation:result.updatedData}
+                            { conversation: result.updatedData }
                         );
-                        
+
                     });
                 });
 
             },
 
-            
+
         ],
             function (err, result) {
-                
-                if(err){
-                    
-                    self.errorResponse(response,Const.httpCodeServerError);   
-                                     
-                }else {
-                              
-                    self.successResponse(response,Const.responsecodeSucceed,{
-                        room : result.updatedData
+
+                if (err) {
+
+                    self.errorResponse(response, Const.httpCodeServerError);
+
+                } else {
+
+                    self.successResponse(response, Const.responsecodeSucceed, {
+                        room: result.updatedData
                     });
-                       
+
                 }
-                             
+
             }
-            
+
         );
-        
+
     });
-	
+
     return router;
-    
+
 }
 
 module["exports"] = new RemoveUsersFromRoomController();
