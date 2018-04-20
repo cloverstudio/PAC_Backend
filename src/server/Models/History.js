@@ -27,6 +27,7 @@ History.prototype.init = function (mongoose) {
         lastMessage: {},
         unreadCount: Number,
         keyword: { type: String, index: true },
+        pinned: Boolean
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "history", this.schema);

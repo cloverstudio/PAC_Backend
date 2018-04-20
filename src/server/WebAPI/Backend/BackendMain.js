@@ -44,6 +44,7 @@ var BackendMain = {
         router.use("/user/updateContacts", require("./Controllers/User/UserUpdateContactsController").init(app));
         router.use("/user/getContacts", require("./Controllers/User/UserGetContactsController").init(app));
         router.use("/user/deleteContact", require("./Controllers/User/UserDeleteContactController").init(app));
+        router.use("/user/pin", require("./Controllers/User/PinController").init(app));
 
         router.use("/room/list/mine", require("./Controllers/Room/RoomListMineController").init(app));
         router.use("/room/new", require("./Controllers/Room/CreateRoomController").init(app));
