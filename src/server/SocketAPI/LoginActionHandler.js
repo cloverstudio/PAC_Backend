@@ -16,14 +16,14 @@ var GroupModel = require('../Models/Group');
 var RoomModel = require('../Models/Room');
 var UserModel = require('../Models/User');
 
-var LoginActionHandler = function(){
-    
+var LoginActionHandler = function () {
+
 }
 
-_.extend(LoginActionHandler.prototype,SocketHandlerBase.prototype);
+_.extend(LoginActionHandler.prototype, SocketHandlerBase.prototype);
 
-LoginActionHandler.prototype.attach = function(io,socket){
-        
+LoginActionHandler.prototype.attach = function (io, socket) {
+
     var self = this;
 
     /**
@@ -34,152 +34,159 @@ LoginActionHandler.prototype.attach = function(io,socket){
      * @apiParam {string} token user token
      * @apiParam {string} processId identifier for device
      */
-    socket.on('login', function(param){
+    socket.on('login', function (param) {
 
-		param.socketid = socket.id;
+        param.socketid = socket.id;
 
 
-        if(_.isNull(param.processId)){
-            socket.emit('socketerror', {code:Const.responsecodeLoginInvalidParam});
+        if (_.isNull(param.processId)) {
+            socket.emit('socketerror', { code: Const.responsecodeLoginInvalidParam });
             return;
         }
-                    
+
         // check token
-        async.waterfall([function(done){
-                
-                var result = {};
-                
-                self.checkToken(param.token,function(checkTokenResult){
-                    
-                    if(_.isNull(checkTokenResult)){
-                        socket.emit('socketerror', {code:Const.responsecodeSigninInvalidToken});
-                        return;
-                    }
-                    
-                    result.user = checkTokenResult;
-                    
-                    done(null,result)
-                    
+        async.waterfall([function (done) {
+
+            var result = {};
+
+            self.checkToken(param.token, function (checkTokenResult) {
+
+                if (_.isNull(checkTokenResult)) {
+                    socket.emit('socketerror', { code: Const.responsecodeSigninInvalidToken });
+                    return;
+                }
+
+                result.user = checkTokenResult;
+
+                done(null, result)
+
+            });
+
+        },
+        function (result, done) {
+
+            // join to self
+            socket.join(result.user._id.toString());
+            done(null, result);
+
+        },
+        function (result, done) {
+
+            // join to groups
+            var model = GroupModel.get();
+
+            model.find({
+                users: result.user._id.toString()
+            }, function (err, groupFindResult) {
+
+                _.forEach(groupFindResult, function (group) {
+
+                    var groupId = group._id.toString();
+
+                    socket.join('2-' + groupId);
+
                 });
-                
-            },
-            function(result,done){
-                
-                // join to groups
-                var model = GroupModel.get();
-                
-                model.find({
-                    users:result.user._id.toString()
-                },function(err,groupFindResult){
-                    
-                    _.forEach(groupFindResult,function(group){
-                        
-                        var groupId = group._id.toString();
 
-                        socket.join('2-' + groupId);
-                         
-                    });
-                    
-                    done(null,result);
-                    
+                done(null, result);
+
+            });
+
+
+
+        },
+        function (result, done) {
+
+            // join to rooms
+            var model = RoomModel.get();
+            model.find({
+                users: result.user._id.toString()
+            }, function (err, groupFindResult) {
+
+                _.forEach(groupFindResult, function (group) {
+
+                    var roomId = group._id.toString();
+
+                    socket.join('3-' + roomId);
+
                 });
-                
-                
-                
-            },
-            function(result,done){
-                
-                // join to rooms
-                var model = RoomModel.get();
-                model.find({
-                    users:result.user._id.toString()
-                },function(err,groupFindResult){
-                    
-                    _.forEach(groupFindResult,function(group){
 
-                        var roomId = group._id.toString();
+                done(null, result);
 
-                        socket.join('3-' + roomId);
-                         
-                    });
-                    
-                    done(null,result);
-                    
-                });
-                
-                
-                
-            },
-            function(result,done){
-                
-                self.handleCalling(socket,result.user.id);
-                done(null,result)
+            });
 
-            }
+
+
+        },
+        function (result, done) {
+
+            self.handleCalling(socket, result.user.id);
+            done(null, result)
+
+        }
         ],
-        function(err,result){
+            function (err, result) {
 
-			SocketConnectionHandler.newSocketConnection(
-				result.user,
-				param.processId,
-				socket.id,
-                function(){
-                    socket.emit('logined',result); 
-                });
+                SocketConnectionHandler.newSocketConnection(
+                    result.user,
+                    param.processId,
+                    socket.id,
+                    function () {
+                        socket.emit('logined', result);
+                    });
 
-        });
-          
+            });
+
     });
 
 }
 
-LoginActionHandler.prototype.handleCalling = function(socket,userId){
+LoginActionHandler.prototype.handleCalling = function (socket, userId) {
 
-        // check call requeste is exists
+    // check call requeste is exists
 
-        async.waterfall([function(done){
+    async.waterfall([function (done) {
 
-            var result = {};
+        var result = {};
 
-            DatabaseManager.redisClient.keys(Const.redisCallQueue + "_" + userId + "_*" ,function(err,keys){
+        DatabaseManager.redisClient.keys(Const.redisCallQueue + "_" + userId + "_*", function (err, keys) {
 
-                if(!err && keys.length > 0){
+            if (!err && keys.length > 0) {
 
-                    DatabaseManager.redisGet(keys[0],function(err,value){
+                DatabaseManager.redisGet(keys[0], function (err, value) {
 
-                        if(!err && value){
+                    if (!err && value) {
 
-                            result.callData = value;
-                            done(null,result);
+                        result.callData = value;
+                        done(null, result);
 
-                        }else{
+                    } else {
 
-                            done('no data',result);
+                        done('no data', result);
 
-                        }
-                    
-                    });
-                
-                } else {
-                    done('no data',result);
-                }
+                    }
 
-            });
+                });
 
-        }
-        ],
-        function(err,result){
+            } else {
+                done('no data', result);
+            }
 
-            if(!err){
+        });
 
-                _.debounce(function(){
+    }
+    ],
+        function (err, result) {
 
-                    SocketAPIHandler.emitToSocket(socket.id,"call_request",{
+            if (!err) {
+
+                _.debounce(function () {
+
+                    SocketAPIHandler.emitToSocket(socket.id, "call_request", {
                         user: result.callData.user,
                         mediaType: result.callData.mediaType
                     });
 
-                },1000)();
+                }, 1000)();
 
             }
 

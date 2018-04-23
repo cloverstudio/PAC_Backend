@@ -23,51 +23,51 @@ var GroupModel = require('../Models/Group');
 var HistoryModel = require('../Models/History');
 
 var NotifyUpdateMessage = {
-    
-    notify: function(obj){
+
+    notify: function (obj) {
 
         var chatType = obj.roomID.split("-")[0];
         var roomIDSplitted = obj.roomID.split("-");
-        
-        if(roomIDSplitted.length < 2)
+
+        if (roomIDSplitted.length < 2)
             return;
-       
+
         async.waterfall([
-            
-            function(done){
-                
+
+            function (done) {
+
                 var result = {};
-                
+
                 // websocket notification
-                if(chatType == Const.chatTypeGroup){
-                    
-                    SocketAPIHandler.emitToRoom(obj.roomID,'updatemessages',[obj]);
-                    
-                    done(null,{});
-                    
-                } else if(chatType == Const.chatTypeRoom) {
-                    
-                    SocketAPIHandler.emitToRoom(obj.roomID,'updatemessages',[obj]);
-                    
-                    done(null,{});
-                    
-                } else if(chatType == Const.chatTypePrivate){
-                    
+                if (chatType == Const.chatTypeGroup) {
+
+                    SocketAPIHandler.emitToRoom(obj.roomID, 'updatemessages', [obj]);
+
+                    done(null, {});
+
+                } else if (chatType == Const.chatTypeRoom) {
+
+                    SocketAPIHandler.emitToRoom(obj.roomID, 'updatemessages', [obj]);
+
+                    done(null, {});
+
+                } else if (chatType == Const.chatTypePrivate) {
+
                     var splitAry = obj.roomID.split("-");
-                    
-                    if(splitAry.length < 2)
+
+                    if (splitAry.length < 2)
                         return;
-                    
+
                     var user1 = splitAry[1];
                     var user2 = splitAry[2];
-                    
+
                     var toUser = null;
                     var fromUser = null;
 
-                    if(user1 == obj.userID){
+                    if (user1 == obj.userID) {
                         toUser = user2;
                         fromUser = user1;
-                    }else{
+                    } else {
                         toUser = user1;
                         fromUser = user2;
                     }
@@ -79,76 +79,78 @@ var NotifyUpdateMessage = {
                     var userModel = UserModel.get();
 
                     userModel.find({
-                        _id:result.toUserId
-                    },function(err,findUserResult){
-                        
+                        _id: result.toUserId
+                    }, function (err, findUserResult) {
+
                         result.users = findUserResult;
 
-                        if(!findUserResult)
+                        if (!findUserResult)
                             return;
 
                         var toUserObj = result.users[0].toObject();
 
-                        if(result.sender && _.isArray(toUserObj.muted)){
-                            
-                            if(toUserObj.muted.indexOf(result.sender._id.toString()) != -1)
+                        if (result.sender && _.isArray(toUserObj.muted)) {
+
+                            if (toUserObj.muted.indexOf(result.sender._id.toString()) != -1)
                                 sendNotification = false;
 
                         }
 
+                        // change
+
                         // send to my self
-                        DatabaseManager.redisGet(Const.redisKeyUserId + fromUser,function(err,redisResult){
-                            
-                            var socketIds = _.pluck(redisResult,"socketId");
-                            
-                            if(!_.isArray(redisResult))
+                        DatabaseManager.redisGet(Const.redisKeyUserId + fromUser, function (err, redisResult) {
+
+                            var socketIds = _.pluck(redisResult, "socketId");
+
+                            if (!_.isArray(redisResult))
                                 return;
-                            
-                            _.forEach(redisResult,function(socketIdObj){
-                                SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',[obj]);
+
+                            _.forEach(redisResult, function (socketIdObj) {
+                                SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'updatemessages', [obj]);
                             })
-                            
+
                         });
 
-                        if(sendNotification) {
+                        if (sendNotification) {
 
                             // send to user who got message
-                            DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
-                                
-                                var socketIds = _.pluck(redisResult,"socketId");
-                                
-                                if(!_.isArray(redisResult))
+                            DatabaseManager.redisGet(Const.redisKeyUserId + toUser, function (err, redisResult) {
+
+                                var socketIds = _.pluck(redisResult, "socketId");
+
+                                if (!_.isArray(redisResult))
                                     return;
-                                
-                                _.forEach(redisResult,function(socketIdObj){
-                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',[obj]);
+
+                                _.forEach(redisResult, function (socketIdObj) {
+                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'updatemessages', [obj]);
                                 })
 
                             });
 
                         }
-                        
-                        done(null,result);
-                        
+
+                        done(null, result);
+
                     });
 
                 }
 
             },
-            
+
         ],
-            
-        function(err,result){
 
-            if(err)
-                return;
-                
+            function (err, result) {
 
-        });
+                if (err)
+                    return;
 
-        
+
+            });
+
+
     }
-    
+
 };
 
 

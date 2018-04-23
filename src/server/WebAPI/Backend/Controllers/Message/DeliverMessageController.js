@@ -173,33 +173,9 @@ DeliverMessageController.prototype.init = function (app) {
                     fromUser = user2;
                 }
 
-                // send to myself
-                DatabaseManager.redisGet(Const.redisKeyUserId + fromUser, function (err, redisResult) {
+                SocketAPIHandler.emitToRoom(toUser, 'updatemessages', [message]);
+                SocketAPIHandler.emitToRoom(fromUser, 'updatemessages', [message]);
 
-                    var socketIds = _.pluck(redisResult, "socketId");
-
-                    if (!_.isArray(redisResult))
-                        return;
-
-                    _.forEach(redisResult, function (socketIdObj) {
-                        SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'updatemessages', [message]);
-                    })
-
-                });
-
-                // send to user who got message
-                DatabaseManager.redisGet(Const.redisKeyUserId + toUser, function (err, redisResult) {
-
-                    var socketIds = _.pluck(redisResult, "socketId");
-
-                    if (!_.isArray(redisResult))
-                        return;
-
-                    _.forEach(redisResult, function (socketIdObj) {
-                        SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'updatemessages', [message]);
-                    })
-
-                });
 
             }
 

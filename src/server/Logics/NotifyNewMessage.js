@@ -230,35 +230,10 @@ var NotifyNewMessage = {
                         }
 
                         // send to my self
-                        DatabaseManager.redisGet(Const.redisKeyUserId + fromUser, function (err, redisResult) {
-
-                            var socketIds = _.pluck(redisResult, "socketId");
-
-                            if (!_.isArray(redisResult))
-                                return;
-
-                            _.forEach(redisResult, function (socketIdObj) {
-                                SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'newmessage', messageCloned);
-                            })
-
-                        });
+                        SocketAPIHandler.emitToRoom(fromUser, 'newmessage', messageCloned);
 
                         // send to user who got message
-                        DatabaseManager.redisGet(Const.redisKeyUserId + toUser, function (err, redisResult) {
-
-                            var socketIds = _.pluck(redisResult, "socketId");
-
-                            if (!_.isArray(redisResult))
-                                return;
-
-                            if (muteNotification)
-                                messageCloned.muted = 1;
-
-                            _.forEach(redisResult, function (socketIdObj) {
-                                SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'newmessage', messageCloned);
-                            })
-
-                        });
+                        SocketAPIHandler.emitToRoom(toUser, 'newmessage', messageCloned);
 
                         done(null, result);
 

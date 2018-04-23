@@ -212,19 +212,8 @@ var MessageList = {
                                 fromUser = user2;
                             }
 
-                            // send to user who got message
-                            DatabaseManager.redisGet(Const.redisKeyUserId + toUser, function (err, redisResult) {
+                            SocketAPIHandler.emitToRoom(toUser, 'updatemessages', messagesToNotify);
 
-                                var socketIds = _.pluck(redisResult, "socketId");
-
-                                if (!_.isArray(redisResult))
-                                    return;
-
-                                _.forEach(redisResult, function (socketIdObj) {
-                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'updatemessages', messagesToNotify);
-                                })
-
-                            });
 
                         }
 

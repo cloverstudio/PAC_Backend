@@ -887,7 +887,7 @@ UserController.prototype.init = function (app) {
                         function (err) {
                             done(err, result);
                         }
-                        );
+                    );
 
                 } else {
 
@@ -1759,6 +1759,8 @@ UserController.prototype.init = function (app) {
 
             },
             function (result, done) {
+
+                // change 23.4
 
                 // get socket id to send block signal
                 DatabaseManager.redisGet(Const.redisKeyUserId + result.user._id, function (err, value) {

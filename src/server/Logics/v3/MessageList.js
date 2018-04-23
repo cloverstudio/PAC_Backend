@@ -20,13 +20,13 @@ var UpdateHistory = require('../../Logics/UpdateHistory');
 var SocketAPIHandler = require('../../SocketAPI/SocketAPIHandler');
 
 var MessageList = {
-    
-    get: function(userID,roomId,params,onSuccess,onError){
+
+    get: function (userID, roomId, params, onSuccess, onError) {
 
         var messageModel = MessageModel.get();
 
-        async.waterfall([function(done){
-            
+        async.waterfall([function (done) {
+
             const conditions = {
                 roomID: roomId
             };
@@ -35,212 +35,200 @@ var MessageList = {
                 .skip(params.offset)
                 .sort(params.sort)
                 .limit(params.limit);
-                
-            query.exec(conditions,(err,messages) => {
 
-                done(err,messages);
+            query.exec(conditions, (err, messages) => {
+
+                done(err, messages);
 
             });
 
         },
-        function(messages,done){
+        function (messages, done) {
 
             // handle seen by
 
             var messagesToNotifyUpdate = [];
 
-            if(messages.length == 0){
+            if (messages.length == 0) {
 
-                done(null,{
-                    messagesToNotifyUpdate:[],
-                    messages:[]
+                done(null, {
+                    messagesToNotifyUpdate: [],
+                    messages: []
                 });
 
                 return;
             }
 
-            async.eachSeries(messages,(message,doneEach) => {
+            async.eachSeries(messages, (message, doneEach) => {
 
                 var seenBy = message.seenBy;
 
-                if(!seenBy)
+                if (!seenBy)
                     seenBy = [];
-                
-                var isExist = _.find(seenBy,(seenByRow) => {
+
+                var isExist = _.find(seenBy, (seenByRow) => {
 
                     return userID == seenByRow.user;
 
                 });
 
-                if(!isExist && message.userID != userID){
+                if (!isExist && message.userID != userID) {
 
                     // add seenby
                     seenBy.push({
-                        user:userID,
-                        at:Utils.now(),
-                        version:2
+                        user: userID,
+                        at: Utils.now(),
+                        version: 2
                     });
 
                     message.seenBy = seenBy;
                     messagesToNotifyUpdate.push(message._id.toString());
 
-                    messageModel.update({ 
-                        _id: message._id 
-                    },{ 
-                        seenBy: seenBy
-                    },(err,updateResult) => {
+                    messageModel.update({
+                        _id: message._id
+                    }, {
+                            seenBy: seenBy
+                        }, (err, updateResult) => {
 
-                        doneEach(err);
+                            doneEach(err);
 
-                    });
-                    
+                        });
+
                 } else {
 
                     doneEach();
 
                 }
 
-            },(err) => {
+            }, (err) => {
 
-                done(null,{
-                    messagesToNotifyUpdate:messagesToNotifyUpdate,
-                    messages:messages
+                done(null, {
+                    messagesToNotifyUpdate: messagesToNotifyUpdate,
+                    messages: messages
                 });
 
             });
 
         },
-        function(result,done){
+        function (result, done) {
 
             var messages = result.messages;
             var messageIdsToNotify = result.messagesToNotifyUpdate;
 
-            if(messages.length > 0){
+            if (messages.length > 0) {
 
-                MessageModel.populateMessages(messages,function (err,data) {
-                    
-                    done(null,data);
-                    
+                MessageModel.populateMessages(messages, function (err, data) {
+
+                    done(null, data);
+
                     // send notification
 
-                    var messagesToNotify = _.filter(data,(obj) => {
+                    var messagesToNotify = _.filter(data, (obj) => {
 
                         return messageIdsToNotify.indexOf(obj._id.toString()) != -1
 
                     });
 
                     // notify if exists
-                    if(messagesToNotify.length > 0){
+                    if (messagesToNotify.length > 0) {
 
                         var roomID = messagesToNotify[0].roomID;
                         var chatType = roomID.split("-")[0];
                         var roomIDSplitted = roomID.split("-");
 
                         // websocket notification
-                        if(chatType == Const.chatTypeGroup){
-                            
-                            SocketAPIHandler.emitToRoom(roomID,'updatemessages',messagesToNotify);
-                            
-                        } else if(chatType == Const.chatTypeRoom) {
-                            
-                            SocketAPIHandler.emitToRoom(roomID,'updatemessages',messagesToNotify);
+                        if (chatType == Const.chatTypeGroup) {
 
-                        } else if(chatType == Const.chatTypePrivate){
-                            
+                            SocketAPIHandler.emitToRoom(roomID, 'updatemessages', messagesToNotify);
+
+                        } else if (chatType == Const.chatTypeRoom) {
+
+                            SocketAPIHandler.emitToRoom(roomID, 'updatemessages', messagesToNotify);
+
+                        } else if (chatType == Const.chatTypePrivate) {
+
                             var splitAry = roomID.split("-");
-                            
-                            if(splitAry.length < 2)
+
+                            if (splitAry.length < 2)
                                 return;
-                            
+
                             var user1 = splitAry[1];
                             var user2 = splitAry[2];
-                            
+
                             var toUser = null;
                             var fromUser = null;
 
-                            if(user1 == userID){
+                            if (user1 == userID) {
                                 toUser = user2;
                                 fromUser = user1;
-                            }else{
+                            } else {
                                 toUser = user1;
                                 fromUser = user2;
                             }
 
-                            // send to user who got message
-                            DatabaseManager.redisGet(Const.redisKeyUserId + toUser,function(err,redisResult){
-                                
-                                var socketIds = _.pluck(redisResult,"socketId");
-                                
-                                if(!_.isArray(redisResult))
-                                    return;
-                                
-                                _.forEach(redisResult,function(socketIdObj){
-                                    SocketAPIHandler.emitToSocket(socketIdObj.socketId,'updatemessages',messagesToNotify);
-                                })
-
-                            });
+                            SocketAPIHandler.emitToRoom(toUser, 'updatemessages', messagesToNotify);
 
                         }
-                        
+
                     };
 
                 });
 
             } else {
 
-                done(null,messages);
+                done(null, messages);
             }
 
 
         },
-        function(messages,done){
-            
+        function (messages, done) {
+
             // add favorite
 
             var favoriteModel = FavoriteModel.get();
-            
+
             favoriteModel.find({
-                userId:userID
-            },function(err,favoriteFindResult){
-                
-                var messageIds = _.map(favoriteFindResult,function(favorite){
-                    
+                userId: userID
+            }, function (err, favoriteFindResult) {
+
+                var messageIds = _.map(favoriteFindResult, function (favorite) {
+
                     return favorite.messageId;
-                        
+
                 });
-                
-                var messagesFav = _.map(messages,function(message){
-                    
+
+                var messagesFav = _.map(messages, function (message) {
+
                     var isFavorite = 0;
-                    
-                    if(messageIds.indexOf(message._id.toString()) != -1)
+
+                    if (messageIds.indexOf(message._id.toString()) != -1)
                         isFavorite = 1;
-                    
+
                     message.isFavorite = isFavorite;
-                    
+
                     return message;
-                        
+
                 });
-                
-                done(null,messagesFav);
-                
+
+                done(null, messagesFav);
+
             });
-            
-        },function(result,done){
-            
+
+        }, function (result, done) {
+
             // update history
             UpdateHistory.resetUnreadCount({
-                roomID:roomId,
-                userID:userID
+                roomID: roomId,
+                userID: userID
             });
 
-            done(null,result);
-            
-        },function(result,done){
-            
+            done(null, result);
+
+        }, function (result, done) {
+
             // formate message json for API v3
 
-            result = result.map( (message) => {
+            result = result.map((message) => {
 
                 return {
                     id: message._id,
@@ -248,31 +236,31 @@ var MessageList = {
                     roomID: message.roomID,
                     type: message.type,
                     message: message.message,
-                    created:message.created,
+                    created: message.created,
                     user: message.user,
                     seenBy: message.seenBy,
                     isFavorite: message.isFavorite
                 }
 
             });
-        
-            done(null,result);
-            
+
+            done(null, result);
+
         }
         ],
-        function(err,result){
-            
-            if(err){
-                onError(err);
-                return;
-            }
-            
-            onSuccess(result);
-            
-        });
-        
+            function (err, result) {
+
+                if (err) {
+                    onError(err);
+                    return;
+                }
+
+                onSuccess(result);
+
+            });
+
     }
-    
+
 };
 
 

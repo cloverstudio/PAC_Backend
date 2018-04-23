@@ -103,27 +103,14 @@ SendTypingActionHandler.prototype.attach = function (io, socket) {
                         fromUser = user2;
                     }
 
-                    // send to user who got message
-                    DatabaseManager.redisGet(Const.redisKeyUserId + toUser, function (err, redisResult) {
+                    UserModel.getUserById(toUser, (findResult) => {
 
-                        var socketIds = _.pluck(redisResult, "socketId");
+                        var user = findResult || {};
 
-                        if (!_.isArray(redisResult))
-                            return;
+                        if (_.indexOf(user.blocked, fromUser) != -1)
+                            return done("user is blocked");
 
-                        UserModel.getUserById(toUser, (findResult) => {
-
-                            var user = findResult || {};
-
-                            if (_.indexOf(user.blocked, fromUser) != -1)
-                                return done("user is blocked");
-
-                            _.forEach(redisResult, function (socketIdObj) {
-                                SocketAPIHandler.emitToSocket(socketIdObj.socketId, 'typing', param);
-                            })
-
-                            done(null, result);
-                        });
+                        SocketAPIHandler.emitToRoom(toUser, 'typing', param);
 
                     });
 
