@@ -446,11 +446,12 @@ var NotifyNewMessage = {
                     });
 
                     _.forEach(row.webPushSubscription, function (subscription) {
+
                         tokenAndBadgeCount.push({
                             badge: badgeCount,
                             token: subscription,
                             isMuted: isMuted
-                        })
+                        });
 
                     });
 

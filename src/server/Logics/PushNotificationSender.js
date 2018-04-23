@@ -114,10 +114,16 @@ PushNotificationSender = {
                         production: true
                     };
 
-                    if (Config.apnsCertificates.push.token)
-                        options.token = Config.apnsCertificates.push.token;
-                    else
+                    if (!Config.apnsCertificates.push ||
+                        !Config.apnsCertificates.push.token ||
+                        !Config.apnsCertificates.push.token.key ||
+                        !Config.apnsCertificates.push.token.keyId ||
+                        !Config.apnsCertificates.push.token.teamId ||
+                        !Config.apnsCertificates.push.appbundleid)
+
                         return donePushOne(null);
+
+                    options.token = Config.apnsCertificates.push.token;
 
                     var apnProvider = new apn.Provider(options);
                     var note = new apn.Notification();
