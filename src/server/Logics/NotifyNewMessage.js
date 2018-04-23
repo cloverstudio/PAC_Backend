@@ -435,26 +435,24 @@ var NotifyNewMessage = {
 
                     }
 
-                    if (!isMuted) {
+                    _.forEach(row.pushToken, function (token) {
 
-                        _.forEach(row.pushToken, function (token) {
-
-                            tokenAndBadgeCount.push({
-                                badge: badgeCount,
-                                token: token
-                            });
-
+                        tokenAndBadgeCount.push({
+                            badge: badgeCount,
+                            token: token,
+                            isMuted: isMuted
                         });
 
-                        _.forEach(row.webPushSubscription, function (subscription) {
-                            tokenAndBadgeCount.push({
-                                badge: badgeCount,
-                                token: subscription
-                            })
+                    });
 
-                        });
+                    _.forEach(row.webPushSubscription, function (subscription) {
+                        tokenAndBadgeCount.push({
+                            badge: badgeCount,
+                            token: subscription,
+                            isMuted: isMuted
+                        })
 
-                    }
+                    });
 
                 });
 

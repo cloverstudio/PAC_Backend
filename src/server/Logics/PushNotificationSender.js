@@ -92,6 +92,8 @@ PushNotificationSender = {
             var pushToken = tokenAndBadge.token;
             var unreadCount = tokenAndBadge.badge;
 
+            payload.mute = tokenAndBadge.isMuted;
+
             async.parallel([
 
                 function (donePushOne) {
@@ -225,7 +227,8 @@ PushNotificationSender = {
                         message: payload.message,
                         fromuser: payload.from,
                         pushType: payload.pushType,
-                        unreadCount: unreadCount
+                        unreadCount: unreadCount,
+                        mute: payload.mute
                     };
 
                     if (payload.file) {
