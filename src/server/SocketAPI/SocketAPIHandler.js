@@ -63,19 +63,7 @@ var SocketAPIHandler = {
     emitToUser: function (userId, command, param) {
         var self = this;
 
-        DatabaseManager.redisGet(Const.redisKeyUserId + userId, function (
-            err,
-            value
-        ) {
-            if (!value) return;
-
-            value.forEach(socket => {
-                var socketId = socket.socketId;
-                var socket = SocketAPIHandler.nsp.sockets[socketId];
-
-                self.nsp.to(socketId).emit(command, param);
-            });
-        });
+        this.emitToRoom(userId, command, param);
 
         //this.nsp.to(socketId).emit(command,param);
     },
