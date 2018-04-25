@@ -100,6 +100,8 @@ export const ChatStartFileUpload = "Chat/StartFileUpload";
 export const ChatFileUploadSucceed = "Chat/FileUploadSucceed";
 export const ChatFileUploadFailed = "Chat/FileUploadFailed";
 export const ChatFileUploadProgress = "Chat/FileUploadProgress";
+export const ChatFileUploadAbortSuccess = "Chat/FileUploadAbortSuccess";
+export const ChatFileUploadAbortFailed = "Chat/FileUploadAbortFailed";
 
 // Info
 export const InfoViewLoadDone = "InfoView/LoadDone";

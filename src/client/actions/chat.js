@@ -18,6 +18,8 @@ import * as utils from "../lib/utils";
 import * as constant from "../lib/const";
 import Encryption from "../lib/encryption/encryption";
 
+import FileUploadManager from "../lib/api/upload";
+
 import { store } from "../index";
 
 export function changeCurrentChat(chatId) {
@@ -404,7 +406,6 @@ export function startFileUpload(file) {
     return (dispatch, getState) => {
         const localFileId = utils.getRandomString();
         const originChatId = getState().chat.chatId;
-        const fileUpload = fileUploadWrapper(localFileId, originChatId);
 
         dispatch({
             type: types.ChatStartFileUpload,
@@ -415,9 +416,13 @@ export function startFileUpload(file) {
             userID: user.userData._id
         });
 
-        fileUpload(file, function (progress, localFileId, originChatId) {
-            dispatch(fileUploadProgress(progress, localFileId, originChatId));
-        })
+        FileUploadManager.uploadFile(
+            localFileId,
+            originChatId,
+            file,
+            (progress, localFileId, originChatId) => {
+                dispatch(fileUploadProgress(progress, localFileId, originChatId))
+            })
             .then(data => {
                 dispatch(fileUploadSucceed(localFileId, originChatId));
 
@@ -439,10 +444,37 @@ export function startFileUpload(file) {
                 }
             })
             .catch(err => {
-                //todo: handle err
-                console.log(err);
+                err.message === 'UPLOAD_ABORTED'
+                    ? console.log('aborted')
+                    : console.error(err);
             });
+
     };
+}
+
+export function abortFileUpload(localID) {
+
+    return (dispatch, getState) => {
+
+        const state = getState();
+        const currentChat = state.chat.chatId;
+
+        FileUploadManager.abortUpload(localID, currentChat)
+            .then(success => {
+                dispatch({
+                    type: types.ChatFileUploadAbortSuccess,
+                    localID,
+                    chatID: currentChat
+                })
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch({
+                    type: types.ChatFileUploadAbortFailed
+                })
+            })
+
+    }
 }
 
 export function forwardMessage(roomId) {

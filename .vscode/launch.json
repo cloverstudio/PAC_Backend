@@ -3,6 +3,13 @@
 	"configurations": [
         {
             "type": "chrome",
+            "request": "launch",
+            "name": "Client Launch chrome",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "chrome",
             "request": "attach",
             "name": "Attach to Chrome",
             "port": 3000,
@@ -33,5 +40,11 @@
 			"request": "attach",
 			"port": 5858
 		}
-	]
+    ],
+    "compounds": [
+        {
+            "name": "Client & Server",
+            "configurations": ["Client Launch chrome", "Launch"]
+        }
+    ]
 }

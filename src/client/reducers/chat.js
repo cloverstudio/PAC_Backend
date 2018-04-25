@@ -250,6 +250,11 @@ const messageList = (state = initial.messageList, action) => {
         }
     }
 
+    if (action.type === types.ChatFileUploadAbortSuccess) {
+        newState = oldState.filter(msg => msg.localID !== action.localID);
+
+    }
+
     if (action.type == types.ChatClearChat) return initial.messageList;
 
     if (action.type === types.MessageInfoDeleteMessage) {
