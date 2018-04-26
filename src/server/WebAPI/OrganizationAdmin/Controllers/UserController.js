@@ -887,7 +887,7 @@ UserController.prototype.init = function (app) {
                         function (err) {
                             done(err, result);
                         }
-                        );
+                    );
 
                 } else {
 
@@ -1760,28 +1760,11 @@ UserController.prototype.init = function (app) {
             },
             function (result, done) {
 
-                // get socket id to send block signal
-                DatabaseManager.redisGet(Const.redisKeyUserId + result.user._id, function (err, value) {
-
-                    result.socketIds = value;
-
-                    done(null, result)
-
+                SocketAPIHandler.emitToRoom(result.user._id, 'device_blocked', {
+                    UUID: UUID
                 });
 
-            },
-            function (result, done) {
-
-                _.forEach(result.socketIds, function (socketInfo) {
-
-                    // send block signal
-                    SocketAPIHandler.emitToSocket(socketInfo.socketId, "device_blocked", {
-                        UUID: UUID
-                    });
-
-                });
-
-                done(null, result)
+                done(null, result);
 
             }
 

@@ -197,6 +197,20 @@
                         }
                         .upload-progress{
                             width:200px;
+                            display:flex;
+                            align-items:center;
+
+                            .upload-abort{
+                                color: #f96868;
+                                font-size: 30px;
+                                cursor: pointer;
+                                
+                            }
+
+                            .progress{
+                                flex:1;
+                                margin: 0 0 0 10px;
+                            }
                         }
 
                         .sticker-message{

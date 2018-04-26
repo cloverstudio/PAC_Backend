@@ -3,87 +3,87 @@ import * as config from '../config';
 import * as constant from '../const';
 import user from '../user';
 
-export function fileUploadWrapper(fileId, chatId){
-    
-    const wrapped = function(file, progressCB){
-        
-        return new Promise(function(resolve, reject){
-    
-            const req = new XMLHttpRequest();
-            
-            req.open('POST', config.APIEndpoint + constant.ApiUrlFileUpload)        
-    
-            if(user.token){
-                req.setRequestHeader('access-token', user.token);
-            }
-        
-            req.upload.addEventListener('progress', function(e){
-                const progress = Math.floor(e.loaded / e.total * 100);
-                progressCB(progress, fileId, chatId);
-            })
-    
-            req.addEventListener('load', e => {
-                if (e.target.status === 200){
-                    resolve(JSON.parse(e.target.responseText).data);
-                }
-                else{
-                    //todo: handle error
-                    reject(e.target.status);
-                }
-            });
-    
-            req.addEventListener('error', e => {
-                //todo: handle error
-                reject(e.target.status);
-            })
-            
-            req.send(file);
-        });
-        
+class FileUploadManager {
+
+    constructor() {
+        this.chats = {};
+        this.abortErr = new Error('UPLOAD_ABORTED');
+        this.failErr = new Error('UPLOAD_FAILED');
     }
 
-    return wrapped;
+    uploadFile(fileID, chatID, file, progressCB) {
+        if (typeof this.chats[chatID] === 'undefined') {
+            this.chats[chatID] = {};
+        }
+
+        const req = new XMLHttpRequest();
+
+        let resolve;
+        let reject;
+        let uploadPromise = new Promise((res, rej) => {
+            resolve = res;
+            reject = rej;
+        });
+
+
+        req.open('POST', config.APIEndpoint + constant.ApiUrlFileUpload)
+        if (user.token) {
+            req.setRequestHeader('access-token', user.token);
+        }
+
+        req.upload.addEventListener('progress', function (e) {
+            const progress = Math.floor(e.loaded / e.total * 100);
+            progressCB(progress, fileID, chatID);
+        });
+
+        req.addEventListener('load', e => {
+            if (e.target.status === 200) {
+                resolve(JSON.parse(e.target.responseText).data);
+            }
+            else {
+                reject(this.failErr);
+            }
+        });
+
+        req.addEventListener('error', e => {
+            reject(this.failErr);
+        });
+
+        const abortPromiseFn = () => {
+
+            return new Promise((res, rej) => {
+                req.abort();
+
+                if (req.status === 0) {
+                    reject(this.abortErr);
+                    res('Upload canceled');
+                }
+                else {
+                    rej(this.abortErr);
+                }
+            })
+        }
+
+        this.chats[chatID][fileID] = {
+            uploadPromise,
+            abortPromiseFn
+        }
+
+        req.send(file);
+
+        return uploadPromise;
+
+    }
+
+    abortUpload(fileID, chatID) {
+        return new Promise((resolve, reject) => {
+            this.chats[chatID][fileID].abortPromiseFn()
+                .then(success => resolve(success))
+                .catch(err => reject(err))
+        })
+
+    }
 
 }
 
-// class fileUpload{
-//     constructor(fileId, chatId){
-//         this.fileId = fileId;
-//         this.chatId = chatId;
-//     }
-
-//     upload(file, progressCB){
-//         return new Promise((resolve, reject)=>{
-//             const req = new XMLHttpRequest();
-
-//             req.open('POST', config.APIEndpoint + constant.ApiUrlFileUpload)        
-            
-//             if(user.token){
-//                 req.setRequestHeader('access-token', user.token);
-//             }
-        
-//             req.upload.addEventListener('progress', function(e){
-//                 const progress = Math.floor(e.loaded / e.total * 100);
-//                 progressCB(progress, fileId, chatId);
-//             })
-    
-//             req.addEventListener('load', e => {
-//                 if (e.target.status === 200){
-//                     resolve(JSON.parse(e.target.responseText).data);
-//                 }
-//                 else{
-//                     //todo: handle error
-//                     reject(e.target.status);
-//                 }
-//             });
-    
-//             req.addEventListener('error', e => {
-//                 //todo: handle error
-//                 reject(e.target.status);
-//             })
-            
-//             req.send(file);
-//         });
-//     }
-// }
-//export fileUpload
+export default new FileUploadManager();

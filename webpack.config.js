@@ -9,7 +9,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var swPlugin = require("serviceworker-webpack-plugin")
 
 module.exports = {
-    devtool: "eval-source-map",
+    devtool: "source-map",
     entry: [
         "babel-polyfill",
         "webpack-dev-server/client?http://localhost:3000/",

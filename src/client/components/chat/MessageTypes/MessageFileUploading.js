@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import * as actions from '../../../actions';
+
 class MessageText extends Component {
 
     static propTypes = {
     }
-    constructor(){
+    constructor() {
         super();
     }
 
@@ -15,30 +17,33 @@ class MessageText extends Component {
         const message = this.props.message;
         let messageContent;
         const messageClass = 'upload-progress';
-        
+
         let fileProgress;
 
-        if (typeof this.props.fileProgress[this.props.currentChatId][message.localID] !== 'undefined'){
+        if (typeof this.props.fileProgress[this.props.currentChatId][message.localID] !== 'undefined') {
             fileProgress = this.props.fileProgress[this.props.currentChatId][message.localID].progress;
         }
-        else{
+        else {
             fileProgress = 100;
         }
 
         let progressBarStyle = {
-            width: fileProgress+'%',
-            height:'16px'
+            width: fileProgress + '%',
+            height: '16px'
         };
 
-        return(
-            <p className={messageClass}>
-                <span className="progress">
-                    {typeof fileProgress != 'undefined' ? 
-                        <span className="progress-bar" role="progressbar" style={progressBarStyle}>
+        return (
+            <div className={messageClass}>
+                <div className="upload-abort" onClick={() => this.props.abortFileUpload(message.localID)}>
+                    <i className="fa fa-ban"></i>
+                </div>
+                <div className="progress">
+                    {typeof fileProgress != 'undefined' ?
+                        <div className="progress-bar" role="progressbar" style={progressBarStyle}>
                             <strong>{fileProgress}%</strong>
-                        </span> : null}
-                </span>
-            </p>
+                        </div> : null}
+                </div>
+            </div>
         );
     }
 
@@ -46,13 +51,14 @@ class MessageText extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        currentChatId:state.chat.chatId,
-        fileProgress: state.files       
+        currentChatId: state.chat.chatId,
+        fileProgress: state.files
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {  
+    return {
+        abortFileUpload: localID => dispatch(actions.chat.abortFileUpload(localID))
     };
 };
 
