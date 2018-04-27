@@ -112,6 +112,7 @@ export const InfoViewLeaveRoomConfirm = "InfoView/LeaveRoomConfirm";
 export const InfoViewLeaveRoomStart = "InfoView/LeaveRoomStart";
 export const InfoViewLeaveRoomSucceed = "InfoView/LeaveRoomSucceed";
 export const InfoViewLeaveRoomFailed = "InfoView/LeaveRoomFailed";
+export const InfoViewTogglePinState = "InfoView/TogglePinState";
 
 // Stickers
 export const StickersLoadStart = "Stickers/LoadStart";

@@ -44,61 +44,72 @@ const historyLoading = (state = false, action) => {
 };
 
 const historyList = (state = [], action) => {
-    switch (action.type) {
-        case types.HistoryLoadInitialSucceed:
 
-            let oldState = state;
-            let currentChatId = action.currentChatId;
+    if (action.type == types.HistoryLoadInitialSucceed) {
+        let oldState = state;
+        let currentChatId = action.currentChatId;
 
-            return action.data.list.map(historyObj => {
+        let newHistoryList = action.data.list.map(historyObj => {
 
-                if (historyObj.unreadCount > 0) {
-                    let historyObjChatId;
+            if (historyObj.unreadCount > 0) {
+                let historyObjChatId = utils.getChatIdByHistory(historyObj);
 
-                    switch (historyObj.chatType) {
-                        case constants.ChatTypePrivate:
-                            historyObjChatId = utils.chatIdByUser(historyObj.user);
-                            break;
-                        case constants.ChatTypeGroup:
-                            historyObjChatId = utils.chatIdByGroup(historyObj.group);
-                            break;
-                        case constants.ChatTypeRoom:
-                            historyObjChatId = utils.chatIdByUser(historyObj.room);
-                            break;
-                    }
+                if (currentChatId === historyObjChatId) {
+                    historyObj.unreadCount = 0;
+                    return historyObj;
+                }
 
-                    if (currentChatId === historyObjChatId) {
+                let oldStateMatchObj = oldState.find(oldHistoryObj => oldHistoryObj.chatId === historyObj.chatId);
+
+                if (oldStateMatchObj) {
+                    if (oldStateMatchObj.unreadCount === 0
+                        && oldStateMatchObj.lastMessage.messageId === historyObj.lastMessage.messageId) {
                         historyObj.unreadCount = 0;
-                        return historyObj;
                     }
-
-                    let oldStateMatchObj = oldState.find(oldHistoryObj => oldHistoryObj.chatId === historyObj.chatId);
-
-                    if (oldStateMatchObj) {
-                        if (oldStateMatchObj.unreadCount === 0
-                            && oldStateMatchObj.lastMessage.messageId === historyObj.lastMessage.messageId) {
-                            historyObj.unreadCount = 0;
-                        }
-                    }
-
-                    return historyObj;
-
-                }
-                else {
-                    return historyObj;
                 }
 
-            });
+                return historyObj;
 
-        case types.HistoryLoadSucceed:
-            return state.concat(action.data.list);
-        case types.HistorySearchSucceed:
-            return action.data.list;
-        case types.Logout:
-            return [];
+            }
+            else {
+                return historyObj;
+            }
+
+        });
+
+        let sortedByLastUpdate = utils.stableSort(newHistoryList, utils.sortHistoryByLastUpdate)
+        let sortedByPin = utils.stableSort(sortedByLastUpdate, utils.sortHistoryByPin);
+        return sortedByPin;
     }
 
-    // update unread count
+    if (action.type == types.HistoryLoadSucceed) {
+        return state.concat(action.data.list);
+    }
+
+    if (action.type == types.HistorySearchSucceed) {
+        return action.data.list;
+    }
+
+    if (action.type == types.InfoViewTogglePinState) {
+        let newHistoryList = state.map(historyObj => {
+
+            if (historyObj.chatId === action.targetId) {
+                historyObj.pinned = action.newState;
+            }
+
+            return historyObj;
+
+        });
+
+        let sortedByLastUpdate = utils.stableSort(newHistoryList, utils.sortHistoryByLastUpdate)
+        let sortedByPin = utils.stableSort(sortedByLastUpdate, utils.sortHistoryByPin);
+        return sortedByPin;
+    }
+
+    if (action.type == types.Logout) {
+        return [];
+    }
+
     if (action.type == types.ChatReceiveMessage) {
 
         const newMessage = action.message;
@@ -132,13 +143,10 @@ const historyList = (state = [], action) => {
 
         });
 
-        if (isExists) {
-            return newHistoryList.sort((obj1, obj2) => {
-                return -1 * (obj1.lastUpdate - obj2.lastUpdate);
-            });
-        } else {
 
-        }
+        let sortedByLastUpdate = utils.stableSort(newHistoryList, utils.sortHistoryByLastUpdate)
+        let sortedByPin = utils.stableSort(sortedByLastUpdate, utils.sortHistoryByPin);
+        return sortedByPin;
 
     }
 
@@ -188,12 +196,30 @@ const historyList = (state = [], action) => {
 
     }
 
-
     return state;
+}
+
+const pinnedChatIDs = (state = [], action) => {
+    switch (action.type) {
+        case types.InfoViewTogglePinState:
+
+            return action.newState
+                ? state.concat(action.targetId)
+                : state.filter(pinnedId => pinnedId !== action.targetId);
+
+        case types.HistoryLoadInitialSucceed:
+
+            return action.data.list.filter(historyObj => historyObj.pinned)
+                .map(pinnedHistory => pinnedHistory.chatId)
+
+        default:
+            return state;
+    }
 }
 
 export default combineReducers({
     historyLoading,
     historyList,
-    keyword
-});;
+    keyword,
+    pinnedChatIDs
+});

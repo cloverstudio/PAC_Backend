@@ -144,7 +144,9 @@ class UserInfo extends Component {
             if (lastToken)
                 lastlogin = lastToken.generateAt;
         }
-        
+
+        let isPinned = this.props.pinnedChatIDs.includes(this.props.user._id);
+
         return (
 
             <div>
@@ -208,6 +210,21 @@ class UserInfo extends Component {
                             </label>
                         </div>
 
+                        <div className="media">
+                            <div className="media-body">
+                                <p><strong>{strings.InfoViewUserDetailPin[user.lang]}</strong></p>
+                                {isPinned ?
+                                    <p>{strings.InfoViewTextPinnedExplanation[user.lang]}</p> : null
+                                }
+                            </div>
+                            <label className="switch switch-lg">
+                                <input type="checkbox"
+                                    checked={isPinned}
+                                    onClick={() => this.props.togglePin(!isPinned)} />
+                                <span className="switch-indicator"></span>
+                            </label>
+                        </div>
+
                     </div>
 
                     <div className={cnTabContentDetail}>
@@ -250,7 +267,8 @@ const mapStateToProps = (state) => {
         chatId: state.chat.chatId,
         timestampByChat: state.chat.timestampByChat,
         blocked: state.infoView.blocked,
-        muted: state.infoView.muted
+        muted: state.infoView.muted,
+        pinnedChatIDs: state.history.pinnedChatIDs
     };
 };
 
@@ -264,6 +282,7 @@ const mapDispatchToProps = (dispatch) => {
         updateMuteState: (state) => dispatch(actions.infoView.updateMuteState(state, constant.ChatTypePrivate)),
         updateBlockState: (state) => dispatch(actions.infoView.updateBlockState(state)),
         makeOutgoingCall: (callObj) => dispatch(actions.call.outgoingCall(callObj)),
+        togglePin: newState => dispatch(actions.infoView.togglePin(newState))
     };
 };
 

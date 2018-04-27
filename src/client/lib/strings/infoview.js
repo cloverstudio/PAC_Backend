@@ -17,6 +17,10 @@ export const InfoViewUserDetailNotification = {
     EN: "Mute"
 }
 
+export const InfoViewUserDetailPin = {
+    EN: "Pin"
+}
+
 export const InfoViewUserDetailName = {
     EN: "Name"
 }
@@ -49,12 +53,20 @@ export const InfoViewTextBlockedExplanation = {
     EN: "This user is blocked."
 }
 
+export const InfoViewTextPinnedExplanation = {
+    EN: "This chat is pinned."
+}
+
 export const InfoViewFailedToMute = {
     EN: "Failed to mute."
 }
 
 export const InfoViewFailedToBlock = {
     EN: "Failed to block."
+}
+
+export const InfoViewFailedToPin = {
+    EN: "Failed to pin."
 }
 
 export const InfoViewCreated = {

@@ -5,20 +5,20 @@ import * as constant from '../lib/const';
 import * as types from '../actions/types';
 
 const initial = {
-    user:{
-        name:"",
+    user: {
+        name: "",
         description: "",
-        token:[]
+        token: []
     },
-    group:{
-        name:"",
+    group: {
+        name: "",
         description: "",
-        created:0
+        created: 0
     },
-    room:{
-        name:"",
+    room: {
+        name: "",
         description: "",
-        created:0
+        created: 0
     },
     isLoading: false,
     blocked: false,
@@ -26,7 +26,7 @@ const initial = {
     members: []
 }
 
-const user = ( state = initial.user, action ) => {
+const user = (state = initial.user, action) => {
 
     switch (action.type) {
         case types.ChatOpenByUser:
@@ -41,24 +41,24 @@ const user = ( state = initial.user, action ) => {
 
 }
 
-const group = ( state = initial.group, action ) => {
-    
-        switch (action.type) {
-            case types.ChatOpenByUser:
-                return initial.user;
-            case types.ChatOpenByGroup:
-                return action.group;
-            case types.ChatOpenByRoom:
-                return initial.room;
+const group = (state = initial.group, action) => {
 
-            default:
-                return state;
-        }
-    
+    switch (action.type) {
+        case types.ChatOpenByUser:
+            return initial.user;
+        case types.ChatOpenByGroup:
+            return action.group;
+        case types.ChatOpenByRoom:
+            return initial.room;
+
+        default:
+            return state;
     }
 
-const room = ( state = initial.room, action ) => {
-    
+}
+
+const room = (state = initial.room, action) => {
+
     switch (action.type) {
         case types.ChatOpenByUser:
             return initial.user;
@@ -74,11 +74,11 @@ const room = ( state = initial.room, action ) => {
 }
 
 const isLoading = (state = initial.isLoading, action) => {
-    
+
     switch (action.type) {
         case types.ChatOpenByUser:
             return true;
-         case types.ChatOpenByGroup:
+        case types.ChatOpenByGroup:
             return true;
         case types.ChatOpenByRoom:
             return true;
@@ -97,7 +97,7 @@ const isLoading = (state = initial.isLoading, action) => {
 
 
 const blocked = (state = initial.blocked, action) => {
-    
+
     switch (action.type) {
         case types.InfoViewLoadBlockState:
             return action.state;
@@ -107,7 +107,7 @@ const blocked = (state = initial.blocked, action) => {
 }
 
 const muted = (state = initial.muted, action) => {
-    
+
     switch (action.type) {
         case types.InfoViewLoadMuteState:
             return action.state;
@@ -117,7 +117,7 @@ const muted = (state = initial.muted, action) => {
 }
 
 const members = (state = initial.members, action) => {
-    
+
     switch (action.type) {
         case types.InfoViewLoadMembersSuccess:
             return action.members;
@@ -127,7 +127,7 @@ const members = (state = initial.members, action) => {
 }
 
 const confirmRoomId = (state = null, action) => {
-    
+
     switch (action.type) {
         case types.InfoViewLeaveRoomConfirm:
             return action.roomId;

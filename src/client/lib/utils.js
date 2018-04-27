@@ -126,25 +126,48 @@ function updateWindowTitle() {
 
 }
 
-export function getChatIdByHistory(history) {
+export function getChatIdByHistory(historyObject) {
 
     let chatId = "";
 
-    const userFrom = history.user;
-    const group = history.group;
-    const room = history.room;
+    const userFrom = historyObject.user;
+    const group = historyObject.group;
+    const room = historyObject.room;
 
-    if (history.chatType == constant.ChatTypePrivate) {
-        chatId = chatIdByUser(userFrom, user);
+    if (historyObject.chatType == constant.ChatTypePrivate) {
+        chatId = chatIdByUser(userFrom);
     }
-    if (history.chatType == constant.ChatTypeGroup) {
+    if (historyObject.chatType == constant.ChatTypeGroup) {
         chatId = chatIdByGroup(group);
     }
-    if (history.chatType == constant.ChatTypeRoom) {
+    if (historyObject.chatType == constant.ChatTypeRoom) {
         chatId = chatIdByRoom(room);
     }
 
     return chatId;
+}
+
+export function sortHistoryByPin(firstObj, secondObj) {
+    let firstObjPinned = firstObj.pinned || 0;
+    let secondObjPinned = secondObj.pinned || 0;
+
+    return secondObjPinned - firstObjPinned;
+}
+
+export function sortHistoryByLastUpdate(firstObj, secondObj) {
+    return secondObj.lastUpdate - firstObj.lastUpdate;
+}
+
+export function stableSort(arr, comparisonFunction) {
+    const arrCopy = [...arr];
+    const original = [...arr];
+
+    arrCopy.sort((x, y) => {
+        let result = comparisonFunction(x, y);
+        return result === 0 ? original.indexOf(x) - original.indexOf(y) : result;
+    })
+
+    return arrCopy;
 }
 
 export function urlBase64ToUint8Array(base64String) {

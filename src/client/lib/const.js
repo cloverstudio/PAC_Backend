@@ -19,6 +19,7 @@ export const ApiUrlGetStickers = "/stickers";
 export const ApiUrlCreateRoom = "/room/new";
 export const ApiUrlMute = "/user/mute";
 export const ApiUrlBlock = "/user/block";
+export const ApiUrlPin = "/user/pin";
 export const ApiUrlGetGroupUserList = "/group/users/";
 export const ApiUrlGetRoomUserList = "/room/users/";
 export const ApiUrlFile = "/file/";
