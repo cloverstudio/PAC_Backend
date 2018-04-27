@@ -52,7 +52,7 @@ PinController.prototype.init = function (app) {
                 var result = {};
 
                 // check params
-                if (!pin || pin != 0 && pin != 1)
+                if (pin == undefined || pin != 0 && pin != 1)
                     return self.successResponse(response, Const.responsecodePinChatWrongPinParam);
 
                 if (!chatId)

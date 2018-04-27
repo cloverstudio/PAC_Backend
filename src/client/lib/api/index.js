@@ -37,6 +37,8 @@ export { callMute } from "./mute";
 
 export { callBlock } from "./block";
 
+export { callPin } from "./pin";
+
 export { fileUploadWrapper } from "./upload";
 
 export {

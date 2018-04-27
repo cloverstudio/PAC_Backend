@@ -136,6 +136,8 @@ class RoomInfo extends Component {
 
         });
 
+        let isPinned = this.props.pinnedChatIDs.includes(this.props.room._id);
+
         return (
             <div>
 
@@ -220,6 +222,21 @@ class RoomInfo extends Component {
                             </div>
                             <label className="switch switch-lg">
                                 <input type="checkbox" checked={this.props.muted} onClick={this.tuggleMute} />
+                                <span className="switch-indicator"></span>
+                            </label>
+                        </div>
+
+                        <div className="media">
+                            <div className="media-body">
+                                <p><strong>{strings.InfoViewUserDetailPin[user.lang]}</strong></p>
+                                {isPinned ?
+                                    <p>{strings.InfoViewTextPinnedExplanation[user.lang]}</p> : null
+                                }
+                            </div>
+                            <label className="switch switch-lg">
+                                <input type="checkbox"
+                                    checked={isPinned}
+                                    onClick={() => this.props.togglePin(!isPinned)} />
                                 <span className="switch-indicator"></span>
                             </label>
                         </div>
@@ -319,6 +336,7 @@ const mapStateToProps = (state) => {
         members: state.infoView.members,
         confirmRoomId: state.infoView.confirmRoomId,
         chatId: state.chat.chatId,
+        pinnedChatIDs: state.history.pinnedChatIDs
     };
 };
 
@@ -337,8 +355,8 @@ const mapDispatchToProps = (dispatch) => {
         leaveRoom: roomId => dispatch(actions.infoView.leaveRoom(roomId)),
         loadChatMessages: chatId => dispatch(actions.chat.loadChatMessages(chatId)),
         changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId)),
-        initRoomEditing: data => dispatch(actions.room.initRoomEditng(data))
-
+        initRoomEditing: data => dispatch(actions.room.initRoomEditng(data)),
+        togglePin: newState => dispatch(actions.infoView.togglePin(newState))
     };
 };
 

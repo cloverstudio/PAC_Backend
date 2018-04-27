@@ -8,10 +8,12 @@ import * as utils from '../lib/utils';
 
 import {
     callGetHistory,
-    callBlock, callMute,
+    callBlock,
+    callMute,
     callGroupUserList,
     callRoomUserList,
-    callLeaveRoom
+    callLeaveRoom,
+    callPin
 } from '../lib/api/';
 
 import user from '../lib/user';
@@ -128,6 +130,53 @@ export function updateBlockState(state) {
 
     }
 
+}
+
+export function togglePin(newState) {
+    return (dispatch, getState) => {
+
+        let targetId = null;
+        const targetUser = getState().infoView.user;
+        const targetGroup = getState().infoView.group;
+        const targetRoom = getState().infoView.room;
+
+        if (targetUser._id)
+            targetId = targetUser._id;
+        if (targetGroup._id)
+            targetId = targetGroup._id;
+        if (targetRoom._id)
+            targetId = targetRoom._id;
+
+        callPin(newState, targetId)
+            .then((result) => {
+
+                if (result !== undefined) {
+
+                } else {
+                    dispatch(actions.notification.showToast(strings.InfoViewFailedToPin[user.lang]));
+                    dispatch({
+                        type: types.InfoViewTogglePinState,
+                        newState: !newState,
+                        targetId
+                    });
+                }
+
+            }).catch((err) => {
+                dispatch(actions.notification.showToast(strings.InfoViewFailedToPin[user.lang]));
+                dispatch({
+                    type: types.InfoViewTogglePinState,
+                    newState: !newState,
+                    targetId
+                });
+            });
+
+        dispatch({
+            type: types.InfoViewTogglePinState,
+            newState,
+            targetId
+        })
+
+    }
 }
 
 export function loadMembers() {

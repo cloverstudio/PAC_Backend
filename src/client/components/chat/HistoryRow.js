@@ -121,6 +121,12 @@ class HistoryRow extends Component {
 
         }
 
+        if (history.pinned) {
+
+            rowClass += " pinned";
+
+        }
+
         return (
             <div className={rowClass} onClick={() => this.selected(this.props.linkedChat)}>
                 {history.chatType == constant.ChatTypePrivate ?
