@@ -51,14 +51,11 @@ self.addEventListener('fetch', function (event) {
 });
 
 self.addEventListener('push', function (event) {
-    //todo: maybe remove checks, already in NotifManager
     if (!(self.Notification && self.Notification.permission === 'granted')) {
         return;
     }
 
     const payload = event.data.json();
-
-    const notificationTitle = `${payload.from.name} sent:`;
     const notificationActions = [
         {
             action: 'view',
@@ -72,15 +69,44 @@ self.addEventListener('push', function (event) {
         }
     ];
 
+    let iconImage = config.mediaBaseURL;
+    let notificationTitle;
+    let message;
+
+    if (payload.group) {
+        iconImage += payload.group.thumb;
+        notificationTitle = `${payload.group.name} - ${payload.from.name} sent:`
+    }
+    else if (payload.room) {
+        iconImage += payload.room.thumb;
+        notificationTitle = `${payload.room.name} - ${payload.from.name} sent:`
+
+    }
+    else {
+        iconImage += payload.from.thumb;
+        notificationTitle = `${payload.from.name} sent:`
+
+    }
+
+    if (payload.message.type === consts.MessageTypeFile) {
+        message = 'a file.';
+    }
+    else if (payload.message.type === consts.MessageTypeSticker) {
+        message = 'a sticker.';
+    }
+    else {
+        message = payload.message.message;
+    }
+
     const notificationOptions = {
         badge: badgeIcon,
         timestamp: getTimestamp(new Date(payload.message.created)),
         actions: notificationActions,
-        body: payload.message.message,
+        body: message,
         requireInteraction: true,
         tag: payload.roomId,
         data: payload.roomId,
-        icon: config.mediaBaseURL + payload.from.thumb
+        icon: iconImage,
     }
 
     event.waitUntil(self.clients.matchAll({
