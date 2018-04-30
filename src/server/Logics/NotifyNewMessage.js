@@ -432,6 +432,29 @@ var NotifyNewMessage = {
 
                 });
 
+                // sender send push
+                //*************************
+                _.forEach(result.sender.pushToken, function (token) {
+
+                    tokenAndBadgeCount.push({
+                        badge: 0,
+                        token: token,
+                        isMuted: false
+                    });
+
+                });
+
+                _.forEach(result.sender.webPushSubscription, function (subscription) {
+
+                    tokenAndBadgeCount.push({
+                        badge: 0,
+                        token: subscription,
+                        isMuted: false
+                    });
+
+                });
+                //*************************
+
                 var avatarURL = "/api/v2/avatar/user/";
 
                 if (obj.user && obj.user.avatar && obj.user.avatar.thumbnail)
