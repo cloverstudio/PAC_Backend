@@ -51,7 +51,7 @@ class PushNotificationHandler {
                 .catch(registrationErr => {
 
                     console.error('SW registration error', registrationErr);
-                    reject(error);
+                    reject(registrationErr);
 
                 })
 
