@@ -439,7 +439,8 @@ var NotifyNewMessage = {
                     tokenAndBadgeCount.push({
                         badge: 0,
                         token: token,
-                        isMuted: false
+                        isMuted: false,
+                        isSender: true
                     });
 
                 });
@@ -449,7 +450,8 @@ var NotifyNewMessage = {
                     tokenAndBadgeCount.push({
                         badge: 0,
                         token: subscription,
-                        isMuted: false
+                        isMuted: false,
+                        isSender: true
                     });
 
                 });
