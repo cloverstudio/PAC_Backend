@@ -107,6 +107,7 @@ self.addEventListener('push', function (event) {
         tag: payload.roomId,
         data: payload.roomId,
         icon: iconImage,
+        silent: payload.mute
     }
 
     event.waitUntil(self.clients.matchAll({
@@ -119,9 +120,14 @@ self.addEventListener('push', function (event) {
             if (filteredClients[0].visibilityState !== 'visible' || !filteredClients[0].focused) {
 
                 return self.registration.showNotification(notificationTitle, notificationOptions)
-                    .then(() => filteredClients[0].postMessage({
-                        action: 'NOTIFICATION_PLAY_SOUND'
-                    }))
+                    .then(() => {
+
+                        if (!payload.mute) {
+                            filteredClients[0].postMessage({
+                                action: 'NOTIFICATION_PLAY_SOUND'
+                            })
+                        }
+                    })
                     .then(() => self.registration.getNotifications())
                     .then(notifications => {
                         const recentNotif = notifications.find(notif => notif.tag === payload.roomId);

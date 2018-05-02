@@ -123,14 +123,14 @@ class SocketNotificationHandler {
                 break;
         }
 
-        let isMuted = store.getState().userData.muted.includes(singleChatId);
+        const silent = store.getState().userData.muted.includes(singleChatId);
 
-        if (!(this.visibility || isMuted)) this.showNotification(title, message, avatar);
+        if (!this.visibility) this.showNotification(title, message, avatar, silent);
 
     }
 
 
-    showNotification = (title, body, icon) => {
+    showNotification = (title, body, icon, silent) => {
 
         if (!('Notification' in window)) return;
 
@@ -140,7 +140,8 @@ class SocketNotificationHandler {
         };
 
         const notification = new Notification(title, options);
-        this.audioElement.play();
+
+        if (!silent) this.audioElement.play();
 
         this.lastNotificationTimeout = setTimeout(
             () => notification.close(),
