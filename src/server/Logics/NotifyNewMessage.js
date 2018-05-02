@@ -550,7 +550,7 @@ var NotifyNewMessage = {
                 }
 
                 payload.pushType = Const.pushTypeNewMessage;
-                PushNotificationSender.start(tokenAndBadgeCount, payload);
+                PushNotificationSender.start(tokenAndBadgeCount, payload, Config.useVoipPush);
 
                 done(null, result);
 
