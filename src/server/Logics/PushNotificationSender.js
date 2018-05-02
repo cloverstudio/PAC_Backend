@@ -223,7 +223,20 @@ PushNotificationSender = {
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
+
                         apnProvider.shutdown();
+
+                        if (!_.isEmpty(result.failed)) {
+
+                            options.production = false;
+                            apnProvider = new apn.Provider(options);
+
+                            apnProvider.send(note, pushToken).then((result) => {
+                                apnProvider.shutdown();
+                            });
+
+                        }
+
                     });
 
                     donePushOne(null);
