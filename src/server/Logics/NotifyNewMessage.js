@@ -434,22 +434,20 @@ var NotifyNewMessage = {
 
                 // sender send push
                 //*************************
-                _.forEach(result.sender.pushToken, function (token) {
+                var uuid = _.find(result.sender.UUID, { UUID: originalRequestData.UUID });
+
+                var senderPushTokens = [];
+
+                if (!_.isEmpty(uuid))
+                    senderPushTokens = _.difference(result.sender.pushToken, uuid.pushTokens);
+                else
+                    senderPushTokens = result.sender.pushToken;
+
+                senderPushTokens.forEach(token => {
 
                     tokenAndBadgeCount.push({
                         badge: 0,
                         token: token,
-                        isMuted: false,
-                        isSender: true
-                    });
-
-                });
-
-                _.forEach(result.sender.webPushSubscription, function (subscription) {
-
-                    tokenAndBadgeCount.push({
-                        badge: 0,
-                        token: subscription,
                         isMuted: false,
                         isSender: true
                     });
