@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import * as config from './lib/config'
 import * as consts from './lib/const';
 
@@ -50,6 +51,59 @@ self.addEventListener('fetch', function (event) {
     );
 });
 
+const handleNotification = async function (notificationTitle, notificationOptions) {
+
+    const clientList = await self.clients.matchAll({
+        type: 'window'
+    });
+
+    const filteredClients = filterClients(clientList);
+
+    const existingNotifications = await self.registration.getNotifications({
+        tag: notificationOptions.tag
+    });
+
+    let updatedOptions = notificationOptions;
+
+    if (existingNotifications[0]) {
+
+        const messageBody = existingNotifications[0].body;
+        let splitMessages = messageBody.split('\n');
+
+        splitMessages.push(notificationOptions.body);
+        if (splitMessages.length == 6) splitMessages.shift();
+
+        updatedOptions.body = splitMessages.join('\n');
+    }
+
+    if (filteredClients.length > 0) {
+
+        if (filteredClients[0].visibilityState !== 'visible'
+            || !filteredClients[0].focused) {
+
+            const newNotification = await self.registration.showNotification(notificationTitle, updatedOptions);
+            if (!notificationOptions.silent) {
+
+                filteredClients[0].postMessage({
+                    action: 'NOTIFICATION_PLAY_SOUND'
+                });
+            }
+
+            const visibleExistingNotifications = await self.registration.getNotifications({
+                tag: notificationOptions.tag
+            });
+            if (visibleExistingNotifications[0]) {
+
+                setTimeout(() => visibleExistingNotifications[0].close(), consts.NotificationCloseTimeout);
+            }
+            return newNotification;
+        }
+    }
+    else {
+        return await self.registration.showNotification(notificationTitle, updatedOptions);
+    }
+}
+
 self.addEventListener('push', function (event) {
     if (!(self.Notification && self.Notification.permission === 'granted')) {
         return;
@@ -75,11 +129,11 @@ self.addEventListener('push', function (event) {
 
     if (payload.group) {
         iconImage += payload.group.thumb;
-        notificationTitle = `${payload.group.name} - ${payload.from.name} sent:`
+        notificationTitle = payload.group.name;
     }
     else if (payload.room) {
         iconImage += payload.room.thumb;
-        notificationTitle = `${payload.room.name} - ${payload.from.name} sent:`
+        notificationTitle = payload.room.name;
 
     }
     else {
@@ -98,6 +152,10 @@ self.addEventListener('push', function (event) {
         message = payload.message.message;
     }
 
+    if (payload.group || payload.room) {
+        message = payload.from.name + ': ' + message;
+    }
+
     const notificationOptions = {
         badge: badgeIcon,
         timestamp: getTimestamp(new Date(payload.message.created)),
@@ -107,44 +165,13 @@ self.addEventListener('push', function (event) {
         tag: payload.roomId,
         data: payload.roomId,
         icon: iconImage,
-        silent: payload.mute
+        silent: payload.mute,
+        renotify: true
     }
 
-    event.waitUntil(self.clients.matchAll({
-        type: 'window'
-    }).then(function (clientList) {
-
-        const filteredClients = filterClients(clientList);
-
-        if (filteredClients.length > 0) {
-            if (filteredClients[0].visibilityState !== 'visible' || !filteredClients[0].focused) {
-
-                return self.registration.showNotification(notificationTitle, notificationOptions)
-                    .then(() => {
-
-                        if (!payload.mute) {
-                            filteredClients[0].postMessage({
-                                action: 'NOTIFICATION_PLAY_SOUND'
-                            })
-                        }
-                    })
-                    .then(() => self.registration.getNotifications())
-                    .then(notifications => {
-                        const recentNotif = notifications.find(notif => notif.tag === payload.roomId);
-
-                        if (recentNotif) {
-                            setTimeout(() => recentNotif.close(), consts.NotificationCloseTimeout);
-                        }
-                    });
-            }
-        }
-        else {
-            return self.registration.showNotification(notificationTitle, notificationOptions);
-        }
-    }))
+    event.waitUntil(handleNotification(notificationTitle, notificationOptions));
 
 })
-
 
 self.addEventListener('notificationclick', function (event) {
 
