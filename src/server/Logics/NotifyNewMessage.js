@@ -420,6 +420,20 @@ var NotifyNewMessage = {
 
                     });
 
+                    if (Config.useVoipPush) {
+
+                        _.forEach(row.voipPushToken, function (token) {
+
+                            tokenAndBadgeCount.push({
+                                badge: badgeCount,
+                                token: token,
+                                isMuted: isMuted
+                            });
+
+                        });
+
+                    }
+
                     _.forEach(row.webPushSubscription, function (subscription) {
 
                         tokenAndBadgeCount.push({
@@ -444,6 +458,21 @@ var NotifyNewMessage = {
                     });
 
                 });
+
+                if (Config.useVoipPush) {
+
+                    _.forEach(result.sender.voipPushToken, function (token) {
+
+                        tokenAndBadgeCount.push({
+                            badge: 0,
+                            token: token,
+                            isMuted: false,
+                            isSender: true
+                        });
+
+                    });
+
+                }
 
                 _.forEach(result.sender.webPushSubscription, function (subscription) {
 
