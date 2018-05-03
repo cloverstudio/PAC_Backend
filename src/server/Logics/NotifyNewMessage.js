@@ -432,6 +432,31 @@ var NotifyNewMessage = {
 
                 });
 
+                // sender send push
+                //*************************
+                _.forEach(result.sender.pushToken, function (token) {
+
+                    tokenAndBadgeCount.push({
+                        badge: 0,
+                        token: token,
+                        isMuted: false,
+                        isSender: true
+                    });
+
+                });
+
+                _.forEach(result.sender.webPushSubscription, function (subscription) {
+
+                    tokenAndBadgeCount.push({
+                        badge: 0,
+                        token: subscription,
+                        isMuted: false,
+                        isSender: true
+                    });
+
+                });
+                //*************************
+
                 var avatarURL = "/api/v2/avatar/user/";
 
                 if (obj.user && obj.user.avatar && obj.user.avatar.thumbnail)
@@ -525,7 +550,7 @@ var NotifyNewMessage = {
                 }
 
                 payload.pushType = Const.pushTypeNewMessage;
-                PushNotificationSender.start(tokenAndBadgeCount, payload);
+                PushNotificationSender.start(tokenAndBadgeCount, payload, Config.useVoipPush);
 
                 done(null, result);
 

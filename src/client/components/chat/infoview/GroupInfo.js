@@ -30,12 +30,12 @@ class GroupInfo extends Component {
         this.props.loadMembers();
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (this.props.timestampByChat != nextProps.timestampByChat) {
-    //         this.updateSwitches();
-    //         this.props.loadMembers();
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.timestampByChat != nextProps.timestampByChat) {
+            this.updateSwitches();
+            this.props.loadMembers();
+        }
+    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.chatId !== this.props.chatId) {
@@ -122,6 +122,8 @@ class GroupInfo extends Component {
 
         });
 
+        let isPinned = this.props.pinnedChatIDs.includes(this.props.group._id);
+
         return (
             <div>
 
@@ -170,6 +172,21 @@ class GroupInfo extends Component {
                                 <span className="switch-indicator"></span>
                             </label>
 
+                        </div>
+
+                        <div className="media">
+                            <div className="media-body">
+                                <p><strong>{strings.InfoViewUserDetailPin[user.lang]}</strong></p>
+                                {isPinned ?
+                                    <p>{strings.InfoViewTextPinnedExplanation[user.lang]}</p> : null
+                                }
+                            </div>
+                            <label className="switch switch-lg">
+                                <input type="checkbox"
+                                    checked={isPinned}
+                                    onClick={() => this.props.togglePin(!isPinned)} />
+                                <span className="switch-indicator"></span>
+                            </label>
                         </div>
 
                     </div>
@@ -261,6 +278,8 @@ const mapStateToProps = (state) => {
         muted: state.infoView.muted,
         members: state.infoView.members,
         chatId: state.chat.chatId,
+        pinnedChatIDs: state.history.pinnedChatIDs
+
     };
 };
 
@@ -274,8 +293,8 @@ const mapDispatchToProps = (dispatch) => {
         loadMembers: () => dispatch(actions.infoView.loadMembers()),
         openChat: user => dispatch(actions.chat.openChatByUser(user)),
         loadChatMessages: (chatId) => dispatch(actions.chat.loadChatMessages(chatId)),
-        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
-
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId)),
+        togglePin: newState => dispatch(actions.infoView.togglePin(newState))
     };
 };
 

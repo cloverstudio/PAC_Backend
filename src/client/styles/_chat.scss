@@ -419,6 +419,13 @@
     height: 100%;
 }
 
+.media-list-body{
+    .media{
+        border-bottom: 1px solid $color-divider-light;
+
+    }
+}
+
 .usersview,.groupsview, .messageInfoView{
 
     height: 100vh;
@@ -461,14 +468,26 @@
         cursor: pointer;
         transition: all 0.3s;
     }
-    
+
     .selected{
         cursor: default;
         background-color: $color-pale-secondary;
     }
 
+    .pinned{
+        background-color: lighten($color-pale-success, 4%);
+    }
+
+    .pinned.selected{
+        background-color: lighten($color-pale-success, 1%);
+    }
+
     .history-row:hover{
         background-color: $color-bg-light;
+    }
+
+    .pinned:hover{
+        background-color: lighten($color-pale-success, 2%);
     }
 
 }

@@ -91,6 +91,7 @@ PushNotificationSender = {
 
             var pushToken = tokenAndBadge.token;
             var unreadCount = tokenAndBadge.badge;
+            var isSender = tokenAndBadge.isSender;
 
             payload.mute = tokenAndBadge.isMuted;
 
@@ -130,8 +131,12 @@ PushNotificationSender = {
 
                     note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
                     note.badge = unreadCount;
-                    note.sound = "ping.aiff";
-                    note.alert = payload.message.messageiOS;
+
+                    if (!isSender) {
+                        note.sound = "ping.aiff";
+                        note.alert = payload.message.messageiOS;
+                    }
+
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
                     note.topic = Config.apnsCertificates.push.appbundleid;
@@ -207,14 +212,31 @@ PushNotificationSender = {
 
                     note.expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
                     note.badge = unreadCount;
-                    note.sound = "ping.aiff";
-                    note.alert = payload.message.messageiOS;
+
+                    if (!isSender) {
+                        note.sound = "ping.aiff";
+                        note.alert = payload.message.messageiOS;
+                    }
+
                     note.category = Const.apnCategoryMessage;
                     note.payload = payload;
                     note.contentAvailable = true;
 
                     apnProvider.send(note, pushToken).then((result) => {
+
                         apnProvider.shutdown();
+
+                        if (!_.isEmpty(result.failed)) {
+
+                            options.production = false;
+                            apnProvider = new apn.Provider(options);
+
+                            apnProvider.send(note, pushToken).then((result) => {
+                                apnProvider.shutdown();
+                            });
+
+                        }
+
                     });
 
                     donePushOne(null);
