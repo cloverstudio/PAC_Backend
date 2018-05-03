@@ -165,8 +165,7 @@ self.addEventListener('push', function (event) {
         tag: payload.roomId,
         data: payload.roomId,
         icon: iconImage,
-        silent: payload.mute,
-        renotify: true
+        silent: payload.mute
     }
 
     event.waitUntil(handleNotification(notificationTitle, notificationOptions));
