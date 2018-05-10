@@ -12,7 +12,7 @@ Config.dbCollectionPrefix = '';
 Config.databaseUrl = "mongodb://localhost/spikaenterprise";
 
 Config.supportUserId = "56ec126ca4718ef424641692";
-Config.forceLogoutAllDevice = false;
+Config.forceLogoutAllDevice = true;
 
 Config.redis = {
     host: "localhost",
