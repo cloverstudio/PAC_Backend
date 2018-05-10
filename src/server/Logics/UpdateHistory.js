@@ -261,6 +261,12 @@ var UpdateHistory = {
             },
             function (result, done) {
 
+                let message = result.message.message;
+                if (message)
+                    message = message.substr(0, 30);
+                else
+                    message = "";
+
                 // update for fromUser
                 var historyData = {
                     userId: fromUserId,
@@ -281,6 +287,12 @@ var UpdateHistory = {
             },
             function (result, done) {
 
+                let message = result.message.message;
+                if (message)
+                    message = message.substr(0, 30);
+                else
+                    message = "";
+
                 // update for toUser
                 var historyData = {
                     userId: toUserId,
@@ -289,7 +301,7 @@ var UpdateHistory = {
                     lastUpdate: Utils.now(),
                     lastUpdateUser: result.fromUser,
                     lastMessage: result.message,
-                    keyword: result.fromUser.name + ", " + result.message.message
+                    keyword: result.fromUser.name + ", " + message
                 }
 
                 self.updateData(historyData, rawMessageObj, function (err, updateResult) {
@@ -368,6 +380,13 @@ var UpdateHistory = {
 
                 async.each(result.room.users, function (userId, doneEach) {
 
+                    let message = result.message.message;
+                    if (message)
+                        message = message.substr(0, 30);
+                    else
+                        message = "";
+
+
                     var historyData = {
                         userId: userId,
                         chatId: roomId,
@@ -376,7 +395,7 @@ var UpdateHistory = {
                         isUnread: 1,
                         lastUpdateUser: result.fromUser,
                         lastMessage: result.message,
-                        keyword: result.room.name + ", " + result.message.message
+                        keyword: result.room.name + ", " + message
                     }
 
                     self.updateData(historyData, rawMessageObj, function (err, updateResult) {
@@ -491,6 +510,11 @@ var UpdateHistory = {
 
                 async.each(groupUsers, function (userId, doneEach) {
 
+                    let message = result.message.message;
+                    if (message)
+                        message = message.substr(0, 30);
+                    else
+                        message = "";
 
                     var historyData = {
                         userId: userId,
@@ -500,7 +524,7 @@ var UpdateHistory = {
                         isUnread: 1,
                         lastUpdateUser: result.fromUser,
                         lastMessage: result.message,
-                        keyword: result.group.name + ", " + result.message.message
+                        keyword: result.group.name + ", " + message
                     };
 
                     self.updateData(historyData, rawMessageObj, function (err, updateResult) {
