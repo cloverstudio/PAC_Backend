@@ -97,7 +97,8 @@ export {
     InfoViewDeleteRoom,
     InfoViewLeaveRoomConfirm,
     InfoViewFailedToLeave,
-    InfoViewNotes
+    InfoViewNotes,
+    InfoViewTodo
 } from "./strings/infoview";
 
 export {
@@ -114,7 +115,10 @@ export {
     SidebarPassword,
     SidebarAdmin,
     SidebarLogout,
-    SidebarHelp
+    SidebarHelp,
+    SidebarTitleTools,
+    SidebarNotes,
+    SidebarTodo
 } from "./strings/sidebar";
 
 export {

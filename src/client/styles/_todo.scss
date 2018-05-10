@@ -1,0 +1,53 @@
+.layout-chat {
+
+    .main-content.todo{
+
+        margin-top: 30px;
+        padding: 0px 30px 0px 30px;
+        
+        .row{
+            width:100%;
+        }
+        
+        .card-body{
+            overflow-y: auto;
+        }
+
+        .note-container {
+            box-sizing: inherit;
+        }
+
+        .tasks-container{
+
+            padding-left: 0px;
+
+            .task-row{
+                list-style: none;
+                border-bottom: 1px solid #eee;
+                cursor: pointer;
+                padding-top: 25px;
+
+                &:first-child{
+                    padding-top: 0px;
+                }
+    
+                &.input{
+                    padding-bottom: 25px;
+                }
+
+                .empty-text-input{
+                    margin-left: 22px;
+                }
+                
+            }
+
+        }
+
+        .empty-text-input{
+            border: none;
+            display: block;
+            width: 100%;
+        }
+    }
+
+}

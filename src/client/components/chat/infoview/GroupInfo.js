@@ -152,6 +152,12 @@ class GroupInfo extends Component {
                         </div>
 
                         <div className="media">
+                            <Link to={`${utils.url("/todo/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
+                                <label><i className="ti-check"></i></label>{strings.InfoViewTodo[user.lang]}
+                            </Link>
+                        </div>
+
+                        <div className="media">
                             <Link to={`${utils.url("/favorites/" + this.props.chatId)}`} className="btn btn-label btn-primary btn-block">
                                 <label><i className="ti-heart"></i></label>{strings.SidebarFavorite[user.lang]}
                             </Link>

@@ -65,7 +65,7 @@
         overflow-x: hidden;
     }
 
-    .main-content{
+    .main-content.chat{
         
         @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
 
@@ -83,6 +83,7 @@
 
         padding: 0px;
         flex-direction: row;
+        justify-content: flex-start;
         
         .chat-container{
         

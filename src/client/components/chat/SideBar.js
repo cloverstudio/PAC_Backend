@@ -108,6 +108,25 @@ class SideBar extends Component {
             </li>
 
             <li className="menu-category">
+              {strings.SidebarTitleTools[user.lang]}
+            </li>
+
+            <li className="menu-item">
+              <Link className="menu-link" to={`${utils.url("/notes")}`}>
+                <span className="icon fa fa-file-text-o" />
+                <span className="title">{strings.SidebarNotes[user.lang]}</span>
+              </Link>
+            </li>
+
+            <li className="menu-item">
+              <Link className="menu-link" to={`${utils.url("/todos")}`}>
+                <span className="icon fa fa-tasks" />
+                <span className="title">{strings.SidebarTodo[user.lang]}</span>
+              </Link>
+            </li>
+
+
+            <li className="menu-category">
               {strings.SidebarTitle2[user.lang]}
             </li>
 

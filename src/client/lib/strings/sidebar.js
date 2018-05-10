@@ -1,61 +1,73 @@
 import * as config from '../config';
-import {EN} from '../const';
+import { EN } from '../const';
 
 export const SidebarTitle1 = {
-    EN:"Chat"
+    EN: "Chat"
 }
 
 export const SidebarTitle2 = {
-    EN:"User Settings"
+    EN: "User Settings"
 }
 
 export const SidebarTitle3 = {
-    EN:"Links"
+    EN: "Links"
 }
 
 
 export const SidebarChat = {
-    EN:"Chat"
+    EN: "Chat"
 }
 
 export const SidebarHistory = {
-    EN:"History"
+    EN: "History"
 }
 
 export const SidebarSearch = {
-    EN:"Search"
+    EN: "Search"
 }
 
 export const SidebarFavorite = {
-    EN:"Favorite"
+    EN: "Favorite"
 }
 
 
 export const SidebarNewRoom = {
-    EN:"New Room"
+    EN: "New Room"
 }
 
 export const SidebarMarkAll = {
-    EN:"Mark All"
+    EN: "Mark All"
 }
 
 export const SidebarProfile = {
-    EN:"Edit Profile"
+    EN: "Edit Profile"
 }
 
 export const SidebarPassword = {
-    EN:"Change Password"
+    EN: "Change Password"
 }
 
 export const SidebarAdmin = {
-    EN:"Admin Console"
+    EN: "Admin Console"
 }
 
 export const SidebarLogout = {
-    EN:"Logout"
+    EN: "Logout"
 }
 
 export const SidebarHelp = {
-    EN:"Help"
+    EN: "Help"
 }
+
+export const SidebarTitleTools = {
+    EN: "Tools"
+}
+export const SidebarNotes = {
+    EN: "Notes"
+}
+export const SidebarTodo = {
+    EN: "Todo"
+}
+
+
 

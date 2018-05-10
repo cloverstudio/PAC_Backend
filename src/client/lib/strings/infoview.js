@@ -105,3 +105,7 @@ export const FavoriteTitleFrom = {
     EN: "From chat: "
 }
 
+
+export const InfoViewTodo = {
+    EN: "ToDo"
+}

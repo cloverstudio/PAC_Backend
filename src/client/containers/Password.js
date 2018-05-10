@@ -98,34 +98,38 @@ class Password extends Base {
                             </div>
                         </div>
 
-                        <div className="col-12 pt-15">
+                        <div className="row">
 
-                            <div className="card">
+                            <div className="col-12">
 
-                                <div className="card-body p-20">
+                                <div className="card">
 
-                                    <div className="form-group">
-                                        <label className="require">{strings.PasswordCurrentPassword[user.lang]}</label>
-                                        <input type="password" value={this.props.currentPassword} className="form-control" onChange={e => { this.props.typeCurrentPassword(e.target.value) }} />
-                                        <div className="invalid-feedback">{this.props.errorMessageCurrentPassword}</div>
-                                    </div>
+                                    <div className="card-body">
 
-                                    <div className="form-group">
-                                        <label className="require">{strings.PasswordNewPassword[user.lang]}</label>
-                                        <input type="text" value={this.props.newPassword} className="form-control" onChange={e => { this.props.typeNewPassword(e.target.value) }} />
-                                        <div className="invalid-feedback">{this.props.errorMessageNewPassword}</div>
-                                    </div>
+                                        <div className="form-group">
+                                            <label className="require">{strings.PasswordCurrentPassword[user.lang]}</label>
+                                            <input type="password" value={this.props.currentPassword} className="form-control" onChange={e => { this.props.typeCurrentPassword(e.target.value) }} />
+                                            <div className="invalid-feedback">{this.props.errorMessageCurrentPassword}</div>
+                                        </div>
 
-                                    <div className="form-group">
-                                        <label className="require">{strings.PasswordNewPasswordConfirm[user.lang]}</label>
-                                        <input type="text" value={this.props.confirmPassword} className="form-control" onChange={e => { this.props.typeConfirmPassword(e.target.value) }} />
-                                        <div className="invalid-feedback">{this.props.errorMessageConfirmPassword}</div>
-                                    </div>
+                                        <div className="form-group">
+                                            <label className="require">{strings.PasswordNewPassword[user.lang]}</label>
+                                            <input type="text" value={this.props.newPassword} className="form-control" onChange={e => { this.props.typeNewPassword(e.target.value) }} />
+                                            <div className="invalid-feedback">{this.props.errorMessageNewPassword}</div>
+                                        </div>
 
-                                    <div className="text-right button-container">
+                                        <div className="form-group">
+                                            <label className="require">{strings.PasswordNewPasswordConfirm[user.lang]}</label>
+                                            <input type="text" value={this.props.confirmPassword} className="form-control" onChange={e => { this.props.typeConfirmPassword(e.target.value) }} />
+                                            <div className="invalid-feedback">{this.props.errorMessageConfirmPassword}</div>
+                                        </div>
 
-                                        <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
-                                        <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
+                                        <div className="text-right button-container">
+
+                                            <button onClick={this.props.cancel} className="btn btn-w-md btn-danger">{strings.Cancel[user.lang]}</button>
+                                            <button onClick={this.props.save} className="btn btn-w-md btn-info">{strings.Save[user.lang]}</button>
+
+                                        </div>
 
                                     </div>
 

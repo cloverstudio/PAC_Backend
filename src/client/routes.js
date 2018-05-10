@@ -13,6 +13,10 @@ import Favorites from "./containers/Favorites";
 import Profile from "./containers/Profile";
 import Password from "./containers/Password";
 import Note from "./containers/Note";
+import Notes from "./containers/Notes";
+import Todo from "./containers/Todo";
+import Todos from "./containers/Todos";
+import Template from "./containers/Template";
 
 export default (
 
@@ -27,9 +31,12 @@ export default (
         <Route exact path={`${util.url("/favorites")}`} component={Favorites} key="global favorites" />
         <Route path={`${util.url("/favorites/:chatId")}`} component={Favorites} />
         <Route path={`${util.url("/note/:chatId")}`} component={Note} />
+        <Route path={`${util.url("/todo/:chatId")}`} component={Todo} />
         <Route path={`${util.url("/profile")}`} component={Profile} />
         <Route path={`${util.url("/password")}`} component={Password} />
         <Route path={`${util.url("/logout")}`} component={Logout} />
+        <Route path={`${util.url("/notes")}`} component={Notes} />
+        <Route path={`${util.url("/todos")}`} component={Todos} />
         <Redirect from='*' to={`${util.url("/")}`} />
     </Switch>
 
