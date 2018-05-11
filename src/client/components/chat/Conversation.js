@@ -19,6 +19,8 @@ import Stickers from "./Stickers";
 import ChatInput from "./ChatInput";
 import ChatHeader from "./ChatHeader";
 import Message from "./Message";
+import ChatReply from "./ChatReply";
+import MessageReply from "./MessageTypes/MessageReply";
 
 class Conversation extends Component {
     constructor() {
@@ -195,11 +197,15 @@ class Conversation extends Component {
                         >
                             <div className="media-body">
                                 {messagesByUser.map(message => (
-                                    <Message
-                                        key={message._id || message.localID}
-                                        messageData={message}
-                                        lockForScroll={this.setLockedForScrolling}
-                                    />
+                                    <MessageReply
+                                        replyMessage={message.attributes && message.attributes.replyMessage}
+                                        key={message._id || message.localID}>
+                                        <Message
+
+                                            messageData={message}
+                                            lockForScroll={this.setLockedForScrolling}
+                                        />
+                                    </MessageReply>
                                 ))}
 
                                 <p className="meta">
@@ -215,11 +221,14 @@ class Conversation extends Component {
 
                             <div className="media-body">
                                 {messagesByUser.map(message => (
-                                    <Message
-                                        key={message._id}
-                                        messageData={message}
-                                        lockForScroll={this.setLockedForScrolling}
-                                    />
+                                    <MessageReply
+                                        replyMessage={message.attributes && message.attributes.replyMessage}
+                                        key={message._id}>
+                                        <Message
+                                            messageData={message}
+                                            lockForScroll={this.setLockedForScrolling}
+                                        />
+                                    </MessageReply>
                                 ))}
 
                                 <p className="meta">
@@ -268,8 +277,9 @@ class Conversation extends Component {
                     {conversationItems}
                 </div>
 
+                <ChatReply setLockedForScrolling={this.setLockedForScrolling} />
                 <ChatInput setLockedForScrolling={this.setLockedForScrolling} />
-                <Stickers />
+                <Stickers setLockedForScrolling={this.setLockedForScrolling} />
 
                 <div className="drag-drop-indicator" ref={dropIndicator => this.dropIndicator = dropIndicator}>
                     <i className="fa fa-cloud-upload" ></i>

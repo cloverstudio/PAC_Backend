@@ -77,6 +77,16 @@ class MessageInfo extends Component {
                 </button>
             );
 
+            messageInfoButtons.push(
+                <button
+                    key="btn-backw"
+                    className="btn btn-w-sm btn-multiline btn-outline btn-primary"
+                    onClick={e => this.props.addReplyMessage()}>
+                    <i className="ti-back-left" />
+                    <br />Reply
+                </button>
+            );
+
             if (this.props.selectedMessage.userID === user.userData._id) {
                 if (this.props.selectedMessage.type === constant.MessageTypeText) {
                     messageInfoButtons.push(
@@ -220,7 +230,8 @@ const mapDispatchToProps = dispatch => {
         toggleFavorite: (messageId, isFavorite) => dispatch(actions.favorites.toggleFavorite(messageId, isFavorite)),
         showMessageForwardView: () => dispatch(actions.chatUI.showMessageForwardView()),
         showMessageUpdateView: () => dispatch(actions.chatUI.showMessageUpdateView()),
-        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId))
+        changeCurrentChat: chatId => dispatch(actions.chat.changeCurrentChat(chatId)),
+        addReplyMessage: () => dispatch(actions.chat.addReplyMessage())
     };
 };
 

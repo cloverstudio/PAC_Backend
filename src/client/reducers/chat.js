@@ -19,6 +19,7 @@ const initial = {
     typing: {},
     timestampByChat: 0,
     inputValues: {},
+    replies: {},
     loadingDirection: null,
     loadAllToTarget: null,
     chatName: ""
@@ -354,6 +355,30 @@ const inputValues = (state = initial.inputValues, action) => {
     }
 };
 
+const replies = (state = initial.replies, action) => {
+    switch (action.type) {
+        case types.ChatAddReplyMessage: {
+            const newState = { ...state };
+            newState[action.chatId] = action.replyMessage;
+            return newState;
+        }
+        case types.ChatRemoveReplyMessage: {
+            const newState = { ...state };
+            newState[action.chatId] = null;
+            return newState;
+        }
+        case types.ChatSendMessage: {
+            const newState = { ...state };
+            if (state[action.message.roomID]) {
+                newState[action.message.roomID] = null;
+            }
+            return newState;
+        }
+        default:
+            return state;
+    }
+}
+
 const loadingDirection = (state = initial.loadingDirection, action) => {
     switch (action.type) {
         case types.ChatLoadMessageStart:
@@ -376,6 +401,8 @@ const loadAllToTarget = (state = initial.loadAllToTarget, action) => {
             else {
                 return null;
             }
+        case types.ChatResetLoadAllToTarget:
+            return null;
         default:
             return state;
     }
@@ -392,5 +419,6 @@ export default combineReducers({
     inputValues,
     loadingDirection,
     loadAllToTarget,
-    chatName
+    chatName,
+    replies
 });

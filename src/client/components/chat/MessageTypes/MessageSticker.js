@@ -19,7 +19,7 @@ class MessageSticker extends Component {
         })
     }
 
-    componentDidMount() {
+    scrollToMessageIfTarget = () => {
         if (this.targetMessage.classList.contains('search-target')) {
             if (!this.state.initiallyScrolledToSearchTarget) {
 
@@ -28,10 +28,31 @@ class MessageSticker extends Component {
 
                 this.setState({
                     initiallyScrolledToSearchTarget: true
-                })
+                });
+                this.targetTimeout = setTimeout(() => {
+                    this.props.resetTargetMessage();
+                    this.setState({
+                        initiallyScrolledToSearchTarget: false
+                    })
+                }, constant.TargetMessageResetTimeout);
             }
 
         }
+    }
+
+    componentWillUnmount() {
+        if (this.targetTimeout) {
+            clearTimeout(this.targetTimeout);
+            this.props.resetTargetMessage();
+        }
+    }
+
+    componentDidMount() {
+        this.scrollToMessageIfTarget();
+    }
+
+    componentDidUpdate() {
+        this.scrollToMessageIfTarget();
     }
 
     toggleMessageLoading = () => {
@@ -78,7 +99,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message))
+        getMessageInfo: message => dispatch(actions.messageInfo.getMessageInfo(message)),
+        resetTargetMessage: () => dispatch(actions.chat.resetTargetMessage())
+
     };
 };
 

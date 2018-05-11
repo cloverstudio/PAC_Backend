@@ -286,12 +286,22 @@ export function sendMessage(
     localID = utils.getRandomString()
 ) {
     return (dispatch, getState) => {
+
+        const currentState = getState();
+
+        let attributes = {
+            useclient: "web"
+        }
+        if (currentState.chat.replies[currentState.chat.chatId]) {
+            attributes.replyMessage = { ...currentState.chat.replies[currentState.chat.chatId] }
+        }
+
         const message = {
-            roomID: getState().chat.chatId,
+            roomID: currentState.chat.chatId,
             userID: user.userData._id,
             type: messageType,
             localID,
-            attributes: { useclient: "web" },
+            attributes,
             user: user.userData
         };
 
@@ -383,6 +393,57 @@ export function changeInputValue(chatId, value) {
         chatId,
         value
     };
+}
+
+export function addReplyMessage() {
+    return (dispatch, getState) => {
+        const currentState = getState();
+        const originChatId = currentState.chat.chatId;
+        const selectedMessage = currentState.messageInfo.selectedMessage;
+
+        const replyMessage = {
+            created: selectedMessage.created,
+            localID: selectedMessage.localID,
+            message: selectedMessage.message,
+            roomID: selectedMessage.roomID,
+            type: selectedMessage.type,
+            userId: selectedMessage.userID,
+            userName: selectedMessage.user.name,
+            _id: selectedMessage._id
+        }
+
+        if (selectedMessage.type === constant.MessageTypeFile) {
+            replyMessage.fileId = selectedMessage.file.file.id;
+            replyMessage.fileName = selectedMessage.file.file.name;
+            replyMessage.mimeType = selectedMessage.file.file.mimeType;
+
+            if (selectedMessage.file.file.mimeType.includes(constant.imgMimeType)) {
+                if (selectedMessage.file.thumb) {
+                    replyMessage.thumbId = selectedMessage.file.thumb.id;
+                    replyMessage.thumbName = selectedMessage.file.thumb.name;
+                    replyMessage.thumbMimeType = selectedMessage.file.thumb.mimeType;
+                }
+
+            }
+
+        }
+
+        dispatch({
+            type: types.ChatAddReplyMessage,
+            chatId: originChatId,
+            replyMessage
+        })
+    }
+}
+
+export function removeReplyMessage() {
+    return (dispatch, getState) => {
+        const originChatId = getState().chat.chatId;
+        dispatch({
+            type: types.ChatRemoveReplyMessage,
+            chatId: originChatId
+        })
+    }
 }
 
 export function fileUploadProgress(progress, localFileId, chatId) {
@@ -512,5 +573,11 @@ export function updateMessages(updatedMessages) {
     return {
         type: types.ChatUpdateMessages,
         updatedMessages
+    }
+}
+
+export function resetTargetMessage() {
+    return {
+        type: types.ChatResetLoadAllToTarget
     }
 }

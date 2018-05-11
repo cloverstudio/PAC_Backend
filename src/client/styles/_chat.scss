@@ -102,6 +102,41 @@
                     }
                 }
             }
+
+            .reply-message-container{
+                padding: 5px 8px;
+                border-radius:3px;
+                border-left: 5px solid darken(#f5f6f7, 20%);
+                background: darken(#f5f6f7, 8%);
+
+                .reply-message-name{
+                    font-weight:600;
+                    margin-bottom:8px;
+                }
+                .reply-message-text{
+                    cursor:pointer;
+                    white-space:pre-wrap;
+                    i{
+                        font-size:45px;
+                    }
+                    
+                }
+
+                .reply-message-image{
+                    cursor:pointer;
+                    min-height:50px;
+                    white-space: normal;
+                    img{
+                        max-height:50px;
+                        display: inline-block;
+                        margin:3px;
+                        border-radius: 3px;
+                    }
+                    i{
+                        font-size:38px;
+                    }
+                }
+            }
         
             .chat-content{
         
@@ -119,25 +154,24 @@
                         flex-direction: column;
                         align-items: flex-start;
         
-                        p{
+                        .text-message,
+                        .file-message{
+                            border:1px solid transparent;
                             cursor:pointer;
                             white-space: pre-wrap;
-                            transition:0.35s all;
+                            transition:all 0.35s;
                             max-width:100%;
                             overflow-wrap: break-word;
                             word-wrap: break-word;
+                            position: relative;
+                            padding: 6px 8px;
+                            margin: 4px 0;
+                            background-color: #f5f6f7;
+                            border-radius: 3px;
 
-                            img{
-                                max-width: 150px;
-                            }
-
-                            &.sticker-message{
-                                background:transparent;
-                            }
                             u{
                                 word-break: break-word;
                             }
-
                         }
 
                         .favorite-message{
@@ -157,6 +191,8 @@
                         }
 
                         %image-shared{
+                            border:1px solid transparent;
+                            transition: border 0.35s;
                             background:transparent;
                             width:150px;
                             height:150px;
@@ -226,12 +262,22 @@
                                 right:0;
                                 position: absolute;
                                 opacity:1;
+                                margin:auto;
                                 transition: opacity 0.5s;
                             }
 
                             .spinner-dots + img{
                                 opacity:0;
                             }
+                        }
+
+                        
+                        .reply-message-wrapper{
+                            margin:4px 0;
+                            padding: 8px;
+                            border-radius:3px;
+                            background-color: #f5f6f7;
+
                         }
                         
                     }
@@ -245,7 +291,8 @@
                         flex: none;
                         align-items:flex-end;
                         
-                        p{
+                        .text-message,
+                        .file-message{
                             background-color: $color-blue;
                             color: #fff;
                             
@@ -259,6 +306,25 @@
                                 }
                             }
                          
+                        }
+                        .favorite-message{
+                            background-color:#f96197;
+                            color:white;
+                        }
+
+                        .reply-message-wrapper{
+                            background-color: $color-blue;
+                            .reply-message-container{
+                                border-left: 5px solid darken($color-blue, 30%);
+                                background: darken($color-blue, 15%);
+                            }
+                            .reply-message-name{
+                                color:white;
+                            }
+                            .reply-message-text{
+                                color:#f5f6f7;
+                            }
+
                         }
                     }
             
@@ -326,6 +392,42 @@
             }
             .stickers-visible{
                 display:block;
+            }
+
+            .reply-wrapper{
+                height:0px;
+                transition: height 0.3s ease;
+                background: #f9fafb;
+                .reply-container{
+                    padding: 7px 10px 7px 20px;
+                    display:flex;
+                    align-items: flex-start;
+                    border-top: 1px solid #f1f2f3;
+
+                    .reply-message-container{
+                        padding:3px 10px;
+                        max-height:107px;
+                        overflow-y:auto;
+                        flex:1;
+
+                        .reply-message-image{
+                            i{
+                                font-size:38px;
+                            }
+
+                        }
+                    }
+
+                    .reply-close{
+                        padding:10px;
+                        font-size: 20px;
+                        cursor:pointer;
+                    }
+                }
+            }
+
+            .reply-visible{
+                height: 116px;
             }
 
             footer{
