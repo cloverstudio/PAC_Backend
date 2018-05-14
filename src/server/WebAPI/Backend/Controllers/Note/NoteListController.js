@@ -84,7 +84,12 @@ NoteListController.prototype.init = function (app) {
             // get departments
             PermissionLogic.getDepartments(user._id.toString(), function (departments) {
 
-                done(null, { groupIds: _.union(user.groups, departments) });
+                var groupIds = _.union(user.groups, departments);
+
+                groupIds = groupIds.map((id) => {
+                    return new RegExp('^.*' + Utils.escapeRegExp(id.toString()) + '.*$', "i")
+                });
+                done(null, { groupIds: groupIds });
 
             });
 
@@ -97,8 +102,10 @@ NoteListController.prototype.init = function (app) {
                 users: user._id.toString()
             }, function (err, findResult) {
 
-                result.roomIds = _.map(findResult, "_id");
-                done(err, result)
+                result.roomIds = findResult.map((obj) => {
+                    return new RegExp('^.*' + Utils.escapeRegExp(obj._id.toString()) + '.*$', "i")
+                });
+                done(err, result);
 
             });
 
@@ -113,8 +120,10 @@ NoteListController.prototype.init = function (app) {
                 _id: { $ne: user._id }
             }, function (err, findResult) {
 
-                result.userIds = _.map(findResult, "_id");
-                done(err, result)
+                result.userIds = findResult.map((obj) => {
+                    return new RegExp('^.*' + Utils.escapeRegExp(obj._id.toString()) + '.*$', "i")
+                });
+                done(err, result);
 
             });
 
@@ -125,7 +134,7 @@ NoteListController.prototype.init = function (app) {
             var ids = _.union(result.groupIds, result.roomIds, result.userIds);
 
             noteModel.find({
-                chatId: new RegExp('^.*' + Utils.escapeRegExp(ids.toString()) + '.*$', "i")
+                chatId: { $in: ids }
             }, function (err, findResult) {
 
                 result.notes = findResult;
