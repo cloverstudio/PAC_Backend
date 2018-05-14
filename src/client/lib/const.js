@@ -38,8 +38,8 @@ export const ApiUrlLeaveRoom = "/room/leave";
 export const ApiUrlGetMessageInfo = "/message/seenby/";
 export const ApiUrlMarkAll = "/user/history/markall";
 export const ApiUrlSearchAll = "/search/all/";
-export const ApiUrlSaveNote = "/note";
-export const ApiUrlLoadNote = "/note";
+export const ApiUrlSaveNote = "/note/save";
+export const ApiUrlLoadNote = "/note/list";
 export const ApiUrlSaveWebPushSubscription = "/user/savewebpushsubscription";
 
 export const ErrorCodeInvalidToken = 4000007;
