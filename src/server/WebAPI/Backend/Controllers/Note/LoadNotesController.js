@@ -28,7 +28,7 @@ LoadNotesController.prototype.init = function (app) {
     var self = this;
 
     /**
-      * @api {get} /api/v2/notes/:chatId load notes for the chat
+      * @api {get} /api/v2/note/list/:chatId load notes for the chat
       * @apiName AddToFavorite
       * @apiGroup WebAPI
       * @apiDescription Add to callers favorite
@@ -55,11 +55,6 @@ LoadNotesController.prototype.init = function (app) {
 
         const noteModel = NoteModel.get();
         const chatId = request.params.chatId;
-
-        if (!chatId) {
-            self.successResponse(response, Const.resCodeLoadNoteNoChatID);
-            return;
-        }
 
         async.waterfall([function (done) {
 
