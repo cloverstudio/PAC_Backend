@@ -15,7 +15,6 @@ var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
 var Utils = require(pathTop + 'lib/utils');
 var NoteModel = require(pathTop + 'Models/Note');
 var RoomModel = require(pathTop + 'Models/Room');
-var UserModel = require(pathTop + 'Models/User');
 
 var PermissionLogic = require(pathTop + 'Logics/Permission');
 
@@ -63,7 +62,6 @@ NoteListController.prototype.init = function (app) {
 
         const noteModel = NoteModel.get();
         const roomModel = RoomModel.get();
-        const userModel = UserModel.get();
 
         const user = request.user;
 
@@ -97,7 +95,6 @@ NoteListController.prototype.init = function (app) {
         function getRoomIds(result, done) {
 
             roomModel.find({
-                organizationId: user.organizationId,
                 users: user._id.toString()
             }, function (err, findResult) {
 

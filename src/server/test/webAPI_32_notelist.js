@@ -1,20 +1,20 @@
-var should = require('should');
 var request = require('supertest');
 var app = require('../mainTest');
-var sha1 = require('sha1');
 var util = require('util');
+var Const = require("../lib/consts");
+
 
 describe('WEB API', function () {
 
     var req, res;
 
-    describe('/search/all GET', function () {
+    describe('/note/list GET', function () {
 
-        it('works with keyword', function (done) {
+        it('fails if invalid token', function (done) {
 
             request(app)
-                .get('/api/v2/search/all/1?keyword=room1')
-                .set('access-token', global.user1.accessToken)
+                .get('/api/v2/note/list')
+                .set('access-token', "blablabal")
                 .end(function (err, res) {
 
                     if (err) {
@@ -22,7 +22,7 @@ describe('WEB API', function () {
                     }
 
                     res.body.should.have.property('code');
-                    res.body.code.should.equal(1);
+                    res.body.code.should.equal(Const.responsecodeSigninInvalidToken);
 
                     done();
 
@@ -30,10 +30,10 @@ describe('WEB API', function () {
 
         });
 
-        it('works without keyword', function (done) {
+        it('works', function (done) {
 
             request(app)
-                .get('/api/v2/search/all/1')
+                .get('/api/v2/note/list')
                 .set('access-token', global.user1.accessToken)
                 .end(function (err, res) {
 
@@ -42,7 +42,10 @@ describe('WEB API', function () {
                     }
 
                     res.body.should.have.property('code');
-                    res.body.code.should.equal(1);
+                    res.body.code.should.equal(Const.responsecodeSucceed);
+
+                    res.body.should.have.property('data');
+                    res.body.data.should.have.property('notes');
 
                     done();
 
