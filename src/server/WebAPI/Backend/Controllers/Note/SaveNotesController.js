@@ -28,7 +28,7 @@ SaveNotesController.prototype.init = function (app) {
     var self = this;
 
     /**
-      * @api {post} /api/v2/notes Save Notes for chat
+      * @api {post} /api/v2/note/save Save Notes for chat
       * @apiName AddToFavorite
       * @apiGroup WebAPI
       * @apiDescription Add to callers favorite

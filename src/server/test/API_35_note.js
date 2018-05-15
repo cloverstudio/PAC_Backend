@@ -6,11 +6,11 @@ describe('API', function () {
 
     var req, res;
 
-    describe('/api/v2/note POST', function () {
+    describe('/api/v2/note/save POST', function () {
 
         it('Save notes', (done) => {
             request(app)
-                .post('/api/v2/note/')
+                .post('/api/v2/note/save')
                 .set('access-token', global.user1.apiaccesstoken)
                 .send({
                     chatId: "3-" + global.room1._id,
@@ -30,11 +30,11 @@ describe('API', function () {
         });
     });
 
-    describe('/api/v2/note GET', function () {
+    describe('/api/v2/note/list GET', function () {
 
-        it('Loat notes', (done) => {
+        it('Load notes', (done) => {
             request(app)
-                .get('/api/v2/note/' + "3-" + global.room1._id)
+                .get('/api/v2/note/list/' + "3-" + global.room1._id)
                 .set('access-token', global.user1.apiaccesstoken)
                 .expect(200)
                 .end((err, res) => {
