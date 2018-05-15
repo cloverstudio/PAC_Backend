@@ -11,12 +11,12 @@ class Stickers extends Component {
 
     static propTypes = {
     }
-    constructor(){
+    constructor() {
         super();
         this.state = {
 
             index: 0
-        
+
         }
     }
 
@@ -32,37 +32,41 @@ class Stickers extends Component {
         let stickersNavTabs = [];
         let stickersGridItems = [];
 
-        this.props.stickers.forEach( (stickerGroup, index) => {
+        this.props.stickers.forEach((stickerGroup, index) => {
             let navClass = this.state.index === index ? 'nav-link active' : 'nav-link';
-            let paneClass= this.state.index === index ? 'tab-pane fade active show' : 'tab-pane fade'; 
+            let paneClass = this.state.index === index ? 'tab-pane fade active show' : 'tab-pane fade';
 
             stickersNavTabs.push(
-                <li key={index} className="nav-item" onClick={e => this.changeStickersTab(index) }>
+                <li key={index} className="nav-item" onClick={e => this.changeStickersTab(index)}>
                     <span className={navClass}>
-                        <img className="stickers-nav" src={config.mediaBaseURL + stickerGroup.mainTitlePic}/>
+                        <img className="stickers-nav" src={config.mediaBaseURL + stickerGroup.mainTitlePic} />
                     </span>
                 </li>);
-            
+
             stickersGridItems.push(
-               <div key={index} className={paneClass}>
-                    {stickerGroup.list.map( sticker => 
-                            <span key={sticker.smallPic} className='dropdown-item' onClick={() => this.props.sendMessage(constant.MessageTypeSticker, sticker.fullPic)}>
-                                <img src={config.mediaBaseURL + sticker.smallPic}/>
-                            </span>
-                        )}
+                <div key={index} className={paneClass}>
+                    {stickerGroup.list.map(sticker =>
+                        <span key={sticker.smallPic} className='dropdown-item'
+                            onClick={() => {
+                                this.props.sendMessage(constant.MessageTypeSticker, sticker.fullPic)
+                                this.props.setLockedForScrolling(false);
+                            }}>
+                            <img src={config.mediaBaseURL + sticker.smallPic} />
+                        </span>
+                    )}
                 </div>);
 
         });
 
         return (
             <div className={cardClass}>
-            
+
                 {this.props.stickersLoading ?
                     <div className="card-loading reveal">
                         <div className="spinner-dots">
-                        <span className="dot1"></span>
-                        <span className="dot2"></span>
-                        <span className="dot3"></span>
+                            <span className="dot1"></span>
+                            <span className="dot2"></span>
+                            <span className="dot3"></span>
                         </div>
                     </div> : null
                 }
@@ -94,8 +98,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        sendMessage : (messageType, content) => dispatch(actions.chat.sendMessage(messageType, content)),
-        hideStickersView: () => dispatch(actions.chatUI.hideStickersView())        
+        sendMessage: (messageType, content) => dispatch(actions.chat.sendMessage(messageType, content)),
+        hideStickersView: () => dispatch(actions.chatUI.hideStickersView())
     };
 };
 

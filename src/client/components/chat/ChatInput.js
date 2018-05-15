@@ -73,6 +73,10 @@ class ChatInput extends Component {
             const inputValue = this.props.inputValues[this.props.currentChatId] || '';
             if(inputValue) this.props.sendStartTyping(this.props.currentChatId);
         }
+
+        if (this.props.replies[this.props.currentChatId]) {
+            this.textareaInputElement.focus();
+        }
     }
 
     handleClickFileUpload = e => {
@@ -91,6 +95,7 @@ class ChatInput extends Component {
             <footer className="publisher">
     
                     <textarea
+                    ref={input => this.textareaInputElement = input}
                     placeholder="Write something"
                     style={this.state.textAreaStyle}
                     value={this.props.inputValues[this.props.currentChatId] || ''}
@@ -154,7 +159,8 @@ const mapStateToProps = (state) => {
     return {
         currentChatId:state.chat.chatId,        
         stickersViewState: state.chatUI.stickersViewState,
-        inputValues: state.chat.inputValues     
+        inputValues: state.chat.inputValues,
+        replies: state.chat.replies  
     };
 };
 

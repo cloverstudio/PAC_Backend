@@ -17,9 +17,11 @@ var UserModel = require('../Models/User');
 
 var SocketHandlerBase = require("./SocketHandlerBase");
 
+var useVoipPush = true;
+
 // default
-if (Config.useVoipPush == undefined) {
-    Config.useVoipPush = true;
+if (Config.useVoipPush != undefined) {
+    useVoipPush = Config.useVoipPush;
 }
 
 var CallingActionsHandler = function () {
@@ -152,7 +154,7 @@ CallingActionsHandler.prototype.attach = function (io, socket) {
 
                             findUserResult.pushToken.forEach((token) => {
 
-                                if (Config.useVoipPush) {
+                                if (useVoipPush) {
 
                                     // only android
                                     if (token.length > 64) {
@@ -176,7 +178,7 @@ CallingActionsHandler.prototype.attach = function (io, socket) {
 
                         }
 
-                        if (Config.useVoipPush) {
+                        if (useVoipPush) {
                             if (findUserResult.voipPushToken && findUserResult.voipPushToken.length > 0) {
                                 findUserResult.voipPushToken.forEach((token) => {
                                     tokens.push({
@@ -206,7 +208,7 @@ CallingActionsHandler.prototype.attach = function (io, socket) {
                                         name: result.userFrom.name,
                                         avatarFileName: avatarFileName
                                     }
-                                }, Config.useVoipPush);
+                                }, useVoipPush);
                             }
                         }
 
@@ -313,7 +315,7 @@ CallingActionsHandler.prototype.attach = function (io, socket) {
 
                             findUserResult.pushToken.forEach((token) => {
 
-                                if (Config.useVoipPush) {
+                                if (useVoipPush) {
 
                                     // only android
                                     if (token.length > 64) {
@@ -336,7 +338,7 @@ CallingActionsHandler.prototype.attach = function (io, socket) {
 
                         }
 
-                        if (Config.useVoipPush) {
+                        if (useVoipPush) {
 
                             if (findUserResult.voipPushToken && findUserResult.voipPushToken.length > 0) {
 
@@ -370,7 +372,7 @@ CallingActionsHandler.prototype.attach = function (io, socket) {
                                         name: result.userFrom.name,
                                         avatarFileName: avatarFileName
                                     }
-                                }, Config.useVoipPush);
+                                }, useVoipPush);
                             }
 
                         }

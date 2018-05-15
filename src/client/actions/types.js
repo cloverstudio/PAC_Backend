@@ -83,6 +83,7 @@ export const ChatForwardMessage = "Chat/ForwardMessage";
 export const ChatForwardMessageFailed = "Chat/ForwardMessageFailed";
 export const ChatUpdateMessages = "Chat/UpdateMessages";
 export const ChatLoadMessageStart = "Chat/LoadMessageStart";
+export const ChatResetLoadAllToTarget = "Chat/ResetLoadAllToTarget";
 
 export const ChatStartedTyping = "Chat/StartedTyping";
 export const ChatStoppedTyping = "Chat/StoppedTyping";
@@ -95,6 +96,8 @@ export const ChatHideHistory = "Chat/HideHistory";
 export const ChatShowInfoView = "Chat/ShowInfoView";
 export const ChatHideInfoView = "Chat/HideInfoView";
 export const ChatChangeInputValue = "Chat/ChangeInputValue";
+export const ChatAddReplyMessage = "Chat/AddReplyMessage";
+export const ChatRemoveReplyMessage = "Chat/RemoveReplyMessage";
 
 export const ChatStartFileUpload = "Chat/StartFileUpload";
 export const ChatFileUploadSucceed = "Chat/FileUploadSucceed";
