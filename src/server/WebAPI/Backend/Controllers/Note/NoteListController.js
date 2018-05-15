@@ -70,7 +70,6 @@ NoteListController.prototype.init = function (app) {
         async.waterfall([
             getGroupIds,
             getRoomIds,
-            getUserIds,
             getNotes
         ], endAsync);
 
@@ -111,27 +110,11 @@ NoteListController.prototype.init = function (app) {
 
         };
 
-        function getUserIds(result, done) {
-
-            userModel.find({
-                organizationId: user.organizationId,
-                status: Const.userStatus.enabled,
-                groups: { $in: result.groupIds },
-                _id: { $ne: user._id }
-            }, function (err, findResult) {
-
-                result.userIds = findResult.map((obj) => {
-                    return new RegExp('^.*' + Utils.escapeRegExp(obj._id.toString()) + '.*$', "i")
-                });
-                done(err, result);
-
-            });
-
-        };
-
         function getNotes(result, done) {
 
-            var ids = _.union(result.groupIds, result.roomIds, result.userIds);
+            var ids = _.union(result.groupIds, result.roomIds);
+
+            ids.push(new RegExp('^.*' + Utils.escapeRegExp(user._id.toString()) + '.*$', "i"));
 
             noteModel.find({
                 chatId: { $in: ids }
