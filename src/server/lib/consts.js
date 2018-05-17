@@ -120,6 +120,11 @@ Const.responsecodeDeliverMessageUserIsSender = 4000101;
 Const.responsecodePinChatWrongPinParam = 4000102;
 Const.responsecodePinChatWrongChatIdParam = 4000103;
 
+Const.responsecodeTodoNoChatId = 4000104;
+Const.responsecodeTodoNoText = 4000105;
+Const.responsecodeTodoNotFound = 4000106;
+Const.responsecodeTodoWrongAssignedUserId = 4000107;
+
 Const.httpCodeSucceed = 200;
 Const.httpCodeForbidden = 403;
 Const.httpCodeFileNotFound = 404;

@@ -99,6 +99,10 @@ var BackendMain = {
         router.use("/note/list", require("./Controllers/Note/LoadNotesController").init(app));
         router.use("/note/list", require("./Controllers/Note/NoteListController").init(app));
 
+        router.use("/todo/add", require("./Controllers/Todo/AddTodoController").init(app));
+        router.use("/todo/edit", require("./Controllers/Todo/EditTodoController").init(app));
+        router.use("/todo/list", require("./Controllers/Todo/TodoListController").init(app));
+
         return router;
     }
 }
