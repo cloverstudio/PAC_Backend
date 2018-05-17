@@ -25,6 +25,7 @@ Todo.prototype.init = function (mongoose) {
         modified: Number,
         dueDate: Number,
         assignedUserId: { type: String, index: true },
+        position: Number,
         completed: Boolean
     });
 
