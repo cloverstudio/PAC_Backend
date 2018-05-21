@@ -102,6 +102,8 @@ var BackendMain = {
         router.use("/todo/add", require("./Controllers/Todo/AddTodoController").init(app));
         router.use("/todo/edit", require("./Controllers/Todo/EditTodoController").init(app));
         router.use("/todo/list", require("./Controllers/Todo/TodoListController").init(app));
+        router.use("/todo/delete", require("./Controllers/Todo/DeleteTodoController").init(app));
+        router.use("/todo/reorder", require("./Controllers/Todo/ReorderTodoController").init(app));
 
         return router;
     }

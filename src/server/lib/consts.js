@@ -124,6 +124,8 @@ Const.responsecodeTodoNoChatId = 4000104;
 Const.responsecodeTodoNoText = 4000105;
 Const.responsecodeTodoNotFound = 4000106;
 Const.responsecodeTodoWrongAssignedUserId = 4000107;
+Const.responsecodeTodoListNotArray = 4000108;
+Const.responsecodeTodoReorderWrongObjectProperties = 4000109;
 
 Const.httpCodeSucceed = 200;
 Const.httpCodeForbidden = 403;

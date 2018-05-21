@@ -59,8 +59,6 @@ AddTodoController.prototype.init = function (app) {
 
     router.post('/', tokenChecker, function (request, response) {
 
-        var todoModel = TodoModel.get();
-
         var chatId = request.body.chatId;
         var text = request.body.text;
 
@@ -71,6 +69,8 @@ AddTodoController.prototype.init = function (app) {
 
         if (!text)
             return self.successResponse(response, Const.responsecodeTodoNoText);
+
+        var todoModel = TodoModel.get();
 
         async.waterfall([
             getNextPosition,
