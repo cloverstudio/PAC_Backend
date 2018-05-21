@@ -7,14 +7,14 @@ var app = require('../mainTest');
 
 global.hashsalt = "8zgqvU6LaziThJI1uz3PevYd";
 
-global.getRandomStr = function(num){
+global.getRandomStr = function (num) {
 
     if (!num) num = 5;
-    
+
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < num; i++ )
+    for (var i = 0; i < num; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
@@ -37,58 +37,58 @@ global.organization2 = {
     diskQuota: 10
 }
 
-var password = "password"  + global.getRandomStr();
+var password = "password" + global.getRandomStr();
 
 global.user1 = {
     name: "user1",
     userid: "userid1" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1,
+    organizationId: 1,
     permission: 2
 }
 
-password = "password"  + global.getRandomStr();
+password = "password" + global.getRandomStr();
 
 global.user2 = {
     name: "user2",
     userid: "userid2" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1,
-    permission: 3    
+    organizationId: 1,
+    permission: 3
 }
 
-password = "password"  + global.getRandomStr();
+password = "password" + global.getRandomStr();
 
 global.user3 = {
     name: "user3",
     userid: "userid3" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1,
+    organizationId: 1,
     permission: 1
 }
 
-password = "password"  + global.getRandomStr();
+password = "password" + global.getRandomStr();
 
 global.user4 = {
     name: "user4",
     userid: "userid4" + global.getRandomStr(),
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1,
+    organizationId: 1,
     permission: 1
 }
 
-password = "password"  + global.getRandomStr();
+password = "password" + global.getRandomStr();
 
 global.user5 = {
     name: "user5",
     userid: "+15005550006",
     password: sha1(password + global.hashsalt),
     passwordOrig: password,
-    organizationId : 1,
+    organizationId: 1,
     permission: 1,
     phoneNumber: "+15005550006",
     UUID: [
@@ -156,16 +156,18 @@ global.department3 = {
     type: 2
 }
 
+global.todo = {};
+
 global.encryptedText = "0301b8a755b0d074259a98114f78b6738401681b3762c87d6f25249001e903067cc7009beae2288379e456e6856bb3c4f22084811c05d10fa7869ac660aec60c04259926d75506a83284368805bdaca07563";
 
-before(function(doneMain){
-    
-    this.timeout(15000);
-    
-    setTimeout(function(){
+before(function (doneMain) {
 
-        async.waterfall([function(done){
-            
+    this.timeout(15000);
+
+    setTimeout(function () {
+
+        async.waterfall([function (done) {
+
 
             // create org
             request(app)
@@ -180,72 +182,72 @@ before(function(doneMain){
                 })
                 .end(function (err, res) {
 
-    			if (err) {
-    				throw err;
-    			}
-    			
-                var result = {};
-                
-                result.organization = res.body.data.org;
+                    if (err) {
+                        throw err;
+                    }
 
-                global.organization1._id = result.organization._id;
-                
-                global.user1.organizationId = result.organization._id;
-                global.user2.organizationId = result.organization._id;
-                global.user3.organizationId = result.organization._id;
-                global.user4.organizationId = result.organization._id;
-                global.user5.organizationId = result.organization._id;
+                    var result = {};
 
-                done(null,result)
-            
-            }); 
+                    result.organization = res.body.data.org;
+
+                    global.organization1._id = result.organization._id;
+
+                    global.user1.organizationId = result.organization._id;
+                    global.user2.organizationId = result.organization._id;
+                    global.user3.organizationId = result.organization._id;
+                    global.user4.organizationId = result.organization._id;
+                    global.user5.organizationId = result.organization._id;
+
+                    done(null, result)
+
+                });
 
         },
 
-        function(result, done) {
+        function (result, done) {
 
             // create apikey
             request(app)
                 .post('/api/v3/test/createapikey')
                 .send({
-                    organizationId:global.organization1._id
+                    organizationId: global.organization1._id
                 })
                 .end(function (err, res) {
-                
-    			if (err) {
-    				throw err;
-    			}
-                
-                global.apikey = res.body.key;
-                
-                done(null,result)
-            
-            });   
-            
+
+                    if (err) {
+                        throw err;
+                    }
+
+                    global.apikey = res.body.key;
+
+                    done(null, result)
+
+                });
+
         },
 
-        function(result, done) {
+        function (result, done) {
 
             // create user
             request(app)
                 .post('/api/v2/test/createtempuser')
                 .send(global.user1)
                 .end(function (err, res) {
-                
-    			if (err) {
-    				throw err;
-    			}
-    			
-                global.user1._id = res.body.data.user._id;
 
-                // global.group1.users.push(global.user1._id);
+                    if (err) {
+                        throw err;
+                    }
 
-                done(null,result)
-            
-            });   
-            
+                    global.user1._id = res.body.data.user._id;
+
+                    // global.group1.users.push(global.user1._id);
+
+                    done(null, result)
+
+                });
+
         },
-        function(result, done) {
+        function (result, done) {
 
             // create user
             request(app)
@@ -253,20 +255,20 @@ before(function(doneMain){
                 .send(global.user2)
                 .end(function (err, res) {
 
-    			if (err) {
-    				throw err;
-    			}
-    			
-                global.user2._id = res.body.data.user._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                // global.group1.users.push(global.user2._id);
+                    global.user2._id = res.body.data.user._id;
 
-                done(null,result)
-            
-            });  
-            
+                    // global.group1.users.push(global.user2._id);
+
+                    done(null, result)
+
+                });
+
         },
-        function(result, done) {
+        function (result, done) {
 
             // create user
             request(app)
@@ -274,20 +276,20 @@ before(function(doneMain){
                 .send(global.user3)
                 .end(function (err, res) {
 
-    			if (err) {
-    				throw err;
-    			}
-    			
-                global.user3._id = res.body.data.user._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                // global.group1.users.push(global.user3._id);
+                    global.user3._id = res.body.data.user._id;
 
-                done(null,result)
-            
-            });  
-            
+                    // global.group1.users.push(global.user3._id);
+
+                    done(null, result)
+
+                });
+
         },
-        function(result, done) {
+        function (result, done) {
 
             // create user
             request(app)
@@ -295,40 +297,40 @@ before(function(doneMain){
                 .send(global.user4)
                 .end(function (err, res) {
 
-                if (err) {
-                    throw err;
-                }
-                
-                
-                global.user4._id = res.body.data.user._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                // global.group1.users.push(global.user4._id);
 
-                done(null,result)
-            
-            });  
-            
+                    global.user4._id = res.body.data.user._id;
+
+                    // global.group1.users.push(global.user4._id);
+
+                    done(null, result)
+
+                });
+
         },
-        function(result, done) {
-            
+        function (result, done) {
+
             // create user
             request(app)
                 .post('/api/v2/test/createtempuser')
                 .send(global.user5)
                 .end(function (err, res) {
 
-                if (err) {
-                    throw err;
-                }
-                
-                global.user5._id = res.body.data.user._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                done(null,result)
-            
-            });  
-            
+                    global.user5._id = res.body.data.user._id;
+
+                    done(null, result)
+
+                });
+
         },
-        function(result, done) {
+        function (result, done) {
 
             // create group
             request(app)
@@ -338,22 +340,22 @@ before(function(doneMain){
                 .field('description', global.group1.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id)
-                .field('type', global.group1.type)                                
+                .field('type', global.group1.type)
                 .attach('file', 'src/server/test/samplefiles/user1.jpg')
                 .end(function (err, res) {
 
-                if (err) {
-                    throw err;
-                }
-                
-                global.group1._id = res.body.data.group._id;
-                
-                done(null, result);
-            
-            });  
-            
+                    if (err) {
+                        throw err;
+                    }
+
+                    global.group1._id = res.body.data.group._id;
+
+                    done(null, result);
+
+                });
+
         },
-        function(result, done) { 
+        function (result, done) {
 
             // create group
             request(app)
@@ -363,22 +365,22 @@ before(function(doneMain){
                 .field('description', global.group2.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user2._id + "," + global.user3._id + "," + global.user4._id)
-                .field('type', global.group2.type)                                
+                .field('type', global.group2.type)
                 .attach('file', 'src/server/test/samplefiles/user2.jpg')
                 .end(function (err, res) {
 
-                if (err) {
-                    throw err;
-                }
-                
-                global.group2._id = res.body.data.group._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                done(null, result);
-            
-            });  
-            
+                    global.group2._id = res.body.data.group._id;
+
+                    done(null, result);
+
+                });
+
         },
-        function(result, done) {
+        function (result, done) {
 
             // create group
             request(app)
@@ -388,22 +390,22 @@ before(function(doneMain){
                 .field('description', global.group3.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
-                .field('type', global.group3.type)                                
+                .field('type', global.group3.type)
                 .attach('file', 'src/server/test/samplefiles/user3.png')
                 .end(function (err, res) {
 
-                if (err) {
-                    throw err;
-                }
-                
-                global.group3._id = res.body.data.group._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                done(null, result);
-            
-            });  
-            
+                    global.group3._id = res.body.data.group._id;
+
+                    done(null, result);
+
+                });
+
         },
-        function(result, done) {
+        function (result, done) {
 
             // create group
             request(app)
@@ -413,26 +415,26 @@ before(function(doneMain){
                 .field('description', global.group4.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
-                .field('type', global.group4.type)                
+                .field('type', global.group4.type)
                 .attach('file', 'src/server/test/samplefiles/user4.png')
                 .end(function (err, res) {
 
-                if (err) {
-                    throw err;
-                }
-                
-                global.group4._id = res.body.data.group._id;
+                    if (err) {
+                        throw err;
+                    }
 
-                global.createdGroup2 = global.group4;
-                global.createdGroup2.id = global.group4._id;
+                    global.group4._id = res.body.data.group._id;
 
-                done(null, result);
-            
-            });  
-            
+                    global.createdGroup2 = global.group4;
+                    global.createdGroup2.id = global.group4._id;
+
+                    done(null, result);
+
+                });
+
         },
-        function(result, done) {
-            
+        function (result, done) {
+
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
@@ -441,16 +443,16 @@ before(function(doneMain){
                 .field('description', global.department1.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
-                .field('type', global.department1.type)                
-                .field('default', global.department1.default)                
+                .field('type', global.department1.type)
+                .field('default', global.department1.default)
                 .end(function (err, res) {
                     if (err) throw err;
                     global.department1._id = res.body.data.group._id;
                     done(null, result);
-                });  
+                });
         },
-        function(result, done) {
-            
+        function (result, done) {
+
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
@@ -463,14 +465,14 @@ before(function(doneMain){
                 .field('parentId', global.department1._id)
                 .attach('file', 'src/server/test/samplefiles/user4.png')
                 .end(function (err, res) {
-                if (err) throw err;
-                global.department2._id = res.body.data.group._id;
-                done(null, result);
-            });  
-            
+                    if (err) throw err;
+                    global.department2._id = res.body.data.group._id;
+                    done(null, result);
+                });
+
         },
-        function(result, done) {
-            
+        function (result, done) {
+
             // create group
             request(app)
                 .post('/api/v2/test/createtempgroup')
@@ -479,22 +481,22 @@ before(function(doneMain){
                 .field('description', global.department3.description)
                 .field('organizationId', global.organization1._id)
                 .field('users', global.user1._id + "," + global.user2._id + "," + global.user3._id + "," + global.user4._id)
-                .field('type', global.department3.type)                
-                .field('parentId', global.department1._id)                
+                .field('type', global.department3.type)
+                .field('parentId', global.department1._id)
                 .attach('file', 'src/server/test/samplefiles/user4.png')
                 .end(function (err, res) {
-                if (err) throw err;
-                global.department3._id = res.body.data.group._id;
-                done(null, result);
-            });  
-            
+                    if (err) throw err;
+                    global.department3._id = res.body.data.group._id;
+                    done(null, result);
+                });
+
         }
         ],
-        function(err, result) {
-            
-            doneMain();
-        });
-        
+            function (err, result) {
+
+                doneMain();
+            });
+
     }, 3000);
-    
+
 });
