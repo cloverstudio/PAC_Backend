@@ -13,8 +13,11 @@ var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
 
 
 var Utils = require(pathTop + 'lib/utils');
+
 var NoteModel = require(pathTop + 'Models/Note');
 var RoomModel = require(pathTop + 'Models/Room');
+var GroupModel = require(pathTop + 'Models/Group');
+var UserModel = require(pathTop + 'Models/User');
 
 var PermissionLogic = require(pathTop + 'Logics/Permission');
 
@@ -62,13 +65,18 @@ NoteListController.prototype.init = function (app) {
 
         const noteModel = NoteModel.get();
         const roomModel = RoomModel.get();
+        const groupModel = GroupModel.get();
+        const userModel = UserModel.get();
 
         const user = request.user;
 
         async.waterfall([
             getGroupIds,
-            getRoomIds,
-            getNotes
+            getRooms,
+            getNotes,
+            getGroups,
+            getUsers,
+            parseNotes
         ], endAsync);
 
 
@@ -82,25 +90,19 @@ NoteListController.prototype.init = function (app) {
             PermissionLogic.getDepartments(user._id.toString(), function (departments) {
 
                 var groupIds = _.union(user.groups, departments);
-
-                groupIds = groupIds.map((id) => {
-                    return new RegExp('^.*' + Utils.escapeRegExp(id.toString()) + '.*$', "i")
-                });
                 done(null, { groupIds: groupIds });
 
             });
 
         };
 
-        function getRoomIds(result, done) {
+        function getRooms(result, done) {
 
             roomModel.find({
                 users: user._id.toString()
             }, function (err, findResult) {
 
-                result.roomIds = findResult.map((obj) => {
-                    return new RegExp('^.*' + Utils.escapeRegExp(obj._id.toString()) + '.*$', "i")
-                });
+                result.rooms = findResult;
                 done(err, result);
 
             });
@@ -109,18 +111,115 @@ NoteListController.prototype.init = function (app) {
 
         function getNotes(result, done) {
 
-            var ids = _.union(result.groupIds, result.roomIds);
+            var ids = _.union(result.groupIds, _.map(result.rooms, "_id"), [user._id.toString()]);
 
-            ids.push(new RegExp('^.*' + Utils.escapeRegExp(user._id.toString()) + '.*$', "i"));
+            ids = ids.map((id) => {
+                return new RegExp('^.*' + Utils.escapeRegExp(id.toString()) + '.*$', "i");
+            });
 
             noteModel.find({
                 chatId: { $in: ids }
             }, function (err, findResult) {
 
-                result.notes = findResult;
+                result.notes = findResult.map((note) => {
+                    return note.toObject();
+                });
                 done(err, result);
 
             });
+
+        };
+
+        function getGroups(result, done) {
+
+            groupModel.find({
+                _id: { $in: result.groupIds }
+            }, function (err, findResult) {
+
+                result.groups = findResult;
+                done(err, result);
+
+            });
+
+        };
+
+        function getUsers(result, done) {
+
+            userModel.find({
+                organizationId: user.organizationId,
+                status: Const.userStatus.enabled,
+                groups: { $in: result.groupIds },
+                _id: { $ne: user._id }
+            }, function (err, findResult) {
+
+                result.users = findResult;
+                done(err, result);
+
+            });
+
+        };
+
+        function parseNotes(result, done) {
+
+            var notes = result.notes;
+            var users = result.users;
+            var groups = result.groups;
+            var rooms = result.rooms;
+
+            _.map(notes, (note) => {
+
+                var splittedChatId = note.chatId.split("-");
+
+                var chatType = Number(splittedChatId[0]);
+
+                switch (chatType) {
+
+                    case Const.chatTypePrivate:
+
+                        var userToId = splittedChatId[1];
+
+                        if (userToId == user._id.toString())
+                            userToId = splittedChatId[2];
+
+                        var findUser = _.find(users, { _id: DatabaseManager.toObjectId(userToId) });
+
+                        if (findUser) {
+                            note.chatName = findUser.name;
+                            note.chatAvatar = findUser.avatar;
+                        }
+                        break;
+
+                    case Const.chatTypeGroup:
+
+                        var groupId = splittedChatId[1];
+
+                        var findGroup = _.find(groups, { _id: DatabaseManager.toObjectId(groupId) });
+
+                        if (findGroup) {
+                            note.chatName = findGroup.name;
+                            note.chatAvatar = findGroup.avatar;
+                        }
+                        break;
+
+                    case Const.chatTypeRoom:
+
+                        var roomId = splittedChatId[1];
+
+                        var findRoom = _.find(rooms, { _id: DatabaseManager.toObjectId(roomId) });
+
+                        if (findRoom) {
+                            note.chatName = findRoom.name;
+                            note.chatAvatar = findRoom.avatar;
+                        }
+                        break;
+
+                }
+
+                return note;
+
+            });
+
+            done(null, result);
 
         };
 
