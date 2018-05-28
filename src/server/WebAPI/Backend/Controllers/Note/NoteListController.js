@@ -122,8 +122,14 @@ NoteListController.prototype.init = function (app) {
             }, function (err, findResult) {
 
                 result.notes = findResult.map((note) => {
+
+                    if (!note.modified)
+                        note.modified = note.created;
+
                     return note.toObject();
+
                 });
+                result.notes = _.sortByOrder(result.notes, "modified", "desc");
                 done(err, result);
 
             });
