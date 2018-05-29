@@ -109,7 +109,7 @@ UndeliverMessageListController.prototype.init = function (app) {
                 result.messages = findResult;
                 done(err, result);
 
-            }).sort({ created: "desc" });
+            }).sort({ created: "desc" }).limit(100);
 
         };
 
