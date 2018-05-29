@@ -256,7 +256,8 @@ PushNotificationSender = {
                         fromuser: payload.from,
                         pushType: payload.pushType,
                         unreadCount: unreadCount,
-                        mute: payload.mute
+                        mute: payload.mute,
+                        undeliveredCount: payload.undeliveredCount
                     };
 
                     if (payload.file) {

@@ -16,6 +16,8 @@ var GroupModel = require('../Models/Group');
 var RoomModel = require('../Models/Room');
 var UserModel = require('../Models/User');
 
+var MessageListLogic = require('../Logics/MessageList');
+
 var LoginActionHandler = function () {
 
 }
@@ -34,7 +36,7 @@ LoginActionHandler.prototype.attach = function (io, socket) {
      * @apiParam {string} token user token
      * @apiParam {string} processId identifier for device
      */
-    socket.on('login', function (param) {
+    socket.on('login', function (param, callback) {
 
         param.socketid = socket.id;
 
@@ -45,96 +47,104 @@ LoginActionHandler.prototype.attach = function (io, socket) {
         }
 
         // check token
-        async.waterfall([function (done) {
+        async.waterfall([
 
-            var result = {};
+            function (done) {
 
-            self.checkToken(param.token, function (checkTokenResult) {
+                var result = {};
 
-                if (_.isNull(checkTokenResult)) {
-                    socket.emit('socketerror', { code: Const.responsecodeSigninInvalidToken });
-                    return;
-                }
+                self.checkToken(param.token, function (checkTokenResult) {
 
-                result.user = checkTokenResult;
+                    if (_.isNull(checkTokenResult)) {
+                        socket.emit('socketerror', { code: Const.responsecodeSigninInvalidToken });
+                        return;
+                    }
 
-                done(null, result)
+                    result.user = checkTokenResult;
 
-            });
-
-        },
-        function (result, done) {
-
-            // join to self
-            socket.join(result.user._id.toString());
-            done(null, result);
-
-        },
-        function (result, done) {
-
-            // join to groups
-            var model = GroupModel.get();
-
-            model.find({
-                users: result.user._id.toString()
-            }, function (err, groupFindResult) {
-
-                _.forEach(groupFindResult, function (group) {
-
-                    var groupId = group._id.toString();
-
-                    socket.join('2-' + groupId);
+                    done(null, result)
 
                 });
 
+            },
+            function (result, done) {
+
+                // join to self
+                socket.join(result.user._id.toString());
                 done(null, result);
 
-            });
+            },
+            function (result, done) {
 
+                // join to groups
+                var model = GroupModel.get();
 
+                model.find({
+                    users: result.user._id.toString()
+                }, function (err, groupFindResult) {
 
-        },
-        function (result, done) {
+                    _.forEach(groupFindResult, function (group) {
 
-            // join to rooms
-            var model = RoomModel.get();
-            model.find({
-                users: result.user._id.toString()
-            }, function (err, groupFindResult) {
+                        var groupId = group._id.toString();
 
-                _.forEach(groupFindResult, function (group) {
+                        socket.join('2-' + groupId);
 
-                    var roomId = group._id.toString();
-
-                    socket.join('3-' + roomId);
-
-                });
-
-                done(null, result);
-
-            });
-
-
-
-        },
-        function (result, done) {
-
-            self.handleCalling(socket, result.user.id);
-            done(null, result)
-
-        }
-        ],
-            function (err, result) {
-
-                SocketConnectionHandler.newSocketConnection(
-                    result.user,
-                    param.processId,
-                    socket.id,
-                    function () {
-                        socket.emit('logined', result);
                     });
 
-            });
+                    done(null, result);
+
+                });
+
+
+
+            },
+            function (result, done) {
+
+                // join to rooms
+                var model = RoomModel.get();
+                model.find({
+                    users: result.user._id.toString()
+                }, function (err, groupFindResult) {
+
+                    _.forEach(groupFindResult, function (group) {
+
+                        var roomId = group._id.toString();
+
+                        socket.join('3-' + roomId);
+
+                    });
+
+                    done(null, result);
+
+                });
+
+
+
+            },
+            function (result, done) {
+
+                self.handleCalling(socket, result.user.id);
+                done(null, result)
+
+            }
+
+        ], function (err, result) {
+
+            SocketConnectionHandler.newSocketConnection(
+                result.user,
+                param.processId,
+                socket.id,
+                function () {
+                    socket.emit('logined', result);
+                }
+            );
+
+            if (_.isFunction(callback))
+                MessageListLogic.getUndeliveredCount(null, (count) => {
+                    callback({ undeliveredCount: count });
+                });
+
+        });
 
     });
 

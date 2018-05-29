@@ -95,8 +95,11 @@ UndeliverMessageListController.prototype.init = function (app) {
             var result = {};
 
             var query = {
-                deliveredTo: { $exists: false }
-            }
+                $or: [
+                    { deliveredTo: { $exists: false } },
+                    { deliveredTo: { $exists: true, $eq: [] } }
+                ]
+            };
 
             if (chatId)
                 query.roomID = chatId;
@@ -106,7 +109,7 @@ UndeliverMessageListController.prototype.init = function (app) {
                 result.messages = findResult;
                 done(err, result);
 
-            }).sort({ created: "desc" }).limit(100);
+            }).sort({ created: "desc" });
 
         };
 

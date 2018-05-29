@@ -582,6 +582,7 @@ var NotifyNewMessage = {
                 }
 
                 payload.pushType = Const.pushTypeNewMessage;
+                payload.undeliveredCount = originalRequestData.undeliveredCount;
                 PushNotificationSender.start(tokenAndBadgeCount, payload, Config.useVoipPush);
 
                 done(null, result);

@@ -22,6 +22,7 @@ var MessageModel = require("../Models/Message");
 var GroupModel = require('../Models/Group');
 var RoomModel = require('../Models/Room');
 
+var MessageListLogic = require('../Logics/MessageList');
 
 var SendMessage = {
 
@@ -151,7 +152,17 @@ var SendMessage = {
                 done(null, result);
             }
 
-        }, (result, done) => {
+        },
+        (result, done) => {
+
+            MessageListLogic.getUndeliveredCount(param.roomID, (count) => {
+
+                param.undeliveredCount = count;
+                done(null, result);
+
+            });
+        },
+        (result, done) => {
 
             var objMessage = {
                 remoteIpAddress: param.ipAddress,

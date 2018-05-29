@@ -494,6 +494,28 @@ var MessageList = {
 
             });
 
+    },
+
+    getUndeliveredCount: function (chatId, callback) {
+
+        var messageModel = MessageModel.get();
+
+        var query = {
+            $or: [
+                { deliveredTo: { $exists: false } },
+                { deliveredTo: { $exists: true, $eq: [] } }
+            ]
+        };
+
+        if (chatId)
+            query.roomID = chatId;
+
+        messageModel.count(query, (err, countResult) => {
+
+            callback(countResult);
+
+        });
+
     }
 
 };
