@@ -13,6 +13,7 @@ var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
 
 var Utils = require(pathTop + 'lib/utils');
 var MessageModel = require(pathTop + 'Models/Message');
+var UserModel = require(pathTop + 'Models/User');
 
 var tokenChecker = require(pathTop + 'lib/authApi');
 
@@ -78,10 +79,13 @@ UndeliverMessageListController.prototype.init = function (app) {
 
         const chatId = request.params.chatId;
 
-        const messageModel = MessageModel.get();
         const user = request.user;
 
+        const messageModel = MessageModel.get();
+        const userModel = UserModel.get();
+
         async.waterfall([
+            getUsers,
             getMessages
         ], endAsync);
 
@@ -90,11 +94,28 @@ UndeliverMessageListController.prototype.init = function (app) {
         ****** FUNCTIONS ******
         **********************/
 
-        function getMessages(done) {
+        function getUsers(done) {
 
             var result = {};
 
+            userModel.find({
+                organizationId: user.organizationId,
+                status: Const.userStatus.enabled,
+            }, function (err, findResult) {
+
+                result.users = findResult;
+                done(err, result);
+
+            });
+
+        };
+
+        function getMessages(result, done) {
+
+            var userIds = result.users.map((user) => { return user._id.toString() });
+
             var query = {
+                userID: { $in: userIds },
                 $or: [
                     { deliveredTo: { $exists: false } },
                     { deliveredTo: { $exists: true, $eq: [] } }

@@ -155,7 +155,7 @@ var SendMessage = {
         },
         (result, done) => {
 
-            MessageListLogic.getUndeliveredCount(param.roomID, (count) => {
+            MessageListLogic.getUndeliveredCount(param.roomID, result.user.organizationId, (count) => {
 
                 param.undeliveredCount = count;
                 done(null, result);

@@ -496,23 +496,34 @@ var MessageList = {
 
     },
 
-    getUndeliveredCount: function (chatId, callback) {
+    getUndeliveredCount: function (chatId, organizationId, callback) {
 
         var messageModel = MessageModel.get();
+        var userModel = UserModel.get();
 
-        var query = {
-            $or: [
-                { deliveredTo: { $exists: false } },
-                { deliveredTo: { $exists: true, $eq: [] } }
-            ]
-        };
+        userModel.find({
+            organizationId: organizationId,
+            status: Const.userStatus.enabled,
+        }, function (err, findResult) {
 
-        if (chatId)
-            query.roomID = chatId;
+            var userIds = findResult.map((user) => { return user._id.toString() });
 
-        messageModel.count(query, (err, countResult) => {
+            var query = {
+                userID: { $in: userIds },
+                $or: [
+                    { deliveredTo: { $exists: false } },
+                    { deliveredTo: { $exists: true, $eq: [] } }
+                ]
+            };
 
-            callback(countResult);
+            if (chatId)
+                query.roomID = chatId;
+
+            messageModel.count(query, (err, countResult) => {
+
+                callback(countResult);
+
+            });
 
         });
 

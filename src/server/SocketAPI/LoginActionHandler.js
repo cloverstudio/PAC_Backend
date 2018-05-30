@@ -140,7 +140,7 @@ LoginActionHandler.prototype.attach = function (io, socket) {
             );
 
             if (_.isFunction(callback))
-                MessageListLogic.getUndeliveredCount(null, (count) => {
+                MessageListLogic.getUndeliveredCount(null, result.user.organizationId, (count) => {
                     callback({ undeliveredCount: count });
                 });
 
