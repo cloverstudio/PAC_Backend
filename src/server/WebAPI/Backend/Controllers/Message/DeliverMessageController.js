@@ -38,7 +38,7 @@ DeliverMessageController.prototype.init = function (app) {
 
       * @apiHeader {String} access-token Users unique access-token.
 
-      * @apiParam {String} messageId messageId
+      * @apiParam {String} messageIds messageIds
 
       * @apiSuccessExample Success-Response:
         {
@@ -50,12 +50,16 @@ DeliverMessageController.prototype.init = function (app) {
 
     router.post('/', tokenChecker, function (request, response) {
 
-        var messageId = request.body.messageId;
+        var messageIds = request.body.messageIds;
 
         var user = request.user;
 
-        if (!messageId)
+        if (!messageIds)
             return self.successResponse(response, Const.responsecodeDeliverMessageNoMessageId);
+
+        messageIds = messageIds.split(",").map((id) => {
+            return DatabaseManager.toObjectId(id.trim());
+        });
 
         var messageModel = MessageModel.get();
 
@@ -65,19 +69,19 @@ DeliverMessageController.prototype.init = function (app) {
 
                 var result = {};
 
-                messageModel.findOne({
-                    _id: messageId
+                messageModel.find({
+                    _id: { $in: messageIds }
                 }, (err, findResult) => {
 
-                    if (!findResult)
+                    if (_.isEmpty(findResult))
                         return self.successResponse(response, Const.responsecodeDeliverMessageWrongMessageId);
 
-                    // do nothing for message sent user
-                    if (findResult.userID == user._id.toString())
-                        return self.successResponse(response, Const.responsecodeDeliverMessageUserIsSender);
 
-                    result.isDelivered = !_.isEmpty(_.filter(findResult.deliveredTo, { userId: user._id.toString() }));
-                    result.message = findResult;
+                    result.messages = findResult;
+
+                    result.undeliveredMesssages = _.filter(findResult, (message) => {
+                        return _.isEmpty(_.find(message.deliveredTo, { userId: user._id.toString() }));
+                    });
                     done(err, result);
 
                 });
@@ -94,7 +98,7 @@ DeliverMessageController.prototype.init = function (app) {
                 };
 
                 messageModel.update(
-                    { _id: messageId },
+                    { _id: messageIds },
                     {
                         $push: {
                             deliveredTo: deliveredToRow
@@ -111,7 +115,7 @@ DeliverMessageController.prototype.init = function (app) {
             (result, done) => {
 
                 UpdateHistory.updateLastMessageStatus({
-                    messageId: messageId,
+                    messageId: messageIds,
                     delivered: true
                 }, (err) => {
 
@@ -159,18 +163,12 @@ DeliverMessageController.prototype.init = function (app) {
                 if (splitAry.length < 2)
                     return;
 
-                var user1 = splitAry[1];
-                var user2 = splitAry[2];
+                var fromUser = splitAry[1];
+                var toUser = splitAry[2];
 
-                var toUser = null;
-                var fromUser = null;
-
-                if (user1 == user._id.toString()) {
-                    toUser = user2;
-                    fromUser = user1;
-                } else {
-                    toUser = user1;
-                    fromUser = user2;
+                if (fromUser != user._id.toString()) {
+                    fromUser = splitAry[2];
+                    toUser = splitAry[1];
                 }
 
                 SocketAPIHandler.emitToRoom(toUser, 'updatemessages', [message]);
