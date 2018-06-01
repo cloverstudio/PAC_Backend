@@ -15,7 +15,7 @@ describe('WEB API', function () {
                 .post('/api/v2/message/deliver')
                 .set('access-token', global.user2.accessToken)
                 .send({
-                    messageId: global.message1._id
+                    messageIds: global.message1._id
                 })
                 .end(function (err, res) {
 
@@ -38,7 +38,7 @@ describe('WEB API', function () {
                 .post('/api/v2/message/deliver')
                 .set('access-token', global.user2.accessToken)
                 .send({
-                    messageId: ""
+                    messageIds: ""
                 })
                 .end(function (err, res) {
 
@@ -61,7 +61,7 @@ describe('WEB API', function () {
                 .post('/api/v2/message/deliver')
                 .set('access-token', global.user2.accessToken)
                 .send({
-                    messageId: "invalid"
+                    messageIds: "invalid"
                 })
                 .end(function (err, res) {
 
@@ -71,29 +71,6 @@ describe('WEB API', function () {
 
                     res.body.should.have.property('code');
                     res.body.code.should.equal(Const.responsecodeDeliverMessageWrongMessageId);
-
-                    done();
-
-                });
-
-        });
-
-        it('Fails if user is sender', function (done) {
-
-            request(app)
-                .post('/api/v2/message/deliver')
-                .set('access-token', global.user1.accessToken)
-                .send({
-                    messageId: global.message1._id
-                })
-                .end(function (err, res) {
-
-                    if (err) {
-                        throw err;
-                    }
-
-                    res.body.should.have.property('code');
-                    res.body.code.should.equal(Const.responsecodeDeliverMessageUserIsSender);
 
                     done();
 

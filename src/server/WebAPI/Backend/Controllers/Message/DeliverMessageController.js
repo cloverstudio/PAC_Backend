@@ -31,8 +31,8 @@ DeliverMessageController.prototype.init = function (app) {
     var self = this;
 
     /**
-      * @api {post} /api/v2/message/deliver Update Message Delivered To 
-      * @apiName Update Message Delivered To 
+      * @api {post} /api/v2/message/deliver Update Messages Delivered To 
+      * @apiName Update Messages Delivered To 
       * @apiGroup WebAPI
       * @apiDescription 
 
