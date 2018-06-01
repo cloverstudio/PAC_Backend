@@ -58,7 +58,7 @@ DeliverMessageController.prototype.init = function (app) {
             return self.successResponse(response, Const.responsecodeDeliverMessageNoMessageId);
 
         messageIds = messageIds.split(",").map((id) => {
-            return DatabaseManager.toObjectId(id.trim());
+            return id.trim();
         });
 
         var messageModel = MessageModel.get();
@@ -76,12 +76,7 @@ DeliverMessageController.prototype.init = function (app) {
                     if (_.isEmpty(findResult))
                         return self.successResponse(response, Const.responsecodeDeliverMessageWrongMessageId);
 
-
                     result.messages = findResult;
-
-                    result.undeliveredMesssages = _.filter(findResult, (message) => {
-                        return _.isEmpty(_.find(message.deliveredTo, { userId: user._id.toString() }));
-                    });
                     done(err, result);
 
                 });
@@ -89,7 +84,11 @@ DeliverMessageController.prototype.init = function (app) {
             },
             (result, done) => {
 
-                if (result.isDelivered)
+                var undeliveredMesssages = _.filter(result.messages, (message) => {
+                    return _.isEmpty(_.find(message.deliveredTo, { userId: user._id.toString() }));
+                });
+
+                if (_.isEmpty(undeliveredMesssages))
                     return done(null, result);
 
                 var deliveredToRow = {
@@ -97,16 +96,23 @@ DeliverMessageController.prototype.init = function (app) {
                     at: Utils.now(),
                 };
 
+                var undeliveredMessageIds = _.map(undeliveredMesssages, "_id");
+
                 messageModel.update(
-                    { _id: messageIds },
+                    { _id: { $in: undeliveredMessageIds } },
                     {
                         $push: {
                             deliveredTo: deliveredToRow
                         }
                     },
+                    { multi: true },
                     (err, updateResult) => {
 
-                        result.message.deliveredTo.push(deliveredToRow);
+                        _.map(undeliveredMesssages, (message) => {
+                            message.deliveredTo.push(deliveredToRow);
+                            return message;
+                        });
+
                         done(err, result);
 
                     });
@@ -115,7 +121,7 @@ DeliverMessageController.prototype.init = function (app) {
             (result, done) => {
 
                 UpdateHistory.updateLastMessageStatus({
-                    messageId: messageIds,
+                    messageIds: messageIds,
                     delivered: true
                 }, (err) => {
 
@@ -126,56 +132,62 @@ DeliverMessageController.prototype.init = function (app) {
             },
             (result, done) => {
 
-                MessageModel.populateMessages([result.message], function (err, data) {
+                MessageModel.populateMessages(result.messages, function (err, data) {
 
-                    done(err, data[0]);
+                    done(err, data);
 
                 });
 
             },
-            (message, done) => {
+            (messages, done) => {
 
-                done(null, message);
+                done(null, messages);
 
             }
-        ], (err, message) => {
+        ], (err, messages) => {
 
             if (err) {
                 console.log("critical err", err);
                 return self.errorResponse(response, Const.httpCodeServerError);
             }
 
-            var chatType = message.roomID.split("-")[0];
+            var roomIds = _.uniq(_.map(messages, "roomID"));
 
-            // websocket notification
-            if (chatType == Const.chatTypeGroup) {
+            roomIds.forEach(roomId => {
 
-                SocketAPIHandler.emitToRoom(message.roomID, 'updatemessages', [message]);
+                var chatType = roomId.split("-")[0];
+                var filterMessages = _.filter(messages, { roomID: roomId });
 
-            } else if (chatType == Const.chatTypeRoom) {
+                // websocket notification
+                if (chatType == Const.chatTypeGroup) {
 
-                SocketAPIHandler.emitToRoom(message.roomID, 'updatemessages', [message]);
+                    SocketAPIHandler.emitToRoom(roomId, 'updatemessages', filterMessages);
 
-            } else if (chatType == Const.chatTypePrivate) {
+                } else if (chatType == Const.chatTypeRoom) {
 
-                var splitAry = message.roomID.split("-");
+                    SocketAPIHandler.emitToRoom(roomId, 'updatemessages', filterMessages);
 
-                if (splitAry.length < 2)
-                    return;
+                } else if (chatType == Const.chatTypePrivate) {
 
-                var fromUser = splitAry[1];
-                var toUser = splitAry[2];
+                    var splitAry = roomId.split("-");
 
-                if (fromUser != user._id.toString()) {
-                    fromUser = splitAry[2];
-                    toUser = splitAry[1];
+                    if (splitAry.length < 2)
+                        return;
+
+                    var fromUser = splitAry[1];
+                    var toUser = splitAry[2];
+
+                    if (fromUser != user._id.toString()) {
+                        fromUser = splitAry[2];
+                        toUser = splitAry[1];
+                    }
+
+                    SocketAPIHandler.emitToRoom(toUser, 'updatemessages', filterMessages);
+                    SocketAPIHandler.emitToRoom(fromUser, 'updatemessages', filterMessages);
+
                 }
 
-                SocketAPIHandler.emitToRoom(toUser, 'updatemessages', [message]);
-                SocketAPIHandler.emitToRoom(fromUser, 'updatemessages', [message]);
-
-
-            }
+            });
 
             self.successResponse(response, Const.responsecodeSucceed);
 

@@ -641,7 +641,9 @@ var UpdateHistory = {
         if (obj.seen)
             updateParams["lastMessage.seen"] = true;
 
-        historyModel.update({ "lastMessage.messageId": obj.messageId }, updateParams, { multi: true }, (err, updateResult) => {
+        var messageIds = !_.isEmpty(obj.messageIds) ? obj.messageIds : [obj.messageId];
+
+        historyModel.update({ "lastMessage.messageId": { $in: messageIds } }, updateParams, { multi: true }, (err, updateResult) => {
             callback(err);
         });
 
