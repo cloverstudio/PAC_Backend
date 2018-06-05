@@ -9,10 +9,14 @@ var pathTop = "../../../../";
 
 var Const = require(pathTop + "lib/consts");
 var Config = require(pathTop + "lib/init");
+var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
 
 var Utils = require(pathTop + 'lib/utils');
+
 var TodoModel = require(pathTop + 'Models/Todo');
 var RoomModel = require(pathTop + 'Models/Room');
+var GroupModel = require(pathTop + 'Models/Group');
+var UserModel = require(pathTop + 'Models/User');
 
 var PermissionLogic = require(pathTop + 'Logics/Permission');
 
@@ -142,11 +146,16 @@ TodoListController.prototype.init = function (app) {
 
         const todoModel = TodoModel.get();
         const roomModel = RoomModel.get();
+        const groupModel = GroupModel.get();
+        const userModel = UserModel.get();
 
         async.waterfall([
             getGroupIds,
-            getRoomIds,
-            getTodos
+            getRooms,
+            getTodos,
+            getGroups,
+            getUsers,
+            parseTodos
         ], endAsync);
 
 
@@ -160,25 +169,19 @@ TodoListController.prototype.init = function (app) {
             PermissionLogic.getDepartments(user._id.toString(), function (departments) {
 
                 var groupIds = _.union(user.groups, departments);
-
-                groupIds = groupIds.map((id) => {
-                    return new RegExp('^.*' + Utils.escapeRegExp(id.toString()) + '.*$', "i")
-                });
                 done(null, { groupIds: groupIds });
 
             });
 
         };
 
-        function getRoomIds(result, done) {
+        function getRooms(result, done) {
 
             roomModel.find({
                 users: user._id.toString()
             }, function (err, findResult) {
 
-                result.roomIds = findResult.map((obj) => {
-                    return new RegExp('^.*' + Utils.escapeRegExp(obj._id.toString()) + '.*$', "i")
-                });
+                result.rooms = findResult;
                 done(err, result);
 
             });
@@ -187,18 +190,122 @@ TodoListController.prototype.init = function (app) {
 
         function getTodos(result, done) {
 
-            var ids = _.union(result.groupIds, result.roomIds);
+            var ids = _.union(result.groupIds, _.map(result.rooms, "_id"), [user._id.toString()]);
 
-            ids.push(new RegExp('^.*' + Utils.escapeRegExp(user._id.toString()) + '.*$', "i"));
+            ids = ids.map((id) => {
+                return new RegExp('^.*' + Utils.escapeRegExp(id.toString()) + '.*$', "i");
+            });
 
             todoModel.find({
                 chatId: { $in: ids }
             }, function (err, findResult) {
 
-                result.todos = findResult;
+                result.todos = findResult.map((todo) => {
+
+                    if (!todo.modified)
+                        todo.modified = todo.created;
+
+                    return todo.toObject();
+
+                });
+
+                result.todos = _.sortByOrder(result.todos, "modified", "desc");
                 done(err, result);
 
             });
+
+        };
+
+        function getGroups(result, done) {
+
+            groupModel.find({
+                _id: { $in: result.groupIds }
+            }, function (err, findResult) {
+
+                result.groups = findResult;
+                done(err, result);
+
+            });
+
+        };
+
+        function getUsers(result, done) {
+
+            userModel.find({
+                organizationId: user.organizationId,
+                status: Const.userStatus.enabled,
+                groups: { $in: result.groupIds },
+                _id: { $ne: user._id }
+            }, function (err, findResult) {
+
+                result.users = findResult;
+                done(err, result);
+
+            });
+
+        };
+
+        function parseTodos(result, done) {
+
+            var todos = result.todos;
+            var users = result.users;
+            var groups = result.groups;
+            var rooms = result.rooms;
+
+            _.map(todos, (todo) => {
+
+                var splittedChatId = todo.chatId.split("-");
+
+                var chatType = Number(splittedChatId[0]);
+
+                switch (chatType) {
+
+                    case Const.chatTypePrivate:
+
+                        var userToId = splittedChatId[1];
+
+                        if (userToId == user._id.toString())
+                            userToId = splittedChatId[2];
+
+                        var findUser = _.find(users, { _id: DatabaseManager.toObjectId(userToId) });
+
+                        if (findUser) {
+                            todo.chatName = findUser.name;
+                            todo.chatAvatar = findUser.avatar;
+                        }
+                        break;
+
+                    case Const.chatTypeGroup:
+
+                        var groupId = splittedChatId[1];
+
+                        var findGroup = _.find(groups, { _id: DatabaseManager.toObjectId(groupId) });
+
+                        if (findGroup) {
+                            todo.chatName = findGroup.name;
+                            todo.chatAvatar = findGroup.avatar;
+                        }
+                        break;
+
+                    case Const.chatTypeRoom:
+
+                        var roomId = splittedChatId[1];
+
+                        var findRoom = _.find(rooms, { _id: DatabaseManager.toObjectId(roomId) });
+
+                        if (findRoom) {
+                            todo.chatName = findRoom.name;
+                            todo.chatAvatar = findRoom.avatar;
+                        }
+                        break;
+
+                }
+
+                return todo;
+
+            });
+
+            done(null, result);
 
         };
 

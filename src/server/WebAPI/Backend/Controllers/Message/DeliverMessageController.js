@@ -138,11 +138,6 @@ DeliverMessageController.prototype.init = function (app) {
 
                 });
 
-            },
-            (messages, done) => {
-
-                done(null, messages);
-
             }
         ], (err, messages) => {
 
