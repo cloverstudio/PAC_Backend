@@ -86,7 +86,8 @@ UndeliverMessageListController.prototype.init = function (app) {
 
         async.waterfall([
             getUsers,
-            getMessages
+            getMessages,
+            populateMessages
         ], endAsync);
 
 
@@ -131,6 +132,17 @@ UndeliverMessageListController.prototype.init = function (app) {
                 done(err, result);
 
             }).sort({ created: "desc" }).limit(100);
+
+        };
+
+        function populateMessages(result, done) {
+
+            MessageModel.populateMessages(result.messages, function (err, data) {
+
+                result.messages = data;
+                done(err, result);
+
+            });
 
         };
 
