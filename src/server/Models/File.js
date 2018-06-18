@@ -12,25 +12,26 @@ var Utils = require("../lib/utils");
 var BaseModel = require('./BaseModel');
 var UserModel = require('./User');
 
-var File = function(){};
+var File = function () { };
 
-_.extend(File.prototype,BaseModel.prototype);
+_.extend(File.prototype, BaseModel.prototype);
 
-File.prototype.init = function(mongoose){
+File.prototype.init = function (mongoose) {
 
     // Defining a schema
     this.schema = new mongoose.Schema({
         name: String,
         mimeType: String,
         size: Number,
-        created: Number
+        created: Number,
+        duration: Number
     });
 
     this.model = mongoose.model(Config.dbCollectionPrefix + "spika_files", this.schema);
 
 }
 
-File.get = function(){
+File.get = function () {
 
     return DatabaseManager.getModel('File').model;
 

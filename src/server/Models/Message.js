@@ -35,7 +35,8 @@ Message.prototype.init = function (mongoose) {
                 id: mongoose.Schema.Types.ObjectId,
                 name: String,
                 size: Number,
-                mimeType: String
+                mimeType: String,
+                duration: Number
             },
             thumb: {
                 id: mongoose.Schema.Types.ObjectId,

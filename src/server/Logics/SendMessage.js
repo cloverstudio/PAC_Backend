@@ -191,6 +191,9 @@ var SendMessage = {
                     }
                 };
 
+                if (param.file.file.duration)
+                    objMessage.file.file.duration = param.file.file.duration;
+
                 if (!_.isEmpty(param.file.thumb)) {
 
                     objMessage.file.thumb = {

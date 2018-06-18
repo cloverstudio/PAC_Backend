@@ -241,6 +241,14 @@ var UpdateHistory = {
                     }
                 };
 
+                if (rawMessageObj.type == Const.messageTypeFile) {
+                    result.message.mimeType = rawMessageObj.file.file.mimeType;
+                    result.message.size = rawMessageObj.file.file.size;
+
+                    if (rawMessageObj.file.file.duration)
+                        result.message.duration = rawMessageObj.file.file.duration;
+                };
+
                 userModel.findOne({ _id: fromUserId }, UserModel.defaultResponseFields, function (err, findUserResult) {
 
                     result.fromUser = findUserResult;
@@ -345,6 +353,14 @@ var UpdateHistory = {
                     }
                 };
 
+                if (rawMessageObj.type == Const.messageTypeFile) {
+                    result.message.mimeType = rawMessageObj.file.file.mimeType;
+                    result.message.size = rawMessageObj.file.file.size;
+
+                    if (rawMessageObj.file.file.duration)
+                        result.message.duration = rawMessageObj.file.file.duration;
+                };
+
                 // get room
                 roomModel.findOne({ _id: roomId }, function (err, findRoomResult) {
 
@@ -446,6 +462,14 @@ var UpdateHistory = {
                         created: rawMessageObj.created,
                         type: rawMessageObj.type
                     }
+                };
+
+                if (rawMessageObj.type == Const.messageTypeFile) {
+                    result.message.mimeType = rawMessageObj.file.file.mimeType;
+                    result.message.size = rawMessageObj.file.file.size;
+
+                    if (rawMessageObj.file.file.duration)
+                        result.message.duration = rawMessageObj.file.file.duration;
                 };
 
                 // get group
