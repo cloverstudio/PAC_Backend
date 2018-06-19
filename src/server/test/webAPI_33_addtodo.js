@@ -73,6 +73,31 @@ describe('WEB API', function () {
 
         });
 
+        it('fails if wrong assigned userId', function (done) {
+
+            request(app)
+                .post('/api/v2/todo/add')
+                .set('access-token', global.user1.accessToken)
+                .send({
+                    chatId: Const.chatTypeRoom + "-" + global.room1._id.toString(),
+                    text: "text",
+                    assignedUserId: "test"
+                })
+                .end(function (err, res) {
+
+                    if (err) {
+                        throw err;
+                    }
+
+                    res.body.should.have.property('code');
+                    res.body.code.should.equal(Const.responsecodeTodoWrongAssignedUserId);
+
+                    done();
+
+                });
+
+        });
+
         it('works', function (done) {
 
             request(app)

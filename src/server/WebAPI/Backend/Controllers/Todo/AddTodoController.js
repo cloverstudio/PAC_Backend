@@ -8,10 +8,10 @@ var async = require('async');
 var pathTop = "../../../../";
 
 var Const = require(pathTop + "lib/consts");
-var Config = require(pathTop + "lib/init");
 
 var Utils = require(pathTop + 'lib/utils');
 var TodoModel = require(pathTop + 'Models/Todo');
+var UserModel = require(pathTop + 'Models/User');
 
 var tokenChecker = require(pathTop + 'lib/authApi');
 
@@ -36,6 +36,8 @@ AddTodoController.prototype.init = function (app) {
       * 
       * @apiParam {String} chatId roomId
       * @apiParam {String} text Description
+      * @apiParam {Number} dueDate unix time in milliseconds
+      * @apiParam {String} assignedUserId user assigned to
       * 
       * @apiSuccessExample Success-Response:
         {
@@ -61,6 +63,8 @@ AddTodoController.prototype.init = function (app) {
 
         var chatId = request.body.chatId;
         var text = request.body.text;
+        var dueDate = request.body.dueDate;
+        var assignedUserId = request.body.assignedUserId;
 
         var user = request.user;
 
@@ -71,8 +75,10 @@ AddTodoController.prototype.init = function (app) {
             return self.successResponse(response, Const.responsecodeTodoNoText);
 
         var todoModel = TodoModel.get();
+        var userModel = UserModel.get();
 
         async.waterfall([
+            checkAssignedUser,
             getNextPosition,
             addTodo
         ], endAsync);
@@ -82,13 +88,34 @@ AddTodoController.prototype.init = function (app) {
         ****** FUNCTIONS ******
         **********************/
 
-        function getNextPosition(done) {
+        function checkAssignedUser(done) {
+
+            var result = {};
+
+            if (!assignedUserId)
+                return done(null, result);
+
+            userModel.findOne({
+                _id: assignedUserId
+            }, (err, findResult) => {
+
+                if (!findResult)
+                    return self.successResponse(response, Const.responsecodeTodoWrongAssignedUserId);
+
+                done(err, result);
+
+            })
+
+        };
+
+        function getNextPosition(result, done) {
 
             todoModel.count({
                 chatId: chatId
             }, (err, countResult) => {
 
-                done(err, { nextPosition: countResult + 1 });
+                result.nextPosition = countResult + 1;
+                done(err, result);
 
             })
 
@@ -104,6 +131,12 @@ AddTodoController.prototype.init = function (app) {
                 assignedUserId: user._id.toString(),
                 position: result.nextPosition
             });
+
+            if (dueDate)
+                model.dueDate = dueDate;
+
+            if (assignedUserId)
+                model.assignedUserId = assignedUserId;
 
             model.save((err, saveResult) => {
 
