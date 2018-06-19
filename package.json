@@ -134,6 +134,7 @@
   "scripts": {
     "start": "webpack-dev-server --inline",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
-    "test": "mocha ./src/server/test"
+    "test": "mocha ./src/server/test",
+    "ffmpeg": "sudo apt-get install ffmpeg"
   }
 }
