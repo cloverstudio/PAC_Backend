@@ -8,7 +8,6 @@ var async = require('async');
 var pathTop = "../../../../";
 
 var Const = require(pathTop + "lib/consts");
-var Config = require(pathTop + "lib/init");
 var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
 
 var Utils = require(pathTop + 'lib/utils');
@@ -70,9 +69,12 @@ TodoListController.prototype.init = function (app) {
         var user = request.user;
 
         var todoModel = TodoModel.get();
+        var userModel = UserModel.get();
 
         async.waterfall([
-            getTodo
+            getTodo,
+            getAssignedUsers,
+            parse
         ], endAsync);
 
 
@@ -88,10 +90,45 @@ TodoListController.prototype.init = function (app) {
                 chatId: chatId
             }, (err, findResult) => {
 
-                result.todos = findResult;
+                result.todos = findResult.map(todo => {
+                    return todo.toObject();
+                });
                 done(err, result);
 
             })
+
+        };
+
+        function getAssignedUsers(result, done) {
+
+            var assignedUserIds = _.uniq(_.map(result.todos, "assignedUserId"));
+
+            userModel.find({
+                _id: { $in: assignedUserIds }
+            }, (err, findResult) => {
+
+                result.assignedUsers = findResult.map(user => {
+                    return user.toObject();
+                });
+                done(err, result);
+
+            })
+
+        };
+
+        function parse(result, done) {
+
+            var todos = result.todos;
+            var assignedUsers = result.assignedUsers;
+
+            _.map(todos, (todo) => {
+
+                todo.user = _.find(assignedUsers, { _id: DatabaseManager.toObjectId(todo.assignedUserId) });;
+                return todo;
+
+            });
+
+            done(null, result);
 
         };
 
@@ -155,6 +192,7 @@ TodoListController.prototype.init = function (app) {
             getTodos,
             getGroups,
             getUsers,
+            getAssignedUsers,
             parseTodos
         ], endAsync);
 
@@ -245,12 +283,30 @@ TodoListController.prototype.init = function (app) {
 
         };
 
+        function getAssignedUsers(result, done) {
+
+            var assignedUserIds = _.uniq(_.map(result.todos, "assignedUserId"));
+
+            userModel.find({
+                _id: { $in: assignedUserIds }
+            }, (err, findResult) => {
+
+                result.assignedUsers = findResult.map(user => {
+                    return user.toObject();
+                });
+                done(err, result);
+
+            })
+
+        };
+
         function parseTodos(result, done) {
 
             var todos = result.todos;
             var users = result.users;
             var groups = result.groups;
             var rooms = result.rooms;
+            var assignedUsers = result.assignedUsers;
 
             _.map(todos, (todo) => {
 
@@ -301,6 +357,7 @@ TodoListController.prototype.init = function (app) {
 
                 }
 
+                todo.user = _.find(assignedUsers, { _id: DatabaseManager.toObjectId(todo.assignedUserId) });;
                 return todo;
 
             });
