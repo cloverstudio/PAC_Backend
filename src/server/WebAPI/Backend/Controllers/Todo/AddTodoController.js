@@ -102,6 +102,7 @@ AddTodoController.prototype.init = function (app) {
                 if (!findResult)
                     return self.successResponse(response, Const.responsecodeTodoWrongAssignedUserId);
 
+                result.assignedUser = findResult.toObject();
                 done(err, result);
 
             })
@@ -140,7 +141,13 @@ AddTodoController.prototype.init = function (app) {
 
             model.save((err, saveResult) => {
 
-                result.todo = saveResult;
+                result.todo = saveResult.toObject();
+
+                result.todo.assignedUser = user.toObject();
+
+                if (result.assignedUser)
+                    result.todo.assignedUser = result.assignedUser;
+
                 done(err, result);
 
             });
