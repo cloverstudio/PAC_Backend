@@ -123,7 +123,7 @@ TodoListController.prototype.init = function (app) {
 
             _.map(todos, (todo) => {
 
-                todo.user = _.find(assignedUsers, { _id: DatabaseManager.toObjectId(todo.assignedUserId) });;
+                todo.assignedUser = _.find(assignedUsers, { _id: DatabaseManager.toObjectId(todo.assignedUserId) });;
                 return todo;
 
             });
@@ -357,7 +357,7 @@ TodoListController.prototype.init = function (app) {
 
                 }
 
-                todo.user = _.find(assignedUsers, { _id: DatabaseManager.toObjectId(todo.assignedUserId) });;
+                todo.assignedUser = _.find(assignedUsers, { _id: DatabaseManager.toObjectId(todo.assignedUserId) });;
                 return todo;
 
             });

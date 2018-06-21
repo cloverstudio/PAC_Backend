@@ -105,16 +105,19 @@ EditTodoController.prototype.init = function (app) {
 
         function checkAssignedUser(result, done) {
 
-            if (!assignedUserId)
-                return done(null, result);
+            var userId = assignedUserId;
+
+            if (!userId)
+                userId = result.todo.assignedUserId;
 
             userModel.findOne({
-                _id: assignedUserId
+                _id: userId
             }, (err, findResult) => {
 
                 if (!findResult)
                     return self.successResponse(response, Const.responsecodeTodoWrongAssignedUserId);
 
+                result.assignedUser = findResult.toObject();
                 done(err, result);
 
             })
@@ -141,7 +144,8 @@ EditTodoController.prototype.init = function (app) {
 
             todo.save((err, saveResult) => {
 
-                result.todo = saveResult;
+                result.todo = saveResult.toObject();
+                result.todo.assignedUser = result.assignedUser;
                 done(err, result);
 
             });
