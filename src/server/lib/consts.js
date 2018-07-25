@@ -190,10 +190,13 @@ Const.callFaildUserRejected = 2;
 Const.gigabyteToByteMultiplier = 1000000000;
 
 Const.messageTypeText = 1;
-Const.messageTypeFile = 2;
+Const.messageTypeFile = 2; // document
 Const.messageTypeLocation = 3;
 Const.messageTypeContact = 4;
 Const.messageTypeSticker = 5;
+Const.messageTypeAudio = 6;
+Const.messageTypeVideo = 7;
+Const.messageTypeImage = 8;
 
 Const.pushTypeNewMessage = 1;
 Const.pushTypeCall = 2;
