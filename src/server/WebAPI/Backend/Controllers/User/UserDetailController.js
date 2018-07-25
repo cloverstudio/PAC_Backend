@@ -8,12 +8,11 @@ var async = require('async');
 var pathTop = "../../../../";
 
 var Const = require(pathTop + "lib/consts");
-var Config = require(pathTop + "lib/init");
-var DatabaseManager = require(pathTop + 'lib/DatabaseManager');
-var Utils = require(pathTop + 'lib/utils');
 var GroupModel = require(pathTop + 'Models/Group');
 var UserModel = require(pathTop + 'Models/User');
 var OrganizationModel = require(pathTop + 'Models/Organization');
+var DeviceVersionModel = require(pathTop + 'Models/DeviceVersion');
+
 var tokenChecker = require(pathTop + 'lib/authApi');
 
 var GetOnlineStatusLogic = require(pathTop + 'Logics/GetUserOnlineStatus');
@@ -78,6 +77,7 @@ UserDetailController.prototype.init = function (app) {
 
         var userModel = UserModel.get();
         var groupModel = GroupModel.get();
+        var deviceVersionModel = DeviceVersionModel.get();
         var userId = request.params.userId;
 
         async.waterfall([
@@ -177,6 +177,39 @@ UserDetailController.prototype.init = function (app) {
                     else
                         result.user.onlineStatus = 0;
 
+                    done(null, result);
+
+                });
+
+            },
+            function (result, done) {
+
+                // get device versions
+                deviceVersionModel.findOne((err, findResult) => {
+
+                    if (err)
+                        return done(err);
+
+                    if (!findResult) {
+
+                        var model = new deviceVersionModel({
+                            iosBuildVersion: "72",
+                            androidBuildVersion: "56"
+                        });
+
+                        model.save((err, saveResult) => {
+
+                            result.iosBuildVersion = saveResult.iosBuildVersion;
+                            result.androidBuildVersion = saveResult.androidBuildVersion;
+                            done(err, result);
+
+                        });
+                        return;
+
+                    }
+
+                    result.iosBuildVersion = findResult.iosBuildVersion;
+                    result.androidBuildVersion = findResult.androidBuildVersion;
                     done(null, result);
 
                 });
