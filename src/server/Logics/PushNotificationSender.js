@@ -370,46 +370,47 @@ PushNotificationSender = {
             {
                 $or: [
                     { pushToken: pushToken },
-                    { UUID: { $elemMatch: { pushTokens: pushToken } } },
-                    { webPushSubscription: { $elemMatch: { endpoint: pushToken.endpoint } } }
+                    { UUID: { $elemMatch: { pushTokens: pushToken } } }
                 ]
             },
             (err, findResult) => {
 
-                if (err)
-                    console.log(err);
+                findResult.forEach(user => {
 
-                findResult.forEach((user) => {
+                    user.UUID.forEach(uuid => {
 
-                    var UUID = _.map(user.UUID, (uuid) => {
-                        uuid.pushTokens = _.pull(uuid.pushTokens, pushToken)
-                        return uuid;
+                        // remove UUID push token
+                        userModel.update(
+                            { _id: user._id, "UUID.UUID": uuid.UUID },
+                            { $pull: { "UUID.$.pushTokens": pushToken } },
+                            { multi: true },
+                            (err, updateResult) => {
+
+                                if (err)
+                                    console.log("error remove UUID push token:", err);
+
+                            }
+                        );
+
                     });
 
-                    var pushTokens = _.pull(user.pushToken.toObject(), pushToken);
-
-                    var webPushSubscription = _.remove(user.webPushSubscription.toObject(), function (pushSubs) {
-                        return pushSubs.endpoint !== pushToken.endpoint;
-                    });
-
+                    // remove user push token
                     userModel.update(
                         { _id: user._id },
-                        {
-                            pushToken: pushTokens,
-                            UUID: UUID,
-                            webPushSubscription: webPushSubscription
-                        },
+                        { $pull: { pushToken: pushToken } },
                         { multi: true },
                         (err, updateResult) => {
 
                             if (err)
-                                console.log(err);
+                                console.log("error remove user push token:", err);
 
-                        });
+                        }
+                    );
 
                 });
 
-            });
+            }
+        );
 
     }
 }
