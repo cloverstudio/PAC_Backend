@@ -7,11 +7,7 @@ var _ = require('lodash');
 
 var async = require('async');
 
-var Const = require("../../../lib/consts");
-var Config = require("../../../lib/init");
 var BackendBaseController = require("./BackendBaseController");
-var DatabaseManager = require('../../../lib/DatabaseManager');
-var Utils = require('../../../lib/utils');
 
 var checkUserOwner = require('../../../lib/auth.js').checkUserOwner;
 
