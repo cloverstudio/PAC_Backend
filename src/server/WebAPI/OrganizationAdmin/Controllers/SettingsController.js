@@ -22,23 +22,22 @@ var RoomModel = require('../../../Models/Room');
 var OrganizationModel = require('../../../Models/Organization');
 var OrganizationSettingsModel = require('../../../Models/OrganizationSettings');
 
-var SettingsController = function(){
+var SettingsController = function () {
 }
 
 // extends from basecontroller
-_.extend(SettingsController.prototype,BackendBaseController.prototype);
+_.extend(SettingsController.prototype, BackendBaseController.prototype);
 
-SettingsController.prototype.init = function(app){
-    
+SettingsController.prototype.init = function (app) {
+
     var self = this;
-	var menuItemName = "settings";
+    var menuItemName = "settings";
 
-    router.get('/', checkUserAdmin, function(request, response) {
+    router.get('/', checkUserAdmin, function (request, response) {
 
         var templateParams = {
-            formValues : {
-
-            }
+            formValues: {},
+            page: menuItemName
         };
 
         var model = OrganizationSettingsModel.get();
@@ -47,45 +46,45 @@ SettingsController.prototype.init = function(app){
 
         var organizationId = baseOrganization._id;
 
-        async.waterfall([function(done){
+        async.waterfall([function (done) {
 
             var result = {};
 
             model.findOne({
-                organizationId : organizationId
-            },function(err,findResult){
+                organizationId: organizationId
+            }, function (err, findResult) {
 
                 result.organizationSettings = findResult;
 
-                done(err,result);
+                done(err, result);
 
             });
 
         },
-        function(result,done){
+        function (result, done) {
 
-            if(result.organizationSettings){
+            if (result.organizationSettings) {
                 templateParams.formValues.allowMultipleDevices = result.organizationSettings.allowMultipleDevice;
-            }else{
+            } else {
                 templateParams.formValues.allowMultipleDevices = 1;
             }
 
-            done(null,result);
+            done(null, result);
 
         }
         ],
-        function(err,result){
+            function (err, result) {
 
-            self.render(request, response, '/Settings/Settings', templateParams);
+                self.render(request, response, '/Settings/Settings', templateParams);
 
-        });
+            });
 
-        
+
 
     });
 
-    router.post('/', function(request, response) {
-        
+    router.post('/', function (request, response) {
+
 
         var model = OrganizationSettingsModel.get();
 
@@ -96,98 +95,99 @@ SettingsController.prototype.init = function(app){
 
         var formValues = request.body;
 
-        async.waterfall([function(done){
+        async.waterfall([function (done) {
 
             var result = {};
 
             model.findOne({
-                organizationId : organizationId
-            },function(err,findResult){
+                organizationId: organizationId
+            }, function (err, findResult) {
 
                 result.organizationSettings = findResult;
 
-                done(err,result);
+                done(err, result);
 
             });
-            
+
         },
-        function(result,done){
+        function (result, done) {
 
             var allow = formValues.allowMultipleDevices;
 
-            if(!result.organizationSettings){
+            if (!result.organizationSettings) {
 
                 var modelOrgSettins = new model({
-                    organizationId : organizationId,
-                    allowMultipleDevice : allow
+                    organizationId: organizationId,
+                    allowMultipleDevice: allow
                 });
-            
-                modelOrgSettins.save(function(err,insertResult){
-                    
+
+                modelOrgSettins.save(function (err, insertResult) {
+
                     result.insertResult = insertResult;
-                    done(err,result);
-                    
+                    done(err, result);
+
                 });
-                    
 
-            }else{
 
-                if(result.organizationSettings.allowMultipleDevice == 1
-                    && allow == "0"){
+            } else {
+
+                if (result.organizationSettings.allowMultipleDevice == 1
+                    && allow == "0") {
 
                     self.resetAllToken(organizationId);
 
                 }
 
-                model.update({ 
-                    organizationId: organizationId 
+                model.update({
+                    organizationId: organizationId
                 }, {
-                    allowMultipleDevice : allow
-                }, function(err, updateResult) {
+                        allowMultipleDevice: allow
+                    }, function (err, updateResult) {
 
-                    result.updateResult = updateResult;
-                    done(err,result);
+                        result.updateResult = updateResult;
+                        done(err, result);
 
-                });
+                    });
 
             }
-            
+
         }
         ],
-        function(err,result){
-            
-            var templateParams = {
-                formValues : formValues
-            };
+            function (err, result) {
 
-            if(err)
-                templateParams.errorMessage = self.l10n('Error happens while saving settings.');
-            else
-                templateParams.successMessage = self.l10n('Settings are saved.');
+                var templateParams = {
+                    formValues: formValues,
+                    page: menuItemName
+                };
 
-            self.render(request, response, '/Settings/Settings', templateParams);
+                if (err)
+                    templateParams.errorMessage = self.l10n('Error happens while saving settings.');
+                else
+                    templateParams.successMessage = self.l10n('Settings are saved.');
 
-        });
+                self.render(request, response, '/Settings/Settings', templateParams);
+
+            });
 
 
     });
-    
+
     return router;
 }
 
-SettingsController.prototype.resetAllToken = function(organizationId){
+SettingsController.prototype.resetAllToken = function (organizationId) {
 
     var model = UserModel.get();
 
     model.update(
-        {organizationId:organizationId},{
-        token: []
-    },{
-      multi: true  
-    },function(err,updateResult){
+        { organizationId: organizationId }, {
+            token: []
+        }, {
+            multi: true
+        }, function (err, updateResult) {
 
-        
-    });
+
+        });
 
 }
 

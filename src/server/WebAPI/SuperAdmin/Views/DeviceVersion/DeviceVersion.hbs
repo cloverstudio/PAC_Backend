@@ -1,0 +1,53 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/owner/home">{{l10n "Home"}}</a>
+    </li>
+    <li class="breadcrumb-item active">{{l10n "Device Version"}}</li>
+</ol>
+
+<header class="header bg-ui-general">
+    <div class="header-info">
+        <h1 class="header-title">
+            {{l10n "Device Version"}}
+        </h1>
+    </div>
+</header>
+
+
+<hr> {{> alertMessage }}
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <form method="post" action="/owner/deviceVersion">
+
+                    <div class="form-group">
+                        <label for="iosBuildVersion">{{l10n "iOS Build Version"}}</label>
+                        <input type="text" name="iosBuildVersion" class="form-control" id="iosBuildVersion" placeholder="{{l10n "Name"}}" value="{{formValues.iosBuildVersion}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="androidBuildVersion">{{l10n "Android Build Version"}}</label>
+                        <input type="text" name="androidBuildVersion" class="form-control" id="androidBuildVersion" placeholder="{{l10n "Name"}}" value="{{formValues.androidBuildVersion}}">
+                    </div>
+
+                    <button type="submit" class="btn btn-label btn-primary pull-right">
+                        <label>
+                            <i class="fa fa-floppy-o"></i>
+                        </label> {{l10n "Save"}}
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
